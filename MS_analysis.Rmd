@@ -10,7 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 #Issues to sort out
-1. Dataset currently only has MS2 spectra, either MS1 spectra were not exported properly, or they have been miss-labeled as MS2. I will try to sort this out in the PD workflow first, however if not successful I may need to kwork out how to import Thermo `.raw` files directly and convert to `.mzML`, or how to import `.raw` directly in spectra
+1. Dataset currently only has MS2 spectra, either MS1 spectra were not exported properly, or they have been miss-labeled as MS2. I will try to sort this out in the PD workflow first, however if not successful I may need to kwork out how to import Thermo `.raw` files directly and convert to `.mzML`, or how to import `.raw` directly in spectra - Fixed by editing settings in Sprectrum selection node, changed to include any MS order (previously set to only include MS order 2)
 
 ## Packages
 ```{r packages, include=FALSE}
