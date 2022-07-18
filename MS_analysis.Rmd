@@ -74,28 +74,28 @@ tic(sp1)
 plot(rtime(sp1), tic(sp1), type = "l")
 
 #can also subset to select a specific spectrum, works like a list
-#for example extracting spectrum number 1000, will give a Spectra object of length 1, with the thousandth spectrum
-sp[1000]
+#for example extracting spectrum number 4001, will give a Spectra object of length 1, with the thousandth spectrum
+sp[4001]
 
 #Or select scans from 1000 to 2000
 sp[1000:2000]
 
 #there is also a function to plot a spectrum, this give the classic m/z vs intensity plot
-plotSpectra(sp[1000])
+plotSpectra(sp[4001])
 
 #could also create this plot manually, now that we know how to access this data, as follows
 #create a Spectra object of scan number 1000
-sp1000 <- sp[1000]
+sp4001 <- sp[4001]
 
 #extract the mz values, this creates a list of length 1, so select the first list
-mz(sp1000)[[1]] 
+mz(sp4001)[[1]] 
 
 #extract the intensities, as above
-intensity(sp1000)[[1]]
+intensity(sp4001)[[1]]
 
 #and plot them
-plot(mz(sp1000)[[1]],
-     intensity(sp1000)[[1]],
+plot(mz(sp4001)[[1]],
+     intensity(sp4001)[[1]],
      type = "h")
 ```
 
@@ -103,7 +103,7 @@ plot(mz(sp1000)[[1]],
 ```{r visualisation, include=FALSE}
 #making a chromatogram, code previously used, however this time adding a red line for the selected ion (for MS2)
 plot(rtime(sp1), tic(sp1), type = "l")
-abline(v = rtime(sp)[2807], col = "red")
+abline(v = rtime(sp)[40019], col = "red")
 
 #Now using tidyverse to make a chromatogram, another way to get the same plot. First to filter for MS1, then extract Dataframe (capital D denotes Bioconductor), then as tibble to use in ggplot for more flexibility
 sp %>%
@@ -112,39 +112,35 @@ sp %>%
   as_tibble() %>%
   ggplot(aes(x = rtime, y = totIonCurrent)) +
     geom_line() +
-    geom_vline(xintercept = rtime(sp[2807]), colour = "red")
+    geom_vline(xintercept = rtime(sp[40019]), colour = "red")
 
-#now to extract the set of scans related to scan #2807. Just to review it first briefly. Note that it's MS1 level
-sp[2807]
+#now to extract the set of scans related to scan #40019. Just to review it first briefly. Note that it's MS1 level
+sp[40019]
 
-#note that following scan 2807, there a set of MS2 scans which originate from scan 2807
-sp[2807:2817]
+#following scan 40019, there a set of MS2 scans which originate from scan 40019
+sp[40020:40057]
 
-#however there is a specific function to filter for scans related to a particular MS1 scan
-filterPrecursorScan(sp, 2807)
+#however there is a specific function to filter for scans related to a particular MS1 scan. Note that this function doesn't appear to be working for this particular scan or dataset.
+filterPrecursorScan(sp, 40019)
 
-#creating a subset
-spx <- filterPrecursorScan(sp, 2807)
+#creating a subset. Instead of using the `filterPrecursorScan` function, I found which scans were relevant using the `msLevel` function on `sp[]` with an estimate of an appropriate range. this gave a list of MS levels, and I just selected a few till I got only MS2 scans
+spx <- sp[40019:40057]
 
 #starting easy, plotting the MS1 scan
 plotSpectra(spx[1])
 
-#now to highlight the selected peaks. First extract the MZ values of the precursors. there are 11 scans in spx, so there will be 11 results. one is NA because it is the MS1 scan
+#now to highlight the selected peaks. First extract the MZ values of the precursors. there are 39 scans in spx, so there will be 39 results. one is NA because it is the MS1 scan
 precursorMz(spx)
 
-#adding the two together, removing the first NA of the precursor MZ values, limiting the X values, highlighting the first MS2 scan in red
-plotSpectra(spx[1], xlim = c(400, 1000))
-abline(v = precursorMz(spx)[-1], col = "gray")
+#adding the two together, removing the first NA of the precursor MZ values, limiting the X values, highlighting the first MS2 scan in red, the others in blue
+plotSpectra(spx[1], xlim = c(450, 1400))
+abline(v = precursorMz(spx)[-1], col = "blue")
 abline(v = precursorMz(spx)[2], col = "red")
 
 #zooming in further, by limiting the x axis further. Line graph is more appropriate at this level
-plotSpectra(spx[1], xlim = c(521, 522), type = "l")
+plotSpectra(spx[1], xlim = c(875, 895), type = "l")
 abline(v = precursorMz(spx)[-1], col = "gray")
 abline(v = precursorMz(spx)[2], col = "red")
-
-#now to plot the MS2 scans
-#first filter for MS2
-plotSpectra(filterMsLevel(spx, 2))
 ```
 
 ##Sequence identification
@@ -162,11 +158,11 @@ table(msLevel(sp))
 #Dividing the number of MS2 scans by the number of MS1 scans to get the ratio
 sum(msLevel(sp)==2)/sum(msLevel(sp)==1)
 
-#This gives a ratio well below the expected 10. Then I remebered that the scans at the start of the run are not useful, and will therefore not have any MS2 scans. Therefore I will likely get a more realistic result if I filter for scans done during the bulk of the run. Looking at the chromatogram again, so we can choose what range to select
+#This gives a ratio lower than expected. Then I remembered that the scans at the start of the run are not useful, and will therefore not have any MS2 scans. Therefore I will likely get a more realistic result if I filter for scans done during the bulk of the run. Looking at the chromatogram again, so we can choose what range to select
 plot(rtime(sp1), tic(sp1), type = "l")
 
-#retention time between 1300 and 2800 looks good, so I'll filter for that. First create a new fitlered Spectra object
-spfilt <- filterRt(sp, c(1300, 2800))
+#retention time between 1300 and 2800 looks good, so I'll filter for that. First create a new filtered Spectra object
+spfilt <- filterRt(sp, c(1600, 5400))
 
 #then get a ratio again. Looks much better!
 sum(msLevel(spfilt)==2)/sum(msLevel(spfilt)==1)
@@ -185,6 +181,6 @@ data.frame(mz = mz(spx[1])[[1]], intensity = intensity(spx[1])[[1]]) %>%
   geom_line(aes(x = mz, y = intensity)) +
   geom_vline(xintercept = precursorMz(spx[-1]), colour = "gray") +
   geom_vline(xintercept = precursorMz(spx[2]), colour = "red") +
-  xlim(521, 522)
+  xlim(875, 895)
 ```
 
