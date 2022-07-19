@@ -26,6 +26,8 @@ library("tidyverse")
 
 #setting up the actual dataset, using the download approach as described above. Note that this will overwrite the `sp` variable previously defined
 sp <- Spectra("~/Coding/MS_analysis/data/1e6_phospho_converted.mzML")
+
+sp_it <- Spectra("~/Coding/MS_analysis/data/1e6_phospho_it_converted.mzML")
 ```
 
 ## Initial look
