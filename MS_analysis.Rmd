@@ -37,10 +37,10 @@ OT_plot <- sp %>%
   filterMsLevel(1) %>%
   spectraData() %>%
   as_tibble() %>%
-  ggplot(aes(x = rtime, y = totIonCurrent)) +
+  ggplot(aes(x = rtime/60, y = totIonCurrent)) +
     geom_line() +
     ylab("Total ion current") +
-  xlab("Retention time") +
+  xlab("Retention time (minutes)") +
   ggtitle("1e6 cells, post cal, OT/OT chromatogram")
 
 #saving plot
@@ -51,10 +51,10 @@ IT_plot <- sp_it %>%
   filterMsLevel(1) %>%
   spectraData() %>%
   as_tibble() %>%
-  ggplot(aes(x = rtime, y = totIonCurrent)) +
+  ggplot(aes(x = rtime/60, y = totIonCurrent)) +
     geom_line() +
     ylab("Total ion current") +
-  xlab("Retention time") +
+  xlab("Retention time (minutes)") +
   ggtitle("1e6 cells, post cal, OT/OT chromatogram")
 
 #saving plot
