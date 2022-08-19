@@ -32,7 +32,8 @@ sp_it <- Spectra("~/Coding/MS_analysis/data/1e6_phospho_it_converted.mzML")
 
 ## Creating a chromatogram
 ```{r chromatogram, include=FALSE}
-sp %>%
+# creating plot for OT data
+OT_plot <- sp %>%
   filterMsLevel(1) %>%
   spectraData() %>%
   as_tibble() %>%
@@ -41,6 +42,23 @@ sp %>%
     ylab("Total ion current") +
   xlab("Retention time") +
   ggtitle("1e6 cells, post cal, OT/OT chromatogram")
+
+#saving plot
+ggsave("OT_plot.png", width = 8, height = 5.5)
+
+# creating plot for IT data
+IT_plot <- sp_it %>%
+  filterMsLevel(1) %>%
+  spectraData() %>%
+  as_tibble() %>%
+  ggplot(aes(x = rtime, y = totIonCurrent)) +
+    geom_line() +
+    ylab("Total ion current") +
+  xlab("Retention time") +
+  ggtitle("1e6 cells, post cal, OT/OT chromatogram")
+
+#saving plot
+ggsave("IT_plot.png", width = 8, height = 5.5)
 ```
 
 
