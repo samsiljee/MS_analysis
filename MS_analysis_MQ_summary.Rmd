@@ -1,0 +1,34 @@
+---
+title: "MS_analysis_MQ_summary"
+author: "Sam Siljee"
+date: '2022-08-22'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Packages
+```{r packages, include=FALSE}
+library("tidyverse")
+```
+
+## Importing raw data
+```{r reading in MQ results from the combined folder, include=FALSE}
+# importing all peptides
+allPeptides <- read_tsv("~/Coding/MS_analysis/data/combined/txt/allPeptides.txt") %>%
+  as.data.frame()
+
+# importing phospho sites
+phosphoSites <- read_tsv("~/Coding/MS_analysis/data/combined/txt/Phospho (STY)Sites.txt") %>%
+  as.data.frame()
+```
+# Contaminants
+Looking at the potential contaminants from the phospho sites data.
+
+```{r looking at the identified contaminants, echo=FALSE}
+#contaminants in the phosphoSites data
+phosphoSites %>% filter(`Potential contaminant` == "+") %>% .$`Protein name` %>% unique()
+```
+
