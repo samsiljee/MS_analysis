@@ -1,4 +1,4 @@
-# Ignore all data files - too large
+# Ignore all files in data folder - too large
 data/*
 # Ignore reports produced on knitting
 MS_analysis_tutorial.html
