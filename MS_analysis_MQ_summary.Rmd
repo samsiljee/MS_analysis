@@ -23,6 +23,10 @@ evidence <- read_tsv("~/Coding/MS_analysis/data/combined/txt/evidence.txt") %>%
 evidence <- evidence[-which(evidence$Reverse == "+"),]
 # adding column with first protein name if multiple protein matches
 evidence$firstProtName <- sapply(str_split(evidence$`Protein names`,";",),'[',1)
+# doing the same for multiple gene name matches
+evidence$firstGeneName <- sapply(str_split(evidence$`Gene names`,";",),'[',1)
+# converting the "Potential contaminant" column to a vector. The "Potential contaminant" column is unhelpfully laid out, with contaminants labeled as "+". and non-contaminants labeled as NA. Hence the slightly awkward phrasing of the below code, which takes the inverse of logical return from `is.na`
+evidence$potCon <- !is.na(evidence$`Potential contaminant`)
 
 # importing all peptides
 allPeptides <- read_tsv("~/Coding/MS_analysis/data/combined/txt/allPeptides.txt") %>%
@@ -37,6 +41,14 @@ phosphoSites <- phosphoSites[-which(phosphoSites$Reverse == "+"),]
 phosphoSites$firstProtName <- sapply(str_split(phosphoSites$`Protein names`,";",),'[',1)
 ```
 
+## Enrichment for phosphopeptides
+What proportion of hits are enriched for phospho groups
+
+```{r Phospho enrichment, echo= FALSE}
+ 
+```
+
+
 ## Contaminants
 
 # Listing contaminants
@@ -45,7 +57,7 @@ Listing all the potential contaminants from the phospho sites data, note that at
 ```{r looking at the identified contaminants, echo=FALSE}
 #contaminants in the phosphoSites data, first creating a string of all the protein names
 evidence %>%
-  filter(`Potential contaminant` == "+") %>%
+  filter(potCon == TRUE) %>%
   .$firstProtName %>%
   unique() %>%
   sort()
