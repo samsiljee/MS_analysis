@@ -40,7 +40,6 @@ clean_table1 <- function(raw) {
 }
 ```
 
-
 ## Importing raw data
 ```{r reading in MQ results from the combined folder, include=FALSE}
 # importing evidence file, this is the file suggested as the main analysis file
@@ -68,14 +67,14 @@ phosphoSites <- phosphoSites[-which(phosphoSites$Reverse == "+"),]
 phosphoSites$firstProtName <- sapply(str_split(phosphoSites$`Protein names`,";",),'[',1)
 
 # extracting basal cell unique markers list from "The Human Airway Epithelial Basal Cell Transcriptome, Hacket et al. PLoS ONE, 2011)
-
+raw_pdf <- map("~/Coding/MS_analysis/tracked_files/pone_0018378.pdf", pdf_text)
 ```
 
 ## Enrichment for phosphopeptides
 What proportion of hits are enriched for phospho groups
 
 ```{r Phospho enrichment, echo= FALSE}
- 
+ mean(evidence$`Phospho (STY)` > 0)
 ```
 
 
