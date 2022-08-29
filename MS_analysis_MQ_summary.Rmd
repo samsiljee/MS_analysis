@@ -40,10 +40,11 @@ phosphoSites <- phosphoSites[-which(phosphoSites$Reverse == "+"),]
 # adding column with first protein name if peptide matches multiple proteins
 phosphoSites$firstProtName <- sapply(str_split(phosphoSites$`Protein names`,";",),'[',1)
 
-# extracting basal cell unique markers list from "The Human Airway Epithelial Basal Cell Transcriptome, Hacket et al. PLoS ONE, 2011). Adding p63 and Keratin 5 manually
+# extracting basal cell unique markers list from "The Human Airway Epithelial Basal Cell Transcriptome, Hacket et al. PLoS ONE, 2011). Adding p63 and Keratin 5 manually, and adding some CD markers identified in Laar et al 2014.
 basalCellGenes <- read.csv("~/Coding/MS_analysis/tracked_files/basalCellTranscriptome.csv") %>%
   .$Gene.symbol %>% 
-  c(., "TP63", "KRT5") %>% 
+  c(., "TP63", "KRT5", "FAS", "NT5E", "EPCAM", "TSPAN4", "F3", "NGFR", "IFNGR1", "MST1R", "IGF1R", "IGF2R", "ERBB2", "EGFR") %>% 
+  unique() %>%
   sort()
 ```
 
