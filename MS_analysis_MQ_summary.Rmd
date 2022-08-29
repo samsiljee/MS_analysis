@@ -12,7 +12,34 @@ knitr::opts_chunk$set(echo = TRUE)
 ## Packages
 ```{r packages, include=FALSE}
 library("tidyverse")
+library("pdftools")
 ```
+
+## Defining functions
+```{r, include = FALSE}
+# defining function to scrape table from pdf
+clean_table1 <- function(raw) {
+  # split the single pages
+  raw <- map(raw, ~ str_split(.x, "\\n") %>% unlist())
+  # concatenate the split pages
+  raw <- reduce(raw, c)
+  
+  # specify the start and end of the table data
+  table_start <- stringr::str_which(tolower(raw), "Cytoskeleton")
+  table_end <- stringr::str_which(tolower(raw), "Unknown")
+  table_end <- table_end[min(which(table_end > table_start))]
+  
+  # build the table and remove special characters
+  table <- raw[(table_start):(table_end)]
+  table <- str_replace_all(table, "\\s{2,}", "|")
+  text_con <- textConnection(table)
+  data_table <- read.csv(text_con, sep = "|")
+  
+  # create a list of column names
+  colnames(data_table) <- c("x", "Category", "ProbeSetID", "Gene symbol", "Gene title", "Mean expression in differentiated epithelium", "Mean expression in basal cells", "Basal/differentiated epithelium expression ratio", "p value ^2")
+}
+```
+
 
 ## Importing raw data
 ```{r reading in MQ results from the combined folder, include=FALSE}
