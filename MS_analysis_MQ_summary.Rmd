@@ -15,31 +15,6 @@ library("tidyverse")
 library("pdftools")
 ```
 
-## Defining functions
-```{r, include = FALSE}
-# defining function to scrape table from pdf
-clean_table1 <- function(raw) {
-  # split the single pages
-  raw <- map(raw, ~ str_split(.x, "\\n") %>% unlist())
-  # concatenate the split pages
-  raw <- reduce(raw, c)
-  
-  # specify the start and end of the table data
-  table_start <- stringr::str_which(tolower(raw), "Cytoskeleton")
-  table_end <- stringr::str_which(tolower(raw), "Unknown")
-  table_end <- table_end[min(which(table_end > table_start))]
-  
-  # build the table and remove special characters
-  table <- raw[(table_start):(table_end)]
-  table <- str_replace_all(table, "\\s{2,}", "|")
-  text_con <- textConnection(table)
-  data_table <- read.csv(text_con, sep = "|")
-  
-  # create a list of column names
-  colnames(data_table) <- c("x", "Category", "ProbeSetID", "Gene symbol", "Gene title", "Mean expression in differentiated epithelium", "Mean expression in basal cells", "Basal/differentiated epithelium expression ratio", "p value ^2")
-}
-```
-
 ## Importing raw data
 ```{r reading in MQ results from the combined folder, include=FALSE}
 # importing evidence file, this is the file suggested as the main analysis file
@@ -66,36 +41,55 @@ phosphoSites <- phosphoSites[-which(phosphoSites$Reverse == "+"),]
 # adding column with first protein name if peptide matches multiple proteins
 phosphoSites$firstProtName <- sapply(str_split(phosphoSites$`Protein names`,";",),'[',1)
 
-# extracting basal cell unique markers list from "The Human Airway Epithelial Basal Cell Transcriptome, Hacket et al. PLoS ONE, 2011)
-#raw_pdf <- map("~/Coding/MS_analysis/tracked_files/pone_0018378.pdf", pdf_text)
+# extracting basal cell unique markers list from "The Human Airway Epithelial Basal Cell Transcriptome, Hacket et al. PLoS ONE, 2011). Adding p63 and Keratin 5 manually
+basalCellGenes <- read.csv("~/Coding/MS_analysis/tracked_files/basalCellTranscriptome.csv") %>%
+  .$Gene.symbol %>% 
+  c(., "TP63", "KRT5") %>% 
+  sort()
 ```
 
 ## Enrichment for phosphopeptides
 What proportion of results are enriched for phospho groups
 
-```{r Phospho enrichment, echo= FALSE}
- mean(evidence$`Phospho (STY)` > 0)
+```{r Phospho enrichment, echo=FALSE}
+print("Fraction of results with at least one phospho modification") 
+mean(evidence$`Phospho (STY)` > 0)
 ```
 
+# Identifying basal cell markers
+Listing markers found in phosphoproteome, along with fraction of markers found
+```{r identifying basal cell markers, echo=FALSE}
+markersPresent <- evidence %>%
+  filter(firstGeneName %in% basalCellGenes) %>%
+  .$firstProtName %>%
+  unique() %>%
+  sort()
+print("Basal cell markers found")
+markersPresent
+
+print("Proportion of basal cell markers found")
+length(markersPresent)/length(basalCellGenes)
+```
 
 ## Contaminants
+
+# Looking at fraction of contaminants
+Dividing the entries in contaminants marked as "potential contaminant" by total number of entries
+
+```{r Summarising fraction of contaminants, echo=FALSE}
+print("Fraction of results categorised as contaminants")
+length(which(evidence$`Potential contaminant` == "+")) / nrow(evidence)
+```
 
 # Listing contaminants
 Listing all the potential contaminants from the phospho sites data, note that at least Keratin 5 is found in basal cells, and is therefore expected
 
 ```{r looking at the identified contaminants, echo=FALSE}
 #contaminants in the phosphoSites data, first creating a string of all the protein names
+print("List of contaminants found")
 evidence %>%
   filter(potCon == TRUE) %>%
   .$firstProtName %>%
   unique() %>%
   sort()
 ```
-
-# Looking at fraction of contaminants
-Dividing the entries in contaminants marked as "potential contaminant" by total number of entries
-
-```{r Summarising fraction of contaminants, echo = FALSE}
-length(which(evidence$`Potential contaminant` == "+")) / nrow(evidence)
-```
-
