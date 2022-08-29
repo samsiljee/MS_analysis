@@ -12,7 +12,6 @@ knitr::opts_chunk$set(echo = TRUE)
 ## Packages
 ```{r packages, include=FALSE}
 library("tidyverse")
-library("pdftools")
 ```
 
 ## Importing raw data
