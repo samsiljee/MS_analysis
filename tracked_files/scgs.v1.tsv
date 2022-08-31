@@ -1,317 +1,304 @@
-# Description: Public SysCilia Gold Standard Version 1
-# Authors: TJP van Dam, G Wheway, GG Slaats, SYSCILIA Study Group, MA Huynen, RH Giles
-# Date: 2013-05-22
-# Version: 1.0 (GS version 4.0)
-# Ensembl version: 71
-# Note: First official PUBLIC release version of the SysCilia Gold Standard. Published in the Cilia journal
-# Column 1: ensembl gene id
-# Column 2: gene name
-# Column 3: gene description from ensembl
-# Column 4: Curator's note, describes reason for including the gene in the gold standard.
-# Column 5: evidence for ciliary involvement as pubmed ids
-# Column 6: ciliome studies that report this gene
-# Column 7: Cellular and ciliary localisation of the protein
-## ensembl_gene_id	ensembl_gene_symbol	ensembl_gene_desc	scgs_note	scgs_pubmed	scgs_ciliomes	scgs_localisation
-ENSG00000138031	ADCY3	adenylate cyclase 3 [Source:HGNC Symbol;Acc:234]	Localized to the plasma membrane of neuronal cilia PMID: 17924533, PMID: 23392690	PMID:17924533, PMID:23392690	Mayer et al. 2009	Ciliary Membrane
-ENSG00000135541	AHI1	Abelson helper integration site 1 [Source:HGNC Symbol;Acc:21575]	Mutated in Joubert syndrome (type 3) OMIM 608894, PMID:16453322. At mother centriole/basal body. Interacts with B9 complex of transition zone proteins including B9D1, B9D2, MKS1, TCTN1, TCTN2 PMID:22179047. Role in RAB8-dependent ciliary membrane targeting PMID:19625297.	PMID:16453322 PMID:22179047 PMID:19625297	Liu et al. 2007	Basal Body
-ENSG00000140057	AK7	adenylate kinase 7 [Source:HGNC Symbol;Acc:20091]	Ultrastructural defects in 9+2 cilia, leading to PCD phenotype in mutant mice PMID:18776131. Role in ATP production to power ciliary beating. Reduced expression levels in PCD patients PMID:20537283. 1 single possibly pathogenic variant found in AK7 in 1 PCD patient PMID: 22801010	PMID:18776131 PMID:20537283 PMID:22801010	Arnaiz et al. 2009, Arnaiz et al. 2010, Broadhead et al. 2006, Ostrowski et al. 2002, Ross et al. 2007, Smith et al. 2005, Stubbs et al. 2008	No data
-ENSG00000165695	AK8	adenylate kinase 8 [Source:HGNC Symbol;Acc:26526]	Hydrocephalus due to dysfunctional motile cilia in KO mouse PMID: 21746835	PMID:21746835	Arnaiz et al. 2009, Arnaiz et al. 2010, Broadhead et al. 2006, Ostrowski et al. 2002, Smith et al. 2005, Stubbs et al. 2008	
-ENSG00000116127	ALMS1	Alstrom syndrome 1 [Source:HGNC Symbol;Acc:428]	Mutated in Alstrom syndrome (type 1) OMIM 606844, PMID: 11941369, PMID: 11941370. Also mutated in 1 LCA family PMID:21901789. siRNA knockdown leads to shortened cilia and inability of cilia to respond to mechanical stimuli PMID:17206865.	PMID: 11941369, PMID: 11941370, PMID:15855349, PMID:21901789, PMID:17206865	Andersen et al. 2003, Liu et al. 2007, Nogales-Cadenas et al. 2006, Ross et al. 2007	Basal Body, Cilium
-ENSG00000168374	ARF4	ADP-ribosylation factor 4 [Source:HGNC Symbol;Acc:655]	Involved in ciliary targeting of rhodopsin and other proteins with VxPx motif. PMID:19153612. Targets proteins to cilia in association with ASAP1, RAB11 and RAB8 PMID:22983554.	PMID:19153612, PMID:22983554	Arnaiz et al. 2009, Liu et al. 2007	Trans-Golgi Network
-ENSG00000169379	ARL13B	ADP-ribosylation factor-like 13B [Source:HGNC Symbol;Acc:25419]	Mutated in Joubert Syndrome (type 8) OMIM 608922, PMID: 18674751. In proximal ciliary membrane PMID:20231383. Role in IFT  and therefore ciliogenesis PMID:20530210. Necessary for normal Shh PMID:21976698 and INPP5E signalling PMID:23150559 and normal expression of Nodal and Cerl2 PMID:22554696. 	PMID:18674751, PMID:20231383, PMID:20530210, PMID:21976698, PMID: 23150559, PMID:22554696 	Blacque et al. 2005, Broadhead et al. 2006, Efimenko et al. 2005, Liu et al. 2007, Merchant et al. 2007, Ross et al. 2007	Basal Body, Cytosol
-ENSG00000138175	ARL3	ADP-ribosylation factor-like 3 [Source:HGNC Symbol;Acc:694]	interactor of RP2 PMID: 12417528 and PDEdelta PMID:10518933. Involved in trafficking of vesicles from the Golgi to the cilium PMID:20106869, especially; farnesylated cargo PMID:22002721 in association with PDEdelta and RPGR PMID:23559067; and myristoylated cargo in association with UNC119 and RP2 PMID:22085962	PMID:12417528, PMID:10518933, PMID:20106869, PMID:22002721, PMID:23559067, PMID:22085962	Arnaiz et al. 2009, Avidor-Reiss et al. 2004, Blacque et al. 2005, Chen et al. 2006, Efimenko et al. 2005, Liu et al. 2007, Merchant et al. 2007, Pazour et al. 2005	Cytosol
-ENSG00000113966	ARL6	ADP-ribosylation factor-like 6 [Source:HGNC Symbol;Acc:13210]	Mutated in Bardet-Biedl syndrome (type 3) and retinitis pigmentosa (type 55) OMIM 608845, PMID:19956407, PMID:15314642. At the ciliary gate, regulates Wnt signalling PMID:20207729. Functions with BBSome to coat proteins for trafficking to the cilium PMID:20603001	PMID:19956407, PMID:15314642, PMID:20207729, PMID:20603001	Arnaiz et al. 2010, Avidor-Reiss et al. 2004, Blacque et al. 2005, Liu et al. 2007, Merchant et al. 2007, Pazour et al. 2005, Ross et al. 2007, Stolc et al. 2005	Basal Body, Cilium, Cytosol, Transition Zone
-ENSG00000153317	ASAP1	ArfGAP with SH3 domain, ankyrin repeat and PH domain 1 [Source:HGNC Symbol;Acc:2720]	Targets proteins, such as rhodopsin and  polycystin-1, to cilia in association with ARF4, RAB11 and RAB8 PMID:19153612, PMID:21775626. Provides a platform to regulate Arf4- and Rab11-Rab8-mediated ciliary cargo trafficking PMID:22983554 	PMID: 19153612, PMID:21775626, PMID:22983554	Liu et al. 2007	Trans-Golgi Network
-ENSG00000130638	ATXN10	ataxin 10 [Source:HGNC Symbol;Acc:10549]	Mutated in 1 NPHP family (splice-site mutation). Forms complex with NPHP5 and 6 at the basal body PMID: 21565611	PMID:21565611	Liu et al. 2007, Ross et al. 2007	No data
-ENSG00000141577	AZI1	5-azacytidine induced 1 [Source:HGNC Symbol;Acc:29511]	CEP131 Drosophila homologue required for ciliogenesis	PMID:21750193	Andersen et al. 2003, Arnaiz et al. 2010, Avidor-Reiss et al. 2004, Li et al. 2004, Liu et al. 2007, Merchant et al. 2007, Nogales-Cadenas et al. 2006, Pazour et al. 2005	Basal Body, Centrosome
-ENSG00000108641	B9D1	B9 protein domain 1 [Source:HGNC Symbol;Acc:24123]	Mutated in Meckel-Gruber syndrome (type 9) OMIM 614144 although mutations only found in 1 family PMID:21493627. Interacts with B9D2 and MKS1 at the transition zone PMID:22179047	PMID:21493627, PMID:21763481, PMID:22179047		Transition Zone
-ENSG00000123810	B9D2	B9 protein domain 2 [Source:HGNC Symbol;Acc:28636]	Mutated in Meckel-Gruber syndrome (type10) OMIM 611951 although mutations only found in 1 family PMID:21763481. Interacts with B9D2 and MKS1 at the transition zone PMID:22179047	PMID:21493627, PMID:21763481, PMID:22179047	Blacque et al. 2005, Chen et al. 2006, Li et al. 2004, Liu et al. 2007	Transition Zone
-ENSG00000174483	BBS1	Bardet-Biedl syndrome 1 [Source:HGNC Symbol;Acc:966]	Mutated in Bardet-Biedl syndrome (type 1) OMIM 209901 PMID: 12118255. Forms part of BBSome, mediates interaction with RABIN8 (RAB3IP), important for RAB8-mediated membrane protein trafficking PMID: 20603001, PMID:17574030, PMID:22072986	PMID:12118255, PMID: 20603001, PMID:17574030, PMID:22072986	Nogales-Cadenas et al. 2006	Basal Body, Cilium
-ENSG00000179941	BBS10	Bardet-Biedl syndrome 10 [Source:HGNC Symbol;Acc:26291]	Mutated in Bardet-Biedl syndrome (type 10) OMIM 610148 PMID:16582908. Chaperonin-like protein. Forms complex with other chaperonin-like BBS proteins to  facilitate BBSome assembly PMID:20080638. At basal body of differentiating preadipocytes. Role in targeting of Wnt and Hh receptors to this cilium PMID:19190184	PMID:16582908, PMID:20080638		Basal body
-ENSG00000181004	BBS12	Bardet-Biedl syndrome 12 [Source:HGNC Symbol;Acc:26648]	Mutated in Bardet-Biedl syndrome (type 12) OMIM 610683 PMID:17160889 Forms complex with other chaperonin-like BBS proteins to  facilitate BBSome assembly PMID:20080638. At basal body of differentiating preadipocytes. Role in targeting of Wnt and Hh receptors to this cilium PMID:19190184.	PMID:17160889, PMID:20080638, PMID:19190184.		Basal body
-ENSG00000125124	BBS2	Bardet-Biedl syndrome 2 [Source:HGNC Symbol;Acc:967]	Mutated in Bardet-Biedl syndrome (type 2) OMIM 606151 PMID:11285252. Forms part of BBSome, important for RAB8-mediated membrane protein trafficking PMID: 20603001, PMID:17574030, PMID:22072986	PMID:11285252, PMID: 20603001, PMID:17574030, PMID:22072986	Blacque et al. 2005, Efimenko et al. 2005, Li et al. 2004, Liu et al. 2007, Merchant et al. 2007	Basal Body, Cilium
-ENSG00000140463	BBS4	Bardet-Biedl syndrome 4 [Source:HGNC Symbol;Acc:969]	Mutated in Bardet-Biedl syndrome (type 4) OMIM 600374 PMID:11381270. Forms part of BBSome, important for RAB8-mediated membrane protein trafficking PMID: 20603001, PMID:17574030, PMID:22072986	PMID:11381270, PMID: 20603001, PMID:17574030, PMID:22072986	Arnaiz et al. 2009, Arnaiz et al. 2010, Avidor-Reiss et al. 2004, Liu et al. 2007, Nogales-Cadenas et al. 2006	Basal Body, Cilium
-ENSG00000163093	BBS5	Bardet-Biedl syndrome 5 [Source:HGNC Symbol;Acc:970]	Mutated in Bardet-Biedl syndrome (type 5) OMIM 603650 PMID:15137946. Forms part of BBSome, mediates binding to phospholipids, predominantly phosphatidylinositol 3-phosphate PMID: 20603001, PMID:17574030, PMID:22072986	PMID:15137946, PMID: 20603001, PMID:17574030, PMID:22072986	Avidor-Reiss et al. 2004, Blacque et al. 2005, Chen et al. 2006, Efimenko et al. 2005, Laurencon et al. 2007, Li et al. 2004, Liu et al. 2007, Merchant et al. 2007, Pazour et al. 2005	Basal Body
-ENSG00000138686	BBS7	Bardet-Biedl syndrome 7 [Source:HGNC Symbol;Acc:18758]	Mutated in Bardet-Biedl syndrome (type 7) OMIM 607590 PMID:12567324. Forms part of BBSome important for RAB8-mediated membrane protein trafficking PMID: 20603001, PMID:17574030, PMID:22072986	PMID:12567324, PMID: 20603001, PMID:17574030, PMID:22072986	Blacque et al. 2005, Chen et al. 2006, Efimenko et al. 2005, Li et al. 2004, Liu et al. 2007, Merchant et al. 2007, Nogales-Cadenas et al. 2006	Basal Body, Cilium
-ENSG00000122507	BBS9	Bardet-Biedl syndrome 9 [Source:HGNC Symbol;Acc:30000], Parathyroid hormone-responsive B1, PTHB1	Mutated in Bardet-Biedl syndrome (type 7) OMIM 607968 PMID:16380913. Forms part of BBSome, important for RAB8-mediated membrane protein trafficking. Complex-organizing subunit of BBSome. PMID: 20603001, PMID:17574030, PMID:22072986	PMID:16380913, PMID: 20603001, PMID:17574030, PMID:22072986	Blacque et al. 2005, Chen et al. 2006, Efimenko et al. 2005, Liu et al. 2007, Merchant et al. 2007	Cilium
-ENSG00000160226	C21orf2	chromosome 21 open reading frame 2 [Source:HGNC Symbol;Acc:1260]	Structural cilia defects after knockdown PMID:21289087 	PMID:21289087	Avidor-Reiss et al. 2004, Li et al. 2004, Pazour et al. 2005, Ross et al. 2007	
-ENSG00000168014	C2CD3	C2 calcium-dependent domain containing 3 [Source:HGNC Symbol;Acc:24564]	Required for cilia formation and Hh signalling PMID:19004860	PMID:19004860	Andersen et al. 2003	Basal body
-ENSG00000179270	C2orf71	chromosome 2 open reading frame 71 [Source:HGNC Symbol;Acc:34383]	Mutated in retinitis pigmentosa (type 54) OMIM 613425 PMID:20398886, PMID:20398884, specifically expressed in the eye.	PMID:20398884, PMID:20398886		Basal body
-ENSG00000156172	C8orf37	chromosome 8 open reading frame 37 [Source:HGNC Symbol;Acc:27232]	Mutated in cone-rod dystrophy (type 16) and retinitis pigmentosa (type 64) OMIM 614477 PMID:22177090. Localizes to Basal body in cultured RPE cells and Basal body and ciliary rootlet in mouse photoreceptors 	PMID:22177090	Li et al. 2004, Merchant et al. 2007	Basal Body, Ciliary Root
-ENSG00000100211	CBY1	chibby homolog 1 (Drosophila) [Source:HGNC Symbol;Acc:1307]	Interacts with ODF1 (cenexin) at mother centriole. Functions in primary cilia formation PMID:22911743	PMID:22911743	Laurencon et al. 2007	Centriole
-ENSG00000048342	CC2D2A	coiled-coil and C2 domain containing 2A [Source:HGNC Symbol;Acc:29253]	Mutated in Cerebellar vermis hypo/aplasia, Oligophrenia, congenital Ataxi, ocular Coloboma and Hepatic fibrosis (COACH) syndrome, Joubert syndrome (type 9) and Meckel-Gruber syndrome (type 6) OMIM 612013 PMID:19574260, PMID:18387594/PMID:19068953, PMID:18513680. At transition zone PMID:21422230. Interacts with CEP290 at basal body PMID:18950740. Interacts with B9 domain proteins in an 'MKS module' at transition zone PMID:21422230	PMID:18950740, PMID:18513680, PMID:19574260	Blacque et al. 2005, Chen et al. 2006, Li et al. 2004, Liu et al. 2007, Ross et al. 2007	Transition Zone
-ENSG00000167131	CCDC103	coiled-coil domain containing 103 [Source:HGNC Symbol;Acc:32700]	Mutated in primary ciliary dyskinesia (type 17) OMIM 614667 PMID:22581229 Functions in binding of dynein arms to cilia microtubules. 	PMID:22581229	Laurencon et al. 2007, Li et al. 2004	Axoneme, Cytoplasm
-ENSG00000105479	CCDC114	coiled-coil domain containing 114 [Source:HGNC Symbol;Acc:26560]	Mutated in primary ciliary dyskinesia (type 20) OMIM 615038 PMID:23261302, PMID: 23261303 Axonemal outer dynein arm docking complex gene. Required for microtubular attachment of outer dynein arms in the ciliary axoneme	PMID:23261302, PMID: 23261303	Boesger et al. 2009, Broadhead et al. 2006, Li et al. 2004, Merchant et al. 2007, Ostrowski et al. 2002, Pazour et al. 2005, Ross et al. 2007, Stolc et al. 2005	Cilium
-ENSG00000157856	CCDC164	coiled-coil domain containing 164 [Source:HGNC Symbol;Acc:24245]	DRC1. Mutated in primary ciliary dyskinesia. Nexin-dynein regulatory complex subunit. Essential for motile cilia function PMID:23354437	PMID:23354437	Arnaiz et al. 2009, Arnaiz et al. 2010, Avidor-Reiss et al. 2004, Broadhead et al. 2006, McClintock et al. 2008, Ross et al. 2007, Smith et al. 2005	Axoneme
-ENSG00000160050	CCDC28B	coiled-coil domain containing 28B [Source:HGNC Symbol;Acc:28163] 	BBS modifier. Required for ciliogenesis PMID: 23015189	PMID:23015189		
-ENSG00000163885	CCDC37	coiled-coil domain containing 37 [Source:HGNC Symbol;Acc:26842]	Structural cilia defects after knockdown PMID:21289087 	PMID:21289087	Arnaiz et al. 2009, Arnaiz et al. 2010, Li et al. 2004, Merchant et al. 2007, Pazour et al. 2005, Stolc et al. 2005	
-ENSG00000145075	CCDC39	coiled-coil domain containing 39 [Source:HGNC Symbol;Acc:25244]	Mutated in primary ciliary dyskinesia (type 14) OMIM 613798 PMID:21131972 Essential for assembly of inner dynein arms and the dynein regulatory complex	PMID:21131972	Arnaiz et al. 2009, Arnaiz et al. 2010, Boesger et al. 2009, Broadhead et al. 2006, McClintock et al. 2008, Merchant et al. 2007, Ostrowski et al. 2002, Pazour et al. 2005	Axoneme
-ENSG00000141519	CCDC40	coiled-coil domain containing 40 [Source:HGNC Symbol;Acc:26090]	Mutated in primary ciliary dyskinesia (type 15) OMIM 613799 PMID:21131974 Essential for assembly of inner dynein arms and the dynein regulatory complex	PMID:21131974	Arnaiz et al. 2009, Arnaiz et al. 2010, Broadhead et al. 2006, Li et al. 2004, Ostrowski et al. 2002, Pazour et al. 2005, Ross et al. 2007, Smith et al. 2005	Axoneme
-ENSG00000173588	CCDC41	coiled-coil domain containing 41 [Source:HGNC Symbol;Acc:17966]	CEP83. Distal appendage of centrioles, essential for ciliogenesis PMID:23348840. Required for ciliary vesicle docking to the mother centriole PMID:23530209	PMID:23348840, PMID:23530209	McClintock et al. 2008, Ross et al. 2007	Centriole
-ENSG00000107736	CDH23	cadherin-related 23 [Source:HGNC Symbol;Acc:13733]	Mutated in autosomal recessive deafness (type 12) and Usher syndrome (type 1D) OMIM 605516 PMID:11090341, PMID:11138009. Required for stereocilia organisation PMID:11138008, especially tip links PMID:15057246	PMID:11090341, PMID:11138009, PMID:11138008, PMID:15057246	Nogales-Cadenas et al. 2006	Connecting Cilium, Stereocilium
-ENSG00000151849	CENPJ	centromere protein J [Source:HGNC Symbol;Acc:17272]	Required for cilia formation in neuronal cells. PMID: 23213448	PMID:23213448	Andersen et al. 2003, Avidor-Reiss et al. 2004, Broadhead et al. 2006, Muller et al. 2010, Nogales-Cadenas et al. 2006	Centrosome
-ENSG00000116198	CEP104	centrosomal protein 104kDa [Source:HGNC Symbol;Acc:24866]	Microtubule plus-end tracking protein (+TIP). Interacts with CP110 and CEP97 at the centriole and is required for ciliogenesis PMID:22885064	PMID:22885064	Arnaiz et al. 2010, Blacque et al. 2005, Li et al. 2004, Pazour et al. 2005	Centriole
-ENSG00000174799	CEP135	centrosomal protein 135kDa [Source:HGNC Symbol;Acc:29086]	Mutated in primary microcephaly (type 8) OMIM 611423 PMID:22521416 although this is not currently considered a ciliopathy. Required for centriole formation PMID:17681131. Can bind and stabilize MTs, is required for the early steps of central MT pair formation in flagella PMID:22898782. Stabilises basal bodies PMID:23115304	PMID:22521416, PMID:17681131, PMID:22898782, PMID:23115304	Andersen et al. 2003, Keller et al. 2005, Li et al. 2004, Liu et al. 2007, Nogales-Cadenas et al. 2006, Pazour et al. 2005	Centrosome, Centriole, Basal Body, Central Pair
-ENSG00000110274	CEP164	centrosomal protein 164kDa [Source:HGNC Symbol;Acc:29182]	Mutated in nephronophthisis (type 15) OMIM:614848 PMID:22863007. Centriole appendage required for ciliogenesis PMID:17954613. Involved in ciliary INPP5E signalling PMID:23150559. Mediates vesicular docking in early ciliogenesis PMID:23253480. Role in DNA damage signalling PMID:18283122, PMID:19197159	PMID:22863007, PMID:17954613, PMID:23150559.  PMID:23253480, PMID:18283122, PMID:19197159	Andersen et al. 2003, Liu et al. 2007, Merchant et al. 2007, Nogales-Cadenas et al. 2006	Centriole
-ENSG00000126001	CEP250	centrosomal protein 250kDa [Source:HGNC Symbol;Acc:1859]	C-NAP1. Required for ciliogenesis and restraint of DNA damage-induced centriole splitting, in association with rootletin PMID:23070519. 	PMID:23070519	Andersen et al. 2003, Blacque et al. 2005, Chen et al. 2006, Laurencon et al. 2007, Liu et al. 2007, Nogales-Cadenas et al. 2006	Basal Body, Centriole
-ENSG00000198707	CEP290	centrosomal protein 290kDa [Source:HGNC Symbol;Acc:29021]	Mutated in Bardet-Biedl syndrome (type 14), Joubert syndrome (type 5), Leber congenital amaurosis (type 10), Meckel-Gruber syndrome (type 4), nephronophthisis (type 6) and Senior Loken syndrome (type 6) OMIM 610142 PMID:16632484, PMID:16682970, PMID:16909394, PMID:17564974, PMID:17617513. Interacts with centriolar satellite component PCM-1, required for Rab8 localization to the primary cilium PMID:18772192. Interacts with RPGR, required for normal axonemal transport in retinal photoreceptors PMID: 16632484 	PMID:16632484, PMID:16682970, PMID:16909394, PMID:17564974, PMID:17617513, PMID:18772192	Andersen et al. 2003, Liu et al. 2007, Nogales-Cadenas et al. 2006	Basal Body, Centrosome
-ENSG00000106477	CEP41	centrosomal protein 41kDa [Source:HGNC Symbol;Acc:12370]	Mutated in Joubert syndrome (type 15) OMIM 610523 PMID:22246503. Role in tubulin glutamylation	PMID:22246503	Andersen et al. 2003, Arnaiz et al. 2010, Liu et al. 2007, Nogales-Cadenas et al. 2006	Basal Body, Centriole, Cilia
-ENSG00000112877	CEP72	centrosomal protein 72kDa [Source:HGNC Symbol;Acc:25547] 	Interacts with CEP290 and PCM1. Required for recuitment of BBS proteins to cilium. PMID: 22767577	PMID:22767577	Andersen et al. 2003, Nogales-Cadenas et al. 2006	Centriolar Satellite
-ENSG00000121289	CEP89	centrosomal protein 89kDa [Source:HGNC Symbol;Acc:25907]	CCDC123. Distal appendage of centrioles, essential for ciliogenesis PMID:23348840.	PMID:23348840.	Andersen et al. 2003, Nogales-Cadenas et al. 2006	Centriole
-ENSG00000182504	CEP97	centrosomal protein 97kDa [Source:HGNC Symbol;Acc:26244]	Negative regulator of ciliogenesis. Knockdown promotes primary cilia formation in growing cells PMID: 7719545. Regulates cilium length PMID:19481458	PMID: 7719545, PMID:19481458	Andersen et al. 2003, Nogales-Cadenas et al. 2006, Ross et al. 2007	Centrosome
-ENSG00000165376	CLDN2	claudin 2 [Source:HGNC Symbol;Acc:2041]	PMID: 22143774	PMID:22143774		Basal Body, Cilium
-ENSG00000103351	CLUAP1	clusterin associated protein 1 [Source:HGNC Symbol;Acc:19009]	IFT complex B component PMID:23351563	PMID:23351563	Arnaiz et al. 2009, Arnaiz et al. 2010, Avidor-Reiss et al. 2004, Li et al. 2004, Liu et al. 2007, Merchant et al. 2007, Ostrowski et al. 2002, Pazour et al. 2005, Ross et al. 2007, Stolc et al. 2005	Centriole, Cilium
-ENSG00000183862	CNGA2	cyclic nucleotide gated channel alpha 2 [Source:HGNC Symbol;Acc:2149]	Subunit of cyclic nucleotide-gated channel in olfactor sensory neuron cilia PMID: 3027574	PMID:3027574	Li et al. 2004, Mayer et al. 2008, Mayer et al. 2009, Pazour et al. 2005	Cilium
-ENSG00000132259	CNGA4	cyclic nucleotide gated channel alpha 4 [Source:HGNC Symbol;Acc:2152]	Subunit of cyclic nucleotide-gated channel in olfactor sensory neuron cilia PMID: 3027574	PMID:3027574	Li et al. 2004, Mayer et al. 2008, Mayer et al. 2009, Pazour et al. 2005, Ross et al. 2007	Cilium
-ENSG00000070729	CNGB1	cyclic nucleotide gated channel beta 1 [Source:HGNC Symbol;Acc:2151]	Subunit of cyclic nucleotide-gated channel in olfactor sensory neuron cilia PMID: 3027574	PMID:3027574	Liu et al. 2007, Mayer et al. 2009	Cilium
-ENSG00000103540	CP110	centriolar coiled coil protein 110kDa [Source:HGNC Symbol;Acc:24342]	Negative regulator of ciliogenesis. Knockdown promotes primary cilia formation in growing cells PMID:17719545. Regulates cilium length. PMID:19481458 Recruited to cilium by KIF24 PMID:21620453 	PMID:17719545, PMID:19481458, PMID:21620453 	Andersen et al. 2003, Nogales-Cadenas et al. 2006, Ross et al. 2007	Centriole
-ENSG00000130545	CRB3	crumbs homolog 3 (Drosophila) [Source:HGNC Symbol;Acc:20237]	Localises to cilia, required for ciliogenesis PMID:15324661, possibly via an interaction with importin beta. Specific cilia isoform CRB3-CLPI PMID:17646395 	PMID:15324661, PMID:17646395		Ciliary Membrane
-ENSG00000058453	CROCC	ciliary rootlet coiled-coil, rootletin [Source:HGNC Symbol;Acc:21299]	Rootletin. Structural component of ciliary rootlet PMID:12427867. Forms centriole-associated filaments and functions in centrosome cohesion PMID:16203858. Ffunctions as a physical linker between the pair of centrioles/basal bodies in cells, in association with C-NAP1 (CEP250), PMID:16339073 and beta-catenin PMID:18086858 and CEP68 PMID:18042621. Required for ciliogenesis and restraint of DNA damage-induced centriole splitting PMID:23070519. 	PMID:12427867, PMID:16203858, PMID:16339073 PMID:18086858, PMID:18042621, PMID:23070519. 	Andersen et al. 2003, Blacque et al. 2005, Chen et al. 2006, Laurencon et al. 2007, Liu et al. 2007, Nogales-Cadenas et al. 2006	Ciliary Root
-ENSG00000168036	CTNNB1	catenin (cadherin-associated protein), beta 1, 88kDa [Source:HGNC Symbol;Acc:2514]	Involved in regulation of PKD1 and PKD2 expression. PMID:12048202. Nek2 substrate involved in centrosome separation, along with rootletin (CROCC) PMID: 18086858. Facilitator of canonical Wnt signalling pathway. Many links between cilia and Wnt signalling eg PMID:15852005, PMID:17906624	PMID:18086858, PMID:12048202, PMID:15852005, PMID:17906624	Liu et al. 2007, Mayer et al. 2009, Muller et al. 2010, Nogales-Cadenas et al. 2006, Ross et al. 2007	Centrosome, Cytosol
-ENSG00000146038	DCDC2	doublecortin domain containing 2 [Source:HGNC Symbol;Acc:18141]	Affects signaling and length of primary cilia. Overexpression increases cilium length PMID 21698230	PMID:21698230	Mayer et al. 2009, Stubbs et al. 2008	Cilium, Cytosol
-ENSG00000146038	DCDC2	doublecortin domain containing 2 [Source:HGNC Symbol;Acc:18141]	PMID: 21698230	PMID:21698230	Mayer et al. 2009, Stubbs et al. 2008	Ciliary Membrane
-ENSG00000095397	DFNB31	deafness, autosomal recessive 31 [Source:HGNC Symbol;Acc:16361]	Whirlin. Mutated in autosomal recessive deafness (type 31) and Usher syndrome (type 2D) OMIM 607928 PMID:12833159 PMID:17171570. In the connecting cilium and basal body of photoreceptor cells. At tips of stereocilia at specific time points in development	PMID:12833159		Basal Body, Cytosol, Connecting Cilium, Ciliary Tip, Stereocilium
-ENSG00000162946	DISC1	disrupted in schizophrenia 1 [Source:HGNC Symbol;Acc:2888]	Localized to the plasma membrane of neuronal cilia and NIH3T3 cells PMID: 20531939	PMID:20531939	Nogales-Cadenas et al. 2006	Centrosome
-ENSG00000154099	DNAAF1	dynein, axonemal, assembly factor 1 [Source:HGNC Symbol;Acc:30539]	LRRC50. Mutated in primary ciliary dyskinesia (type 13) OMIM 613190 PMID:19944400, PMID:19944405. Assembles dynein arms in cilia thereby stabilizing ciliary architecture. Mutation in zebrafish causes polycystic kidney phenotype PMID:18385425                                 	PMID:18385425, PMID:19944400, PMID:19944405	Arnaiz et al. 2010, Avidor-Reiss et al. 2004, Merchant et al. 2007, Ross et al. 2007, Stolc et al. 2005	Axoneme
-ENSG00000165506	DNAAF2	dynein, axonemal, assembly factor 2 [Source:HGNC Symbol;Acc:20188]	Mutated in primary ciliary dyskinesia (type 10) OMIM 612517 Required for cytoplasmic pre-assembly of axonemal dyneins PMID:19052621.	PMID:19052621	Arnaiz et al. 2010	Cytosol
-ENSG00000167646	DNAAF3	dynein, axonemal, assembly factor 3 [Source:HGNC Symbol;Acc:30492]	Mutated in primary ciliary dyskinesia (type 2) OMIM 614566 Essential for the preassembly of dyneins into complexes before their transport into cilia PMID:22387996.	PMID:22387996	Ross et al. 2007	Cytosol
-ENSG00000114841	DNAH1	dynein, axonemal, heavy chain 1 [Source:HGNC Symbol;Acc:2940]	Component of axonemal dynein. Knockout causes sperm immobility and reduced tracheal ciliary beating in mice PMID:11371505	PMID:11371505	Arnaiz et al. 2009, Arnaiz et al. 2010, Boesger et al. 2009, Broadhead et al. 2006, Laurencon et al. 2007, Li et al. 2004, Merchant et al. 2007, Ostrowski et al. 2002, Pazour et al. 2005, Smith et al. 2005	Axoneme
-ENSG00000197653	DNAH10	dynein, axonemal, heavy chain 10 [Source:HGNC Symbol;Acc:2941]	Axonemal dynein heavy chain PMID:11175280. Predicted component of outer dynein arm PMID:15937072	PMID:11175280, PMID:15937072	Arnaiz et al. 2009, Arnaiz et al. 2010, Boesger et al. 2009, Broadhead et al. 2006, Laurencon et al. 2007, Li et al. 2004, Pazour et al. 2005, Smith et al. 2005	Axoneme
-ENSG00000105877	DNAH11	dynein, axonemal, heavy chain 11 [Source:HGNC Symbol;Acc:2942]	Mutated in primary ciliary dyskinesia (type 7) with or without situs inversus OMIM 603339 PMID:12142464, PMID:18022865. Mutated in mouse models of situs inversus PMID:9353118. Component of outer dynein arms, mutants have normal axonemel ultrastructure, but lack dynein arms. 	PMID:12142464, PMID:18022865	Arnaiz et al. 2009, Arnaiz et al. 2010, Boesger et al. 2009, Broadhead et al. 2006, Laurencon et al. 2007, Li et al. 2004, Ostrowski et al. 2002, Pazour et al. 2005, Smith et al. 2005	Axoneme
-ENSG00000183914	DNAH2	dynein, axonemal, heavy chain 2 [Source:HGNC Symbol;Acc:2948]	Component of axonemal inner arm dynein PMID:9256245	PMID:9256245	Arnaiz et al. 2009, Arnaiz et al. 2010, Boesger et al. 2009, Broadhead et al. 2006, Laurencon et al. 2007, Li et al. 2004, Pazour et al. 2005, Smith et al. 2005	Axoneme
-ENSG00000039139	DNAH5	dynein, axonemal, heavy chain 5 [Source:HGNC Symbol;Acc:2950]	Mutated in primary ciliary dyskinesia (type 3) with or without situs inversus OMIM 603335 PMID:11788826. Component of outer dynein arms mutants have normal axonemel ultrastructure, but lack dynein arms PMID:11062149	PMID:11788826, PMID:11062149	Arnaiz et al. 2009, Arnaiz et al. 2010, Avidor-Reiss et al. 2004, Boesger et al. 2009, Broadhead et al. 2006, Laurencon et al. 2007, Li et al. 2004, Ostrowski et al. 2002, Pazour et al. 2005, Smith et al. 2005	Axoneme
-ENSG00000115423	DNAH6	dynein, axonemal, heavy chain 6 [Source:HGNC Symbol;Acc:2951]	Component of axonemal dynein PMID:8812413	PMID:8812413	Arnaiz et al. 2009, Arnaiz et al. 2010, Boesger et al. 2009, Broadhead et al. 2006, Laurencon et al. 2007, Li et al. 2004, Pazour et al. 2005, Ross et al. 2007, Smith et al. 2005	Axoneme
-ENSG00000122735	DNAI1	dynein, axonemal, intermediate chain 1 [Source:HGNC Symbol;Acc:2954]	Mutated in primary ciliary dyskinesia (type 1), with or without situs inversus OMIM 604366 PMID:10577904, PMID:11231901. Component of outer dynein arms.	PMID:11231901, PMID:10577904	Arnaiz et al. 2009, Arnaiz et al. 2010, Avidor-Reiss et al. 2004, Broadhead et al. 2006, Li et al. 2004, Merchant et al. 2007, Ostrowski et al. 2002, Pazour et al. 2005, Ross et al. 2007, Smith et al. 2005, Stolc et al. 2005	Axoneme
-ENSG00000171595	DNAI2	dynein, axonemal, intermediate chain 2 [Source:HGNC Symbol;Acc:18744]	Mutated in primary ciliary dyskinesia (type 9), with or without situs inversus OMIM 605483 PMID:18950741. Component of outer dynein arms.	PMID:18950741	Arnaiz et al. 2009, Avidor-Reiss et al. 2004, Broadhead et al. 2006, Li et al. 2004, Merchant et al. 2007, Ostrowski et al. 2002, Pazour et al. 2005, Ross et al. 2007, Smith et al. 2005, Stolc et al. 2005	Axoneme
-ENSG00000119661	DNAL1	dynein, axonemal, light chain 1 [Source:HGNC Symbol;Acc:23247]	Mutated in primary ciliary dyskinesia (type 16) OMIM 610062 PMID:15845866, PMID:21496787. Component of outer dynein arms.	PMID:15845866, PMID:21496787	Arnaiz et al. 2009, Arnaiz et al. 2010, Avidor-Reiss et al. 2004, Broadhead et al. 2006, Li et al. 2004, Merchant et al. 2007, Ostrowski et al. 2002, Pazour et al. 2005, Ross et al. 2007, Smith et al. 2005, Stolc et al. 2005	Axoneme
-ENSG00000163879	DNALI1	dynein, axonemal, light intermediate chain 1 [Source:HGNC Symbol;Acc:14353]	Component of axonemal dynein PMID:9284741, PMID:16496424	PMID:9284741, PMID:16496424	Arnaiz et al. 2009, Arnaiz et al. 2010, Avidor-Reiss et al. 2004, Blacque et al. 2005, Broadhead et al. 2006, Li et al. 2004, McClintock et al. 2008, Merchant et al. 2007, Ostrowski et al. 2002, Pazour et al. 2005, Ross et al. 2007, Smith et al. 2005, Stolc et al. 2005, Stubbs et al. 2008	Cilium
-ENSG00000166171	DPCD	deleted in primary ciliary dyskinesia homolog (mouse) [Source:HGNC Symbol;Acc:24542]	Deleted in a mouse model of primary ciliary dyskinesia PMID: 20080492 PMID: 21746835	PMID:20080492, PMID:21746835		
-ENSG00000092964	DPYSL2	dihydropyrimidinase-like 2 [Source:HGNC Symbol;Acc:3014]	CRMP-2. Promotes axon formation, neurite outgrowth and elongation in neuronal cells. Targeted to cilium by GSK3 PMID:23185275	PMID:23185275	Mayer et al. 2009	Cilium
-ENSG00000184845	DRD1	dopamine receptor D1 [Source:HGNC Symbol;Acc:3020]	Localized to the plasma membrane of neuronal cilia and NIH3T3 cells PMID: 20531939	PMID:20531939		Ciliary Membrane
-ENSG00000149295	DRD2	dopamine receptor D2 [Source:HGNC Symbol;Acc:3023]	Localized to the plasma membrane of neuronal cilia and NIH3T3 cells PMID: 20531939	PMID:20531939		Ciliary Membrane
-ENSG00000169676	DRD5	dopamine receptor D5 [Source:HGNC Symbol;Acc:3026] 	Localized to the plasma membrane of neuronal cilia and NIH3T3 cells PMID: 20531939	PMID:20531939		Ciliary Membrane
-ENSG00000107404	DVL1	dishevelled, dsh homolog 1 (Drosophila) [Source:HGNC Symbol;Acc:3084]	Required for apical docking of basal bodies PMID:18552847 and planar cell polarity via inversin PMID:15852005	PMID:18552847, PMID:15852005	Blacque et al. 2005	Basal Body
-ENSG00000187240	DYNC2H1	dynein, cytoplasmic 2, heavy chain 1 [Source:HGNC Symbol;Acc:2962]	DHC1b. Mutated in Jeune asphyxiating thoracic dystrophy (type 3), short rib polydactyly syndromes (type 2 and 3) OMIM 603297 PMID:19442771. PMID:19361615. Required for ciliogenesis in chondrocytes. Localises to Golgi PMID:8666668.Involved in Smo trafficking along the cilium PMID:18488998. Required for cilia assemby PMID:9971742	PMID:19442771, PMID:19361615, PMID:8666668, PMID:18488998, PMID:9971742	Arnaiz et al. 2009, Arnaiz et al. 2010, Blacque et al. 2005, Boesger et al. 2009, Broadhead et al. 2006, Chen et al. 2006, Laurencon et al. 2007, Li et al. 2004, Liu et al. 2007, Mayer et al. 2009, Pazour et al. 2005, Smith et al. 2005	Golgi, Axoneme
-ENSG00000146425	DYNLT1	dynein, light chain, Tctex-type 1 [Source:HGNC Symbol;Acc:11697]	TCTEX1. Role at transition zone in cilia resorption at the start of S phase PMID: 21394082. Regulates cilia length PMID: 21700358. 	PMID:21700358, PMID:21394082	Arnaiz et al. 2009, Blacque et al. 2005, Broadhead et al. 2006, Li et al. 2004, Ostrowski et al. 2002, Pazour et al. 2005, Stolc et al. 2005	Axoneme, Transition Zone
-ENSG00000256061	DYX1C1	dyslexia susceptibility 1 candidate 1 [Source:HGNC Symbol;Acc:21493]	Upregulated during ciliogenesis and localize to centrosome and (in some cells) primary cilia PMID:23300604	PMID:23300604		Centrosome, Cilium
-ENSG00000096093	EFHC1	EF-hand domain (C-terminal) containing 1 [Source:HGNC Symbol;Acc:16406]	EF-hand domain (C-terminal) containing 1. Mutated in Juvenile myoclonic epilepsy. Axonemal protein PMID:15670853. Binds tektin PMID:16831421. Transcription regulated by FOXJ1a PMID:20937855. Regulates beat frequency? PMID:23213475	PMID:15670853, PMID:16831421, PMID:20937855, PMID:23213475	Arnaiz et al. 2009, Arnaiz et al. 2010, Broadhead et al. 2006, Keller et al. 2005, Kilburn et al. 2007, Kubo et al. 2008, Li et al. 2004, McClintock et al. 2008, Merchant et al. 2007, Ostrowski et al. 2002, Pazour et al. 2005, Ross et al. 2007, Smith et al. 2005, Stolc et al. 2005, Stubbs et al. 2008	Axoneme
-ENSG00000072840	EVC	Ellis van Creveld syndrome [Source:HGNC Symbol;Acc:3497]	Mutated in Ellis-van Creveld syndrome and Weyers acrodental dysostosis OMIM 604831, PMID:10700184. At base of cilia PMID:17660199. Diminished Hh response in EVC patients PMID:19876929. Transduces Hh signal at cilium with Smo PMID:22986504.	PMID:10700184, PMID:17660199, PMID:19876929, PMID:22986504.		Transition Zone
-ENSG00000173040	EVC2	Ellis van Creveld syndrome 2 [Source:HGNC Symbol;Acc:19747]	Mutated in Ellis-van Creveld syndrome OMIM 607261 PMID:607261. Transduces Hh signal at cilium with Smo PMID:22981989. Positive modulator of Hh signalling PMID:21356043 	PMID:607261, PMID:22981989, PMID:21356043 		Cilia membrane, Nucleus
-ENSG00000180104	EXOC3	exocyst complex component 3 [Source:HGNC Symbol;Acc:30378]	SEC6. Required for deciliation. RNAi-mediated reduction of Exocyst subunit Sec6 inhibits ciliary shedding and specifically blocks deciliation-associated down-regulation of claudin-2 and gp135. PMID:19005211 	PMID:19005211	Liu et al. 2007	
-ENSG00000131558	EXOC4	exocyst complex component 4 [Source:HGNC Symbol;Acc:30389]	 SEC8. Required for apical docking of basal bodies with DVL1 PMID:18552847	PMID:18552847	Liu et al. 2007	Basal body
-ENSG00000070367	EXOC5	exocyst complex component 5 [Source:HGNC Symbol;Acc:10696]	SEC10. Necessary for primary ciliogenesis and cystogenesis in vitro PMID:19297529 	PMID:19297529	Liu et al. 2007	Cytosol, Plasma Membrane, Cilium
-ENSG00000138190	EXOC6	exocyst complex component 6 [Source:HGNC Symbol;Acc:23196] 	Sec15 paralogue. Binds Rabin8 PMID: 23435566	PMID:23435566	Blacque et al. 2005, Liu et al. 2007	
-ENSG00000144036	EXOC6B	exocyst complex component 6B [Source:HGNC Symbol;Acc:17085] 	Sec15 paralogue. Binds Rabin8 PMID: 23435566	PMID:23435566	Blacque et al. 2005, Liu et al. 2007	
-ENSG00000170264	FAM161A	family with sequence similarity 161, member A [Source:HGNC Symbol;Acc:25808]	Mutated in retinitis pigmentosa (type 28) OMIM 613596 PMID:20705278, PMID:20705279. Role in microtubule acetylation and stabilizationPMID: 22791751. Interacts with lebercilin, CEP290, OFD1 and SDCCAG8. Knockdown reduces cilia number PMID:22940612. Localizes In retinal photoreceptors: connecting cilium, the basal body region and the adjacent centriole. In cultured cells: at centrosome base of primary cilia	PMID:20705278, PMID:20705279, PMID: 22791751, PMID:22940612.	Andersen et al. 2003, Efimenko et al. 2005, Liu et al. 2007, Ross et al. 2007	Connecting Cilium, Basal Body, Centrosome
-ENSG00000188878	FBF1	Fas (TNFRSF6) binding factor 1 [Source:HGNC Symbol;Acc:24674]	Distal appendage of centrioles, essential for ciliogenesis PMID:23348840.	PMID:23348840.	Avidor-Reiss et al. 2004, Laurencon et al. 2007	Centriole
-ENSG00000196924	FLNA	filamin A, alpha [Source:HGNC Symbol;Acc:3754]	Interacts with meckelin (TMEM67) and MKS1. At base of cilium. Knockdown leads to reduced numbers of cilia. PMID:22121117	PMID:22121117	Liu et al. 2007, Mayer et al. 2009	Basal body
-ENSG00000133393	FOPNL	FGFR1OP N-terminal like [Source:HGNC Symbol;Acc:26435]	FOR20. Pericentriolar satellite protein. Involved in regulating the interaction of PCM1 satellites with microtubules and motors PMID:20551181	PMID:20551181	Andersen et al. 2003, Kilburn et al. 2007, Li et al. 2004, Liu et al. 2007, Merchant et al. 2007	Centriolar Satellite
-ENSG00000129654	FOXJ1	forkhead box J1 [Source:HGNC Symbol;Acc:3816]	PMID:19011630 transcription factor regulating expression of cilia genes	PMID:19011630	McClintock et al. 2008, Ross et al. 2007	Nucleus
-ENSG00000010361	FUZ	fuzzy homolog (Drosophila) [Source:HGNC Symbol;Acc:26219]	PMID:16493421 governs apical actin assembly and thus controls the orientation, but not assembly, of ciliary microtubules. Regulates IFT PMID:22778277	PMID:16493421, PMID:22778277		Cytosol
-ENSG00000141013	GAS8	growth arrest-specific 8 [Source:HGNC Symbol;Acc:4166]	Required for sperm motility PMID:11751847 and Smo translocation into cilium PMID:21659505. microtubule associated subunit of the Dynein Regulatory Complex (DRC)	PMID:11751847, PMID:21659505	Arnaiz et al. 2009, Arnaiz et al. 2010, Avidor-Reiss et al. 2004, Broadhead et al. 2006, Li et al. 2004, Merchant et al. 2007, Ostrowski et al. 2002, Pazour et al. 2005, Smith et al. 2005, Stolc et al. 2005	Axoneme
-ENSG00000111087	GLI1	GLI family zinc finger 1 [Source:HGNC Symbol;Acc:4317]	Effectors of Hh signaling, localizes to tip of cilium. PMID:21209912	PMID:21209912	Blacque et al. 2005	Ciliary Tip
-ENSG00000074047	GLI2	GLI family zinc finger 2 [Source:HGNC Symbol;Acc:4318]	Localizes together with other Hh proteins to tip of cilium	PMID:16254602	Blacque et al. 2005	Ciliary Tip
-ENSG00000106571	GLI3	GLI family zinc finger 3 [Source:HGNC Symbol;Acc:4319]	Localizes together with other Hh proteins to tip of cilium	PMID:16254602	Blacque et al. 2005	Ciliary Tip
-ENSG00000126603	GLIS2	GLIS family zinc finger 2 [Source:HGNC Symbol;Acc:29450]	NPHP7 OMIM 608539. Mutation causes NPHP.	PMID:17618285		
-ENSG00000143147	GPR161	G protein-coupled receptor 161 [Source:HGNC Symbol;Acc:23694]	Localizes to primary cilia in a Tulp3/IFT-A-dependent manner. Negatively regulates Shh signalling PMID:23332756 	PMID:23332756 		Cilium
-ENSG00000164199	GPR98	G protein-coupled receptor 98 [Source:HGNC Symbol;Acc:17416]	USH2C OMIM 602851. Mutation causes Usher syndrome type IIC	PMID:15671307	Liu et al. 2007	Connecting Cilium, Stereocilium
-ENSG00000082701	GSK3B	glycogen synthase kinase 3 beta [Source:HGNC Symbol;Acc:4617]	Combined deactivation with VHL causes loss of cilia 	PMID:17450132, PMID:23185275	Liu et al. 2007, Nogales-Cadenas et al. 2006, Pazour et al. 2005	
-ENSG00000173805	HAP1	huntingtin-associated protein 1 [Source:HGNC Symbol;Acc:4812]	Retrograde trafficking of PCM1 regulated by HTT and HAP1 to control ciliogenesis PMID:21985783	PMID:21985783	Nogales-Cadenas et al. 2006	Centrosome, Basal Body
-ENSG00000164818	HEATR2	HEAT repeat containing 2 [Source:HGNC Symbol;Acc:26013]	Mutation causes PCD, presumably involved in dynein arm transport or assembly	PMID:23040496	Li et al. 2004	Cytosol
-ENSG00000108753	HNF1B	HNF1 homeobox B [Source:HGNC Symbol;Acc:11630]	Mutation causes renal cyst and diabetes syndrome (OMIM #137920). Deficiency causes ciliary defects in human cholangiocytes PMID:22706971	PMID:22706971		
-ENSG00000109971	HSPA8	heat shock 70kDa protein 8 [Source:HGNC Symbol;Acc:5241]	Chaperone of the IFT together with DnajB6	PMID:19302411	Andersen et al. 2003, Arnaiz et al. 2009, Blacque et al. 2005, Broadhead et al. 2006, Kilburn et al. 2007, Laurencon et al. 2007, Liu et al. 2007, Mayer et al. 2008, Mayer et al. 2009, Muller et al. 2010, Nogales-Cadenas et al. 2006, Ostrowski et al. 2002, Pazour et al. 2005, Ross et al. 2007, Stolc et al. 2005	
-ENSG00000081870	HSPB11	heat shock protein family B (small), member 11 [Source:HGNC Symbol;Acc:25019]	IFT25, part of IFT-B complex. Forms a complex with IFT27. External submission.	PMID:19253336; PMID:19382199; PMID:21505417; PMID:22595669	Li et al. 2004, Liu et al. 2007, Pazour et al. 2005, Stolc et al. 2005	Cilium, IFT
-ENSG00000158748	HTR6	5-hydroxytryptamine (serotonin) receptor 6, G protein-coupled [Source:HGNC Symbol;Acc:5301] 	Localises to the plasma membrane of neuronal cilia in the rat brain. PMID:10924708	PMID:10924708		Ciliary Membrane
-ENSG00000197386	HTT	huntingtin [Source:HGNC Symbol;Acc:4851]	Retrograde trafficking of PCM1 regulated by HTT and HAP1 to control ciliogenesis PMID:21985783	PMID:21985783	Liu et al. 2007, Nogales-Cadenas et al. 2006, Ross et al. 2007	Centrosome, Basal Body
-ENSG00000157423	HYDIN	HYDIN, axonemal central pair apparatus protein [Source:HGNC Symbol;Acc:19368]	axonemal central pair apparatus protein PMID:17296796 mutated in PCD PMID: 23022101 	PMID:17296796, PMID:23022101	Arnaiz et al. 2009, Boesger et al. 2009, Broadhead et al. 2006, Li et al. 2004, McClintock et al. 2008, Merchant et al. 2007, Pazour et al. 2005, Ross et al. 2007, Smith et al. 2005	Central Pair
-ENSG00000198331	HYLS1	hydrolethalus syndrome 1 [Source:HGNC Symbol;Acc:26558]	Hydrolethalus syndrome OMIM 610693. Mutation impares ciliogenesis. Required for apical anchoring of basal body/centriole	PMID:19656802	Andersen et al. 2003	Basal Body
-ENSG00000163913	IFT122	intraflagellar transport 122 homolog (Chlamydomonas) [Source:HGNC Symbol;Acc:13556]	component of IFT complex A	PMID:20493458	Arnaiz et al. 2009, Avidor-Reiss et al. 2004, Chen et al. 2006, Li et al. 2004, Liu et al. 2007, Pazour et al. 2005	Basal Body, Cilium, IFT
-ENSG00000187535	IFT140	intraflagellar transport 140 homolog (Chlamydomonas) [Source:HGNC Symbol;Acc:29077]	component of IFT complex A, mutated in skeletal ciliopathies with kidney disease PMID: 23418020	PMID:23418020	Arnaiz et al. 2009, Arnaiz et al. 2010, Avidor-Reiss et al. 2004, Blacque et al. 2005, Efimenko et al. 2005, Li et al. 2004, Liu et al. 2007, Merchant et al. 2007, Pazour et al. 2005	Basal Body, Cilium, IFT
-ENSG00000138002	IFT172	intraflagellar transport 172 homolog (Chlamydomonas) [Source:HGNC Symbol;Acc:30391]	component of IFT complex B	PMID:18930042	Arnaiz et al. 2009, Arnaiz et al. 2010, Avidor-Reiss et al. 2004, Blacque et al. 2005, Chen et al. 2006, Efimenko et al. 2005, Laurencon et al. 2007, Li et al. 2004, Liu et al. 2007, McClintock et al. 2008, Merchant et al. 2007, Ostrowski et al. 2002, Pazour et al. 2005, Ross et al. 2007	Basal Body, Cilium, IFT
-ENSG00000109083	IFT20	intraflagellar transport 20 homolog (Chlamydomonas) [Source:HGNC Symbol;Acc:30989]	component of IFT complex B	PMID:12821668, PMID:16775004	Arnaiz et al. 2009, Avidor-Reiss et al. 2004, Blacque et al. 2005, Efimenko et al. 2005, Laurencon et al. 2007, Liu et al. 2007, Merchant et al. 2007, Nogales-Cadenas et al. 2006, Ostrowski et al. 2002, Pazour et al. 2005, Stolc et al. 2005	Basal Body, Cilium, Golgi, IFT
-ENSG00000100360	IFT27	intraflagellar transport 27 homolog (Chlamydomonas) [Source:HGNC Symbol;Acc:18626]	component of IFT complex B. Rab-like small G protein	PMID:22076686	Arnaiz et al. 2009, Arnaiz et al. 2010, Liu et al. 2007, Merchant et al. 2007, Ostrowski et al. 2002, Pazour et al. 2005, Ross et al. 2007, Stolc et al. 2005	Basal Body, Cilium, IFT
-ENSG00000119650	IFT43	intraflagellar transport 43 homolog (Chlamydomonas) [Source:HGNC Symbol;Acc:29669]	component of IFT complex A	PMID:21378380	Boesger et al. 2009, Li et al. 2004, Merchant et al. 2007, Pazour et al. 2005, Ross et al. 2007	Basal Body, Cilium, IFT
-ENSG00000118096	IFT46	intraflagellar transport 46 homolog (Chlamydomonas) [Source:HGNC Symbol;Acc:26146]	component of IFT complex B, confirmed in PMID:21289087	PMID:21289087	Arnaiz et al. 2009, Avidor-Reiss et al. 2004, Laurencon et al. 2007, Li et al. 2004, Liu et al. 2007, Merchant et al. 2007, Ostrowski et al. 2002, Pazour et al. 2005, Ross et al. 2007, Stolc et al. 2005	Basal Body, Cilium, IFT
-ENSG00000101052	IFT52	intraflagellar transport 52 homolog (Chlamydomonas) [Source:HGNC Symbol;Acc:15901]	component of IFT complex B	PMID:11676918	Arnaiz et al. 2009, Avidor-Reiss et al. 2004, Blacque et al. 2005, Chen et al. 2006, Efimenko et al. 2005, Li et al. 2004, Liu et al. 2007, Merchant et al. 2007, Pazour et al. 2005, Smith et al. 2005, Stolc et al. 2005	Basal Body, Cilium, IFT
-ENSG00000114446	IFT57	intraflagellar transport 57 homolog (Chlamydomonas) [Source:HGNC Symbol;Acc:17367]	component of IFT complex B	PMID:18492793	Arnaiz et al. 2009, Arnaiz et al. 2010, Avidor-Reiss et al. 2004, Blacque et al. 2005, Chen et al. 2006, Efimenko et al. 2005, Laurencon et al. 2007, Li et al. 2004, Liu et al. 2007, Merchant et al. 2007, Ostrowski et al. 2002, Pazour et al. 2005, Ross et al. 2007, Stolc et al. 2005	Basal Body, Cilium, IFT
-ENSG00000096872	IFT74	intraflagellar transport 74 homolog (Chlamydomonas) [Source:HGNC Symbol;Acc:21424]	component of IFT complex B	PMID:15955805	Arnaiz et al. 2009, Arnaiz et al. 2010, Blacque et al. 2005, Chen et al. 2006, Li et al. 2004, Liu et al. 2007, McClintock et al. 2008, Merchant et al. 2007, Ostrowski et al. 2002, Pazour et al. 2005, Ross et al. 2007, Stolc et al. 2005	Basal Body, Cilium, IFT
-ENSG00000068885	IFT80	intraflagellar transport 80 homolog (Chlamydomonas) [Source:HGNC Symbol;Acc:29262]	component of IFT complex B, ATD2 OMIM 611177	PMID:17468754	Arnaiz et al. 2009, Avidor-Reiss et al. 2004, Blacque et al. 2005, Chen et al. 2006, Efimenko et al. 2005, Li et al. 2004, Liu et al. 2007, Mayer et al. 2009, Merchant et al. 2007, Ostrowski et al. 2002, Pazour et al. 2005, Stolc et al. 2005	Basal Body, Cilium, IFT
-ENSG00000122970	IFT81	intraflagellar transport 81 homolog (Chlamydomonas) [Source:HGNC Symbol;Acc:14313]	component of IFT complex B	PMID:15955805	Arnaiz et al. 2009, Arnaiz et al. 2010, Blacque et al. 2005, Chen et al. 2006, Li et al. 2004, Liu et al. 2007, Merchant et al. 2007, Ostrowski et al. 2002, Pazour et al. 2005, Ross et al. 2007, Stolc et al. 2005	Basal Body, Cilium, IFT
-ENSG00000032742	IFT88	intraflagellar transport 88 homolog (Chlamydomonas) [Source:HGNC Symbol;Acc:20606]	component of IFT complex B	PMID:11062270	Arnaiz et al. 2009, Arnaiz et al. 2010, Avidor-Reiss et al. 2004, Blacque et al. 2005, Chen et al. 2006, Efimenko et al. 2005, Li et al. 2004, Liu et al. 2007, Merchant et al. 2007, Ostrowski et al. 2002, Pazour et al. 2005, Ross et al. 2007, Stolc et al. 2005	Basal Body, Cilium, IFT
-ENSG00000148384	INPP5E	inositol polyphosphate-5-phosphatase, 72 kDa [Source:HGNC Symbol;Acc:21474]	JBTS1 OMIM 613037. cause primary cilium signaling defects, ciliary instability and ciliopathies in human and mouse	PMID:19668215	Kim et al. 2010	Axoneme
-ENSG00000164066	INTU	inturned planar cell polarity effector homolog (Drosophila) [Source:HGNC Symbol;Acc:29239]	PMID:16493421 governs apical actin assembly and thus controls the orientation, but not assembly, of ciliary microtubules	PMID:16493421		Plasma Membrane
-ENSG00000119509	INVS	inversin [Source:HGNC Symbol;Acc:17870]	Known ciliopathy gene NPHP2 OMIM 243305	PMID:12872123	Blacque et al. 2005, Nogales-Cadenas et al. 2006	Cilium, Basal Body, Centrosome
-ENSG00000173226	IQCB1	IQ motif containing B1 [Source:HGNC Symbol;Acc:28949]	Known ciliopathy gene NPHP5, SLS5 OMIM 609237	PMID:15723066, PMID:20881296	Liu et al. 2007	Basal Body, Centrosome
-ENSG00000117245	KIF17	kinesin family member 17 [Source:HGNC Symbol;Acc:19167]	Kinesin 2 motor, active in antergrade IFT PMID: 18304522, PMID: 16782012	PMID:18304522, PMID:16782012	Arnaiz et al. 2010, Wigge et al. 1998	Ciliary Tip
-ENSG00000196169	KIF19	kinesin family member 19 [Source:HGNC Symbol;Acc:26735]	Microtubule-depolymerizing kinesin for ciliary length control PMID: 23168168	PMID:23168168		Ciliary Tip
-ENSG00000186638	KIF24	kinesin family member 24 [Source:HGNC Symbol;Acc:19916]	Recruites CP110 to centrosome to regulate ciliogenesis PMID:21620453	PMID:21620453		Centriole
-ENSG00000165115	KIF27	kinesin family member 27 [Source:HGNC Symbol;Acc:18632] 	Hydrocephalus due to dysfunctional motile cilia in KO mouse PMID: 21746835	PMID:21746835	McClintock et al. 2008, Pazour et al. 2005	
-ENSG00000131437	KIF3A	kinesin family member 3A [Source:HGNC Symbol;Acc:6319]	Mouse mutants suffer Situs inversus and embryonic ciliary morphogenensis defects PMID:10220415	PMID:10220415	Arnaiz et al. 2010, Avidor-Reiss et al. 2004, Liu et al. 2007, Pazour et al. 2005, Wigge et al. 1998	Cilium
-ENSG00000101350	KIF3B	kinesin family member 3B [Source:HGNC Symbol;Acc:6320]	Kinesin linked to IFT complex PMID: 12821668. KIF3B mutation in mouse cause randomization of left-right symetry PMID:9865700	PMID:9865700, PMID:12821668	Avidor-Reiss et al. 2004, Blacque et al. 2005, Laurencon et al. 2007, Liu et al. 2007, Pazour et al. 2005, Wigge et al. 1998	Cilium
-ENSG00000084731	KIF3C	kinesin family member 3C [Source:HGNC Symbol;Acc:6321]	KIF3C dimerizes with KIF3A, redundant with KIF3B	PMID:23123805	Avidor-Reiss et al. 2004, Blacque et al. 2005, Laurencon et al. 2007, Pazour et al. 2005, Wigge et al. 1998	Cilium
-ENSG00000166813	KIF7	kinesin family member 7 [Source:HGNC Symbol;Acc:30497]	JBTS12, mutation causes defect in cilia formation. Function in Hh-signaling	PMID:21633164, PMID:19592253	Pazour et al. 2005	Ciliary Tip
-ENSG00000135338	LCA5	Leber congenital amaurosis 5 [Source:HGNC Symbol;Acc:31923]	Causes LCA OMIM 611408	PMID:17546029	Liu et al. 2007, Ostrowski et al. 2002	Basal Body, Cilium
-ENSG00000129295	LRRC6	leucine rich repeat containing 6 [Source:HGNC Symbol;Acc:16725]	Essential for proper axonemal assembly of inner and outer dynein arms, causes PCD. PMID:23122589	PMID:23122589	Arnaiz et al. 2010, McClintock et al. 2008, Merchant et al. 2007, Ross et al. 2007	Cilium
-ENSG00000163818	LZTFL1	leucine zipper transcription factor-like 1 [Source:HGNC Symbol;Acc:6741]	BBS. BBSome and smoothened trafficking regulator PMID: 22510444	PMID:22510444	Liu et al. 2007, Pazour et al. 2005, Ross et al. 2007	Basal Body, Cilium
-ENSG00000111837	MAK	male germ cell-associated kinase [Source:HGNC Symbol;Acc:6816]	Mutation causes RP. RP62 OMIM 154235 	PMID:22110072	Liu et al. 2007, Ostrowski et al. 2002, Ross et al. 2007	Cilium
-ENSG00000172005	MAL	mal, T-cell differentiation protein [Source:HGNC Symbol;Acc:6817] 	Absent/abnormal cilia when overexpressed PMID: 22895261. Punctate distribution in some cilia	PMID:22895261		Cilium
-ENSG00000101367	MAPRE1	microtubule-associated protein, RP/EB family, member 1 [Source:HGNC Symbol;Acc:6890]	Also called EB1. MT plus-end-tracking protein. promotes ciliogenesis. PMID: 21768326	PMID:21768326	Andersen et al. 2003, Blacque et al. 2005, Liu et al. 2007, Mayer et al. 2008, Nogales-Cadenas et al. 2006, Pazour et al. 2005, Wigge et al. 1998	Centrosome, Cytosol, Golgi
-ENSG00000128285	MCHR1	melanin-concentrating hormone receptor 1 [Source:HGNC Symbol;Acc:4479]	Localizes to primary cilia PMID: 18256283	PMID:18256283		Ciliary Membrane
-ENSG00000111554	MDM1	Mdm1 nuclear protein homolog (mouse) [Source:HGNC Symbol;Acc:29917]	Upregulated during ciliogenesis and localize to centrosomes and primary cilia PMID: 23300604. Nonsense mutation in Mdm1 in the arrd2 mouse model for age-related retinal degeneration PMID: 18805803	PMID:23300604, PMID:18805803	Andersen et al. 2003, Liu et al. 2007, Nogales-Cadenas et al. 2006, Ross et al. 2007	Centrosome, Cilium
-ENSG00000125863	MKKS	McKusick-Kaufman syndrome [Source:HGNC Symbol;Acc:7108]	MKKS, BBS6 OMIM 604896 Forms complex with other chaperonin-like BBS proteins to facilitate BBSome assembly PMID:20080638. At basal body of differentiating preadipocytes. Role in targeting of Wnt and Hh receptors to this cilium PMID:19190184.	PMID:10973251, PMID:15731008	Nogales-Cadenas et al. 2006	Basal Body, Cytosol
-ENSG00000011143	MKS1	Meckel syndrome, type 1 [Source:HGNC Symbol;Acc:7121]	MKS1, BBS13 OMIM 609883	PMID:16415886	Keller et al. 2005, Li et al. 2004, Liu et al. 2007	Basal Body
-ENSG00000178053	MLF1	myeloid leukemia factor 1 [Source:HGNC Symbol;Acc:7125]	Upregulated during ciliogenesis and localize to primary cilia and motile cilia PMID:23300604	PMID:23300604	Nogales-Cadenas et al. 2006, Ostrowski et al. 2002, Ross et al. 2007	Cilium
-ENSG00000138587	MNS1	meiosis-specific nuclear structural 1 [Source:HGNC Symbol;Acc:29636]	Mns1-/- mice have short, immotile sperm flagella, situs defects and hydrocephalus. Protein localised along flagellum. PMID:22396656. Knockdown in IMCD3 and 3T3 cells causes Hh signalling defects PMID:21289087	PMID:22396656, PMID:21289087	Arnaiz et al. 2009, Arnaiz et al. 2010, Cao et al. 2008, Li et al. 2004, Ostrowski et al. 2002, Pazour et al. 2005, Ross et al. 2007, Smith et al. 2005, Stolc et al. 2005	Axoneme
-ENSG00000091536	MYO15A	myosin XVA [Source:HGNC Symbol;Acc:7594]	DFNB3 OMIM 600316. Localizes to tip of stereocilia, essential for staircase formation.	PMID:14610277		Ciliary Tip, Stereocilium
-ENSG00000137474	MYO7A	myosin VIIA [Source:HGNC Symbol;Acc:7606]	Known ciliopathy gene  DFNA11, DFNB2, USH1B OMIM 276903	PMID:7870171	Blacque et al. 2005, Liu et al. 2007	Ciliary Tip, Stereocilium
-ENSG00000137601	NEK1	NIMA-related kinase 1 [Source:HGNC Symbol;Acc:7744]	SRPS2. Promotes VHL degradation and ciliary destabilization	PMID:23255108		Basal Body, Pericentriolar Matrix
-ENSG00000117650	NEK2	NIMA-related kinase 2 [Source:HGNC Symbol;Acc:7745]	required for cilium disassembly at G2/M	PMID:22613497	Andersen et al. 2003, Nogales-Cadenas et al. 2006	Basal Body, Centriole
-ENSG00000114904	NEK4	NIMA-related kinase 4 [Source:HGNC Symbol;Acc:11399]	Interacts with RPGRIP1 and RPGRIP1L. Regulates cilium integrity. PMID:21685204	PMID:21685204		Basal Body, Ciliary Rootlet
-ENSG00000160602	NEK8	NIMA-related kinase 8 [Source:HGNC Symbol;Acc:13387]	Known ciliopathy gene NPHP9 OMIM 609799	PMID:22106379, PMID:18199800		Transition Zone
-ENSG00000064300	NGFR	nerve growth factor receptor [Source:HGNC Symbol;Acc:7809]	Localized to the plasma membrane of neuronal cilia PMID: 20875398	PMID:20875398		Ciliary Membrane
-ENSG00000100503	NIN	ninein (GSK3B interacting protein) [Source:HGNC Symbol;Acc:14906]	PMID: 21725307 PMID: 15784680	PMID:21725307, PMID:15784680	Andersen et al. 2003, Nogales-Cadenas et al. 2006	Centriole
-ENSG00000101004	NINL	ninein-like [Source:HGNC Symbol;Acc:29163]	Interacts with lebercilin, USH2A (isoform B) PMID:18826961	PMID:18826961	Nogales-Cadenas et al. 2006	Basal Body, Centrosome
-ENSG00000112981	NME5	NME/NM23 family member 5 [Source:HGNC Symbol;Acc:7853] 	Hydrocephalus and infertility due to dysfunctional motile cilia in KO mouse PMID: 21746835	PMID:21746835	McClintock et al. 2008, Ostrowski et al. 2002, Pazour et al. 2005, Ross et al. 2007, Stolc et al. 2005, Stubbs et al. 2008	
-ENSG00000143156	NME7	NME/NM23 family member 7 [Source:HGNC Symbol;Acc:20461]	PMID:21289087 IFT transport and signalling defects after knockdown	PMID:21289087	Andersen et al. 2003, Arnaiz et al. 2009, Arnaiz et al. 2010, Broadhead et al. 2006, Cao et al. 2008, Keller et al. 2005, Laurencon et al. 2007, Li et al. 2004, Liu et al. 2007, Merchant et al. 2007, Nogales-Cadenas et al. 2006, Ostrowski et al. 2002, Pazour et al. 2005, Stolc et al. 2005	
-ENSG00000086288	NME8	NME/NM23 family member 8 [Source:HGNC Symbol;Acc:16473]	The sea urchin ortholog of this gene encodes a component of sperm outer dynein arms, and the protein is implicated in ciliary function. Mutations in this gene are implicated in primary ciliary dyskinesia type 6, MIM: 610852	PMID:17360648		
-ENSG00000214513	NOTO	notochord homeobox [Source:HGNC Symbol;Acc:31839]	PMID:17884984 transcription factor regulating expression of cilia genes	PMID:17884984		Nucleus
-ENSG00000144061	NPHP1	nephronophthisis 1 (juvenile) [Source:HGNC Symbol;Acc:7905]	Known ciliopathy gene JBTS4, NPHP1, SLS1 OMIM 607100	PMID:7806215, PMID:15138899, PMID:16885411	Blacque et al. 2005, Chen et al. 2006, Liu et al. 2007, McClintock et al. 2008, Ostrowski et al. 2002, Ross et al. 2007	Transition zone
-ENSG00000113971	NPHP3	nephronophthisis 3 (adolescent) [Source:HGNC Symbol;Acc:7907]	Known ciliopathy gene MKS7, NPHP3 OMIM 608002. PMID:22328406, PMID:  22085962 	PMID:22328406	Li et al. 2004, Pazour et al. 2005	
-ENSG00000131697	NPHP4	nephronophthisis 4 [Source:HGNC Symbol;Acc:19104]	Known ciliopathy gene NPHP4, SLS4 OMIM 607215	PMID:12244321, PMID:15661758	Blacque et al. 2005, Chen et al. 2006, Efimenko et al. 2005, Keller et al. 2005, Li et al. 2004, Liu et al. 2007, Merchant et al. 2007	Transition zone
-ENSG00000126883	NUP214	nucleoporin 214kDa [Source:HGNC Symbol;Acc:8064]	part of ciliary pore complex PMID:22388888	PMID:22388888		Transition zone
-ENSG00000163002	NUP35	nucleoporin 35kDa [Source:HGNC Symbol;Acc:29797]	nucleoporin 35kDa, part of ciliary pore complex, PMID:22388888	PMID:22388888	Blacque et al. 2005, Muller et al. 2010	Transition zone
-ENSG00000075188	NUP37	nucleoporin 37kDa [Source:HGNC Symbol;Acc:29929]	part of ciliary pore complex PMID:22388888	PMID:22388888		Transition zone
-ENSG00000213024	NUP62	nucleoporin 62kDa [Source:HGNC Symbol;Acc:8066]	part of ciliary pore complex PMID:22388888	PMID:22388888	Andersen et al. 2003	Transition zone
-ENSG00000102900	NUP93	nucleoporin 93kDa [Source:HGNC Symbol;Acc:28958]	part of ciliary pore complex PMID:22388888	PMID:22388888	Andersen et al. 2003, Muller et al. 2010	Transition zone
-ENSG00000122126	OCRL	oculocerebrorenal syndrome of Lowe [Source:HGNC Symbol;Acc:8108]	Causes Lowe Syndrome. Involved in assembly of primary cilia, involed in Rab8n dependent protein trafficking to the cilium. PMID:22228094 	PMID:22228094		Cilium
-ENSG00000136811	ODF2	outer dense fiber of sperm tails 2 [Source:HGNC Symbol;Acc:8114]	Several isoforms, all have quite different function in ciliogenesis	PMID:20234188, PMID:23470458	Andersen et al. 2003, Cao et al. 2008, Liu et al. 2007, Nogales-Cadenas et al. 2006	Basal Body
-ENSG00000046651	OFD1	oral-facial-digital syndrome 1 [Source:HGNC Symbol;Acc:2567]	JBTS10, OFD1, SGBS2 OMIM 300170 	PMID:9215688, PMID:11950863, PMID:17761535	Andersen et al. 2003, Liu et al. 2007, Nogales-Cadenas et al. 2006	Basal Body, Nucleus
-ENSG00000085840	ORC1	origin recognition complex, subunit 1 [Source:HGNC Symbol;Acc:8487] 	Causes Meier-Gorlin syndrome (MGS), a disorder conferring microcephaly, primordial dwarfism, underdeveloped ears, and skeletal abnormalities. knockdown affects ciliogenesis and Hh signaling. PMID: 23516378	PMID:23516378	Efimenko et al. 2005, Muller et al. 2010	
-ENSG00000112530	PACRG	PARK2 co-regulated [Source:HGNC Symbol;Acc:19152]	Deletion of the Parkin co-regulated gene causes defects in ependymal ciliary motility and hydrocephalus in the quakingviable mutant mouse	PMID:16278296, PMID:20106870	Arnaiz et al. 2009, Arnaiz et al. 2010, Avidor-Reiss et al. 2004, Blacque et al. 2005, Broadhead et al. 2006, Chen et al. 2006, Efimenko et al. 2005, Keller et al. 2005, Li et al. 2004, McClintock et al. 2008, Merchant et al. 2007, Ostrowski et al. 2002, Pazour et al. 2005, Ross et al. 2007, Smith et al. 2005, Stolc et al. 2005	Axoneme
-ENSG00000007168	PAFAH1B1	platelet-activating factor acetylhydrolase 1b, regulatory subunit 1 (45kDa) [Source:HGNC Symbol;Acc:8574]	LIS1 OMIM 601545. Mammalian Lis1 localizes to motile cilia in trachea and oviduct, but is absent from non-motile primary cilia PMID:17314247	PMID:17314247	Andersen et al. 2003, Blacque et al. 2005, Liu et al. 2007, Nogales-Cadenas et al. 2006, Ross et al. 2007	Axoneme
-ENSG00000148498	PARD3	par-3 partitioning defective 3 homolog (C. elegans) [Source:HGNC Symbol;Acc:16051]	Localizes to the cilium and regulates ciliogenesis PMID:15324661, PMID:18070914	PMID:15324661, PMID:18070914		Cilium
-ENSG00000102981	PARD6A	par-6 partitioning defective 6 homolog alpha (C. elegans) [Source:HGNC Symbol;Acc:15943]	Localizes to the cilium and regulates ciliogenesis PMID:15324661	PMID:15324661	Blacque et al. 2005, Laurencon et al. 2007	Cilium
-ENSG00000150275	PCDH15	protocadherin-related 15 [Source:HGNC Symbol;Acc:14674]	Mutation causes USH1F OMIM 605514	PMID:11398101, PMID:11487575, PMID:14570705	Liu et al. 2007	Connecting Cilium, Stereocilium
-ENSG00000078674	PCM1	pericentriolar material 1 [Source:HGNC Symbol;Acc:8727]	Centriolar satellite protein PMID:10579718. Interacts with BBS8 PMID:14520415. Centriolar localisation dependent on BBS4 PMID:15107855. Interacts with CEP290, involved in RAB8 localisation to cilium PMID:18772192. Retrograde trafficking of PCM1 regulated by HTT and HAP1 PMID: 21985783. Recruits PLK1 to the pericentriolar matrix to promote primary cilia disassembly before mitotic entry PMID:23345402.	PMID:10579718, IPMID:14520415, PMID:15107855, PMID:18772192, PMID: 21985783, PMID:23345402.	Andersen et al. 2003, Liu et al. 2007, Nogales-Cadenas et al. 2006, Ross et al. 2007	Centriolar Satellite
-ENSG00000156973	PDE6D	phosphodiesterase 6D, cGMP-specific, rod, delta [Source:HGNC Symbol;Acc:8788]	Part of the ARL13B, INPP5E and CEP164 network PMID: 23150559 	PMID:23150559	Liu et al. 2007	
-ENSG00000186862	PDZD7	PDZ domain containing 7 [Source:HGNC Symbol;Acc:26257]	PMID:20440071 Homologue of USH1C and USH2D. Mutation modulates disease severity and onset of Usher patients	PMID:20440071		Nucleus, Basal body
-ENSG00000077684	PHF17	PHD finger protein 17 [Source:HGNC Symbol;Acc:30027]	JADE1. Interacts with pVHL, PC1 and NPHP4. PC1 and NPHP4 regulate JADE1 TF activity 	PMID:23001567, PMID:22654112	Blacque et al. 2005	Basal Body, Nucleus, Transition Zone
-ENSG00000083535	PIBF1	progesterone immunomodulatory binding factor 1 [Source:HGNC Symbol;Acc:23352]	CEP90, PMID:23110211. Centriolar satelite protein required for primary cilia formation and BBS4 localization to the cilium	PMID:23110211	Andersen et al. 2003, Liu et al. 2007, Nogales-Cadenas et al. 2006	Pericentriolar Matrix
-ENSG00000008710	PKD1	polycystic kidney disease 1 (autosomal dominant) [Source:HGNC Symbol;Acc:9008]	OMIM 601313. Mutation causes PKD. Dimerizes with PKD2 to form a channel in the ciliary membrane	PMID:1577479, PMID:7633406, PMID:8981910, PMID:9177229		Ciliary Membrane
-ENSG00000158683	PKD1L1	polycystic kidney disease 1 like 1 [Source:HGNC Symbol;Acc:18053]	PMID:21307093 interacts with PKD2, required for normal Left-Richt patterning 	PMID:21307093		Cilium
-ENSG00000118762	PKD2	polycystic kidney disease 2 (autosomal dominant) [Source:HGNC Symbol;Acc:9009]	OMIM 173910. Mutation causes PKD. Dimerizes with PKD1 to form a channel in the ciliary membran	PMID:8650545		Ciliary Membrane
-ENSG00000170927	PKHD1	polycystic kidney and hepatic disease 1 (autosomal recessive) [Source:HGNC Symbol;Acc:9016]	OMIM 606702. Co-localizes with PKD2 to basal body and cilium. Cuases polycystic kidney and hepatic disease	PMID:11898128, PMID:14978161, PMID:15458427		Basal Body, Cilium, Cytosol
-ENSG00000166851	PLK1	polo-like kinase 1 [Source:HGNC Symbol;Acc:9077]	Localizes to TZ and induces phosphorylation of NPHP1 PMID:22701722	PMID:22701722	Andersen et al. 2003, Muller et al. 2010, Nogales-Cadenas et al. 2006	Transition Zone
-ENSG00000164087	POC1A	POC1 centriolar protein homolog A (Chlamydomonas) [Source:HGNC Symbol;Acc:24488]	Causes Primordial Dwarfism, a ciliopathy. A centriolar/basal body protein causes ciliogenesis defects and impaired mitosis PMID:22840364, OMIM:614783	PMID:22840364	Avidor-Reiss et al. 2004, Broadhead et al. 2006, Keller et al. 2005, Kilburn et al. 2007, Liu et al. 2007, Merchant et al. 2007, Nogales-Cadenas et al. 2006	Centriole
-ENSG00000185920	PTCH1	patched 1 [Source:HGNC Symbol;Acc:9585]	PMID: 17641202	PMID:17641202	Blacque et al. 2005	Ciliary Membrane
-ENSG00000158079	PTPDC1	protein tyrosine phosphatase domain containing 1 [Source:HGNC Symbol;Acc:30184]	PMID:21289087 Hh signalling defects after knockdown, validated. Knockdown produces elongated cilia	PMID:21289087	Arnaiz et al. 2010, Blacque et al. 2005, Li et al. 2004, McClintock et al. 2008, Merchant et al. 2007, Pazour et al. 2005	
-ENSG00000103769	RAB11A	RAB11A, member RAS oncogene family [Source:HGNC Symbol;Acc:9760]	PMID:20308558. Interacts with Rabin8 to stimulate Rab8. Enriched at ciliary base. Knockdown blocks ciliogenesis	PMID:20308558	Keller et al. 2005, Liu et al. 2007, Pazour et al. 2005	Centrosome, Basal Body
-ENSG00000090565	RAB11FIP3	RAB11 family interacting protein 3 (class II) [Source:HGNC Symbol;Acc:17224]	PMID:19153612 regulates trafficking of ciliary cargo	PMID:19153612	Nogales-Cadenas et al. 2006	Trans-Golgi Network
-ENSG00000124839	RAB17	RAB17, member RAS oncogene family [Source:HGNC Symbol;Acc:16523]	PMID:17646400 involved in membrane trafficking, necessary for ciliogenesis	PMID:17646400	Ross et al. 2007	Plasma Membrane
-ENSG00000112210	RAB23	RAB23, member RAS oncogene family [Source:HGNC Symbol;Acc:14263]	PMID:17646400 involved in membrane trafficking, necessary for ciliogenesis	PMID:17646400	Avidor-Reiss et al. 2004, Liu et al. 2007, Merchant et al. 2007, Pazour et al. 2005, Stolc et al. 2005	
-ENSG00000127328	RAB3IP	RAB3A interacting protein [Source:HGNC Symbol;Acc:16508]	Rabin 8 PMID:17574030. Regulates GTP/GDP states of Rab8. Localizes to Basal Body and in part regulates localization of the BBSome to the basal body 	PMID:17574030		Basal Body, Centrosome
-ENSG00000167461	RAB8A	RAB8A, member RAS oncogene family [Source:HGNC Symbol;Acc:7007]	PMID:17574030. Locailzes to the cilium and promotes extension of the cilium. Inactivating Rab8 (GDP-bound state) blocks ciliogenesis and induces BBS phenotypes in zebrafish	PMID:17574030	Liu et al. 2007, Pazour et al. 2005	Ciliary Membrane, Cilium
-ENSG00000128581	RABL5	RAB, member RAS oncogene family-like 5 [Source:HGNC Symbol;Acc:21895]	IFT22, component of IFT complex B	PMID:22076686	Arnaiz et al. 2009, Blacque et al. 2005, Chen et al. 2006, Efimenko et al. 2005, Li et al. 2004, Liu et al. 2007, Merchant et al. 2007, Ostrowski et al. 2002, Pazour et al. 2005, Ross et al. 2007, Stolc et al. 2005	Cilium, IFT
-ENSG00000132341	RAN	RAN, member RAS oncogene family [Source:HGNC Symbol;Acc:9846]	RanGTP gradient regulates entry of RP2 and kinesin motor into cilium PMID: 21285245, PMID: 20526328	PMID:21285245, PMID:20526328	Andersen et al. 2003, Arnaiz et al. 2009, Liu et al. 2007, Nogales-Cadenas et al. 2006, Pazour et al. 2005, Reinders et al. 2006, Stolc et al. 2005	Cilium, Cytosol
-ENSG00000099901	RANBP1	RAN binding protein 1 [Source:HGNC Symbol;Acc:9847]	Accelerated Ran GTP->GDP conversion.  knockdown of RanBP1 results in increased localization of Ran to basalbody. Also localises to Basal Body. PMID: 21998203	PMID:21998203	Andersen et al. 2003, Blacque et al. 2005, Nogales-Cadenas et al. 2006, Pazour et al. 2005, Stolc et al. 2005	Basal Body, Cytosol
-ENSG00000080298	RFX3	regulatory factor X, 3 (influences HLA class II expression) [Source:HGNC Symbol;Acc:9984]	PMID:15121860 transcription factor regulating expression of cilia genes	PMID:15121860	Blacque et al. 2005, Chen et al. 2006, Efimenko et al. 2005, Ross et al. 2007	Nucleus
-ENSG00000188026	RILPL1	Rab interacting lysosomal protein-like 1 [Source:HGNC Symbol;Acc:26814] 	Rab effector. Regulates cilium membrane content. PMID: 23264467	PMID:23264467		Cilium, Basal Body, Centriole
-ENSG00000150977	RILPL2	Rab interacting lysosomal protein-like 2 [Source:HGNC Symbol;Acc:28787]	Rab effector. Regulates cilium membrane content. PMID: 23264467	PMID:23264467		Cilium, Basal Body
-ENSG00000145491	ROPN1L	rhophilin associated tail protein 1-like [Source:HGNC Symbol;Acc:24060]	Also know as ASP. loss of ASP reduces mammalian ciliary motility PMID: 22021175	PMID:22021175	Broadhead et al. 2006, Cao et al. 2008, Ostrowski et al. 2002, Pazour et al. 2005, Ross et al. 2007, Stolc et al. 2005	Cilium, Cytosol
-ENSG00000104237	RP1	retinitis pigmentosa 1 (autosomal dominant) [Source:HGNC Symbol;Acc:10263]	Mutation causes retinitis pigmentosa. Localizes to the connecting cilium in photoreceptor cells	PMID:10401003, PMID:11773008	Liu et al. 2007, Ostrowski et al. 2002	Cilium, Connecting Cilium
-ENSG00000102218	RP2	retinitis pigmentosa 2 (X-linked recessive) [Source:HGNC Symbol;Acc:10274]	OMIM 300757. Causes retinis pigmentosa, Localizes to the base of the cilium	PMID:9697692, PMID:21285245	Blacque et al. 2005, Broadhead et al. 2006, Efimenko et al. 2005, Li et al. 2004, Mayer et al. 2009	Basal Body
-ENSG00000156313	RPGR	retinitis pigmentosa GTPase regulator [Source:HGNC Symbol;Acc:10295]	CORD1, RP3 OMIM 312610. Causes retinis pigmentosa, localizes to base of the cilium	PMID:8673101, PMID:15772089	Liu et al. 2007, Nogales-Cadenas et al. 2006, Ross et al. 2007	Basal Body, Centriole, Cilium
-ENSG00000092200	RPGRIP1	retinitis pigmentosa GTPase regulator interacting protein 1 [Source:HGNC Symbol;Acc:13436]	Known ciliopathy gene CORD13, LCA6 OMIM 605446	PMID:11104772, PMID:15772089	Blacque et al. 2005, Liu et al. 2007, Nogales-Cadenas et al. 2006	Basal Body, Centriole, Cilium, Connecting Cilium
-ENSG00000103494	RPGRIP1L	RPGRIP1-like [Source:HGNC Symbol;Acc:29168]	Causes COACH, JBTS7, MKS5, NPHP8 OMIM 610937. Co-localizes with NPHP4 and NPHP6 to the basal body.	PMID:17558407, PMID:17558409, PMID:17960139, PMID:19410446	Blacque et al. 2005, Ross et al. 2007	Basal Body
-ENSG00000160188	RSPH1	radial spoke head 1 homolog (Chlamydomonas) [Source:HGNC Symbol;Acc:12371]	PMID: 17451891 Radial spoke protein 44, May play an important role in male meiosis.           	PMID:17451891	Arnaiz et al. 2009, Arnaiz et al. 2010, Broadhead et al. 2006, McClintock et al. 2008, Merchant et al. 2007, Ostrowski et al. 2002, Pazour et al. 2005, Ross et al. 2007, Smith et al. 2005, Stolc et al. 2005, Stubbs et al. 2008	Cilium, Axoneme
-ENSG00000130363	RSPH3	radial spoke 3 homolog (Chlamydomonas) [Source:HGNC Symbol;Acc:21054]	PMID:21289087 structural primary cilia defects after knockdown in 3 murine cell lines. PMID:19684019 RSPH3 is a protein kinase A-anchoring protein (AKAP) that scaffolds the cAMP-dependent protein kinase holoenzyme. The binding of RSPH3 to the regulatory subunits of cAMP-dependent protein kinase, RIIalpha and RIIbeta, is regulated by ERK1/2 activity and phosphorylation. 	PMID:21289087	Arnaiz et al. 2009, Arnaiz et al. 2010, Broadhead et al. 2006, Li et al. 2004, McClintock et al. 2008, Merchant et al. 2007, Ostrowski et al. 2002, Pazour et al. 2005, Smith et al. 2005, Stolc et al. 2005, Stubbs et al. 2008	Cilium, Axoneme
-ENSG00000111834	RSPH4A	radial spoke head 4 homolog A (Chlamydomonas) [Source:HGNC Symbol;Acc:21558]	PMID:21289087 defective Hh signalling but no structural cilia defects after knockdown. Mutations in RSPH4A cause primary ciliary dyskinesia, with typical respiratory features, but without situs abnormalities. These findings suggest that radial spoke proteins are not essential for embryonic nodal ciliary function, which is important in the determination of left-right axis development  PMID:19200523	PMID:21289087	Arnaiz et al. 2009, Arnaiz et al. 2010, Avidor-Reiss et al. 2004, Broadhead et al. 2006, Kilburn et al. 2007, Li et al. 2004, Ostrowski et al. 2002, Pazour et al. 2005, Smith et al. 2005, Stolc et al. 2005	Cilium, Axoneme
-ENSG00000172426	RSPH9	radial spoke head 9 homolog (Chlamydomonas) [Source:HGNC Symbol;Acc:21057]	MIM: 612648. Mutations in RSPH9 cause primary ciliary dyskinesia, with typical respiratory features, but without situs abnormalities. These findings suggest that radial spoke proteins are not essential for embryonic nodal ciliary function, which is important in the determination of left-right axis development PMID:19200523. PMID:21289087 structural cilia defects of primary cilia after knockdown in 3 different murine cell lines. 	PMID:21289087	Arnaiz et al. 2009, Arnaiz et al. 2010, Broadhead et al. 2006, Li et al. 2004, Merchant et al. 2007, Ostrowski et al. 2002, Pazour et al. 2005, Ross et al. 2007, Smith et al. 2005, Stolc et al. 2005, Stubbs et al. 2008	Cilium, Axoneme
-ENSG00000176225	RTTN	rotatin [Source:HGNC Symbol;Acc:18654]	Mutated in polymicrogyria with seizures OMIM 610436. Required for normal ciliogenesis. Structural abnormalities of the cilia in knockdowns and in  patients with RTTN mutations PMID:22939636	PMID:22939636	Andersen et al. 2003	Basal Body
-ENSG00000156876	SASS6	spindle assembly 6 homolog (C. elegans) [Source:HGNC Symbol;Acc:25403]	PMID: 22349705 required for centriole duplication. Null mutant cells lack primary cilia.	PMID:22349705	Andersen et al. 2003, Kilburn et al. 2007, Li et al. 2004, Nogales-Cadenas et al. 2006	Basal Body, Centriole
-ENSG00000151466	SCLT1	sodium channel and clathrin linker 1 [Source:HGNC Symbol;Acc:26406]	Distal appendage of centrioles, essential for ciliogenesis PMID:23348840.	PMID:23348840.	Nogales-Cadenas et al. 2006	Centriole
-ENSG00000054282	SDCCAG8	serologically defined colon cancer antigen 8 [Source:HGNC Symbol;Acc:10671]	Ciliopathy gene NPHP10, SLS7 OMIM 613524 PMID: 21199495	PMID:21199495	Andersen et al. 2003, Cao et al. 2008, Nogales-Cadenas et al. 2006	Basal Body, Centriole, Transition Zone
-ENSG00000168385	SEPT2	septin 2 [Source:HGNC Symbol;Acc:7729]	Forms 'diffusion barrier' at base of cilium PMID: 20558667	PMID:20558667	Arnaiz et al. 2010, Li et al. 2004, Liu et al. 2007, Mayer et al. 2009, Ostrowski et al. 2002	Centrosome
-ENSG00000122545	SEPT7	septin 7 [Source:HGNC Symbol;Acc:1717]	PMID: 20671153	PMID:20671153	Arnaiz et al. 2010, Li et al. 2004, Liu et al. 2007, Mayer et al. 2009	Centrosome
-ENSG00000185900	SGK196	Probable inactive protein kinase-like protein SgK196 [Source:UniProtKB/Swiss-Prot;Acc:Q9H5K3]	Hydrocephalus and infertility due to dysfunctional motile cilia, cerebellar dysplasia in KO mouse PMID: 21746835	PMID:21746835		
-ENSG00000164690	SHH	sonic hedgehog [Source:HGNC Symbol;Acc:10848]	PMID: 17641202	PMID:17641202		Ciliary Membrane
-ENSG00000180638	SLC47A2	solute carrier family 47, member 2 [Source:HGNC Symbol;Acc:26439]	PMID:22558177. Found to be co-expressed with other ciliary components. Localization studies show localization to the cilium	PMID:22558177		Ciliary Membrane
-ENSG00000128602	SMO	smoothened, frizzled family receptor [Source:HGNC Symbol;Acc:11119]	Localizes to Cilia Membrane when SHH bound to PTCH1	PMID:17641202		Ciliary Membrane
-ENSG00000132639	SNAP25	synaptosomal-associated protein, 25kDa [Source:HGNC Symbol;Acc:11132]	PMID:19454479 required for transport to the cilium	PMID:19454479	Liu et al. 2007	Cilium, Cytosol
-ENSG00000086300	SNX10	sorting nexin 10 [Source:HGNC Symbol;Acc:14974]	PMID:21844891 regulates ciliogenesis	PMID:21844891		Centrosome
-ENSG00000064199	SPA17	sperm autoantigenic protein 17 [Source:HGNC Symbol;Acc:11210]	localized in the spermatozoa flagellar fibrous sheath, PMID: 19604394. 	PMID:19604394	Cao et al. 2008, McClintock et al. 2008, Ostrowski et al. 2002, Ross et al. 2007	Cilium
-ENSG00000144451	SPAG16	sperm associated antigen 16 [Source:HGNC Symbol;Acc:23225]	orthologue of Chlamydomonas reinhardtii PF20, a protein known to be essential to the structure and function of the 9+2 axoneme. Mutation results in instability of central pair of the human sperm axoneme PMID: 17699735	PMID:21655194, PMID:17699735	Arnaiz et al. 2009, Arnaiz et al. 2010, Broadhead et al. 2006, Li et al. 2004, Merchant et al. 2007, Pazour et al. 2005, Smith et al. 2005, Stolc et al. 2005	Axoneme
-ENSG00000155761	SPAG17	sperm associated antigen 17 [Source:HGNC Symbol;Acc:26620]	Essential for motile cilia function. KO mice have immotile nasal and tracheal cilia, respiratory problems and hydrocephalus PMID: 23418344	PMID:23418344	Boesger et al. 2009, Pazour et al. 2005, Ross et al. 2007	Central Pair
-ENSG00000077327	SPAG6	sperm associated antigen 6 [Source:HGNC Symbol;Acc:11215]	axoneme central apparatus protein; protein PF16 homolog; sperm flagellar protein	PMID:12167721, PMID:10493827	Arnaiz et al. 2009, Arnaiz et al. 2010, Broadhead et al. 2006, McClintock et al. 2008, Merchant et al. 2007, Ostrowski et al. 2002, Pazour et al. 2005, Ross et al. 2007, Stolc et al. 2005, Stubbs et al. 2008	Axoneme
-ENSG00000042317	SPATA7	spermatogenesis associated 7 [Source:HGNC Symbol;Acc:20423]	Ciliopathy gene LCA PMID: 19268277	PMID:19268277	Liu et al. 2007	Cilium
-ENSG00000152582	SPEF2	sperm flagellar 2 [Source:HGNC Symbol;Acc:26293]	PCD PMID: 21715716, interacts with IFT20 PMID: 19889948	PMID:19889948, PMID:21715716	Arnaiz et al. 2009, Arnaiz et al. 2010, Li et al. 2004, Mayer et al. 2008, Mayer et al. 2009, Ostrowski et al. 2002, Pazour et al. 2005, Ross et al. 2007, Smith et al. 2005	
-ENSG00000176101	SSNA1	Sjogren syndrome nuclear autoantigen 1 [Source:HGNC Symbol;Acc:11321]	PMID:21289087, siRNA knockdown in 3 mouse cell lines perturbs receptor tranport into cilium and HH signalling. 	PMID:21289087	Andersen et al. 2003, Broadhead et al. 2006, Keller et al. 2005, Li et al. 2004, Merchant et al. 2007, Nogales-Cadenas et al. 2006, Pazour et al. 2005, Stolc et al. 2005	
-ENSG00000183473	SSTR3	somatostatin receptor 3 [Source:HGNC Symbol;Acc:11332]	Localized to the plasma membrane of neuronal cilia PMID: 10199624, PMID: 23392690	PMID:10199624, PMID:23392690		Ciliary Membrane
-ENSG00000123473	STIL	SCL/TAL1 interrupting locus [Source:HGNC Symbol;Acc:10879]	PMID:22349705, OMIM:181590. Required for centriole duplication. Null mutant shows lack of primary cilia 	PMID:22349705		Centrosome
-ENSG00000163482	STK36	serine/threonine kinase 36 [Source:HGNC Symbol;Acc:17209]	Hydrocephalus and infertility, due to dysfunctional motile cilia, craniofacial abnormalities and growth retardation in KO mouse PMID: 21746835	PMID:21746835		
-ENSG00000211455	STK38L	serine/threonine kinase 38 like [Source:HGNC Symbol;Acc:17848] 	Phosphorylates Rabin8. Mutated in canine retinal degeneration. PMID: 20887780 PMID: 23435566	PMID:20887780, PMID:23435566	Avidor-Reiss et al. 2004, Blacque et al. 2005	Cytosol
-ENSG00000133115	STOML3	stomatin (EPB72)-like 3 [Source:HGNC Symbol;Acc:19420]	Localizes to Basal Body, mechanosensing channel. BBS4 snd BBS8 knock-out impede its function. PMID: 17959775	PMID:17959775	Arnaiz et al. 2009, Arnaiz et al. 2010, Blacque et al. 2005, Chen et al. 2006, Efimenko et al. 2005, Mayer et al. 2008, Mayer et al. 2009, Ross et al. 2007	Basal Body
-ENSG00000166900	STX3	syntaxin 3 [Source:HGNC Symbol;Acc:11438]	PMID:19454479 required for transport to the cilium	PMID:19454479	Liu et al. 2007, Mayer et al. 2009	Cilium, Cytosol
-ENSG00000107882	SUFU	suppressor of fused homolog (Drosophila) [Source:HGNC Symbol;Acc:16466]	Localizes to ciliary tip together with GLI transcriptionfactors. Role in Hh signaling	PMID:21209912	Laurencon et al. 2007	Ciliary Tip
-ENSG00000054654	SYNE2	spectrin repeat containing, nuclear envelope 2 [Source:HGNC Symbol;Acc:17084]	interacts with meckelin, required for ciliogenesis, PMID:19596800	PMID:19596800	Liu et al. 2007, Stubbs et al. 2008	
-ENSG00000111490	TBC1D30	TBC1 domain family, member 30 [Source:HGNC Symbol;Acc:29164]	PMID:17646400 involved in membrane trafficking, necessary for ciliogenesis. RabGAP for Rab8a	PMID:17646400	Ross et al. 2007	Basal Body
-ENSG00000145979	TBC1D7	TBC1 domain family, member 7 [Source:HGNC Symbol;Acc:21066]	PMID:17646400 involved in membrane trafficking, necessary for ciliogenesis. RabGAP for Rab17	PMID:17646400		Basal Body
-ENSG00000204852	TCTN1	tectonic family member 1 [Source:HGNC Symbol;Acc:26113]	Ciliopathy gene JBTS13 OMIM 609863	PMID:21725307	Avidor-Reiss et al. 2004, Chen et al. 2006, Laurencon et al. 2007, Liu et al. 2007, Ross et al. 2007	Transition Zone
-ENSG00000168778	TCTN2	tectonic family member 2 [Source:HGNC Symbol;Acc:25774]	Ciliopathy gene MKS8 OMIM 613846	PMID:21725307, PMID:21565611, PMID:21462283	Liu et al. 2007	Transition Zone
-ENSG00000119977	TCTN3	tectonic family member 3 [Source:HGNC Symbol;Acc:24519]	Ciliopathy gene JBTS18, OFD4 OMIM 613847	PMID:22883145	Avidor-Reiss et al. 2004, Chen et al. 2006, Laurencon et al. 2007, Liu et al. 2007	Transition Zone
-ENSG00000092850	TEKT2	tektin 2 (testicular) [Source:HGNC Symbol;Acc:11725]	Tekt2 (Tektt) -/- mice have defects in sperm and tracheal cilium motility result from defective dynein function	PMID:18227105, PMID:11751288	Blacque et al. 2005, Boesger et al. 2009, Cao et al. 2008, Keller et al. 2005, Laurencon et al. 2007, Li et al. 2004, Ostrowski et al. 2002, Pazour et al. 2005, Ross et al. 2007, Stolc et al. 2005, Stubbs et al. 2008	Cilium
-ENSG00000163060	TEKT4	tektin 4 [Source:HGNC Symbol;Acc:31012]	Axonemal protein required for flagella motility in mouse sperm. Expression reduced in inasthenozoospermic men. 	PMID:22774605	Blacque et al. 2005, Boesger et al. 2009, Cao et al. 2008, Keller et al. 2005, Li et al. 2004, Ostrowski et al. 2002, Pazour et al. 2005, Stolc et al. 2005, Stubbs et al. 2008	Cilium
-ENSG00000153060	TEKT5	tektin 5 [Source:HGNC Symbol;Acc:26554]	PMID:20378928 PMID:17924527 Localizes throughout the sperm tail. Implicated role in sperm motility	PMID:20378928, PMID:17924527	Blacque et al. 2005, Boesger et al. 2009, Cao et al. 2008, Keller et al. 2005, Li et al. 2004, Pazour et al. 2005, Stolc et al. 2005	Cilium
-ENSG00000149483	TMEM138	transmembrane protein 138 [Source:HGNC Symbol;Acc:26944]	Ciliopathy gene JBTS16 OMIM 614459	PMID:22282472	Blacque et al. 2005	Basal Body, Cilium
-ENSG00000187049	TMEM216	transmembrane protein 216 [Source:HGNC Symbol;Acc:25018]	Ciliopathy gene JBTS2, MKS2, CORS2 OMIM 613277	PMID:22282472, PMID:20036350		Basal Body, Golgi
-ENSG00000205084	TMEM231	transmembrane protein 231 [Source:HGNC Symbol;Acc:37234]	PMID: 23012439 Joubert syndrome, PMID: 23349226 Meckel-Gruber syndrome	PMID:23012439, PMID:23349226, PMID:20512146	Blacque et al. 2005, Chen et al. 2006, Keller et al. 2005, Li et al. 2004, Liu et al. 2007	Transition Zone
-ENSG00000155755	TMEM237	transmembrane protein 237 [Source:HGNC Symbol;Acc:14432]	Ciliopathy gene Joubert syndrome 14, PMID 22152675	PMID:22152675	Chen et al. 2006, Liu et al. 2007	Transition Zone
-ENSG00000164953	TMEM67	transmembrane protein 67 [Source:HGNC Symbol;Acc:28396]	Ciliopathy gene MKS3, JBTS6, NPHP11, PMID: 16415887, PMID: 17160906, PMID: 17185389, PMID: 17377820, PMID: 19058225, PMID: 19508969,	PMID:16415887, PMID:17160906, PMID:17185389, PMID:17377820, PMID:19058225, PMID:19508969	Blacque et al. 2005, Chen et al. 2006, Efimenko et al. 2005, Liu et al. 2007, Ross et al. 2007	Axoneme, Basal Body
-ENSG00000083312	TNPO1	transportin 1 [Source:HGNC Symbol;Acc:6401]	Importin beta 2. Regulates entry of RP2 and kinesin motor into cilium PMID: 21285245, PMID: 20526328	PMID:21285245, PMID:20526328	Liu et al. 2007	Axoneme
-ENSG00000197579	TOPORS	topoisomerase I binding, arginine/serine-rich, E3 ubiquitin protein ligase [Source:HGNC Symbol;Acc:21653]	Ciliopathy gene RP31 OMIM 609507	PMID:17924349, PMID:18509552, PMID:21159800		Basal Body, Centrosome
-ENSG00000179636	TPPP2	tubulin polymerization-promoting protein family member 2 [Source:HGNC Symbol;Acc:19293]	PMID:21289087 IFT transport and signalling defects after knockdown, ciliary frequency not affected	PMID:21289087	Avidor-Reiss et al. 2004, Blacque et al. 2005, Li et al. 2004, Pazour et al. 2005	
-ENSG00000204104	TRAF3IP1	TNF receptor-associated factor 3 interacting protein 1 [Source:HGNC Symbol;Acc:17861]. 	OMIM 607380. Mouse homologue encodes IFT54, component of IFT complex B. Omori et al. (2008) identified elipsa, the zebrafish ortholog of TRAF3IP1, as a component of intraflagellar transport particles, which are  involved in the formation and function of cilia. Elipsa interacted with rabaptin-5 (RABEP1; 603616), a regulator of endocytosis, and rabaptin-5 in turn interacted with Rab8 (RAB8A; 165040), a small GTPase localized to cilia. Omori et al. (2008) concluded that elipsa, rabaptin-5, and Rab8 provide a bridge between the intraflagellar transport particle and protein complexes that assemble at the ciliary membrane.	PMID:21945076, PMID:19253336, PMID: 18364699.	Arnaiz et al. 2009, Avidor-Reiss et al. 2004, Blacque et al. 2005, Boesger et al. 2009, Efimenko et al. 2005, Laurencon et al. 2007, Li et al. 2004, Liu et al. 2007, Merchant et al. 2007, Ostrowski et al. 2002, Pazour et al. 2005, Ross et al. 2007, Stolc et al. 2005	Basal Body, Cilium, IFT, Cytoplasm, Cytoskeleton
-ENSG00000160218	TRAPPC10	trafficking protein particle complex 10 [Source:HGNC Symbol;Acc:11868]	PMID:21273506 required for Rabin8 centrosome trafficking and ciliogenesis	PMID:21273506	Liu et al. 2007	Basal Body, Centrosome
-ENSG00000054116	TRAPPC3	trafficking protein particle complex 3 [Source:HGNC Symbol;Acc:19942]	OMIM: 610955. PMID:21273506 required for Rabin8 centrosome trafficking and ciliogenesis	PMID:21273506	Blacque et al. 2005, Liu et al. 2007	Basal Body, Centrosome
-ENSG00000167632	TRAPPC9	trafficking protein particle complex 9 [Source:HGNC Symbol;Acc:30832]	OMIM: 611966. PMID:21273506 required for Rabin8 centrosome trafficking and ciliogenesis. Inactivating mutations cause with autosomal recessive mental retardation with ambulatory but no verbal development (Joubert-like?).	PMID:21273506	Blacque et al. 2005, Liu et al. 2007	Basal Body, Centrosome
-ENSG00000119401	TRIM32	tripartite motif containing 32 [Source:HGNC Symbol;Acc:16380]	OMIM: 602290, Inactivating homozygous mutations cause ciliopathy BBS11, PMID: 16606853	PMID:16606853		Intermediate filaments
-ENSG00000100815	TRIP11	thyroid hormone receptor interactor 11 [Source:HGNC Symbol;Acc:12305]	GMAP210 PMID: 23444385 Modulates IFT in C. elegans	PMID:23444385	Nogales-Cadenas et al. 2006	Golgi
-ENSG00000128881	TTBK2	tau tubulin kinase 2 [Source:HGNC Symbol;Acc:19141]	OMIM: 611695, PMID: 23141541. Haploinsufficiency causes Spinocerebellar ataxia 11 (SCA11; 604432), a progressive cerebellar ataxia. 	PMID:23141541, PMID: 18037885	Blacque et al. 2005, Kim et al. 2010	Cytoplasm
-ENSG00000149292	TTC12	tetratricopeptide repeat domain 12 [Source:HGNC Symbol;Acc:23700]	Upregulated during ciliogenesis and localize to the centrosome PMID:23300604	PMID:23300604	Ross et al. 2007	Centrosome
-ENSG00000123607	TTC21B	tetratricopeptide repeat domain 21B [Source:HGNC Symbol;Acc:25660]	OMIM: 612014. Mutated in JBTS11, NPHP12, ATD4, PMID: 21258341 IFT complex A component	PMID:21258341	Arnaiz et al. 2009, Arnaiz et al. 2010, Blacque et al. 2005, Li et al. 2004, Liu et al. 2007, Merchant et al. 2007, Pazour et al. 2005	Axoneme
-ENSG00000105948	TTC26	tetratricopeptide repeat domain 26 [Source:HGNC Symbol;Acc:21882]	IFT complex B associated protein, PMID:21289087, PMID:22718903 siRNA knockdown in 3 mouse cell lines reduced cilia frequency, receptor transport into the cilium, and HH signalling. 	PMID:21289087, PMID:22718903	Arnaiz et al. 2009, Arnaiz et al. 2010, Avidor-Reiss et al. 2004, Blacque et al. 2005, Chen et al. 2006, Li et al. 2004, Liu et al. 2007, Mayer et al. 2009, Merchant et al. 2007, Ostrowski et al. 2002, Ross et al. 2007, Stolc et al. 2005	Basal Body, Cilium
-ENSG00000137473	TTC29	tetratricopeptide repeat domain 29 [Source:HGNC Symbol;Acc:29936]	Chlamydomonas homologue encodes 44kDa subunit of axonemal dynein PMID:17981992	PMID:17981992	Arnaiz et al. 2009, Arnaiz et al. 2010, Broadhead et al. 2006, Ross et al. 2007, Smith et al. 2005	Axoneme
-ENSG00000197557	TTC30A	tetratricopeptide repeat domain 30A [Source:HGNC Symbol;Acc:25853]	part of the IFT-B complex. External submission.	PMID:20534810; PMID:17314406	Arnaiz et al. 2009, Arnaiz et al. 2010, Avidor-Reiss et al. 2004, Blacque et al. 2005, Chen et al. 2006, Li et al. 2004, Liu et al. 2007, McClintock et al. 2008, Merchant et al. 2007, Ostrowski et al. 2002, Pazour et al. 2005, Ross et al. 2007, Stolc et al. 2005	Cilium, IFT
-ENSG00000196659	TTC30B	tetratricopeptide repeat domain 30B [Source:HGNC Symbol;Acc:26425]	part of the IFT-B complex. External submission.	PMID:20534810; PMID:17314406	Arnaiz et al. 2009, Arnaiz et al. 2010, Avidor-Reiss et al. 2004, Blacque et al. 2005, Chen et al. 2006, Li et al. 2004, Liu et al. 2007, McClintock et al. 2008, Merchant et al. 2007, Ostrowski et al. 2002, Pazour et al. 2005, Ross et al. 2007, Stolc et al. 2005	Cilium, IFT
-ENSG00000165533	TTC8	tetratricopeptide repeat domain 8 [Source:HGNC Symbol;Acc:20087]	BBS8, part of the BBSome and IFT RP51 OMIM	PMID:14520415	Avidor-Reiss et al. 2004, Blacque et al. 2005, Chen et al. 2006, Efimenko et al. 2005, Li et al. 2004, Liu et al. 2007, Merchant et al. 2007, Nogales-Cadenas et al. 2006	Basal Body, Cilium, IFT
-ENSG00000112742	TTK	TTK protein kinase [Source:HGNC Symbol;Acc:12401]	Negatively regulates ciliogenesis. PMID: 23388454	PMID:23388454	Nogales-Cadenas et al. 2006	Centrosome
-ENSG00000214021	TTLL3	tubulin tyrosine ligase-like family, member 3 [Source:HGNC Symbol;Acc:24483]	Required for cilia tubulin glycylation PMID: 21262966	PMID:21262966	Arnaiz et al. 2010, Laurencon et al. 2007, Li et al. 2004	Cilium
-ENSG00000170703	TTLL6	tubulin tyrosine ligase-like family, member 6 [Source:HGNC Symbol;Acc:26664] 	Involved in cilia tubulin glutamylation PMID: 21262966	PMID:21262966	Arnaiz et al. 2010, Avidor-Reiss et al. 2004, Li et al. 2004, McClintock et al. 2008, Merchant et al. 2007	Cilium
-ENSG00000131044	TTLL9	tubulin tyrosine ligase-like family, member 9 [Source:HGNC Symbol;Acc:16118]	Required for tubulin polyglutamylation	PMID:20188560	Arnaiz et al. 2010, Li et al. 2004, Merchant et al. 2007, Pazour et al. 2005	Cilium
-ENSG00000167552	TUBA1A	tubulin, alpha 1a [Source:HGNC Symbol;Acc:20766]	tubulin, alpha 1a	PMID:11516662	Andersen et al. 2003, Arnaiz et al. 2009, Arnaiz et al. 2010, Blacque et al. 2005, Broadhead et al. 2006, Chen et al. 2006, Keller et al. 2005, Kilburn et al. 2007, Liu et al. 2007, Mayer et al. 2008, Mayer et al. 2009, Muller et al. 2010, Nogales-Cadenas et al. 2006, Ostrowski et al. 2002, Pazour et al. 2005, Reinders et al. 2006, Ross et al. 2007, Smith et al. 2005, Stolc et al. 2005	Basal Body, Centriole, Cytosol
-ENSG00000167553	TUBA1C	tubulin, alpha 1c [Source:HGNC Symbol;Acc:20768]	tubulin, alpha 1c	PMID:11516662	Andersen et al. 2003, Arnaiz et al. 2009, Arnaiz et al. 2010, Blacque et al. 2005, Broadhead et al. 2006, Chen et al. 2006, Keller et al. 2005, Kilburn et al. 2007, Liu et al. 2007, Mayer et al. 2008, Mayer et al. 2009, Muller et al. 2010, Nogales-Cadenas et al. 2006, Ostrowski et al. 2002, Pazour et al. 2005, Reinders et al. 2006, Ross et al. 2007, Smith et al. 2005, Stolc et al. 2005	Basal Body, Centriole, Cytosol
-ENSG00000127824	TUBA4A	tubulin, alpha 4a [Source:HGNC Symbol;Acc:12407]	tubulin, alpha 4a	PMID:11516662	Andersen et al. 2003, Arnaiz et al. 2009, Arnaiz et al. 2010, Blacque et al. 2005, Broadhead et al. 2006, Chen et al. 2006, Keller et al. 2005, Kilburn et al. 2007, Liu et al. 2007, Mayer et al. 2008, Mayer et al. 2009, Muller et al. 2010, Nogales-Cadenas et al. 2006, Ostrowski et al. 2002, Pazour et al. 2005, Reinders et al. 2006, Ross et al. 2007, Smith et al. 2005, Stolc et al. 2005	Basal Body, Centriole, Cytosol
-ENSG00000137267	TUBB2A	tubulin, beta 2A class IIa [Source:HGNC Symbol;Acc:12412]	tubulin, beta 2A	PMID:11516662	Andersen et al. 2003, Arnaiz et al. 2009, Blacque et al. 2005, Broadhead et al. 2006, Keller et al. 2005, Kilburn et al. 2007, Liu et al. 2007, Mayer et al. 2008, Mayer et al. 2009, Muller et al. 2010, Nogales-Cadenas et al. 2006, Ostrowski et al. 2002, Pazour et al. 2005, Reinders et al. 2006, Ross et al. 2007, Smith et al. 2005, Stolc et al. 2005	Basal Body, Centriole, Cytosol
-ENSG00000137285	TUBB2B	tubulin, beta 2B class IIb [Source:HGNC Symbol;Acc:30829]	tubulin, beta 2B	PMID:11516662	Andersen et al. 2003, Arnaiz et al. 2009, Blacque et al. 2005, Broadhead et al. 2006, Keller et al. 2005, Kilburn et al. 2007, Liu et al. 2007, Mayer et al. 2008, Mayer et al. 2009, Muller et al. 2010, Nogales-Cadenas et al. 2006, Ostrowski et al. 2002, Pazour et al. 2005, Reinders et al. 2006, Ross et al. 2007, Smith et al. 2005, Stolc et al. 2005	Basal Body, Centriole, Cytosol
-ENSG00000198211	TUBB3	tubulin, beta 3 class III [Source:HGNC Symbol;Acc:20772]	tubulin, beta 3 	PMID:11516662	Andersen et al. 2003, Blacque et al. 2005, Broadhead et al. 2006, Liu et al. 2007, Mayer et al. 2008, Mayer et al. 2009, Muller et al. 2010, Nogales-Cadenas et al. 2006, Ostrowski et al. 2002, Reinders et al. 2006, Ross et al. 2007	Basal Body, Centriole, Cytosol
-ENSG00000074935	TUBE1	tubulin, epsilon 1 [Source:HGNC Symbol;Acc:20775]	Role in centriole duplication	PMID:11516662	Keller et al. 2005, Merchant et al. 2007, Nogales-Cadenas et al. 2006	Centriole
-ENSG00000130640	TUBGCP2	tubulin, gamma complex associated protein 2 [Source:HGNC Symbol;Acc:18599]	tubulin, gamma complex associated protein 2	PMID:11516662	Andersen et al. 2003, Liu et al. 2007, Muller et al. 2010, Nogales-Cadenas et al. 2006, Wigge et al. 1998	Basal Body, Centriole, Cytosol
-ENSG00000126216	TUBGCP3	tubulin, gamma complex associated protein 3 [Source:HGNC Symbol;Acc:18598]	tubulin, gamma complex associated protein 3	PMID:11516662	Andersen et al. 2003, Liu et al. 2007, Muller et al. 2010, Nogales-Cadenas et al. 2006, Reinders et al. 2006, Wigge et al. 1998	Basal Body, Centriole, Cytosol
-ENSG00000137822	TUBGCP4	tubulin, gamma complex associated protein 4 [Source:HGNC Symbol;Acc:16691]	tubulin, gamma complex associated protein 4	PMID:11516662	Andersen et al. 2003, Muller et al. 2010, Nogales-Cadenas et al. 2006	Basal Body, Centriole, Cytosol
-ENSG00000153575	TUBGCP5	tubulin, gamma complex associated protein 5 [Source:HGNC Symbol;Acc:18600]	tubulin, gamma complex associated protein 5	PMID:11516662	Andersen et al. 2003, Muller et al. 2010, Nogales-Cadenas et al. 2006	Basal Body, Centriole, Cytosol
-ENSG00000128159	TUBGCP6	tubulin, gamma complex associated protein 6 [Source:HGNC Symbol;Acc:18127]	tubulin, gamma complex associated protein 6	PMID:11516662	Andersen et al. 2003, Muller et al. 2010, Nogales-Cadenas et al. 2006	Basal Body, Centriole, Cytosol
-ENSG00000112041	TULP1	tubby like protein 1 [Source:HGNC Symbol;Acc:12423]	Ciliopathy gene LCA15, RP14 OMIM 602280 but localisation to the basal body or cilium hasn't been shown	PMID:9462750	Liu et al. 2007	Plasma Membrane
-ENSG00000078246	TULP3	tubby like protein 3 [Source:HGNC Symbol;Acc:12425]	PMID:20889716 bridges the IFT-A complex and membrane phosphoinositides to promote trafficking of G protein-coupled receptors into primary cilia.	PMID:20889716	Blacque et al. 2005, Chen et al. 2006, Efimenko et al. 2005	Axoneme, Ciliary Tip
-ENSG00000168038	ULK4	unc-51-like kinase 4 (C. elegans) [Source:HGNC Symbol;Acc:15784] 	Hydrocephalus due to dysfunctional motile cilia in KO mouse PMID: 21746835	PMID:21746835		
-ENSG00000006611	USH1C	Usher syndrome 1C (autosomal recessive, severe) [Source:HGNC Symbol;Acc:12597]	Ciliopathy gene USH1C PMID: 12136232	PMID:12136232, PMID:18339676		Stereocilium
-ENSG00000182040	USH1G	Usher syndrome 1G (autosomal recessive) [Source:HGNC Symbol;Acc:16356]	Ciliopathy gene OMIM: 607696; USH1G, PMID: 12588794	PMID:12588794, PMID:21767579		Cytoplasmic, Plasma Membrane, Centrosome 
-ENSG00000042781	USH2A	Usher syndrome 2A (autosomal recessive, mild) [Source:HGNC Symbol;Acc:12601]	MIM: 608400, PMID: 10738000 Binds lebercilin and NINL. PMID: 18826961, Well estabilished causal relationship with Usher syndrome type II. Mouse model mimics ciliopathy disease Usher syndrome PubMed: 17360538.	PMID:10738000, PMID:16434480, PMID: 18826961, PMID: 17360538	Liu et al. 2007	Cilium,  Centrosome, Stereocilium, Ciliary Membrane, Cytosol
-ENSG00000078668	VDAC3	voltage-dependent anion channel 3 [Source:HGNC Symbol;Acc:12674]	Mitochondrial porin, also a centrosomal protein. Negatively regulates ciliogenesis. PMID:23388454	PMID:23388454	Mayer et al. 2008, Mayer et al. 2009, Muller et al. 2010	Centrosome
-ENSG00000134086	VHL	von Hippel-Lindau tumor suppressor, E3 ubiquitin protein ligase [Source:HGNC Symbol;Acc:12687]	MIM: 193300, MIM: 144700, MIM: 171300, MIM: 263400; Somatic inactivation of VHL causes renal and pancreatic cysts associated with cilia loss. VHL regulates ciliary maintenance and microtubule stability. 	PMID:16775032, PMID:16849532, PMID:23255108, PMID:18497742, PMID:17101696, PMID:17450132, PMID:17912253		Cytosol, Cilium, Nucleus
-ENSG00000143951	WDPCP	WD repeat containing planar cell polarity effector [Source:HGNC Symbol;Acc:28027]	MIM: 613580. Also known as C2ORF86, BBS15. In Xenopus regulates septin and is necessory fro ciliogenesis. Mutations in humans cause BBS & MKS PMID: 20671153	PMID:20671153		Cytosol, Plasma Membrane,  Axoneme
-ENSG00000157796	WDR19	WD repeat domain 19 [Source:HGNC Symbol;Acc:18340]	MIM: 08151. Mutations in WDR19 cause ciliopathies nephronophthisis (NPHP13), Jeune and Sensenbrenner syndromes (ATD5), PMID: 22019273 IFT complex A component (aka IFT144)	PMID:22019273; PMID: 19430947	Arnaiz et al. 2010, Avidor-Reiss et al. 2004, Blacque et al. 2005, Chen et al. 2006, Li et al. 2004, Liu et al. 2007, Merchant et al. 2007, Pazour et al. 2005, Ross et al. 2007	Cilium, IFT
-ENSG00000118965	WDR35	WD repeat domain 35 [Source:HGNC Symbol;Acc:29250]	IFT complex A component, dogenous WDR35 localizes to cilia and centrosomes throughout the developing embryo and that human and mouse fibroblasts lacking the protein fail to produce cilia; Human and mouse homozygouse mutations in WDR35 cause ciliopathy short-rib polydactyly syndrome. Heterozygous mutations shown to cause cranioectodermal dysplasia-2. OMIM:613602	PMID:20817137; PMID: 21473986‎	Avidor-Reiss et al. 2004, Blacque et al. 2005, Chen et al. 2006, Li et al. 2004, Liu et al. 2007, Mayer et al. 2009, Merchant et al. 2007, Pazour et al. 2005	Cilium, IFT
-ENSG00000126870	WDR60	WD repeat domain 60 [Source:HGNC Symbol;Acc:21862]	Isolated from primary cilia from mouse kidney cells and identified by mass spec PMID:22326026	PMID:22326026	Blacque et al. 2005, Li et al. 2004, Liu et al. 2007, Pazour et al. 2005	Cilium
-ENSG00000152763	WDR78	WD repeat domain 78 [Source:HGNC Symbol;Acc:26252]	PMID:21289087; PMID:15937072; Phylogenetically WDR78 groups with Chlamydomonas inner dynein arm proteins IC140 and IC138, suggesting that they are subunits of the inner dynein arm. siRNA knockdown of Wdr78 in 3 different mouse cell lines perturbed receptor transport to the ciliary membrane as well as HH signalling. 	PMID:21289087; PMID:15937072	Arnaiz et al. 2009, Arnaiz et al. 2010, Boesger et al. 2009, Broadhead et al. 2006, Li et al. 2004, Pazour et al. 2005, Ross et al. 2007, Smith et al. 2005, Stolc et al. 2005, Stubbs et al. 2008	Axoneme
-ENSG00000196236	XPNPEP3	X-prolyl aminopeptidase (aminopeptidase P) 3, putative [Source:HGNC Symbol;Acc:28052]	nephronophisis-like nephropathy, PMID: 20179356, in proteome, cleaves N-term DNAAF1	PMID:20179356	Liu et al. 2007	Mitochondrium, Nucleus, Basal Body
-ENSG00000102935	ZNF423	zinc finger protein 423 [Source:HGNC Symbol;Acc:16762]	PMID:22863007, OMIM:604557; Immpunopreciptitates CEP290 and colocalizes with SDCCAG8 and CEP164. Patients homozygous for ZNF423 mutations (NPHP14) manifest as infantile-onset kidney disease, cerebellar vermis hypoplasia, and situs inversus, two mouse models available with Joubert-like cerebellar symptoms.                     	PMID:22863007; 17521568; 17151198		Nucleus
+ensembl_gene_symbol
+ADCY3
+AHI1
+AK7
+AK8
+ALMS1
+ARF4
+ARL13B
+ARL3
+ARL6
+ASAP1
+ATXN10
+AZI1
+B9D1
+B9D2
+BBS1
+BBS10
+BBS12
+BBS2
+BBS4
+BBS5
+BBS7
+BBS9
+C21orf2
+C2CD3
+C2orf71
+C8orf37
+CBY1
+CC2D2A
+CCDC103
+CCDC114
+CCDC164
+CCDC28B
+CCDC37
+CCDC39
+CCDC40
+CCDC41
+CDH23
+CENPJ
+CEP104
+CEP135
+CEP164
+CEP250
+CEP290
+CEP41
+CEP72
+CEP89
+CEP97
+CLDN2
+CLUAP1
+CNGA2
+CNGA4
+CNGB1
+CP110
+CRB3
+CROCC
+CTNNB1
+DCDC2
+DCDC2
+DFNB31
+DISC1
+DNAAF1
+DNAAF2
+DNAAF3
+DNAH1
+DNAH10
+DNAH11
+DNAH2
+DNAH5
+DNAH6
+DNAI1
+DNAI2
+DNAL1
+DNALI1
+DPCD
+DPYSL2
+DRD1
+DRD2
+DRD5
+DVL1
+DYNC2H1
+DYNLT1
+DYX1C1
+EFHC1
+EVC
+EVC2
+EXOC3
+EXOC4
+EXOC5
+EXOC6
+EXOC6B
+FAM161A
+FBF1
+FLNA
+FOPNL
+FOXJ1
+FUZ
+GAS8
+GLI1
+GLI2
+GLI3
+GLIS2
+GPR161
+GPR98
+GSK3B
+HAP1
+HEATR2
+HNF1B
+HSPA8
+HSPB11
+HTR6
+HTT
+HYDIN
+HYLS1
+IFT122
+IFT140
+IFT172
+IFT20
+IFT27
+IFT43
+IFT46
+IFT52
+IFT57
+IFT74
+IFT80
+IFT81
+IFT88
+INPP5E
+INTU
+INVS
+IQCB1
+KIF17
+KIF19
+KIF24
+KIF27
+KIF3A
+KIF3B
+KIF3C
+KIF7
+LCA5
+LRRC6
+LZTFL1
+MAK
+MAL
+MAPRE1
+MCHR1
+MDM1
+MKKS
+MKS1
+MLF1
+MNS1
+MYO15A
+MYO7A
+NEK1
+NEK2
+NEK4
+NEK8
+NGFR
+NIN
+NINL
+NME5
+NME7
+NME8
+NOTO
+NPHP1
+NPHP3
+NPHP4
+NUP214
+NUP35
+NUP37
+NUP62
+NUP93
+OCRL
+ODF2
+OFD1
+ORC1
+PACRG
+PAFAH1B1
+PARD3
+PARD6A
+PCDH15
+PCM1
+PDE6D
+PDZD7
+PHF17
+PIBF1
+PKD1
+PKD1L1
+PKD2
+PKHD1
+PLK1
+POC1A
+PTCH1
+PTPDC1
+RAB11A
+RAB11FIP3
+RAB17
+RAB23
+RAB3IP
+RAB8A
+RABL5
+RAN
+RANBP1
+RFX3
+RILPL1
+RILPL2
+ROPN1L
+RP1
+RP2
+RPGR
+RPGRIP1
+RPGRIP1L
+RSPH1
+RSPH3
+RSPH4A
+RSPH9
+RTTN
+SASS6
+SCLT1
+SDCCAG8
+Sep-02
+Sep-07
+SGK196
+SHH
+SLC47A2
+SMO
+SNAP25
+SNX10
+SPA17
+SPAG16
+SPAG17
+SPAG6
+SPATA7
+SPEF2
+SSNA1
+SSTR3
+STIL
+STK36
+STK38L
+STOML3
+STX3
+SUFU
+SYNE2
+TBC1D30
+TBC1D7
+TCTN1
+TCTN2
+TCTN3
+TEKT2
+TEKT4
+TEKT5
+TMEM138
+TMEM216
+TMEM231
+TMEM237
+TMEM67
+TNPO1
+TOPORS
+TPPP2
+TRAF3IP1
+TRAPPC10
+TRAPPC3
+TRAPPC9
+TRIM32
+TRIP11
+TTBK2
+TTC12
+TTC21B
+TTC26
+TTC29
+TTC30A
+TTC30B
+TTC8
+TTK
+TTLL3
+TTLL6
+TTLL9
+TUBA1A
+TUBA1C
+TUBA4A
+TUBB2A
+TUBB2B
+TUBB3
+TUBE1
+TUBGCP2
+TUBGCP3
+TUBGCP4
+TUBGCP5
+TUBGCP6
+TULP1
+TULP3
+ULK4
+USH1C
+USH1G
+USH2A
+VDAC3
+VHL
+WDPCP
+WDR19
+WDR35
+WDR60
+WDR78
+XPNPEP3
+ZNF423

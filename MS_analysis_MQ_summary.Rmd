@@ -46,6 +46,11 @@ basalCellGenes <- read.csv("~/Coding/MS_analysis/tracked_files/basalCellTranscri
   c(., "TP63", "KRT5", "FAS", "NT5E", "EPCAM", "TSPAN4", "F3", "NGFR", "IFNGR1", "MST1R", "IGF1R", "IGF2R", "ERBB2", "EGFR") %>% 
   unique() %>%
   sort()
+#Adding comparison for cila related genes. taken from http://www.syscilia.org/goldstandard.shtml and edited to remove all unrelated columns
+ciliatedCellGenes <- read.table("~/Coding/MS_analysis/tracked_files/scgs.v1.tsv", sep = "\t") %>%
+  .$V1 %>% 
+  unique() %>%
+  sort()
 ```
 
 ## Enrichment for phosphopeptides
@@ -69,6 +74,21 @@ markersPresent
 
 print("Proportion of basal cell markers found")
 length(markersPresent)/length(basalCellGenes)
+```
+
+# Identifying ciliated cell markers
+Listing markers found in phosphoproteome, along with fraction of markers found
+```{r identifying basal cell markers, echo=FALSE}
+ciliatedMarkersPresent <- evidence %>%
+  filter(firstGeneName %in% ciliatedCellGenes) %>%
+  .$firstProtName %>%
+  unique() %>%
+  sort()
+print("Ciliated cell markers found")
+ciliatedMarkersPresent
+
+print("Proportion of basal cell markers found")
+length(ciliatedMarkersPresent)/length(ciliatedCellGenes)
 ```
 
 ## Contaminants
