@@ -53,7 +53,7 @@ ciliatedCellGenes <- read.table("~/Coding/MS_analysis/tracked_files/scgs.v1.tsv"
   sort()
 
 #creating a list of all proteins from original fasta database
-fasta <- read.fasta("~/Coding/MS_analysis/data/UP000005640_9606.fasta", seqtype = "AA")
+fasta <- read.fasta("~/Coding/MS_analysis/data/UP000005640_9606.fasta", seqtype = "AA", as.string = T)
 ```
 
 ## Enrichment for phosphopeptides
