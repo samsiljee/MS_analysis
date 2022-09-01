@@ -78,7 +78,7 @@ length(markersPresent)/length(basalCellGenes)
 
 # Identifying ciliated cell markers
 Listing markers found in phosphoproteome, along with fraction of markers found
-```{r identifying basal cell markers, echo=FALSE}
+```{r identifying ciliated cell markers, echo=FALSE}
 ciliatedMarkersPresent <- evidence %>%
   filter(firstGeneName %in% ciliatedCellGenes) %>%
   .$firstProtName %>%
@@ -87,8 +87,15 @@ ciliatedMarkersPresent <- evidence %>%
 print("Ciliated cell markers found")
 ciliatedMarkersPresent
 
-print("Proportion of basal cell markers found")
+print("Proportion of basal cell markers found - total list (303)")
 length(ciliatedMarkersPresent)/length(ciliatedCellGenes)
+
+print("Proportion of basal cell markers found - monte carlo (58)")
+hits <- replicate(n = 10000, expr = {(evidence %>%
+    filter(firstGeneName %in% sample(ciliatedCellGenes, 58, replace = FALSE)) %>%
+    .$firstProtName %>%
+    length())/58})
+mean(hits)
 ```
 
 ## Contaminants
