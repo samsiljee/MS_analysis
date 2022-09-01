@@ -51,6 +51,11 @@ ciliatedCellGenes <- read.table("~/Coding/MS_analysis/tracked_files/scgs.v1.tsv"
   .$V1 %>% 
   unique() %>%
   sort()
+
+#creating a list of all genes from the KEGG pathways. I'm sure there's a much better way to do this, but I don't know how exactly at this point.
+tab <- getGeneKEGGLinks(species="hsa")
+tab$Symbol <- mapIds(org.Hs.eg.db, tab$GeneID,
+                       column="SYMBOL", keytype="ENTREZID")
 ```
 
 ## Enrichment for phosphopeptides
