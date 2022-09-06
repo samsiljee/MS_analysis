@@ -101,7 +101,7 @@ ciliatedMarkersPresent <- evidence %>%
 print("Ciliated cell markers found")
 ciliatedMarkersPresent
 
-print("Proportion of basal cell markers found - total list (689)")
+print("Proportion of ciliated cell markers found - total list (689)")
 length(ciliatedMarkersPresent)/length(ciliatedCellGenes)
 ```
 
