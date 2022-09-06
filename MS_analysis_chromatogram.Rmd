@@ -53,7 +53,7 @@ IT_plot <- sp_it %>%
     geom_line() +
     ylab("Total ion current") +
   xlab("Retention time (minutes)") +
-  ggtitle("1e6 cells, post cal, OT/OT chromatogram")
+  ggtitle("1e6 cells, post cal, OT/IT chromatogram")
 
 #saving plot
 ggsave("IT_plot.png", width = 8, height = 5.5)
