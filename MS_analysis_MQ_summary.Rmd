@@ -12,6 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ## Packages
 ```{r packages, include=FALSE}
 library("tidyverse")
+library("seqinr")
 ```
 
 ## Importing raw data
@@ -46,10 +47,16 @@ basalCellGenes <- read.csv("~/Coding/MS_analysis/tracked_files/basalCellTranscri
   c(., "TP63", "KRT5", "FAS", "NT5E", "EPCAM", "TSPAN4", "F3", "NGFR", "IFNGR1", "MST1R", "IGF1R", "IGF2R", "ERBB2", "EGFR") %>% 
   unique() %>%
   sort()
-#Adding comparison for cila related genes. taken from http://www.syscilia.org/goldstandard.shtml and edited to remove all unrelated columns
-ciliatedCellGenes <- read.table("~/Coding/MS_analysis/tracked_files/scgs.v1.tsv", sep = "\t") %>%
-  .$V1 %>% 
-  unique() %>%
+
+#Adding comparison for cilia related genes. taken from http://www.syscilia.org/goldstandard.shtml and edited to remove all unrelated columns
+sysciliaCiliatedCellGenes <- read.table("~/Coding/MS_analysis/tracked_files/scgs.v1.tsv", sep = "\t") %>%
+  .$V1
+#Adding list of ciliated genes taken from "The transcriptional signature associated with human motile cilia", Patir et al. 2020 Nature. Table S2 edited to include only lung genes, pseudogenes, novel transcripts, unvalidated genes removed, and saved as .csv for import to R.  https://www.nature.com/articles/s41598-020-66453-4#MOESM1
+patirCiliatedCellGenes <- read.csv("~/Coding/MS_analysis/tracked_files/patir_cil_genes.csv") %>%
+  .$Lung
+#combining the above lists
+ciliatedCellGenes <- c(sysciliaCiliatedCellGenes, patirCiliatedCellGenes) %>% 
+  unique() %>% 
   sort()
 
 #creating a list of all proteins from original fasta database
@@ -82,6 +89,10 @@ length(markersPresent)/length(basalCellGenes)
 # Identifying ciliated cell markers
 Listing markers found in phosphoproteome, along with fraction of markers found
 ```{r identifying ciliated cell markers, echo=FALSE}
+#first looking at the overlapping genes found in both the basal cell and ciliated cell sets
+print("Genes found in both basal cell and ciliated cell gene list")
+intersect(basalCellGenes, ciliatedCellGenes)
+
 ciliatedMarkersPresent <- evidence %>%
   filter(firstGeneName %in% ciliatedCellGenes) %>%
   .$firstProtName %>%
@@ -90,15 +101,8 @@ ciliatedMarkersPresent <- evidence %>%
 print("Ciliated cell markers found")
 ciliatedMarkersPresent
 
-print("Proportion of basal cell markers found - total list (303)")
+print("Proportion of basal cell markers found - total list (689)")
 length(ciliatedMarkersPresent)/length(ciliatedCellGenes)
-
-print("Proportion of basal cell markers found - monte carlo (58)")
-hits <- replicate(n = 10000, expr = {(evidence %>%
-    filter(firstGeneName %in% sample(ciliatedCellGenes, 58, replace = FALSE)) %>%
-    .$firstProtName %>%
-    length())/58})
-mean(hits)
 ```
 
 ## Contaminants
