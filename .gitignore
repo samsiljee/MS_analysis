@@ -4,6 +4,8 @@ data/*
 MS_analysis_tutorial.html
 MS_analysis_chromatogram.html
 MS_analysis_MQ_summary.html
+MS_analysis_MQ_summary.html
+MS_analysis.html
 # History files
 .Rhistory
 .Rapp.history
@@ -32,4 +34,3 @@ vignettes/*.pdf
 *.knit.md
 # R Environment Variables
 .Renviron
-MS_analysis_MQ_summary.html
