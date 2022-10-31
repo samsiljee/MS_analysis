@@ -43,7 +43,7 @@ OT_plot <- sp %>%
   ggtitle("1e6 cells, post cal, OT/OT chromatogram")
 
 #saving plot
-ggsave("OT_plot.png", width = 8, height = 5.5)
+ggsave("~/Coding/MS_analysis/plots/OT_plot.png", width = 8, height = 5.5)
 
 # creating plot for IT data
 IT_plot <- sp_it %>%
@@ -57,7 +57,7 @@ IT_plot <- sp_it %>%
   ggtitle("1e6 cells, post cal, OT/IT chromatogram")
 
 #saving plot
-ggsave("IT_plot.png", width = 8, height = 5.5)
+ggsave("~/Coding/MS_analysis/plots/IT_plot.png", width = 8, height = 5.5)
 ```
 
 #Fixed issues

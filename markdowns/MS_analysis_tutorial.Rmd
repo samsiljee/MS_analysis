@@ -178,6 +178,7 @@ abline(v = precursorMz(spx)[2], col = "red")
 ```
 
 ##Sequence identification
+I will not be doing the searches in R, I will do this in either Proteome Discoverer or Max Quant.
 ```{r sequence identification, include = FALSE}
 
 ```
