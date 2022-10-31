@@ -27,6 +27,8 @@ library("tidyverse")
 sp <- Spectra("~/Coding/MS_analysis/data/1e6_phospho_converted.mzML")
 
 sp_it <- Spectra("~/Coding/MS_analysis/data/1e6_phospho_it_converted.mzML")
+
+sp_prot <- Spectra("~/Coding/MS_analysis/data/22-091_1_1ul_SS.mzML")
 ```
 
 ## Creating a chromatogram
@@ -58,6 +60,20 @@ IT_plot <- sp_it %>%
 
 #saving plot
 ggsave("~/Coding/MS_analysis/plots/IT_plot.png", width = 8, height = 5.5)
+
+# creating plot for prot data
+PROT_plot <- sp_prot %>%
+  filterMsLevel(1) %>%
+  spectraData() %>%
+  as_tibble() %>%
+  ggplot(aes(x = rtime/60, y = totIonCurrent)) +
+    geom_line() +
+    ylab("Total ion current") +
+  xlab("Retention time (minutes)") +
+  ggtitle("7e5 cells, pre cal, Protein chromatogram")
+
+#saving plot
+ggsave("~/Coding/MS_analysis/plots/PROT_plot.png", width = 8, height = 5.5)
 ```
 
 #Fixed issues
