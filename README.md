@@ -14,12 +14,16 @@ RAW DATA
 PROTEOMICS
   - Import results from Proteome Discoverer or Max Quant
   - Review potential contaminants
+  - QC plots; chromatograms
   - Normalisation in `MSstats`
   - Search IDs against basal cell markers, and ciliated markers as a control
   - Perform differential abundance analysis with `DESeq2` - note that this was developed for transcriptomics, it's likely more appropriate to perform this using `MSstats`
+  - Histogram of log2 foldchanges
   - Perform PCA analysis, and plot clusters
   - Create a heatmap of samples vs proteins
-  - Nework analysis of some kind?
+  - Volcano plots of differentially abundant proteins
+  - GO and KEGG term analysis
+  - Nework analysis of some kind? String?
   - Use COPF analysis to infer proteoform differences
 
 PHOSPHOPROTEOMICS
