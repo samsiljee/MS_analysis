@@ -5,13 +5,13 @@ Initial code is based off of the tutorial by Dr Laurent Gatto, see my tutrial re
 
 First section is to have a basic look at the raw MS data, note that it will need to be converted to mzML format first; I have made a PD workflow for this.
 
-##Overall workflow of analysis
+## Overall workflow of analysis
 
-###RAW DATA
+### RAW DATA
   - Import raw data
   - Quality control; import raw data in mzML format to look at chromatograms using R. I'm sure there are many more quality control things that can be 
 
-###PROTEOMICS
+### PROTEOMICS
   - Import results from Proteome Discoverer or Max Quant
   - Review potential contaminants
   - QC plots; chromatograms
@@ -26,17 +26,17 @@ First section is to have a basic look at the raw MS data, note that it will need
   - Nework analysis of some kind? String?
   - Use COPF analysis to infer proteoform differences
 
-###PHOSPHOPROTEOMICS
+### PHOSPHOPROTEOMICS
   - Import results from Proteome Discoverer or Max Quant
   - Quantify phosphopeptide enrichment
   - Review potential contaminants
   - Normalise in `MSstats`
   - Search IDs against basal cell markers, and ciliated markers as a control
   
-###PRESENTATION
+### PRESENTATION
   - Present QC data in graphs suitable for supplementary materials
   - Present data tables in formats such as crosstalk (can be done with R markdown, see https://www.youtube.com/watch?v=WkF7nqEYF1E https://github.com/jthomasmock/penguin-project)
 
-##Issues and to-do
+## Issues and to-do
   - Get code up and running for all sections, currently working on `MSstats` analysis
   - Add copyright to repository/scripts
