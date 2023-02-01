@@ -39,4 +39,9 @@ First section is to have a basic look at the raw MS data, note that it will need
 
 ## Issues and to-do
   - Get code up and running for all sections, currently working on `MSstats` analysis
+  
+## Completed issues
   - Add copyright to repository/scripts
+
+# License
+Feel free to use this code as you wish under the MIT license, however an anknowledgement would be nice. Thanks!
