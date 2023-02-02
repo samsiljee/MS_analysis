@@ -24,7 +24,7 @@ First section is to have a basic look at the raw MS data, note that it will need
   - Volcano plots of differentially abundant proteins
   - GO and KEGG term analysis
   - Nework analysis of some kind? String?
-  - Use COPF analysis to infer proteoform differences
+  - Use COPF analysis to infer proteoform differences: https://www.nature.com/articles/s41467-021-24030-x#code-availability
 
 ### PHOSPHOPROTEOMICS
   - Import results from Proteome Discoverer or Max Quant
