@@ -36,6 +36,11 @@ First section is to have a basic look at the raw MS data, note that it will need
 ### PRESENTATION
   - Present QC data in graphs suitable for supplementary materials
   - Present data tables in formats such as crosstalk (can be done with R markdown, see https://www.youtube.com/watch?v=WkF7nqEYF1E https://github.com/jthomasmock/penguin-project)
+  
+### FURTHER ANALYSIS
+  - GO annotations
+  - Enrichment analysis
+  - Biological network analysis
 
 ## Issues and to-do
   - Get code up and running for all sections, currently working on `MSstats` analysis
