@@ -2,19 +2,27 @@
 # Created by Sam Siljee - (c) 2023
 # Created 04/04/2023
 
-# Pacakges ----
+# Packages ----
+
+# Load required packages
+
 library(shiny)
-library(markdown)
+library(MSstats)
+library(tidyverse)
 
 # UI ----
 
 # Display the UI, with tabs for each section
 
-ui <- navbarPage("MS proteomics analysis",
+ui <- navbarPage("Proteomics analysis pipeline",
+                 
+  # Welcome ----
   tabPanel("Welcome",
            p("Welcome to my proteomics analysis pipeline."),
            p("Please move sequentially through the tabs to complete the analysis.")
-           ),              
+           ),
+  
+  # Input ----
   tabPanel("Input",
            p("Please upload your dataset as exported from Proteome discoverer and the corresponding annotations table here:"),
            fileInput(inputId = "PSMs",
@@ -26,48 +34,36 @@ ui <- navbarPage("MS proteomics analysis",
                      buttonLabel = "Browse",
                      placeholder = "Upload annotations file here")
            ),
+  
+  # MSstats ----
   tabPanel("MSstats",
-           verbatimTextOutput("summary")
+           p("This section will be where MSstats is computed. There will be drop down options here too for the settings.")
            ),
-  navbarMenu("More",
-             tabPanel("Table",
-                      DT::dataTableOutput("table")
+  tabPanel("Comparisons",
+           p("This section will be where the comparisons will be defined. There will be an input panel to set up the comparion matrix")
+           ),
+  tabPanel("Visualisation",
+           p("This section will be for making the graphs. Again a sidebar panel to select the types of graphs.")
+           ),
+  navbarMenu("Menu placeholder",
+             tabPanel("First option",
+                      
                       ),
-             tabPanel("About",
-                      fluidRow(
-                          column(3,
-                                 img(class="img-polaroid",
-                                     src=paste0("http://upload.wikimedia.org/",
-                                                "wikipedia/commons/9/92/",
-                                                "1919_Ford_Model_T_Highboy_Coupe.jpg")),
-                                 tags$small(
-                                     "Source: Photographed at the Bay State Antique ",
-                                     "Automobile Club's July 10, 2005 show at the ",
-                                     "Endicott Estate in Dedham, MA by ",
-                                     a(href="http://commons.wikimedia.org/wiki/User:Sfoskett",
-                                       "User:Sfoskett")
-                                     )
-                                 )
-                          )
+             tabPanel("Second option",
+                      
                       )
              )
 )
-# Server ----
-# Define server logic required to draw a histogram
 
+# Server ----
 
 server <- function(input, output, session) {
-    output$plot <- renderPlot({
-        plot(cars, type=input$plotType)
-    })
-    
-    output$summary <- renderPrint({
-        summary(cars)
-    })
-    
-    output$table <- DT::renderDataTable({
-        DT::datatable(cars)
-    })
+  # MSstats ----
+  output$table <- renderTable(
+    read.table(input$annotations,
+               sep = ",")
+  )
+  
 }
 
 
