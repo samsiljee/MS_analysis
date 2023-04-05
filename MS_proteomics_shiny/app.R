@@ -19,8 +19,7 @@ ui <- navbarPage(
                  
 # Instructions ----
 
-  tabPanel(
-    title = "Instructions",
+  tabPanel("Instructions",
     
     "Welcome to my proteomics analysis pipeline.",
     
@@ -29,22 +28,17 @@ ui <- navbarPage(
   
 # Input ----
 
-  tabPanel(
-    title = "Input",
+  tabPanel("Input",
     
     "Please upload your dataset as exported from Proteome discoverer and the corresponding annotations table here:",
     
     sidebarPanel(
-      fileInput(
-        inputId = "PSMs",
-        label = "PSMs file",
+      fileInput("PSMs", "PSMs file",
         buttonLabel = "Browse",
         placeholder = "Upload PSMs file here"
         ),
 
-      radioButtons(
-        inputId = "PSMs_sep",
-        label = "Separator",
+      radioButtons("PSMs_sep", "Separator",
         choices = c(
           Tab = "\t",
           Comma = ",",
@@ -55,16 +49,12 @@ ui <- navbarPage(
       
       tags$hr(),
       
-      fileInput(
-        inputId = "annotations",
-        label = "Annotations file",
+      fileInput("annotations", "Annotations file",
         buttonLabel = "Browse",
         placeholder = "Upload annotations file here"
         ),
       
-      radioButtons(
-        inputId = "annotations_sep",
-        label = "Separator",
+      radioButtons("annotations_sep", "Separator",
         choices = c(
           Tab = "\t",
           Comma = ",",
@@ -74,13 +64,14 @@ ui <- navbarPage(
         )
       ),
     
-    mainPanel(
-      "Raw data (head)",
+    mainPanel("Raw data (head)",
+              
       tableOutput("head_PSMs_tab"),
       
       tags$hr(),
       
       "Annotations",
+      
       tableOutput("annotation_tab")
       
     )
@@ -88,8 +79,7 @@ ui <- navbarPage(
   
 # MSstats ----
 
-  tabPanel(
-    title = "MSstats",
+  tabPanel("MSstats",
     
     "This section will be where MSstats is computed. There will be drop down options here too for the settings."
     
@@ -97,8 +87,7 @@ ui <- navbarPage(
 
 # Comparisons ----
 
-  tabPanel(
-    title = "Comparisons",
+  tabPanel("Comparisons",
     
     "This section will be where the comparisons will be defined. There will be an input panel to set up the comparion matrix"
     
@@ -106,9 +95,7 @@ ui <- navbarPage(
 
 # Visualisations ----
 
-  tabPanel(
-    
-    title = "Visualisation",
+  tabPanel("Visualisation",
     
     "This section will be for making the graphs. Again a sidebar panel to select the types of graphs."
     
@@ -123,11 +110,7 @@ options(shiny.maxRequestSize=30*1024^2)
 
 # Set up the server to run the calculations
 
-server <- function(
-    input,
-    output,
-    session
-    ){
+server <- function(input, output, session){
 
 # Input ----
     
@@ -158,8 +141,6 @@ server <- function(
   })
   
   }
-
-
 
 # Run the application 
 shinyApp(ui = ui, server = server)
