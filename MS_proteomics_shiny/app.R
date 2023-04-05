@@ -14,57 +14,150 @@ library(tidyverse)
 
 # Display the UI, with tabs for each section
 
-ui <- navbarPage("Proteomics analysis pipeline",
+ui <- navbarPage(
+  title = "Proteomics analysis pipeline",
                  
-  # Welcome ----
-  tabPanel("Welcome",
-           p("Welcome to my proteomics analysis pipeline."),
-           p("Please move sequentially through the tabs to complete the analysis.")
-           ),
+# Instructions ----
+
+  tabPanel(
+    title = "Instructions",
+    
+    "Welcome to my proteomics analysis pipeline.",
+    
+    "Please move sequentially through the tabs to complete the analysis."
+    ),
   
-  # Input ----
-  tabPanel("Input",
-           p("Please upload your dataset as exported from Proteome discoverer and the corresponding annotations table here:"),
-           fileInput(inputId = "PSMs",
-                     label = "PSMs file",
-                     buttonLabel = "Browse",
-                     placeholder = "Upload PSMs file here"),
-           fileInput(inputId = "annotations",
-                     label = "Annotations file",
-                     buttonLabel = "Browse",
-                     placeholder = "Upload annotations file here")
-           ),
+# Input ----
+
+  tabPanel(
+    title = "Input",
+    
+    "Please upload your dataset as exported from Proteome discoverer and the corresponding annotations table here:",
+    
+    sidebarPanel(
+      fileInput(
+        inputId = "PSMs",
+        label = "PSMs file",
+        buttonLabel = "Browse",
+        placeholder = "Upload PSMs file here"
+        ),
+
+      radioButtons(
+        inputId = "PSMs_sep",
+        label = "Separator",
+        choices = c(
+          Tab = "\t",
+          Comma = ",",
+          Semicolon = ";"
+          ),
+        selected = "\t"
+        ),
+      
+      tags$hr(),
+      
+      fileInput(
+        inputId = "annotations",
+        label = "Annotations file",
+        buttonLabel = "Browse",
+        placeholder = "Upload annotations file here"
+        ),
+      
+      radioButtons(
+        inputId = "annotations_sep",
+        label = "Separator",
+        choices = c(
+          Tab = "\t",
+          Comma = ",",
+          Semicolon = ";"
+          ),
+        selected = ","
+        )
+      ),
+    
+    mainPanel(
+      "Raw data (head)",
+      tableOutput("head_PSMs_tab"),
+      
+      tags$hr(),
+      
+      "Annotations",
+      tableOutput("annotation_tab")
+      
+    )
+    ),
   
-  # MSstats ----
-  tabPanel("MSstats",
-           p("This section will be where MSstats is computed. There will be drop down options here too for the settings.")
-           ),
-  tabPanel("Comparisons",
-           p("This section will be where the comparisons will be defined. There will be an input panel to set up the comparion matrix")
-           ),
-  tabPanel("Visualisation",
-           p("This section will be for making the graphs. Again a sidebar panel to select the types of graphs.")
-           ),
-  navbarMenu("Menu placeholder",
-             tabPanel("First option",
-                      
-                      ),
-             tabPanel("Second option",
-                      
-                      )
-             )
+# MSstats ----
+
+  tabPanel(
+    title = "MSstats",
+    
+    "This section will be where MSstats is computed. There will be drop down options here too for the settings."
+    
+    ),
+
+# Comparisons ----
+
+  tabPanel(
+    title = "Comparisons",
+    
+    "This section will be where the comparisons will be defined. There will be an input panel to set up the comparion matrix"
+    
+    ),
+
+# Visualisations ----
+
+  tabPanel(
+    
+    title = "Visualisation",
+    
+    "This section will be for making the graphs. Again a sidebar panel to select the types of graphs."
+    
+    ),
+
 )
 
 # Server ----
 
-server <- function(input, output, session) {
-  # MSstats ----
-  output$table <- renderTable(
-    read.table(input$annotations,
-               sep = ",")
-  )
+# Setting option to increase allowed file size to 30MB, I will probably have to increase this further
+options(shiny.maxRequestSize=30*1024^2)
+
+# Set up the server to run the calculations
+
+server <- function(
+    input,
+    output,
+    session
+    ){
+
+# Input ----
+    
+  output$head_PSMs_tab <- renderTable({
+    req(input$PSMs)
+    
+    raw <- read.table(
+      input$PSMs$datapath,
+      header = TRUE,
+      sep = input$PSMs_sep
+      )
+    
+    return(head(raw, 5))
+    
+  })
   
-}
+  output$annotation_tab <- renderTable({
+    req(input$PSMs)
+    
+    annot_col <- read.table(
+      input$annotations$datapath,
+      header = TRUE,
+      sep = input$annotations_sep
+    )
+    
+    return(annot_col)
+    
+  })
+  
+  }
 
 
 
