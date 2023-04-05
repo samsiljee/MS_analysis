@@ -33,21 +33,6 @@ ui <- navbarPage(
     "Please upload your dataset as exported from Proteome discoverer and the corresponding annotations table here:",
     
     sidebarPanel(
-      fileInput("PSMs", "PSMs file",
-        buttonLabel = "Browse",
-        placeholder = "Upload PSMs file here"
-        ),
-
-      radioButtons("PSMs_sep", "Separator",
-        choices = c(
-          Tab = "\t",
-          Comma = ",",
-          Semicolon = ";"
-          ),
-        selected = "\t"
-        ),
-      
-      tags$hr(),
       
       fileInput("annotations", "Annotations file",
         buttonLabel = "Browse",
@@ -61,18 +46,35 @@ ui <- navbarPage(
           Semicolon = ";"
           ),
         selected = ","
-        )
-      ),
-    
-    mainPanel("Raw data (head)",
-              
-      tableOutput("head_PSMs_tab"),
+        ),
       
       tags$hr(),
       
-      "Annotations",
+      fileInput("PSMs", "PSMs file",
+                buttonLabel = "Browse",
+                placeholder = "Upload PSMs file here"
+      ),
       
-      tableOutput("annotation_tab")
+      radioButtons("PSMs_sep", "Separator",
+                   choices = c(
+                     Tab = "\t",
+                     Comma = ",",
+                     Semicolon = ";"
+                   ),
+                   selected = "\t"
+      )
+      
+      ),
+    
+    mainPanel(
+              
+      "Annotations",
+      dataTableOutput("annotation_tab"),
+      
+      tags$hr(),
+      
+      "PSM data",
+      dataTableOutput("head_PSMs_tab")
       
     )
     ),
@@ -116,21 +118,8 @@ server <- function(input, output, session){
 # First set some values using `reactive`
   
 # Generate the output
-    
-  output$head_PSMs_tab <- renderTable({
-    req(input$PSMs)
-    
-    raw <- read.table(
-      input$PSMs$datapath,
-      header = TRUE,
-      sep = input$PSMs_sep
-      )
-    
-    return(head(raw, 5))
-    
-  })
   
-  output$annotation_tab <- renderTable({
+  output$annotation_tab <- renderDataTable({
     req(input$PSMs)
     
     annot_col <- read.table(
@@ -140,6 +129,19 @@ server <- function(input, output, session){
     )
     
     return(annot_col)
+    
+  })
+    
+  output$head_PSMs_tab <- renderDataTable({
+    req(input$PSMs)
+    
+    raw <- read.table(
+      input$PSMs$datapath,
+      header = TRUE,
+      sep = input$PSMs_sep
+      )
+    
+    return(raw)
     
   })
   
