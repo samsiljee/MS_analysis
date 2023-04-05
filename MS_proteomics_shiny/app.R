@@ -113,6 +113,9 @@ options(shiny.maxRequestSize=30*1024^2)
 server <- function(input, output, session){
 
 # Input ----
+# First set some values using `reactive`
+  
+# Generate the output
     
   output$head_PSMs_tab <- renderTable({
     req(input$PSMs)
