@@ -68,13 +68,13 @@ ui <- navbarPage(
     
     mainPanel(
               
-      "Annotations",
+      h3("Annotations"),
       dataTableOutput("annotation_tab"),
       
       tags$hr(),
       
-      "PSM data",
-      dataTableOutput("head_PSMs_tab")
+      h3("PSM data"),
+      dataTableOutput("PSMs_tab")
       
     )
     ),
@@ -117,32 +117,30 @@ server <- function(input, output, session){
 # Input ----
 # First set some values using `reactive`
   
-# Generate the output
-  
-  output$annotation_tab <- renderDataTable({
-    req(input$PSMs)
-    
-    annot_col <- read.table(
+  annot_col <- reactive({
+    read.table(
       input$annotations$datapath,
       header = TRUE,
       sep = input$annotations_sep
-    )
-    
-    return(annot_col)
-    
-  })
-    
-  output$head_PSMs_tab <- renderDataTable({
-    req(input$PSMs)
-    
-    raw <- read.table(
+      )
+    })
+  
+  raw <- reactive({
+    read.table(
       input$PSMs$datapath,
       header = TRUE,
       sep = input$PSMs_sep
       )
+    })
+  
+# Generate the output
+
+  output$annotation_tab <- renderDataTable({
+    annot_col()
+  })
     
-    return(raw)
-    
+  output$PSMs_tab <- renderDataTable({
+    raw()
   })
   
   }
