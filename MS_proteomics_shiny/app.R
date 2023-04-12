@@ -15,7 +15,7 @@ library(tidyverse)
 # Display the UI, with tabs for each section
 
 ui <- navbarPage(
-  title = "Proteomics analysis pipeline",
+  title = "MS analysis",
                  
 # Instructions ----
 
@@ -36,31 +36,26 @@ ui <- navbarPage(
       
       fileInput("annotations", "Annotations file",
         buttonLabel = "Browse",
-        placeholder = "Upload annotations file here"
-        ),
+        placeholder = "Upload annotations file here"),
       
       radioButtons("annotations_sep", "Separator",
         choices = c(
           Tab = "\t",
           Comma = ",",
-          Semicolon = ";"
-          ),
-        selected = ","
-        ),
+          Semicolon = ";"),
+        selected = ","),
       
       tags$hr(),
       
       fileInput("PSMs", "PSMs file",
-                buttonLabel = "Browse",
-                placeholder = "Upload PSMs file here"
-      ),
+        buttonLabel = "Browse",
+        placeholder = "Upload PSMs file here"),
       
       radioButtons("PSMs_sep", "Separator",
-                   choices = c(
-                     Tab = "\t",
-                     Comma = ",",
-                     Semicolon = ";"
-                   ),
+        choices = c(
+          Tab = "\t",
+          Comma = ",",
+          Semicolon = ";"),
                    selected = "\t"
       )
       
@@ -80,46 +75,45 @@ ui <- navbarPage(
     ),
   
 # Format ----
-  tabPanel("Format",
-    "Process your data to work in MSstats, options can be changed on the left.",
-    sidebarPanel(h4("MSstats formating options"),
-      checkboxInput("useNumProteinsColumn",
-                    "Remove peptides with more than one in \"number of proteins\" column of PD output",
-                    value = FALSE),
-      checkboxInput("useUniquePeptide",
-                    "Remove peptides assigned to more than one protein",
-                    value = TRUE),
-      checkboxInput("removeFewMeasurements",
-                    "Remove features with one or two measurements across runs",
-                    value = TRUE),
-      checkboxInput("removeOxidationMpeptides",
-                    "Remove peptides with methionine oxidation",
-                    value = FALSE),
-      checkboxInput("removeProtein_with1Peptide",
-                    "Remove proteins with only one peptide and charge",
-                    value = TRUE),
-      radioButtons("summaryforMultipleRows",
-                   "Summary method for multiple rows",
-                   choiceNames = c("Max", "Sum"),
-                   choiceValues = c("max", "sum")),
-      radioButtons("which.quantification",
-                   "Column to be used for quantification",
-                   choiceNames = c("Precursor area", "Intensity", "Area"),
-                   choiceValues = c("Precursor.Area", "Intensity", "Area")),
-      radioButtons("which.proteinid",
-                   "Column to be used for protein names",
-                   choiceNames = c("Protein accessions", "Master protein accessions"),
-                   choiceValues = c("Protein.Accessions", "Master.Protein.Accessions")),
-      radioButtons("which.sequence",
-                   "Column to be used for peptide sequences",
-                   choiceNames = c("Sequence", "Annotated sequence"),
-                   choiceValues = c("Sequence", "Annotated.Sequence")),
-      actionButton("go_format",
-                   "Format!")
-                 ),
-    mainPanel("Put some text here",
-              dataTableOutput("input_tab"))
-           ),
+tabPanel("Format", "Process your data to work in MSstats, options can be changed on the left.",
+  sidebarPanel(h4("MSstats formating options"),
+    checkboxInput("useNumProteinsColumn",
+                  "Remove peptides with more than one in \"number of proteins\" column of PD output",
+                  value = FALSE),
+    checkboxInput("useUniquePeptide",
+                  "Remove peptides assigned to more than one protein",
+                  value = TRUE),
+    checkboxInput("removeFewMeasurements",
+                  "Remove features with one or two measurements across runs",
+                  value = TRUE),
+    checkboxInput("removeOxidationMpeptides",
+                  "Remove peptides with methionine oxidation",
+                  value = FALSE),
+    checkboxInput("removeProtein_with1Peptide",
+                  "Remove proteins with only one peptide and charge",
+                  value = TRUE),
+    radioButtons("summaryforMultipleRows",
+                 "Summary method for multiple rows",
+                 choiceNames = c("Max", "Sum"),
+                 choiceValues = c("max", "sum")),
+    radioButtons("which.quantification",
+                 "Column to be used for quantification",
+                 choiceNames = c("Precursor area", "Intensity", "Area"),
+                 choiceValues = c("Precursor.Area", "Intensity", "Area")),
+    radioButtons("which.proteinid",
+                 "Column to be used for protein names",
+                 choiceNames = c("Protein accessions", "Master protein accessions"),
+                 choiceValues = c("Protein.Accessions", "Master.Protein.Accessions")),
+    radioButtons("which.sequence",
+                 "Column to be used for peptide sequences",
+                 choiceNames = c("Sequence", "Annotated sequence"),
+                 choiceValues = c("Sequence", "Annotated.Sequence")),
+    actionButton("go_format",
+                 "Format!")
+    ),
+  
+  mainPanel("Put some text here")
+),
 
 # MSstats ----
 
@@ -143,7 +137,7 @@ ui <- navbarPage(
     
     "This section will be for making the graphs. Again a sidebar panel to select the types of graphs."
     
-    ),
+    )
 
 )
 
@@ -191,27 +185,10 @@ server <- function(input, output, session){
   })
   
 # Format ----
-  # Set reactive values
-  input <- eventReactive(input$go_format, {
-    PDtoMSstatsFormat(
-      input = raw(),
-      annotation = annot_col(),
-      useNumProteinsColumn = input$useNumProteinsColumn,
-      useUniquePeptide = input$useUniquePeptide,
-      summaryforMultipleRows = input$summaryforMultipleRows,
-      removeFewMeasurements = input$removeFewMeasurements,
-      removeOxidationMpeptides = input$removeOxidationMpeptides,
-      removeProtein_with1Peptide = input$removeProtein_with1Peptide,
-      which.quantification = input$which.quantification,
-      which.proteinid = input$which.proteinid,
-      which.sequence = input$which.sequence,
-      use_log_file = FALSE
-      )
-  })
-  # Generate output
-  output$input_tab <- renderDataTable({
-    input()
-  })
+# Set reactive values
+
+  
+# Generate output
   
   }
 
