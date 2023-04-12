@@ -79,6 +79,48 @@ ui <- navbarPage(
     )
     ),
   
+# Format ----
+  tabPanel("Format",
+    "Process your data to work in MSstats, options can be changed on the left.",
+    sidebarPanel(h4("MSstats formating options"),
+      checkboxInput("useNumProteinsColumn",
+                    "Remove peptides with more than one in \"number of proteins\" column of PD output",
+                    value = FALSE),
+      checkboxInput("useUniquePeptide",
+                    "Remove peptides assigned to more than one protein",
+                    value = TRUE),
+      checkboxInput("removeFewMeasurements",
+                    "Remove features with one or two measurements across runs",
+                    value = TRUE),
+      checkboxInput("removeOxidationMpeptides",
+                    "Remove peptides with methionine oxidation",
+                    value = FALSE),
+      checkboxInput("removeProtein_with1Peptide",
+                    "Remove proteins with only one peptide and charge",
+                    value = TRUE),
+      radioButtons("summaryforMultipleRows",
+                   "Summary method for multiple rows",
+                   choiceNames = c("Max", "Sum"),
+                   choiceValues = c("max", "sum")),
+      radioButtons("which.quantification",
+                   "Column to be used for quantification",
+                   choiceNames = c("Precursor area", "Intensity", "Area"),
+                   choiceValues = c("Precursor.Area", "Intensity", "Area")),
+      radioButtons("which.proteinid",
+                   "Column to be used for protein names",
+                   choiceNames = c("Protein accessions", "Master protein accessions"),
+                   choiceValues = c("Protein.Accessions", "Master.Protein.Accessions")),
+      radioButtons("which.sequence",
+                   "Column to be used for peptide sequences",
+                   choiceNames = c("Sequence", "Annotated sequence"),
+                   choiceValues = c("Sequence", "Annotated.Sequence")),
+      actionButton("go_format",
+                   "Format!")
+                 ),
+    mainPanel("Put some text here",
+              dataTableOutput("input_tab"))
+           ),
+
 # MSstats ----
 
   tabPanel("MSstats",
@@ -115,7 +157,7 @@ options(shiny.maxRequestSize=30*1024^2)
 server <- function(input, output, session){
 
 # Input ----
-# First set some values using `reactive`
+# Set reactive values
   
   annot_col <- reactive({
     read.table(
@@ -130,10 +172,15 @@ server <- function(input, output, session){
       input$PSMs$datapath,
       header = TRUE,
       sep = input$PSMs_sep
-      )
+      ) %>%
+      # rename columns as required by MSstats
+      mutate(
+        ProteinGroupAccessions = .$Master.Protein.Accessions,
+        PrecursorArea = .$Precursor.Abundance,
+        Run = .$Spectrum.File)
     })
   
-# Generate the output
+# Generate output
 
   output$annotation_tab <- renderDataTable({
     annot_col()
@@ -141,6 +188,29 @@ server <- function(input, output, session){
     
   output$PSMs_tab <- renderDataTable({
     raw()
+  })
+  
+# Format ----
+  # Set reactive values
+  input <- eventReactive(input$go_format, {
+    PDtoMSstatsFormat(
+      input = raw(),
+      annotation = annot_col(),
+      useNumProteinsColumn = input$useNumProteinsColumn,
+      useUniquePeptide = input$useUniquePeptide,
+      summaryforMultipleRows = input$summaryforMultipleRows,
+      removeFewMeasurements = input$removeFewMeasurements,
+      removeOxidationMpeptides = input$removeOxidationMpeptides,
+      removeProtein_with1Peptide = input$removeProtein_with1Peptide,
+      which.quantification = input$which.quantification,
+      which.proteinid = input$which.proteinid,
+      which.sequence = input$which.sequence,
+      use_log_file = FALSE
+      )
+  })
+  # Generate output
+  output$input_tab <- renderDataTable({
+    input()
   })
   
   }
