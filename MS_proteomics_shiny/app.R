@@ -23,8 +23,7 @@ ui <- navbarPage(
     
     "Welcome to my proteomics analysis pipeline.",
     
-    "Please move sequentially through the tabs to complete the analysis."
-    ),
+    "Please move sequentially through the tabs to complete the analysis."),
   
 # Input ----
 
@@ -56,10 +55,7 @@ ui <- navbarPage(
           Tab = "\t",
           Comma = ",",
           Semicolon = ";"),
-                   selected = "\t"
-      )
-      
-      ),
+                   selected = "\t")),
     
     mainPanel(
               
@@ -69,13 +65,10 @@ ui <- navbarPage(
       tags$hr(),
       
       h3("PSM data"),
-      dataTableOutput("PSMs_tab")
-      
-    )
-    ),
+      dataTableOutput("PSMs_tab"))),
   
 # Format ----
-tabPanel("Format", "Process your data to work in MSstats, options can be changed on the left.",
+tabPanel("Format", "Format and pre-filter your data to work in MSstats, options can be changed on the left.",
   sidebarPanel(h4("MSstats formating options"),
     checkboxInput("useNumProteinsColumn",
                   "Remove peptides with more than one in \"number of proteins\" column of PD output",
@@ -108,12 +101,40 @@ tabPanel("Format", "Process your data to work in MSstats, options can be changed
                  "Column to be used for peptide sequences",
                  choiceNames = c("Sequence", "Annotated sequence"),
                  choiceValues = c("Sequence", "Annotated.Sequence")),
-    actionButton("go_format",
-                 "Format!")
-    ),
+    actionButton("go_format", "Format!")),
   
-  mainPanel("Put some text here")
-),
+  mainPanel("Preview of formatted input data",
+            "I still need to add functionality to download as .rda, .csv, or .tsv format, and a way to save the log file.",
+    dataTableOutput("MSstats_input_tab"))),
+
+# Processing ----
+
+tabPanel("Processing",
+  sidebarPanel(h4("MSstats processing options"),
+    radioButtons("logTrans",
+      "Base of log transformation",
+      choices = c(2, 10),
+      selected = 2),
+    radioButtons("normalization",
+      "Normalisation method used to remove bias between runs",
+      choiceNames = c("Equalize medians", "Quantile", "Global standards", "None"),
+      choiceValues = c("equalizeMedians", "quantile", "globalStandards", FALSE)),
+    radioButtons("featureSubset",
+      "Subset features to use",
+      choiceNames = c("All", "Top 3", "Top N", "High quality"),
+      choiceValues = c("all", "top3", "topN", "highQuality")),
+    numericInput("n_top_feature",
+      "Number of top features to use for subsetting",
+      value = 3),
+    radioButtons("summaryMethod",
+      "Method used to summarise features",
+      choiceNames = c("Tukey's median polish", "Linear mixed model"),
+      choiceValues = c("TMP", "linear")),
+    actionButton("go_process", "Process!")),
+  
+  mainPanel("This section will be where MSstats processing happens. There will be drop down options here too for the settings.",
+            "Note that currently I've not got the \"Global standards\" method working as it takes a named vector as input"
+            )),
 
 # MSstats ----
 
@@ -157,16 +178,14 @@ server <- function(input, output, session){
     read.table(
       input$annotations$datapath,
       header = TRUE,
-      sep = input$annotations_sep
-      )
+      sep = input$annotations_sep)
     })
   
   raw <- reactive({
     read.table(
       input$PSMs$datapath,
       header = TRUE,
-      sep = input$PSMs_sep
-      ) %>%
+      sep = input$PSMs_sep) %>%
       # rename columns as required by MSstats
       mutate(
         ProteinGroupAccessions = .$Master.Protein.Accessions,
@@ -185,11 +204,62 @@ server <- function(input, output, session){
   })
   
 # Format ----
-# Set reactive values
+# Reactive values
+  MSstats_input <- eventReactive(input$go_format, {
+    PDtoMSstatsFormat(
+      input = raw(),
+      annotation = annot_col(),
+      useNumProteinsColumn = input$useNumProteinsColumn,
+      useUniquePeptide = input$useUniquePeptide,
+      summaryforMultipleRows = ifelse(input$summaryforMultipleRows == "max", max, sum),
+      removeFewMeasurements = input$removeFewMeasurements,
+      removeOxidationMpeptides = input$removeOxidationMpeptides,
+      removeProtein_with1Peptide = input$removeProtein_with1Peptide,
+      which.quantification = input$which.quantification,
+      which.proteinid = input$which.proteinid,
+      which.sequence = input$which.sequence,
+      use_log_file = FALSE
+    )
+  })
 
+# Output
+  output$MSstats_input_tab <- renderDataTable({
+    MSstats_input()
+  })
+
+# Processing ----
+  # Reactive values
+  output$featureSubset <- reactive(input$featureSubset)
   
-# Generate output
+  MSstats_processed <- eventReactive(input$go_process, {
+    dataProcess(
+      MSstats_input(),
+      logTrans = 2,
+      normalization = "equalizeMedians",
+      nameStandards = NULL,
+      featureSubset = "all",
+      remove_uninformative_feature_outlier = FALSE,
+      min_feature_count = 2,
+      n_top_feature = 3,
+      summaryMethod = "TMP",
+      equalFeatureVar = TRUE,
+      censoredInt = "NA",
+      MBimpute = TRUE,
+      remove50missing = FALSE,
+      fix_missing = NULL,
+      maxQuantileforCensored = 0.999,
+      use_log_file = TRUE,
+      append = FALSE,
+      verbose = TRUE,
+      log_file_path = NULL
+    )
+  })
   
+  # Output
+    
+# Testing ----
+  
+  # Close the server function
   }
 
 # Run the application 
