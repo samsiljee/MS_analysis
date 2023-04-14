@@ -126,7 +126,7 @@ tabPanel("Process",
     textInput("nameStandards",
       "Named vector for standard peptides (not yet working)")),
     radioButtons("featureSubset",
-      "Subset features to use",
+      "feature subset to use",
       choiceNames = c("All", "Top 3", "Top N", "High quality"),
       choiceValues = c("all", "top3", "topN", "highQuality")),
     conditionalPanel(
@@ -163,6 +163,14 @@ tabPanel("Process",
     checkboxInput("remove50missing",
       "Remove runs with >50% missing values",
       value = FALSE)),
+    radioButtons("censoredInt",
+      "Missing values are censored or at random",
+      choiceNames = c("NA", "0", "Null"),
+      choiceValues = c("NA", "0", "NULL")),
+    radioButtons("fix_missing",
+      "fix missing values (uncertain how this works)",
+      choiceNames = c("No action", "0 -> NA", "NA -> 0"),
+      choiceValues = c("NULL", "zero_to_na", "na_to_zero")),
     numericInput("maxQuantileforCensored",
       "Maximum quantile for deciding censored missing values",
       value = 0.999),
@@ -265,10 +273,10 @@ server <- function(input, output, session){
       n_top_feature = input$n_top_feature,
       summaryMethod = input$summaryMethod,
       equalFeatureVar = input$equalFeatureVar,
-      censoredInt = input$censoredInt,
+      censoredInt = ifelse(input$censoredInt == "NULL", NULL, input$censoredInt),
       MBimpute = input$MBimpute,
       remove50missing = input$remove50missing,
-      fix_missing = input$fix_missing,
+      fix_missing = ifelse(input$fix_missing == "NULL", NULL, input$fix_missing),
       maxQuantileforCensored = input$maxQuantileforCensored,
       use_log_file = FALSE)
   })
@@ -283,12 +291,25 @@ server <- function(input, output, session){
 # Visualisation ----
   
 # Downloads ----
+  formatted_for_dl <- reactive({
+    MSstats_processed()$ProteinLevelData
+  })
+  
   output$formatted_csv <- downloadHandler(
     filename = function() {
-      paste0("MSstats_formatted.csv")
+      paste0("MSstats_formatted_", Sys.Date(), ".csv")
     },
     content = function(file) {
-      write.csv(MSstats_processed(), file)
+      write.csv(MSstats_input(), file)
+    }
+  )
+  
+  output$formatted_rda <- downloadHandler(
+    filename = function() {
+      paste0("MSstats_formatted_", Sys.Date(), ".rda")
+    },
+    content = function(file) {
+      save(MSstats_input(), file = file)
     }
   )
      
