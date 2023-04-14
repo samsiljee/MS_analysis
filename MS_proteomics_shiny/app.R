@@ -285,10 +285,10 @@ server <- function(input, output, session){
 # Downloads ----
   output$formatted_csv <- downloadHandler(
     filename = function() {
-      paste0("MSstats_formatted_",format(Sys.time(), "%Y_%m_%d"), ".tsv")
+      paste0("MSstats_formatted.csv")
     },
     content = function(file) {
-      write.csv(MSstats_processed, file)
+      write.csv(MSstats_processed(), file)
     }
   )
      
