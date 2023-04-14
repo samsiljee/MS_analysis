@@ -178,8 +178,11 @@ tabPanel("Process",
   
   mainPanel("This section will be where MSstats processing happens. There will be drop down options here too for the settings.",
             "Note that currently I've not got the \"Global standards\" method working as it takes a named vector as input",
-            "Overview of processed protein level data",
-            withSpinner(dataTableOutput("MSstats_processed_protein_tab")))),
+            radioButtons("processed_tab_view",
+              "Which processed data would you like to view?",
+              choiceNames = c("Protein level data", "Feature level data", "Summary method"),
+              choiceValues = c("ProteinLevelData", "FeatureLevelData", "SummaryMethod")),
+            withSpinner(dataTableOutput("MSstats_processed_tab")))),
 
 # Comparison ----
 
@@ -257,10 +260,28 @@ server <- function(input, output, session){
   output$MSstats_input_tab <- renderDataTable({
     MSstats_input()
   })
+  
+# Downloads
+  output$formatted_csv <- downloadHandler(
+    filename = function() {
+      paste0("MSstats_formatted_", Sys.Date(), ".csv")
+    },
+    content = function(file) {
+      write.csv(MSstats_input(), file)
+    }
+  )
+  
+  output$formatted_rda <- downloadHandler(
+    filename = function() {
+      paste0("MSstats_formatted_", Sys.Date(), ".rda")
+    },
+    content = function(file) {
+      save(MSstats_input(), file = file)
+    }
+  )
 
 # Process ----
   # Reactive values
-  
   MSstats_processed <- eventReactive(input$go_process, {
     dataProcess(
       MSstats_input(),
@@ -282,36 +303,16 @@ server <- function(input, output, session){
   })
   
   # Output
-  output$MSstats_processed_protein_tab <- renderDataTable({
-    MSstats_processed()$ProteinLevelData
+  output$MSstats_processed_tab <- renderDataTable({
+    ifelse(input$processed_tab_view == "ProteinLevelData", MSstats_processed()$ProteinLevelData, ifelse(input$processed_tab_view == "FeatureLevelData", MSstats_processed()$ProteinLevelData, MSstats_processed()$SummaryMethod))
   })
+  
+  # Download
+  
  
 # Comparison ----
   
 # Visualisation ----
-  
-# Downloads ----
-  formatted_for_dl <- reactive({
-    MSstats_processed()$ProteinLevelData
-  })
-  
-  output$formatted_csv <- downloadHandler(
-    filename = function() {
-      paste0("MSstats_formatted_", Sys.Date(), ".csv")
-    },
-    content = function(file) {
-      write.csv(MSstats_input(), file)
-    }
-  )
-  
-  output$formatted_rda <- downloadHandler(
-    filename = function() {
-      paste0("MSstats_formatted_", Sys.Date(), ".rda")
-    },
-    content = function(file) {
-      save(MSstats_input(), file = file)
-    }
-  )
      
 # Testing ----
   
