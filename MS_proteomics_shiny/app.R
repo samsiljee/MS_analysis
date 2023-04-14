@@ -7,6 +7,7 @@
 library(shiny)
 library(MSstats)
 library(tidyverse)
+library(shinycssloaders)
 
 # UI ----
 
@@ -40,7 +41,7 @@ ui <- navbarPage(
           Semicolon = ";"),
         selected = ","),
       
-      tags$hr(),
+      tags$hr(style = "border-top: 2px solid #000000;"),
       
       fileInput("PSMs", "PSMs file",
         buttonLabel = "Browse",
@@ -56,12 +57,12 @@ ui <- navbarPage(
     mainPanel(
               
       h3("Annotations"),
-      dataTableOutput("annotation_tab"),
+      withSpinner(dataTableOutput("annotation_tab")),
       
-      tags$hr(),
+      tags$hr(style = "border-top: 2px solid #000000;"),
       
       h3("PSM data"),
-      dataTableOutput("PSMs_tab"))),
+      withSpinner(dataTableOutput("PSMs_tab")))),
   
 # Format ----
 tabPanel("Format", "Format and pre-filter your data to work in MSstats, options can be changed on the left.",
@@ -97,11 +98,16 @@ tabPanel("Format", "Format and pre-filter your data to work in MSstats, options 
                  "Column to be used for peptide sequences",
                  choiceNames = c("Sequence", "Annotated sequence"),
                  choiceValues = c("Sequence", "Annotated.Sequence")),
-    actionButton("go_format", "Format!")),
+    actionButton("go_format", "Format!"),
+    tags$hr(style = "border-top: 2px solid #000000;"),
+    downloadButton("formatted_csv",
+                   "Save as .csv"),
+    downloadButton("formatted_rda",
+                   "Save as .rda")),
   
   mainPanel("Preview of formatted input data",
             "I still need to add functionality to download as .rda, .csv, or .tsv format, and a way to save the log file.",
-    dataTableOutput("MSstats_input_tab"))),
+    withSpinner(dataTableOutput("MSstats_input_tab")))),
 
 # Process ----
 
@@ -115,34 +121,48 @@ tabPanel("Process",
       "Normalisation method used to remove bias between runs",
       choiceNames = c("Equalize medians", "Quantile", "Global standards", "None"),
       choiceValues = c("equalizeMedians", "quantile", "globalStandards", FALSE)),
+    conditionalPanel(
+      condition = "input.normalization == 'globalStandards'",
     textInput("nameStandards",
-      "Named vector for global standard peptides (Global standards"),
+      "Named vector for standard peptides (not yet working)")),
     radioButtons("featureSubset",
       "Subset features to use",
       choiceNames = c("All", "Top 3", "Top N", "High quality"),
       choiceValues = c("all", "top3", "topN", "highQuality")),
+    conditionalPanel(
+      condition = "input.featureSubset == 'topN'",
     numericInput("n_top_feature",
-      "Number of top features to use (Top N)",
-      value = 3),
+      "Number of top features to use",
+      value = 3)),
+    conditionalPanel(
+      condition = "input.featureSubset == 'highQuality'",
     checkboxInput("remove_uninformative_feature_outlier",
-      "Remove noisy features and outliers before run-level summarisation (High quality)",
-      value = FALSE),
+      "Remove noisy features and outliers before run-level summarisation",
+      value = FALSE)),
+    conditionalPanel(
+      condition = "input.featureSubset == 'highQuality'",
     numericInput("min_feature_count",
-      "Minimum features required to be considered in feature selection algorythm (High quality)",
-      value = 2),
+      "Minimum features required to be considered in feature selection algorythm",
+      value = 2)),
     radioButtons("summaryMethod",
       "Method used to summarise features",
       choiceNames = c("Tukey's median polish", "Linear mixed model"),
       choiceValues = c("TMP", "linear")),
+    conditionalPanel(
+      condition = "input.summaryMethod == 'linear'",
     checkboxInput("equalFeatureVar",
-      "Account for heterogeneous variation among intensities from different features (Linear)",
-      value = TRUE),
+      "Account for heterogeneous variation among intensities from different features",
+      value = TRUE)),
+    conditionalPanel(
+      condition = "input.summaryMethod == 'TMP'",
     checkboxInput("MBimpute",
-      "Impute censored values by Accelated failure model (TMP)",
-      value = TRUE),
+      "Impute censored values by Accelated failure model",
+      value = TRUE)),
+    conditionalPanel(
+      condition = "input.summaryMethod == 'TMP'",
     checkboxInput("remove50missing",
-      "Remove runs with >50% missing values (TMP)",
-      value = FALSE),
+      "Remove runs with >50% missing values",
+      value = FALSE)),
     numericInput("maxQuantileforCensored",
       "Maximum quantile for deciding censored missing values",
       value = 0.999),
@@ -151,8 +171,7 @@ tabPanel("Process",
   mainPanel("This section will be where MSstats processing happens. There will be drop down options here too for the settings.",
             "Note that currently I've not got the \"Global standards\" method working as it takes a named vector as input",
             "Overview of processed protein level data",
-            dataTableOutput("MSstats_processed_protein_tab")
-            )),
+            withSpinner(dataTableOutput("MSstats_processed_protein_tab")))),
 
 # Comparison ----
 
@@ -262,6 +281,16 @@ server <- function(input, output, session){
 # Comparison ----
   
 # Visualisation ----
+  
+# Downloads ----
+  output$formatted_csv <- downloadHandler(
+    filename = function() {
+      paste0("MSstats_formatted_",format(Sys.time(), "%Y_%m_%d"), ".tsv")
+    },
+    content = function(file) {
+      write.csv(MSstats_processed, file)
+    }
+  )
      
 # Testing ----
   
