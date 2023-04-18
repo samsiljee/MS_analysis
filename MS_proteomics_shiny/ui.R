@@ -3,8 +3,9 @@
 # Created 04/04/2023
 
 # Packages ----
-
 library(shiny)
+library(MSstats)
+library(tidyverse)
 library(shinycssloaders)
 
 ui <- navbarPage(
@@ -202,7 +203,8 @@ tabPanel("Process",
       tags$hr(style = "border-top: 2px solid #000000;")),
     
     mainPanel(h4("Comparison matrix"),
-              dataTableOutput("comparison_matrix_tab"))),
+              dataTableOutput("comparison_matrix_tab"),
+              textOutput("comparison_text"))),
 
 # Visualisation ----
 

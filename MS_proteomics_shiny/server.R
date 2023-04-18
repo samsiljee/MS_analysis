@@ -3,7 +3,6 @@
 # Created 04/04/2023
 
 # Packages ----
-
 library(shiny)
 library(MSstats)
 library(tidyverse)
@@ -104,8 +103,7 @@ server <- function(input, output, session){
   })
  
 # Comparison ----
-  
-  #Making input for UI side with selection of variables for comparison
+  #Making UI input with selection of variables for comparison
   output$select_numerator <- renderUI({
     selectInput("numerator", "Numerator/s",
                 choices = conditions(),
@@ -114,12 +112,9 @@ server <- function(input, output, session){
   
   output$select_denominator <- renderUI({
     selectInput("denominator", "Denominator/s",
-                choices = conditions(),
+                choices = setdiff(conditions(), input$numerator),
                 multiple = TRUE)
   })
-  
-  #Blank comparison_matrix
-  comparison_matrix <- NULL
   
   #Reactive variables
   conditions <- reactive({
@@ -130,13 +125,18 @@ server <- function(input, output, session){
     c(input$comparison_name, c(1,-1, 0))
   })
   
+  comparison_matrix <- data.frame()
   comparison_matrix <- eventReactive(input$go_comparison, {
-    rbind(comparison_matrix, comparison)
+    rbind(comparison_matrix, c("A", "B", "C"))
   })
   
   #Output
   output$comparison_matrix_tab <- renderDataTable({
     comparison_matrix()
+  })
+  
+  output$comparison_text <- renderText({
+    comparison()
   })
   
 # Visualisation ----
