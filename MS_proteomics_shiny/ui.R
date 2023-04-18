@@ -5,11 +5,7 @@
 # Packages ----
 
 library(shiny)
-library(MSstats)
-library(tidyverse)
 library(shinycssloaders)
-
-# UI ----
 
 ui <- navbarPage(
   title = "MS analysis",
@@ -206,7 +202,7 @@ tabPanel("Process",
       tags$hr(style = "border-top: 2px solid #000000;")),
     
     mainPanel(h4("Comparison matrix"),
-              renderDataTable("comparison_matrix_tab"))),
+              dataTableOutput("comparison_matrix_tab"))),
 
 # Visualisation ----
 

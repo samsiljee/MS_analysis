@@ -69,25 +69,6 @@ server <- function(input, output, session){
   output$MSstats_input_tab <- renderDataTable({
     MSstats_input()
   })
-  
-# Downloads
-  output$formatted_csv <- downloadHandler(
-    filename = function() {
-      paste0("MSstats_formatted_", Sys.Date(), ".csv")
-    },
-    content = function(file) {
-      write.csv(MSstats_input(), file)
-    }
-  )
-  
-  output$formatted_rda <- downloadHandler(
-    filename = function() {
-      paste0("MSstats_formatted_", Sys.Date(), ".rda")
-    },
-    content = function(file) {
-      saveRDS(MSstats_input(), file = file)
-    }
-  )
 
 # Process ----
   # Reactive values
@@ -121,35 +102,6 @@ server <- function(input, output, session){
              MSstats_processed()$FeatureLevelData
            })
   })
-  
-  # Download
-  
-  output$processed_protein_csv <- downloadHandler(
-    filename = function() {
-      paste0("Processed_protein_data_", Sys.Date(), ".csv")
-    },
-    content = function(file) {
-      write.csv(MSstats_processed()$ProteinLevelData, file)
-    }
-  )
-  
-  output$processed_feature_csv <- downloadHandler(
-    filename = function() {
-      paste0("Processed_feature_data_", Sys.Date(), ".csv")
-    },
-    content = function(file) {
-      write.csv(MSstats_processed()$FeatureLevelData, file)
-    }
-  )
-  
-  output$processed_rda <- downloadHandler(
-    filename = function() {
-      paste0("MSstats_processed_", Sys.Date(), ".rda")
-    },
-    content = function(file) {
-      saveRDS(MSstats_processed(), file = file)
-    }
-  )
  
 # Comparison ----
   
@@ -188,8 +140,55 @@ server <- function(input, output, session){
   })
   
 # Visualisation ----
-     
-# Testing ----
+  
+# Downloads ----
+  #Formatted data tables
+  output$formatted_csv <- downloadHandler(
+    filename = function() {
+      paste0("MSstats_formatted_", Sys.Date(), ".csv")
+    },
+    content = function(file) {
+      write.csv(MSstats_input(), file)
+    }
+  )
+  
+  output$formatted_rda <- downloadHandler(
+    filename = function() {
+      paste0("MSstats_formatted_", Sys.Date(), ".rda")
+    },
+    content = function(file) {
+      saveRDS(MSstats_input(), file = file)
+    }
+  )
+  
+  #Processed data
+  
+  output$processed_protein_csv <- downloadHandler(
+    filename = function() {
+      paste0("Processed_protein_data_", Sys.Date(), ".csv")
+    },
+    content = function(file) {
+      write.csv(MSstats_processed()$ProteinLevelData, file)
+    }
+  )
+  
+  output$processed_feature_csv <- downloadHandler(
+    filename = function() {
+      paste0("Processed_feature_data_", Sys.Date(), ".csv")
+    },
+    content = function(file) {
+      write.csv(MSstats_processed()$FeatureLevelData, file)
+    }
+  )
+  
+  output$processed_rda <- downloadHandler(
+    filename = function() {
+      paste0("MSstats_processed_", Sys.Date(), ".rda")
+    },
+    content = function(file) {
+      saveRDS(MSstats_processed(), file = file)
+    }
+  )
   
   # Close the server
   }
