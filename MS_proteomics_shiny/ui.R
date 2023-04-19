@@ -15,8 +15,7 @@ ui <- navbarPage(
 
   tabPanel("Instructions",
     
-    "Welcome to my proteomics analysis pipeline.",
-    
+    "Welcome to my proteomics analysis pipeline.", br(),
     "Please move sequentially through the tabs to complete the analysis."),
   
 # Input ----
@@ -174,9 +173,9 @@ tabPanel("Process",
     actionButton("go_process", "Process!"),
     tags$hr(style = "border-top: 2px solid #000000;"),
     downloadButton("processed_protein_csv",
-                   "Save protein level data as .csv"),
+                   "Save protein data as .csv"),
     downloadButton("processed_feature_csv",
-                   "Save feature level data as .csv"),
+                   "Save feature data as .csv"),
     downloadButton("processed_rda",
                    "Save as .rda")),
   
@@ -185,7 +184,8 @@ tabPanel("Process",
             radioButtons("processed_tab_view",
               "Which processed data would you like to view?",
               choiceNames = c("Protein level data", "Feature level data"),
-              choiceValues = c("ProteinLevelData", "FeatureLevelData")),
+              choiceValues = c("ProteinLevelData", "FeatureLevelData"),
+              inline = TRUE),
             withSpinner(dataTableOutput("MSstats_processed_tab")))),
 
 # Comparison ----
@@ -197,13 +197,13 @@ tabPanel("Process",
       textInput("comparison_name", "Comparison name"),
       uiOutput("select_numerator"),
       uiOutput("select_denominator"),
-      actionButton("go_comparison",
+      actionButton("add_comparison",
                    "Add comparison"),
       textOutput("condition_levels"),
       tags$hr(style = "border-top: 2px solid #000000;")),
     
     mainPanel(h4("Comparison matrix"),
-              dataTableOutput("comparison_matrix_tab"),
+              tableOutput("comparison_matrix_tab"),
               textOutput("comparison_text"))),
 
 # Visualisation ----

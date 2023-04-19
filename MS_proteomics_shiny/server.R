@@ -37,13 +37,9 @@ server <- function(input, output, session){
   
 # Generate output
 
-  output$annotation_tab <- renderDataTable({
-    annot_col()
-  })
+  output$annotation_tab <- renderDataTable(annot_col())
     
-  output$PSMs_tab <- renderDataTable({
-    raw()
-  })
+  output$PSMs_tab <- renderDataTable(raw())
   
 # Format ----
 # Reactive values
@@ -65,9 +61,7 @@ server <- function(input, output, session){
   })
 
 # Output
-  output$MSstats_input_tab <- renderDataTable({
-    MSstats_input()
-  })
+  output$MSstats_input_tab <- renderDataTable(MSstats_input())
 
 # Process ----
   # Reactive values
@@ -121,23 +115,36 @@ server <- function(input, output, session){
     sort(unique(annot_col()$Condition))
   })
   
-  comparison <- reactive({
-    c(input$comparison_name, c(1,-1, 0))
+  num_conditions <- reactive(length(unique(annot_col()$Condition)))
+  
+  comparison <- eventReactive(input$add_comparison, {
+    ifelse(conditions() %in% input$numerator,
+           1,
+           ifelse(conditions() %in% input$denominator,
+                  -1,
+                  0))
   })
   
-  comparison_matrix <- data.frame()
-  comparison_matrix <- eventReactive(input$go_comparison, {
-    rbind(comparison_matrix, c("A", "B", "C"))
+  # Generate Reactive Text Data
+  comparison_matrix <- reactiveValues(data = {
+    df <- data.frame(matrix(ncol = 5))
+    df
+    })
+  
+  # Add New Text
+  observeEvent(input$add_comparison, {
+    # Combine New Text With Old Text
+    comparison_matrix$data <- rbind(
+      comparison_matrix$data, 
+      comparison())
   })
   
   #Output
-  output$comparison_matrix_tab <- renderDataTable({
-    comparison_matrix()
-  })
+  output$comparison_matrix_tab <- renderTable({
+    comparison_matrix$data
+  }, escape = TRUE)
   
-  output$comparison_text <- renderText({
-    comparison()
-  })
+  output$comparison_text <- renderText(comparison())
   
 # Visualisation ----
   
