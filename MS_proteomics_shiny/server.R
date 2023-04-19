@@ -42,7 +42,7 @@ server <- function(input, output, session){
   output$PSMs_tab <- renderDataTable(raw())
   
 # Format ----
-# Reactive values
+  # Reactive values
   MSstats_input <- eventReactive(input$go_format, {
     PDtoMSstatsFormat(
       input = raw(),
@@ -127,7 +127,7 @@ server <- function(input, output, session){
   
   # Generate Reactive Text Data
   comparison_matrix <- reactiveValues(data = {
-    df <- data.frame(matrix(ncol = 5))
+    df <- data.frame(matrix(nrow = 0, ncol = 5))
     df
     })
   
