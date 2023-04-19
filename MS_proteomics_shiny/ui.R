@@ -3,9 +3,6 @@
 # Created 04/04/2023
 
 # Packages ----
-library(shiny)
-library(MSstats)
-library(tidyverse)
 library(shinycssloaders)
 
 ui <- navbarPage(
@@ -16,7 +13,7 @@ ui <- navbarPage(
   tabPanel("Instructions",
     
     "Welcome to my proteomics analysis pipeline.", br(),
-    "Please move sequentially through the tabs to complete the analysis."),
+    "Please move sequentially through the tabs to complete the analysis.", br()),
   
 # Input ----
 

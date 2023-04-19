@@ -6,7 +6,6 @@
 library(shiny)
 library(MSstats)
 library(tidyverse)
-library(shinycssloaders)
 
 # Setting option to increase allowed file size to 30MB, I will probably have to increase this further
 options(shiny.maxRequestSize=30*1024^2)
@@ -111,9 +110,7 @@ server <- function(input, output, session){
   })
   
   #Reactive variables
-  conditions <- reactive({
-    sort(unique(annot_col()$Condition))
-  })
+  conditions <- reactive(sort(unique(annot_col()$Condition)))
   
   num_conditions <- reactive(length(unique(annot_col()$Condition)))
   
@@ -126,27 +123,29 @@ server <- function(input, output, session){
   })
   
   # Generate Reactive Text Data
-  comparison_matrix <- reactiveValues(data = {
-    df <- data.frame(matrix(nrow = 0, ncol = 5))
+  blank_matrix <- reactiveValues(data = {
+    df <- data.frame(matrix(nrow = 0, ncol = 1))
     df
     })
   
+  # Add rows equal to n conditions
+  comparison_matrix <- reactive({
+    cbind(blank_matrix$data, data.frame(matrix(nrow = 0, ncol = num_conditions())))
+  })
+  
   # Add New Text
-  observeEvent(input$add_comparison, {
-    # Combine New Text With Old Text
-    comparison_matrix$data <- rbind(
-      comparison_matrix$data, 
-      comparison())
+  comparison_matrix <- eventReactive(input$add_comparison, {
+    rbind(comparison_matrix(), comparison())
   })
   
   #Output
-  output$comparison_matrix_tab <- renderTable({
-    comparison_matrix$data
-  }, escape = TRUE)
+  output$comparison_matrix_tab <- renderTable(comparison_matrix())
   
   output$comparison_text <- renderText(comparison())
   
 # Visualisation ----
+  
+#Testing ----
   
 # Downloads ----
   #Formatted data tables

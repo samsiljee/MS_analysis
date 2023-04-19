@@ -3,10 +3,6 @@
 # Created 04/04/2023
 
 # Packages ----
-library(shiny)
-library(MSstats)
-library(tidyverse)
-library(shinycssloaders)
 
 source("ui.R")
 source("server.R")
