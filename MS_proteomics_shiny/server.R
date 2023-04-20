@@ -16,13 +16,17 @@ server <- function(input, output, session){
 # Set reactive values
   
   annot_col <- reactive({
-    read.table(
-      input$annotations$datapath,
-      header = TRUE,
-      sep = input$annotations_sep)
-    })
+    if (!is.null(input$annotations)) {
+      read.table(input$annotations$datapath,
+                 header = TRUE,
+                 sep = input$annotations_sep)
+    } else {
+      data.frame()
+    }
+  })
   
   raw <- reactive({
+    if (!is.null(input$PSMs)) {
     read.table(
       input$PSMs$datapath,
       header = TRUE,
@@ -32,7 +36,10 @@ server <- function(input, output, session){
         ProteinGroupAccessions = .$Master.Protein.Accessions,
         PrecursorArea = .$Precursor.Abundance,
         Run = .$Spectrum.File)
-    })
+      } else {
+        data.frame()
+        }
+  })
   
 # Generate output
 
@@ -96,52 +103,53 @@ server <- function(input, output, session){
   })
  
 # Comparison ----
-  #Making UI input with selection of variables for comparison
-  output$select_numerator <- renderUI({
-    selectInput("numerator", "Numerator/s",
-                choices = conditions(),
-                multiple = TRUE)
+  # Reactive UI
+  
+
+  
+  # Reactive variables
+  observeEvent(input$annotations, {
+
+    output$select_numerator <- renderUI({
+      selectInput("numerator", "Numerator/s",
+                  choices = conditions(),
+                  multiple = TRUE)
+    })
+    
+    output$select_denominator <- renderUI({
+      selectInput("denominator", "Denominator/s",
+                  choices = setdiff(conditions(), input$numerator),
+                  multiple = TRUE)
+    })
+    conditions <- reactive({
+      annot_col()$Condition %>% unique() %>% sort()
+    })
+    
+    num_conditions <- reactive({
+      length(unique(annot_col()$Condition))
+    })
+    
+    # Generate reactive values for the comparison matrix
+    comparison_matrix <- reactiveValues(
+      data = data.frame(matrix(nrow = 0, ncol = num_conditions())),
+      num_rows = 0
+    )
+    
+    comparison <- eventReactive(input$add_comparison, {
+      row <- ifelse(conditions() %in% input$numerator, 1, ifelse(conditions() %in% input$denominator, -1, 0))
+      comparison_matrix$num_rows <- comparison_matrix$num_rows + 1
+      comparison_matrix$data[comparison_matrix$num_rows, ] <- row
+      comparison_matrix$data
+    })
+    
+    # Output
+    output$comparison_matrix_tab <- renderTable({
+      comparison()
+    })
   })
   
-  output$select_denominator <- renderUI({
-    selectInput("denominator", "Denominator/s",
-                choices = setdiff(conditions(), input$numerator),
-                multiple = TRUE)
-  })
   
-  #Reactive variables
-  # Generate reactive values for the conditions and number of conditions
-  conditions <- reactive({
-    annot_col()$Condition %>%
-      unique() %>%
-      sort()
-  })
-  
-  num_conditions <- reactive({
-    length(unique(annot_col()$Condition))
-  })
-  
-  # Generate reactive values for the comparison matrix
-  blank_matrix <- reactiveValues(data = {
-    df <- data.frame(matrix(nrow = 0, ncol = num_conditions()))
-    df
-  })
-  
-  comparison <- eventReactive(input$add_comparison, {
-    ifelse(conditions() %in% input$numerator,
-           1,
-           ifelse(conditions() %in% input$denominator,
-                  -1,
-                  0))
-  })
-  
-  comparison_matrix <- eventReactive(input$add_comparison, {
-    rbind(blank_matrix$data, comparison())
-  })
-  
-  #Output
-  output$comparison_matrix_tab <- renderTable(comparison_matrix())
-  
+
   
 # Visualisation ----
   
