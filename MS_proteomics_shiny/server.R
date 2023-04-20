@@ -128,12 +128,13 @@ server <- function(input, output, session){
   # Making the matrix and output
   observeEvent(input$annotations, {
 
-    # Generate reactive values for the comparison matrix
+    # Generate empty matrix
     comparison_values <- reactiveValues(
       matrix = data.frame(matrix(nrow = 0, ncol = num_conditions() + 1)),
       num_rows = 0
     )
     
+    # Add row to matrix
     comparison_matrix <- eventReactive(input$add_comparison, {
       row <- c(input$comparison_name, ifelse(conditions() %in% input$numerator, 1, ifelse(conditions() %in% input$denominator, -1, 0)))
       comparison_values$num_rows <- comparison_values$num_rows + 1
@@ -142,13 +143,24 @@ server <- function(input, output, session){
       comparison_values$matrix
     })
     
-    # Output
+    # Output comparison matrix
     output$comparison_matrix_tab <- renderTable({
       comparison_matrix()
     })
   })
   
   # Run the comparison function
+  eventReactive(input$go_compare {
+    groupComparison(
+      contrast.matrix = comparison_matrix()[,-1],
+      data = MSstats_processed(),
+      save_fitted_models = input$save_fitted_models,
+      log_base = input$logTrans,
+      use_log_file = FALSE
+    )
+  })
+  
+  # Output results table
   
 # Visualisation ----
   

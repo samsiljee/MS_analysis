@@ -194,13 +194,19 @@ tabPanel("Process",
       textInput("comparison_name", "Comparison name"),
       uiOutput("select_numerator"),
       uiOutput("select_denominator"),
-      actionButton("add_comparison",
-                   "Add comparison"),
+      actionButton("add_comparison", "Add comparison"),
       textOutput("condition_levels"),
-      tags$hr(style = "border-top: 2px solid #000000;")),
+      tags$hr(style = "border-top: 2px solid #000000;"),
+      checkboxInput("save_fitted_models", "Save fitted models to .rda output", value = FALSE),
+      actionButton("go_compare", "Compare!"),
+      tags$hr(style = "border-top: 2px solid #000000;"),
+      downloadButton("comparisons_csv",
+                     "Save comparisons as .csv"),
+      downloadButton("comparisons_rda",
+                     "Save comparisons as .rda")),
     
     mainPanel(h4("Comparison matrix"),
-              tableOutput("comparison_matrix_tab"))),
+      tableOutput("comparison_matrix_tab"))),
 
 # Visualisation ----
 
