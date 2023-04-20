@@ -105,9 +105,6 @@ server <- function(input, output, session){
 # Comparison ----
 
   
-  # Making the matrix and output
-observeEvent(input$annotations, {
-  
   # Reactive UI
   output$select_numerator <- renderUI({
     selectInput("numerator", "Numerator/s",
@@ -129,21 +126,37 @@ observeEvent(input$annotations, {
   num_conditions <- reactive({
     length(unique(annot_col()$Condition))
   })
+  
+  #Attempt to make "comparison_matrix" available outside of the observe event
+  comparison_matrix <- NULL
+  makeReactiveBinding("comparison_matrix")
+  
+  # Making the comparison matrix
+  observeEvent(input$annotations, {
 
     # Generate empty matrix
     comparison_values <- reactiveValues(
       matrix = data.frame(matrix(nrow = 0, ncol = num_conditions() + 1)),
-      num_rows = 0
-    )
+      num_rows = 0)
     
     # Add row to matrix
-    comparison_matrix <- eventReactive(input$add_comparison, {
-      row <- c(input$comparison_name, ifelse(conditions() %in% input$numerator, 1, ifelse(conditions() %in% input$denominator, -1, 0)))
+    comparison_matrix <<- eventReactive(input$add_comparison, {
+      row <- c(input$comparison_name,
+               ifelse(
+                 conditions() %in% input$numerator,
+                 1,
+                 ifelse(
+                   conditions() %in% input$denominator,
+                   -1,
+                   0)))
       comparison_values$num_rows <- comparison_values$num_rows + 1
       comparison_values$matrix[comparison_values$num_rows, ] <- row
       colnames(comparison_values$matrix) <- c("Comparison", conditions())
       comparison_values$matrix
     })
+
+  # End the observeEvent here
+})
   
   # Run the comparison function
   MSstats_test <- eventReactive(input$go_compare, {
@@ -156,7 +169,7 @@ observeEvent(input$annotations, {
     )
   })
   
-  # Output
+# Output
   output$comparison_matrix_tab <- renderTable(comparison_matrix())
   
   output$results_tab <- renderDataTable({
@@ -164,10 +177,7 @@ observeEvent(input$annotations, {
            ComparisonResult = MSstats_test()$ComparisonResult,
            ModelQC = MSstats_test()$ModelQC)
   })
-  
-  # End the observeEvent here
-})
-  
+
 # Visualisation ----
   
 #Testing ----
@@ -193,7 +203,6 @@ observeEvent(input$annotations, {
   )
   
   #Processed data
-  
   output$processed_protein_csv <- downloadHandler(
     filename = function() {
       paste0("Processed_protein_data_", Sys.Date(), ".csv")
@@ -218,6 +227,34 @@ observeEvent(input$annotations, {
     },
     content = function(file) {
       saveRDS(MSstats_processed(), file = file)
+    }
+  )
+  
+  # Comparison
+  output$results_csv <- downloadHandler(
+    filename = function() {
+      paste0("MSstats_results_", Sys.Date(), ".csv")
+    },
+    content = function(file) {
+      write.csv(MSstats_test()$ComparisonResult, file)
+    }
+  )
+  
+  output$model_qc_csv <- downloadHandler(
+    filename = function() {
+      paste0("MSstats_model_QC_", Sys.Date(), ".csv")
+    },
+    content = function(file) {
+      write.csv(MSstats_test()$ModelQC, file)
+    }
+  )  
+  
+  output$comparisons_rda <- downloadHandler(
+    filename = function() {
+      paste0("MSstats_test_results_", Sys.Date(), ".rda")
+    },
+    content = function(file) {
+      saveRDS(MSstats_test(), file = file)
     }
   )
   
