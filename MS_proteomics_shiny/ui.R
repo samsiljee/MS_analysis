@@ -190,7 +190,7 @@ tabPanel("Process",
   tabPanel("Comparison",
     "This section will be where MSstats is computed. There will be drop down options here too for the settings.",
     
-    sidebarPanel(h4("Add new comparisons. Multiple can be made simultaneously"),
+    sidebarPanel(h4("Add new comparisons"),
       textInput("comparison_name", "Comparison name"),
       uiOutput("select_numerator"),
       uiOutput("select_denominator"),

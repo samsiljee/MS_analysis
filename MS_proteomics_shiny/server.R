@@ -104,52 +104,51 @@ server <- function(input, output, session){
  
 # Comparison ----
   # Reactive UI
+  output$select_numerator <- renderUI({
+    selectInput("numerator", "Numerator/s",
+                choices = conditions(),
+                multiple = TRUE)
+  })
   
+  output$select_denominator <- renderUI({
+    selectInput("denominator", "Denominator/s",
+                choices = setdiff(conditions(), input$numerator),
+                multiple = TRUE)
+  })
 
-  
   # Reactive variables
+  conditions <- reactive({
+    annot_col()$Condition %>% unique() %>% sort()
+  })
+  
+  num_conditions <- reactive({
+    length(unique(annot_col()$Condition))
+  })
+  
+  # Making the matrix and output
   observeEvent(input$annotations, {
 
-    output$select_numerator <- renderUI({
-      selectInput("numerator", "Numerator/s",
-                  choices = conditions(),
-                  multiple = TRUE)
-    })
-    
-    output$select_denominator <- renderUI({
-      selectInput("denominator", "Denominator/s",
-                  choices = setdiff(conditions(), input$numerator),
-                  multiple = TRUE)
-    })
-    conditions <- reactive({
-      annot_col()$Condition %>% unique() %>% sort()
-    })
-    
-    num_conditions <- reactive({
-      length(unique(annot_col()$Condition))
-    })
-    
     # Generate reactive values for the comparison matrix
-    comparison_matrix <- reactiveValues(
-      data = data.frame(matrix(nrow = 0, ncol = num_conditions())),
+    comparison_values <- reactiveValues(
+      matrix = data.frame(matrix(nrow = 0, ncol = num_conditions() + 1)),
       num_rows = 0
     )
     
-    comparison <- eventReactive(input$add_comparison, {
-      row <- ifelse(conditions() %in% input$numerator, 1, ifelse(conditions() %in% input$denominator, -1, 0))
-      comparison_matrix$num_rows <- comparison_matrix$num_rows + 1
-      comparison_matrix$data[comparison_matrix$num_rows, ] <- row
-      comparison_matrix$data
+    comparison_matrix <- eventReactive(input$add_comparison, {
+      row <- c(input$comparison_name, ifelse(conditions() %in% input$numerator, 1, ifelse(conditions() %in% input$denominator, -1, 0)))
+      comparison_values$num_rows <- comparison_values$num_rows + 1
+      comparison_values$matrix[comparison_values$num_rows, ] <- row
+      colnames(comparison_values$matrix) <- c("Comparison", conditions())
+      comparison_values$matrix
     })
     
     # Output
     output$comparison_matrix_tab <- renderTable({
-      comparison()
+      comparison_matrix()
     })
   })
   
-  
-
+  # Run the comparison function
   
 # Visualisation ----
   
