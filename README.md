@@ -43,8 +43,9 @@ First section is to have a basic look at the raw MS data, note that it will need
   - Biological network analysis
 
 ## Issues and to-do
-  - Currently working on the shiny app, for use by non-coders
-  - Get code up and running for all sections, currently working on `MSstats` analysis
+  - Currently working on the shiny app, for use by non-coders, MSstats section mostly completed
+  - Current issues include getting reasonable results from the comparison output
+  - Levels in the results of the group comparison is currently a number, this should be the name of the comparison
   
 ## Completed issues
   - Add copyright to repository/scripts

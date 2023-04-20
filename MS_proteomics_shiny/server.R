@@ -103,6 +103,11 @@ server <- function(input, output, session){
   })
  
 # Comparison ----
+
+  
+  # Making the matrix and output
+observeEvent(input$annotations, {
+  
   # Reactive UI
   output$select_numerator <- renderUI({
     selectInput("numerator", "Numerator/s",
@@ -115,7 +120,7 @@ server <- function(input, output, session){
                 choices = setdiff(conditions(), input$numerator),
                 multiple = TRUE)
   })
-
+  
   # Reactive variables
   conditions <- reactive({
     annot_col()$Condition %>% unique() %>% sort()
@@ -124,9 +129,6 @@ server <- function(input, output, session){
   num_conditions <- reactive({
     length(unique(annot_col()$Condition))
   })
-  
-  # Making the matrix and output
-  observeEvent(input$annotations, {
 
     # Generate empty matrix
     comparison_values <- reactiveValues(
@@ -142,15 +144,9 @@ server <- function(input, output, session){
       colnames(comparison_values$matrix) <- c("Comparison", conditions())
       comparison_values$matrix
     })
-    
-    # Output comparison matrix
-    output$comparison_matrix_tab <- renderTable({
-      comparison_matrix()
-    })
-  })
   
   # Run the comparison function
-  eventReactive(input$go_compare {
+  MSstats_test <- eventReactive(input$go_compare, {
     groupComparison(
       contrast.matrix = comparison_matrix()[,-1],
       data = MSstats_processed(),
@@ -160,7 +156,17 @@ server <- function(input, output, session){
     )
   })
   
-  # Output results table
+  # Output
+  output$comparison_matrix_tab <- renderTable(comparison_matrix())
+  
+  output$results_tab <- renderDataTable({
+    switch(input$results_tab_view,
+           ComparisonResult = MSstats_test()$ComparisonResult,
+           ModelQC = MSstats_test()$ModelQC)
+  })
+  
+  # End the observeEvent here
+})
   
 # Visualisation ----
   
