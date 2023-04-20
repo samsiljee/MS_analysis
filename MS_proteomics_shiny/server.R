@@ -110,9 +110,22 @@ server <- function(input, output, session){
   })
   
   #Reactive variables
-  conditions <- reactive(sort(unique(annot_col()$Condition)))
+  # Generate reactive values for the conditions and number of conditions
+  conditions <- reactive({
+    annot_col()$Condition %>%
+      unique() %>%
+      sort()
+  })
   
-  num_conditions <- reactive(length(unique(annot_col()$Condition)))
+  num_conditions <- reactive({
+    length(unique(annot_col()$Condition))
+  })
+  
+  # Generate reactive values for the comparison matrix
+  blank_matrix <- reactiveValues(data = {
+    df <- data.frame(matrix(nrow = 0, ncol = num_conditions()))
+    df
+  })
   
   comparison <- eventReactive(input$add_comparison, {
     ifelse(conditions() %in% input$numerator,
@@ -122,26 +135,13 @@ server <- function(input, output, session){
                   0))
   })
   
-  # Generate Reactive Text Data
-  blank_matrix <- reactiveValues(data = {
-    df <- data.frame(matrix(nrow = 0, ncol = 1))
-    df
-    })
-  
-  # Add rows equal to n conditions
-  comparison_matrix <- reactive({
-    cbind(blank_matrix$data, data.frame(matrix(nrow = 0, ncol = num_conditions())))
-  })
-  
-  # Add New Text
   comparison_matrix <- eventReactive(input$add_comparison, {
-    rbind(comparison_matrix(), comparison())
+    rbind(blank_matrix$data, comparison())
   })
   
   #Output
   output$comparison_matrix_tab <- renderTable(comparison_matrix())
   
-  output$comparison_text <- renderText(comparison())
   
 # Visualisation ----
   

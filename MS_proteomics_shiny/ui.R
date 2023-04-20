@@ -200,8 +200,7 @@ tabPanel("Process",
       tags$hr(style = "border-top: 2px solid #000000;")),
     
     mainPanel(h4("Comparison matrix"),
-              tableOutput("comparison_matrix_tab"),
-              textOutput("comparison_text"))),
+              tableOutput("comparison_matrix_tab"))),
 
 # Visualisation ----
 
