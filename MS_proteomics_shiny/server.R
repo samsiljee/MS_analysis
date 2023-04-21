@@ -104,7 +104,6 @@ server <- function(input, output, session){
  
 # Comparison ----
 
-  
   # Reactive UI
   output$select_numerator <- renderUI({
     selectInput("numerator", "Numerator/s",
@@ -119,21 +118,13 @@ server <- function(input, output, session){
   })
   
   # Reactive variables
-  conditions <- reactive({
-    annot_col()$Condition %>% unique() %>% sort()
-  })
+  conditions <- reactive(annot_col()$Condition %>% unique() %>% sort())
   
-  num_conditions <- reactive({
-    length(unique(annot_col()$Condition))
-  })
-  
-  #Attempt to make "comparison_matrix" available outside of the observe event
-  comparison_matrix <- NULL
-  makeReactiveBinding("comparison_matrix")
+  num_conditions <- reactive(length(unique(annot_col()$Condition)))
   
   # Making the comparison matrix
   observeEvent(input$annotations, {
-
+    
     # Generate empty matrix
     comparison_values <- reactiveValues(
       matrix = data.frame(matrix(nrow = 0, ncol = num_conditions() + 1)),
@@ -152,16 +143,15 @@ server <- function(input, output, session){
       comparison_values$num_rows <- comparison_values$num_rows + 1
       comparison_values$matrix[comparison_values$num_rows, ] <- row
       colnames(comparison_values$matrix) <- c("Comparison", conditions())
-      comparison_values$matrix
+      return(comparison_values$matrix)
     })
-
-  # End the observeEvent here
-})
+    
+  })
   
   # Run the comparison function
   MSstats_test <- eventReactive(input$go_compare, {
     groupComparison(
-      contrast.matrix = comparison_matrix()[,-1],
+      contrast.matrix = contrast_matrix(),
       data = MSstats_processed(),
       save_fitted_models = input$save_fitted_models,
       log_base = input$logTrans,
