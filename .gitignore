@@ -1,5 +1,6 @@
 # Ignore all files in data folder - too large
 data/*
+input/*
 *.log
 # Ignore reports produced on knitting
 MS_analysis_tutorial.html
