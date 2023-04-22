@@ -126,24 +126,25 @@ server <- function(input, output, session){
   observeEvent(input$annotations, {
     
     # Generate empty matrix
-    comparison_values <- reactiveValues(
-      matrix = data.frame(matrix(nrow = 0, ncol = num_conditions() + 1)),
-      num_rows = 0)
-    
+    c_vals <- reactiveValues(
+      matrix = matrix(nrow = 0, ncol = num_conditions()),
+      comparison_names = character()
+      )
+  
     # Add row to matrix
     comparison_matrix <<- eventReactive(input$add_comparison, {
-      row <- c(input$comparison_name,
-               ifelse(
-                 conditions() %in% input$numerator,
-                 1,
-                 ifelse(
-                   conditions() %in% input$denominator,
-                   -1,
-                   0)))
-      comparison_values$num_rows <- comparison_values$num_rows + 1
-      comparison_values$matrix[comparison_values$num_rows, ] <- row
-      colnames(comparison_values$matrix) <- c("Comparison", conditions())
-      return(comparison_values$matrix)
+      row <- ifelse(
+        conditions() %in% input$numerator,
+        1,
+        ifelse(
+          conditions() %in% input$denominator,
+          -1,
+          0))
+      c_vals$comparison_names <- c(c_vals$comparison_names, input$comparison_name)
+      c_vals$matrix <- rbind(c_vals$matrix, row)
+      colnames(c_vals$matrix) <- conditions()
+      rownames(c_vals$matrix) <- c_vals$comparison_names
+      return(c_vals$matrix)
     })
     
   })
@@ -151,7 +152,7 @@ server <- function(input, output, session){
   # Run the comparison function
   MSstats_test <- eventReactive(input$go_compare, {
     groupComparison(
-      contrast.matrix = contrast_matrix(),
+      contrast.matrix = comparison_matrix(),
       data = MSstats_processed(),
       save_fitted_models = input$save_fitted_models,
       log_base = input$logTrans,

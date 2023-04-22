@@ -11,35 +11,27 @@ ui <- navbarPage(
 # Instructions ----
 
   tabPanel("Instructions",
-    
-    "Welcome to my proteomics analysis pipeline.", br(),
-    "Please move sequentially through the tabs to complete the analysis.", br()),
-  
+    "Welcome to my proteomics analysis pipeline.",
+    "Please move sequentially through the tabs to complete the analysis.", br(),
+    "Please prepare an annotations file with the columns \"Run\", \"Condition\", and \"BioReplicate\" (Case sensitive). the Run column should contain the raw file names for each MS run, including the .raw extension. Save it as a .csv file."),
+ 
 # Input ----
 
-  tabPanel("Input",
-    
-    "Please upload your dataset as exported from Proteome discoverer and the corresponding annotations table here:",
-    
+  tabPanel("Input", "Input PSM and annotation files",
     sidebarPanel(
-      
       fileInput("annotations", "Annotations file",
         buttonLabel = "Browse",
         placeholder = "Upload annotations file here"),
-      
       radioButtons("annotations_sep", "Separator",
         choices = c(
           Tab = "\t",
           Comma = ",",
           Semicolon = ";"),
         selected = ","),
-      
       tags$hr(style = "border-top: 2px solid #000000;"),
-      
       fileInput("PSMs", "PSMs file",
         buttonLabel = "Browse",
         placeholder = "Upload PSMs file here"),
-      
       radioButtons("PSMs_sep", "Separator",
         choices = c(
           Tab = "\t",
@@ -48,17 +40,14 @@ ui <- navbarPage(
                    selected = "\t")),
     
     mainPanel(
-              
       h3("Annotations"),
       withSpinner(dataTableOutput("annotation_tab")),
-      
       tags$hr(style = "border-top: 2px solid #000000;"),
-      
       h3("PSM data"),
       withSpinner(dataTableOutput("PSMs_tab")))),
   
 # Format ----
-tabPanel("Format", "Format and pre-filter your data to work in MSstats, options can be changed on the left.",
+tabPanel("Format", "Pre-filter and format data for MSstats",
   sidebarPanel(h4("MSstats formating options"),
     checkboxInput("useNumProteinsColumn",
                   "Remove peptides with more than one in \"number of proteins\" column of PD output",
@@ -93,13 +82,10 @@ tabPanel("Format", "Format and pre-filter your data to work in MSstats, options 
                  choiceValues = c("Sequence", "Annotated.Sequence")),
     actionButton("go_format", "Format!"),
     tags$hr(style = "border-top: 2px solid #000000;"),
-    downloadButton("formatted_csv",
-                   "Save as .csv"),
-    downloadButton("formatted_rda",
-                   "Save as .rda")),
+    downloadButton("formatted_csv", "Save as .csv"),
+    downloadButton("formatted_rda", "Save as .rda")),
   
   mainPanel("Preview of formatted input data",
-            "I still need to add functionality to download as .rda, .csv, or .tsv format, and a way to save the log file.",
     withSpinner(dataTableOutput("MSstats_input_tab")))),
 
 # Process ----
@@ -169,12 +155,9 @@ tabPanel("Process",
       value = 0.999),
     actionButton("go_process", "Process!"),
     tags$hr(style = "border-top: 2px solid #000000;"),
-    downloadButton("processed_protein_csv",
-                   "Save protein data as .csv"),
-    downloadButton("processed_feature_csv",
-                   "Save feature data as .csv"),
-    downloadButton("processed_rda",
-                   "Save as .rda")),
+    downloadButton("processed_protein_csv", "Save protein data as .csv"),
+    downloadButton("processed_feature_csv", "Save feature data as .csv"),
+    downloadButton("processed_rda", "Save as .rda")),
   
   mainPanel("This section will be where MSstats processing happens. There will be drop down options here too for the settings.",
             "Note that currently I've not got the \"Global standards\" method working as it takes a named vector as input",
@@ -199,18 +182,14 @@ tabPanel("Process",
       checkboxInput("save_fitted_models", "Save fitted models to .rda output", value = TRUE),
       actionButton("go_compare", "Compare!"),
       tags$hr(style = "border-top: 2px solid #000000;"),
-      downloadButton("results_csv",
-                     "Save results as .csv"),
-      downloadButton("model_qc_csv",
-                     "Save model QC as .csv"),
-      downloadButton("comparisons_rda",
-                     "Save as .rda")),
+      downloadButton("results_csv", "Save results as .csv"),
+      downloadButton("model_qc_csv", "Save model QC as .csv"),
+      downloadButton("comparisons_rda", "Save as .rda")),
     
     mainPanel("Comparison/s to be made:",
       tableOutput("comparison_matrix_tab"),
       tags$hr(style = "border-top: 2px solid #000000;"),
-      radioButtons("results_tab_view",
-                   "Which results would you like to view?",
+      radioButtons("results_tab_view", "Which results would you like to view?",
                    choiceNames = c("Comparison result", "Model QC"),
                    choiceValues = c("ComparisonResult", "ModelQC"),
                    inline = TRUE),

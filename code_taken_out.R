@@ -5,6 +5,39 @@
 
 
 
+# Reactive variables
+conditions <- reactive(annot_col()$Condition %>% unique() %>% sort())
+
+num_conditions <- reactive(length(unique(annot_col()$Condition)))
+
+# Making the comparison matrix
+observeEvent(input$annotations, {
+  
+  # Generate empty matrix
+  comparison_values <- reactiveValues(
+    matrix = data.frame(matrix(nrow = 0, ncol = num_conditions() + 1)),
+    num_rows = 0)
+  
+  # Add row to matrix
+  comparison_matrix <<- eventReactive(input$add_comparison, {
+    row <- c(input$comparison_name,
+             ifelse(
+               conditions() %in% input$numerator,
+               1,
+               ifelse(
+                 conditions() %in% input$denominator,
+                 -1,
+                 0)))
+    comparison_values$num_rows <- comparison_values$num_rows + 1
+    comparison_values$matrix[comparison_values$num_rows, ] <- row
+    colnames(comparison_values$matrix) <- c("Comparison", conditions())
+    return(comparison_values$matrix)
+  })
+  
+})
+
+
+
 #Turning the comparison_matrix dataframe into a contrast_matrix named matrix
 contrast_matrix <- reactive({
   # Extract names
