@@ -124,13 +124,12 @@ server <- function(input, output, session){
   
   # Making the comparison matrix
   observeEvent(input$annotations, {
-    
     # Generate empty matrix
     c_vals <- reactiveValues(
       matrix = matrix(nrow = 0, ncol = num_conditions()),
-      comparison_names = character()
-      )
-  
+      comparison_names = character())
+    makeReactiveBinding(c_vals)
+    
     # Add row to matrix
     comparison_matrix <<- eventReactive(input$add_comparison, {
       row <- ifelse(
