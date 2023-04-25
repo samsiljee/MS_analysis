@@ -204,9 +204,7 @@ server <- function(input, output, session){
   output$plot <- eventReactive(input$go_plot, { renderPlot({
     switch(input$plot_type,
       Volcano = {
-          
-        # Volcano plot using ggplot
-        volcano <- MSstats_test() %>%
+        MSstats_test() %>%
           filter(Label == input$comparison_selected) %>%
           ggplot(aes(x = log2FC, y = -log10(adj.pvalue), col = Dif)) +
           geom_vline(xintercept = c(-1, 1), linetype = "dashed", colour = "black") +
