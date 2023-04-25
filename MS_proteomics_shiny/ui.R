@@ -199,6 +199,9 @@ tabPanel("Process",
 
   tabPanel("Visualisation",
     "This section will be for making the graphs. Again a sidebar panel to select the types of graphs.",
+    sidebarPanel(),
+    
+    mainPanel()
     
    )
 # Close UI

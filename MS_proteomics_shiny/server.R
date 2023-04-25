@@ -119,14 +119,19 @@ server <- function(input, output, session){
   
   # Reactive variables
   conditions <- reactive(sort(unique(annot_col()$Condition)))
-  
-  num_conditions <- reactive(length(unique(annot_col()$Condition)))
-  
+
   # Define comparison_matrix as a reactiveValues object
-  comparison_matrix <- reactiveValues(matrix = NULL, comparison_names = character())
+  c_vals <- reactiveValues(matrix = NULL, comparison_names = character())
   
-  # Define a function to add rows to the matrix
-  add_comparison_row <- function() {
+  # Initialising the comparison matrix on uploading annotations file
+  observeEvent(input$annotations, {
+    add_comparison()
+  })
+  
+  # Define function to add a row
+  add_comparison <- function() {
+    
+    # Read the values used to create the row
     row <- ifelse(
       conditions() %in% input$numerator,
       1,
@@ -134,37 +139,47 @@ server <- function(input, output, session){
         conditions() %in% input$denominator,
         -1,
         0))
-    comparison_matrix$comparison_names <- c(comparison_matrix$comparison_names, input$comparison_name)
-    comparison_matrix$matrix <- rbind(comparison_matrix$matrix, row)
-    colnames(comparison_matrix$matrix) <- conditions()
-    rownames(comparison_matrix$matrix) <- comparison_matrix$comparison_names
-    return(comparison_matrix$matrix)
+    
+    # Update the row names
+    c_vals$comparison_names <- if (is.null(c_vals$matrix)) {
+      "First_name_to_be_removed"
+    } else {
+      c(c_vals$comparison_names, input$comparison_name)
+    }
+    
+    # Update the matrix
+    c_vals$matrix <- if (is.null(c_vals$matrix)) {
+      c_vals$matrix <- matrix(NA,  nrow = 1, ncol = length(row))
+    } else {
+      c_vals$matrix <- rbind(c_vals$matrix, matrix(row, nrow = 1, ncol = length(row)))
+    }
+    
+    # Update the column names
+    colnames(c_vals$matrix) <- conditions()
+    
+    #Update the row names
+    rownames(c_vals$matrix) <- c_vals$comparison_names
+    
+    return(c_vals$matrix)
   }
-  
-  # Making the comparison matrix
-  observeEvent(input$annotations, {
-    add_comparison_row() # Initialize the matrix
-  })
   
   # Update the comparison matrix when add_comparison is clicked
   comparison_matrix_updated <- eventReactive(input$add_comparison, {
-    add_comparison_row()
+    add_comparison()
   })
   
   # Run the comparison function
   MSstats_test <- eventReactive(input$go_compare, {
     groupComparison(
-      contrast.matrix = comparison_matrix_updated()[-1,],
+      contrast.matrix = comparison_matrix_updated()[-1, , drop = FALSE],
       data = MSstats_processed(),
       save_fitted_models = input$save_fitted_models,
       log_base = input$logTrans,
-      use_log_file = FALSE
-    )
+      use_log_file = FALSE)
   })
-  
+      
   # Output
-  output$comparison_matrix_tab <- renderTable(comparison_matrix_updated()[-1,], rownames = TRUE)
-  
+  output$comparison_matrix_tab <- renderTable(comparison_matrix_updated()[-1, , drop = FALSE], rownames = TRUE)
   
   output$results_tab <- renderDataTable({
     switch(input$results_tab_view,
