@@ -188,6 +188,39 @@ server <- function(input, output, session){
   })
 
 # Visualisation ----
+  # Reactive UI
+  # Select comparison to compare
+  output$select_comparison <- renderUI({
+    selectInput("comparison_selected", "Comparison to plot",
+                choices = rownames(comparison_matrix_updated()[-1, , drop = FALSE]),
+                multiple = FALSE)
+  })
+  
+  # Set colours as a named vector - for use in volcano plot
+  colours <- c("red", "blue", "black") 
+  names(colours) <- c("Upregulated", "Downregulated", "Not significant")
+  
+  
+  output$plot <- eventReactive(input$go_plot, { renderPlot({
+    switch(input$plot_type,
+      Volcano = {
+          
+        # Volcano plot using ggplot
+        volcano <- MSstats_test() %>%
+          filter(Label == input$comparison_selected) %>%
+          ggplot(aes(x = log2FC, y = -log10(adj.pvalue), col = Dif)) +
+          geom_vline(xintercept = c(-1, 1), linetype = "dashed", colour = "black") +
+          geom_hline(yintercept = -log10(0.05), linetype = "dashed", colour = "red") +
+          geom_point(alpha = 0.25, show.legend = FALSE) +
+          scale_color_manual(values = colours) +
+          ylab("-Log10(adjusted p-value)") +
+          xlab("Log2 fold change") +
+          ggtitle(paste("Volcano plot of", input$comparison_selected))
+      
+      }
+    )
+  })
+})
   
 #Testing ----
   

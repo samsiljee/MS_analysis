@@ -199,9 +199,18 @@ tabPanel("Process",
 
   tabPanel("Visualisation",
     "This section will be for making the graphs. Again a sidebar panel to select the types of graphs.",
-    sidebarPanel(),
+    sidebarPanel(
+      selectInput("plot_type", "Plot type",
+        choices = c("Volcano", "PCA"),
+        multiple = FALSE),
+      uiOutput("select_comparison"),
+      actionButton("go_plot", "Plot!"),
+      tags$hr(style = "border-top: 2px solid #000000;")
+    ),
     
-    mainPanel()
+    mainPanel(
+      withSpinner(plotOutput("plot"))
+    )
     
    )
 # Close UI
