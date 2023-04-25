@@ -118,40 +118,43 @@ server <- function(input, output, session){
   })
   
   # Reactive variables
-  conditions <- reactive(annot_col()$Condition %>% unique() %>% sort())
+  conditions <- reactive(sort(unique(annot_col()$Condition)))
   
   num_conditions <- reactive(length(unique(annot_col()$Condition)))
   
+  # Define comparison_matrix as a reactiveValues object
+  comparison_matrix <- reactiveValues(matrix = NULL, comparison_names = character())
+  
+  # Define a function to add rows to the matrix
+  add_comparison_row <- function() {
+    row <- ifelse(
+      conditions() %in% input$numerator,
+      1,
+      ifelse(
+        conditions() %in% input$denominator,
+        -1,
+        0))
+    comparison_matrix$comparison_names <- c(comparison_matrix$comparison_names, input$comparison_name)
+    comparison_matrix$matrix <- rbind(comparison_matrix$matrix, row)
+    colnames(comparison_matrix$matrix) <- conditions()
+    rownames(comparison_matrix$matrix) <- comparison_matrix$comparison_names
+    return(comparison_matrix$matrix)
+  }
+  
   # Making the comparison matrix
   observeEvent(input$annotations, {
-    # Generate empty matrix
-    c_vals <- reactiveValues(
-      matrix = matrix(nrow = 0, ncol = num_conditions()),
-      comparison_names = character())
-    makeReactiveBinding(c_vals)
-    
-    # Add row to matrix
-    comparison_matrix <<- eventReactive(input$add_comparison, {
-      row <- ifelse(
-        conditions() %in% input$numerator,
-        1,
-        ifelse(
-          conditions() %in% input$denominator,
-          -1,
-          0))
-      c_vals$comparison_names <- c(c_vals$comparison_names, input$comparison_name)
-      c_vals$matrix <- rbind(c_vals$matrix, row)
-      colnames(c_vals$matrix) <- conditions()
-      rownames(c_vals$matrix) <- c_vals$comparison_names
-      return(c_vals$matrix)
-    })
-    
+    add_comparison_row() # Initialize the matrix
+  })
+  
+  # Update the comparison matrix when add_comparison is clicked
+  comparison_matrix_updated <- eventReactive(input$add_comparison, {
+    add_comparison_row()
   })
   
   # Run the comparison function
   MSstats_test <- eventReactive(input$go_compare, {
     groupComparison(
-      contrast.matrix = comparison_matrix(),
+      contrast.matrix = comparison_matrix_updated()[-1,],
       data = MSstats_processed(),
       save_fitted_models = input$save_fitted_models,
       log_base = input$logTrans,
@@ -159,8 +162,9 @@ server <- function(input, output, session){
     )
   })
   
-# Output
-  output$comparison_matrix_tab <- renderTable(comparison_matrix())
+  # Output
+  output$comparison_matrix_tab <- renderTable(comparison_matrix_updated()[-1,], rownames = TRUE)
+  
   
   output$results_tab <- renderDataTable({
     switch(input$results_tab_view,
