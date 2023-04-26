@@ -177,13 +177,25 @@ server <- function(input, output, session){
       log_base = input$logTrans,
       use_log_file = FALSE)
   })
+  
+  # Results of comparison, and some further processing
+  MSstats_results <- reactive({
+    MSstats_test()$ComparisonResult %>%
+      mutate(Dif = ifelse(
+        MSstats_test()$ComparisonResult$log2FC > 1 & MSstats_test()$ComparisonResult$adj.pvalue < 0.05,
+        "Upregulated",
+        ifelse(
+          MSstats_test()$ComparisonResult$log2FC < -1 & MSstats_test()$ComparisonResult$adj.pvalue < 0.05,
+          "Downregulated",
+          "Not significant")))
+    })
       
   # Output
   output$comparison_matrix_tab <- renderTable(comparison_matrix_updated()[-1, , drop = FALSE], rownames = TRUE)
   
   output$results_tab <- renderDataTable({
     switch(input$results_tab_view,
-           ComparisonResult = MSstats_test()$ComparisonResult,
+           ComparisonResult = MSstats_results(),
            ModelQC = MSstats_test()$ModelQC)
   })
 
@@ -200,25 +212,25 @@ server <- function(input, output, session){
   colours <- c("red", "blue", "black") 
   names(colours) <- c("Upregulated", "Downregulated", "Not significant")
   
-  
-  output$plot <- eventReactive(input$go_plot, { renderPlot({
+  output$plot <- renderPlot({
     switch(input$plot_type,
       Volcano = {
-        MSstats_test() %>%
+        MSstats_results()[-which(MSstats_results()$log2FC == Inf | MSstats_results()$log2FC == -Inf),] %>%
           filter(Label == input$comparison_selected) %>%
           ggplot(aes(x = log2FC, y = -log10(adj.pvalue), col = Dif)) +
-          geom_vline(xintercept = c(-1, 1), linetype = "dashed", colour = "black") +
-          geom_hline(yintercept = -log10(0.05), linetype = "dashed", colour = "red") +
-          geom_point(alpha = 0.25, show.legend = FALSE) +
-          scale_color_manual(values = colours) +
-          ylab("-Log10(adjusted p-value)") +
-          xlab("Log2 fold change") +
-          ggtitle(paste("Volcano plot of", input$comparison_selected))
-      
-      }
+            geom_vline(xintercept = c(-1, 1), linetype = "dashed", colour = "black") +
+            geom_hline(yintercept = -log10(0.05), linetype = "dashed", colour = "red") +
+            geom_point(alpha = 0.25, show.legend = FALSE) +
+            scale_color_manual(values = colours) +
+            ylab("-Log10(adjusted p-value)") +
+            xlab("Log2 fold change") +
+            ggtitle(paste("Volcano plot of", input$comparison_selected))
+      },
+     PCA = {
+       ggplot(data.frame(x = 1:9, y = 1:9), aes(x = x, y = y)) + geom_point()
+     }
     )
   })
-})
   
 #Testing ----
   
