@@ -43,12 +43,16 @@ First section is to have a basic look at the raw MS data, note that it will need
   - Biological network analysis
 
 ## Issues and to-do
-  - Currently working on the shiny app, for use by non-coders, MSstats section mostly completed
-  - Current issues include getting reasonable results from the comparison output
-  - Levels in the results of the group comparison is currently a number, this should be the name of the comparison
+  - Currently working on fine-tuning some of the MSstats I/O options
+  - Adding heatmap and PCA plot function
+  - Will start on section for QC after visualisation
+  - I would like to add an option to filter out results of the comparison that show infinite fold-cahnge
+  - I would like to add an option to do the pair-wise comparison in MSstats instead of the matrix
   
 ## Completed issues
   - Add copyright to repository/scripts
+  - Levels in the results of the group comparison is currently a number, this should be the name of the comparison - solved by changing from data frame to a named matrix
+   - Current issues include getting reasonable results from the comparison output - solved by changing from data frame to a named matrix
 
 # License
 Feel free to use this code as you wish under the MIT license, however an anknowledgement would be nice. Thanks!

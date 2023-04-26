@@ -224,9 +224,14 @@ server <- function(input, output, session){
             scale_color_manual(values = colours) +
             ylab("-Log10(adjusted p-value)") +
             xlab("Log2 fold change") +
-            ggtitle(paste("Volcano plot of", input$comparison_selected))
+            ggtitle(input$comparison_selected)
       },
+      
      PCA = {
+       ggplot(data.frame(x = 1:9, y = 1:9), aes(x = x, y = y)) + geom_point()
+     },
+     
+     Heatmap = {
        ggplot(data.frame(x = 1:9, y = 1:9), aes(x = x, y = y)) + geom_point()
      }
     )
