@@ -2,6 +2,7 @@
 data/*
 input/*
 *.log
+MS_analysis.Rproj
 # Ignore reports produced on knitting
 MS_analysis_tutorial.html
 MS_analysis_chromatogram.html
