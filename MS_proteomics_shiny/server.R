@@ -179,8 +179,8 @@ server <- function(input, output, session){
   })
   
   # Results of comparison, and some further processing
-  MSstats_results <- reactive({
-    MSstats_test()$ComparisonResult %>%
+  MSstats_comparison_results <- reactive({
+      MSstats_test()$ComparisonResult %>%
       mutate(Dif = ifelse(
         MSstats_test()$ComparisonResult$log2FC > 1 & MSstats_test()$ComparisonResult$adj.pvalue < 0.05,
         "Upregulated",
@@ -189,6 +189,14 @@ server <- function(input, output, session){
           "Downregulated",
           "Not significant")))
     })
+  
+  MSstats_results <- reactive({
+    if(input$filter_results) {
+      MSstats_comparison_results()[-which(MSstats_comparison_results()$log2FC == Inf | MSstats_comparison_results()$log2FC == -Inf),]
+    } else {
+      MSstats_comparison_results()
+    }
+  })
       
   # Output
   output$comparison_matrix_tab <- renderTable(comparison_matrix_updated()[-1, , drop = FALSE], rownames = TRUE)
@@ -198,10 +206,11 @@ server <- function(input, output, session){
            ComparisonResult = MSstats_results(),
            ModelQC = MSstats_test()$ModelQC)
   })
+  
+output$outliers <- renderText(paste("There are", length(which(MSstats_comparison_results()$log2FC == Inf | MSstats_comparison_results()$log2FC == -Inf)), "results with infinite fold-change.", sep = " "))
 
 # Visualisation ----
   # Reactive UI
-  # Select comparison to compare
   output$select_comparison <- renderUI({
     selectInput("comparison_selected", "Comparison to plot",
                 choices = rownames(comparison_matrix_updated()[-1, , drop = FALSE]),
@@ -212,19 +221,25 @@ server <- function(input, output, session){
   colours <- c("red", "blue", "black") 
   names(colours) <- c("Upregulated", "Downregulated", "Not significant")
   
+  # Make volcano plot
+  volcano_plot <-  reactive({
+    MSstats_results() %>%
+    filter(Label == input$comparison_selected) %>%
+    ggplot(aes(x = log2FC, y = -log10(adj.pvalue), col = Dif)) +
+    geom_vline(xintercept = c(-1, 1), linetype = "dashed", colour = "black") +
+    geom_hline(yintercept = -log10(0.05), linetype = "dashed", colour = "red") +
+    geom_point(alpha = 0.25, show.legend = FALSE) +
+    scale_color_manual(values = colours) +
+    ylab("-Log10(adjusted p-value)") +
+    xlab("Log2 fold change") +
+    ggtitle(input$comparison_selected)
+  })
+  
+  # Output
   output$plot <- renderPlot({
     switch(input$plot_type,
       Volcano = {
-        MSstats_results()[-which(MSstats_results()$log2FC == Inf | MSstats_results()$log2FC == -Inf),] %>%
-          filter(Label == input$comparison_selected) %>%
-          ggplot(aes(x = log2FC, y = -log10(adj.pvalue), col = Dif)) +
-            geom_vline(xintercept = c(-1, 1), linetype = "dashed", colour = "black") +
-            geom_hline(yintercept = -log10(0.05), linetype = "dashed", colour = "red") +
-            geom_point(alpha = 0.25, show.legend = FALSE) +
-            scale_color_manual(values = colours) +
-            ylab("-Log10(adjusted p-value)") +
-            xlab("Log2 fold change") +
-            ggtitle(input$comparison_selected)
+       volcano_plot()
       },
       
      PCA = {
@@ -293,7 +308,7 @@ server <- function(input, output, session){
       paste0("MSstats_results_", Sys.Date(), ".csv")
     },
     content = function(file) {
-      write.csv(MSstats_test()$ComparisonResult, file)
+      write.csv(MSstats_results(), file)
     }
   )
   

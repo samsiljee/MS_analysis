@@ -46,8 +46,8 @@ First section is to have a basic look at the raw MS data, note that it will need
   - Currently working on fine-tuning some of the MSstats I/O options
   - Adding heatmap and PCA plot function
   - Will start on section for QC after visualisation
-  - I would like to add an option to filter out results of the comparison that show infinite fold-cahnge
   - I would like to add an option to do the pair-wise comparison in MSstats instead of the matrix
+  - Download plot from visualisation
   
 ## Completed issues
   - Add copyright to repository/scripts
