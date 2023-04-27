@@ -171,7 +171,11 @@ server <- function(input, output, session){
   # Run the comparison function
   MSstats_test <- eventReactive(input$go_compare, {
     groupComparison(
-      contrast.matrix = comparison_matrix_updated()[-1, , drop = FALSE],
+      contrast.matrix = if (input$pairwise) {
+          "pairwise"
+        } else {
+          comparison_matrix_updated()[-1, , drop = FALSE]
+        },
       data = MSstats_processed(),
       save_fitted_models = input$save_fitted_models,
       log_base = input$logTrans,
@@ -222,7 +226,7 @@ output$outliers <- renderText(paste("There are", length(which(MSstats_comparison
   names(colours) <- c("Upregulated", "Downregulated", "Not significant")
   
   # Make volcano plot
-  volcano_plot <-  reactive({
+  volcano_plot <-  eventReactive(input$go_plot, {
     MSstats_results() %>%
     filter(Label == input$comparison_selected) %>%
     ggplot(aes(x = log2FC, y = -log10(adj.pvalue), col = Dif)) +
@@ -235,20 +239,22 @@ output$outliers <- renderText(paste("There are", length(which(MSstats_comparison
     ggtitle(input$comparison_selected)
   })
   
+  # Make heatmap
+  heatmap_plot <- eventReactive(input$go_plot, {
+    
+  })
+  
+  # Make PCA
+  pca_plot <- eventReactive(input$go_plot, {
+    
+  })
+  
   # Output
   output$plot <- renderPlot({
     switch(input$plot_type,
-      Volcano = {
-       volcano_plot()
-      },
-      
-     PCA = {
-       ggplot(data.frame(x = 1:9, y = 1:9), aes(x = x, y = y)) + geom_point()
-     },
-     
-     Heatmap = {
-       ggplot(data.frame(x = 1:9, y = 1:9), aes(x = x, y = y)) + geom_point()
-     }
+      Volcano = { volcano_plot() },
+      PCA = { pca_plot() },
+      Heatmap = { heatmap_plot() }
     )
   })
   
