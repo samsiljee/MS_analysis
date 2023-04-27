@@ -171,7 +171,7 @@ tabPanel("Process",
     
     sidebarPanel(h4("Comparisons"),
       checkboxInput("pairwise", "Pairwise", value = FALSE),
-      conditionalPanel(condition = "input.pairwise == FALSE",
+      conditionalPanel(condition = "input.pairwise == false",
         h5("Add new comparisons"),
         textInput("comparison_name", "Comparison name"),
         uiOutput("select_numerator"),
