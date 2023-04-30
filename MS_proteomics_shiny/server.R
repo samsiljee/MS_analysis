@@ -8,7 +8,7 @@ library(MSstats)
 library(tidyverse)
 
 # Setting option to increase allowed file size to 30MB, I will probably have to increase this further
-options(shiny.maxRequestSize=30*1024^2)
+options(shiny.maxRequestSize=30*1024^3)
 
 server <- function(input, output, session){
 

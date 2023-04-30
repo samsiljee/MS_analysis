@@ -1,6 +1,7 @@
 # Ignore all files in data folder - too large
 data/*
 input/*
+output/*
 *.log
 MS_analysis.Rproj
 # Ignore reports produced on knitting

@@ -48,6 +48,9 @@ First section is to have a basic look at the raw MS data, note that it will need
   - Will start on section for QC after visualisation
   - I would like to add an option to do the pair-wise comparison in MSstats instead of the matrix
   - Download plot from visualisation
+  - Import .rda files as opposed to calculating from scratch again
+  - Better progress bars for slow processes
+  - Export log files of the MSstats functions, and export a txt document describing the settings used
   
 ## Completed issues
   - Add copyright to repository/scripts
