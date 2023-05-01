@@ -6,6 +6,7 @@
 library(shiny)
 library(MSstats)
 library(tidyverse)
+library(ComplexHeatmap)
 
 # Setting option to increase allowed file size to 30MB, I will probably have to increase this further
 options(shiny.maxRequestSize=30*1024^3)
@@ -221,6 +222,20 @@ output$outliers <- renderText(paste("There are", length(which(MSstats_comparison
                 multiple = FALSE)
   })
   
+# Reactive variables
+# create a matrix of protein abundance
+prot_mat <- reactive(
+  MSstats_processed()$ProteinLevelData %>%
+    select(Protein, originalRUN, LogIntensities) %>%
+    pivot_wider(names_from = originalRUN, values_from = LogIntensities),
+  # set row names as the proteins
+  rownames(prot_mat) <- prot_mat$Protein,
+  # convert to matrix and remove row of protein names
+  prot_mat <- prot_mat[,-1] %>% as.matrix())
+
+#create annotations for sample type
+column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
+
   # Set colours as a named vector - for use in volcano plot
   colours <- c("red", "blue", "black") 
   names(colours) <- c("Upregulated", "Downregulated", "Not significant")
@@ -241,7 +256,17 @@ output$outliers <- renderText(paste("There are", length(which(MSstats_comparison
   
   # Make heatmap
   heatmap_plot <- eventReactive(input$go_plot, {
-    
+    #create heatmap of gene expression, scaled rows (genes)
+    t(scale(t(prot_mat()))) %>% 
+      Heatmap(
+        row_title = "Proteins",
+        column_title = "Unfiltered proteome heatmap",
+        show_row_dend = FALSE,
+        show_column_dend = TRUE, 
+        column_names_gp = gpar(fontsize = 8),
+        bottom_annotation = column_ha(),
+        show_row_names = FALSE,
+        show_heatmap_legend = FALSE)
   })
   
   # Make PCA
