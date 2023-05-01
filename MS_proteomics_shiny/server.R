@@ -217,7 +217,7 @@ output$outliers <- renderText(paste("There are", length(which(MSstats_comparison
   # Reactive UI
   output$select_comparison <- renderUI({
     selectInput("comparison_selected", "Comparison to plot",
-                choices = rownames(comparison_matrix_updated()[-1, , drop = FALSE]),
+                choices = sort(unique(MSstats_results()$Label)),
                 multiple = FALSE)
   })
   
@@ -335,6 +335,23 @@ output$outliers <- renderText(paste("There are", length(which(MSstats_comparison
       saveRDS(MSstats_test(), file = file)
     }
   )
+  
+  output$plot_download <- downloadHandler(
+    filename = switch(input$plot_type,
+                      Volcano = paste0(input$comparison_selected, " volcano plot", ".png"),
+                      PCA = "PCA plot.png",
+                      Heatmap = "Heatmap.png"),
+    content = function(file) {
+      device <- function() {
+        grDevices::png(width = input$plot_width, height = input$plot_height, units = "mm", res = 600)
+      }
+      ggsave(file,
+             plot = switch(input$plot_type,
+                           Volcano = { volcano_plot() },
+                           PCA = { pca_plot() },
+                           Heatmap = { heatmap_plot() }),
+             device = device)
+    })
   
   # Close the server
   }

@@ -208,7 +208,10 @@ tabPanel("Process",
       conditionalPanel(condition = "input.plot_type == 'Volcano'",
         uiOutput("select_comparison")),
       actionButton("go_plot", "Plot!"),
-      hr(style = "border-top: 2px solid #000000;")
+      hr(style = "border-top: 2px solid #000000;"),
+      numericInput("plot_width", "Plot width (mm)", value = 240),
+      numericInput("plot_height", "Plot height (mm)", value = 160),
+      downloadButton("plot_download", "Download plot")
     ),
     
     mainPanel(
