@@ -223,15 +223,19 @@ output$outliers <- renderText(paste("There are", length(which(MSstats_comparison
   })
   
 # Reactive variables
-# create a matrix of protein abundance
-prot_mat <- reactive(
-  MSstats_processed()$ProteinLevelData %>%
-    select(Protein, originalRUN, LogIntensities) %>%
-    pivot_wider(names_from = originalRUN, values_from = LogIntensities),
-  # set row names as the proteins
-  rownames(prot_mat) <- prot_mat$Protein,
-  # convert to matrix and remove row of protein names
-  prot_mat <- prot_mat[,-1] %>% as.matrix())
+plot_height <- reactive(input$plot_height)
+plot_width <- reactive(input$plot_width)
+
+
+# # create a matrix of protein abundance
+# prot_mat <- reactive(
+#   MSstats_processed()$ProteinLevelData %>%
+#     select(Protein, originalRUN, LogIntensities) %>%
+#     pivot_wider(names_from = originalRUN, values_from = LogIntensities)[,-1] %>%
+#     as.matrix())
+# 
+# # set row names as the proteins
+# observe(rownames(prot_mat()) <- prot_mat()$Protein)
 
 #create annotations for sample type
 column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
@@ -363,7 +367,7 @@ column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
   
   output$plot_download <- downloadHandler(
     filename = switch(input$plot_type,
-                      Volcano = paste0(input$comparison_selected, " volcano plot", ".png"),
+                      Volcano = paste0(input$comparison_selected, " volcano plot.png"),
                       PCA = "PCA plot.png",
                       Heatmap = "Heatmap.png"),
     content = function(file) {
