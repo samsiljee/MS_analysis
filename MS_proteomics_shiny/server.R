@@ -12,7 +12,13 @@ library(ComplexHeatmap)
 options(shiny.maxRequestSize=30*1024^3)
 
 server <- function(input, output, session){
-
+ # Packages
+  if (!require(ggplot2)) {
+    install.packages("ggplot2")
+    library(ggplot2)
+  }
+  
+  
 # Input ----
 # Set reactive values
   
@@ -225,7 +231,14 @@ output$outliers <- renderText(paste("There are", length(which(MSstats_comparison
 # Reactive variables
 plot_height <- reactive(input$plot_height)
 plot_width <- reactive(input$plot_width)
-
+selected_theme <- reactive({
+  switch(input$select_theme,
+         "B&W" = theme_bw(),
+         "Gray" = theme_gray(),
+         "Classic" = theme_classic(),
+         "Minimal" = theme_minimal(),
+         "Void" = theme_void())
+})
 
 # # create a matrix of protein abundance
 # prot_mat <- reactive(
@@ -278,13 +291,16 @@ column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
     
   })
   
+
+  
   # Output
   output$plot <- renderPlot({
-    switch(input$plot_type,
-      Volcano = { volcano_plot() },
-      PCA = { pca_plot() },
-      Heatmap = { heatmap_plot() }
-    )
+    plot_obj <- switch(input$plot_type,
+                       Volcano = volcano_plot(),
+                       PCA = pca_plot(),
+                       Heatmap = heatmap_plot()) +
+      selected_theme()
+    return(plot_obj)
   })
   
 #Testing ----
@@ -365,22 +381,38 @@ column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
     }
   )
   
+  # Download the plot
   output$plot_download <- downloadHandler(
     filename = switch(input$plot_type,
                       Volcano = paste0(input$comparison_selected, " volcano plot.png"),
                       PCA = "PCA plot.png",
                       Heatmap = "Heatmap.png"),
     content = function(file) {
-      device <- function() {
-        grDevices::png(width = input$plot_width, height = input$plot_height, units = "mm", res = 600)
+      device <- function(filename) {
+        grDevices::png(
+          filename = filename,
+          width = input$plot_width,
+          height = input$plot_height,
+          units = "mm",
+          res = 600,
+          bg = "white"
+        )
       }
-      ggsave(file,
-             plot = switch(input$plot_type,
-                           Volcano = { volcano_plot() },
-                           PCA = { pca_plot() },
-                           Heatmap = { heatmap_plot() }),
-             device = device)
-    })
+      plot_obj <- switch(input$plot_type,
+                         Volcano = volcano_plot(),
+                         PCA = pca_plot(),
+                         Heatmap = heatmap_plot()) +
+        selected_theme()
+      
+      print(plot_obj)
+      ggplot2::ggsave(
+        file = file,
+        plot = plot_obj,
+        device = device
+      )
+    }
+  )
+  
   
   # Close the server
   }
