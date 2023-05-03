@@ -5,8 +5,12 @@
 # Packages ----
 library(shiny)
 library(MSstats)
-library(tidyverse)
 library(ComplexHeatmap)
+
+if (!require(dplyr)) {
+  install.packages("dplyr")
+  library(dplyr)
+} 
 
 # Setting option to increase allowed file size to 30MB, I will probably have to increase this further
 options(shiny.maxRequestSize=30*1024^3)
@@ -17,7 +21,6 @@ server <- function(input, output, session){
     install.packages("ggplot2")
     library(ggplot2)
   }
-  
   
 # Input ----
 # Set reactive values
@@ -38,7 +41,7 @@ server <- function(input, output, session){
       input$PSMs$datapath,
       header = TRUE,
       sep = input$PSMs_sep) %>%
-      # rename columns as required by MSstats
+      # rename columns as required by `MSstats`
       mutate(
         ProteinGroupAccessions = .$Master.Protein.Accessions,
         PrecursorArea = .$Precursor.Abundance,
@@ -240,15 +243,15 @@ selected_theme <- reactive({
          "Void" = theme_void())
 })
 
-# # create a matrix of protein abundance
-# prot_mat <- reactive(
-#   MSstats_processed()$ProteinLevelData %>%
-#     select(Protein, originalRUN, LogIntensities) %>%
-#     pivot_wider(names_from = originalRUN, values_from = LogIntensities)[,-1] %>%
-#     as.matrix())
-# 
-# # set row names as the proteins
-# observe(rownames(prot_mat()) <- prot_mat()$Protein)
+# create a matrix of protein abundance
+prot_mat <- reactive(
+  MSstats_processed()$ProteinLevelData %>%
+    select(Protein, originalRUN, LogIntensities) %>%
+    pivot_wider(names_from = originalRUN, values_from = LogIntensities)[,-1] %>%
+    as.matrix())
+
+# set row names as the proteins
+observe(rownames(prot_mat()) <- prot_mat()$Protein)
 
 #create annotations for sample type
 column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
@@ -304,6 +307,8 @@ column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
   })
   
 #Testing ----
+  
+  output$test <- renderText(colnames(MSstats_processed()$ProteinLevelData))
   
 # Downloads ----
   #Formatted data tables
