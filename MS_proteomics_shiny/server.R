@@ -381,37 +381,53 @@ column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
     }
   )
   
+  # Calculate width and height in pixels
+  width_in <- reactive(input$plot_width/25.4)
+  height_in <- reactive(input$plot_height/25.4)
+  
+  # Download the plot
   # Download the plot
   output$plot_download <- downloadHandler(
     filename = switch(input$plot_type,
                       Volcano = paste0(input$comparison_selected, " volcano plot.png"),
                       PCA = "PCA plot.png",
                       Heatmap = "Heatmap.png"),
+    
     content = function(file) {
+      # Define the device function
       device <- function(filename) {
         grDevices::png(
           filename = filename,
-          width = input$plot_width,
-          height = input$plot_height,
-          units = "mm",
+          width = width_in(),
+          height = height_in(),
           res = 600,
           bg = "white"
         )
       }
+      
+      # Create the plot object
       plot_obj <- switch(input$plot_type,
                          Volcano = volcano_plot(),
                          PCA = pca_plot(),
                          Heatmap = heatmap_plot()) +
         selected_theme()
       
-      print(plot_obj)
+      # Save the plot object to the PNG file
       ggplot2::ggsave(
         file = file,
         plot = plot_obj,
-        device = device
+        device = device,
+        bg = "white",
+        width = width_in(),
+        height = height_in()
       )
-    }
+    },
+    
+    contentType = "image/png"
+    
   )
+  
+  
   
   
   # Close the server
