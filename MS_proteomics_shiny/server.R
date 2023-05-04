@@ -261,7 +261,7 @@ prot_mat <- reactive({
     select(Protein, originalRUN, LogIntensities) %>%
     pivot_wider(names_from = originalRUN, values_from = LogIntensities)
   rownames(df) <- df$Protein
-  df <- df[,-1] %>% as.matrix() %>% na.omit()
+  df <- df[,-1] %>% as.matrix()
   df
   })
 
@@ -289,7 +289,7 @@ column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
   # Make heatmap
   heatmap_plot <- eventReactive(input$go_plot, {
     #create heatmap of gene expression, scaled rows (genes)
-    t(scale(t(prot_mat()))) %>% 
+    t(scale(t(na.omit(prot_mat())))) %>% 
       Heatmap(
         row_title = "Proteins",
         column_title = "Unfiltered proteome heatmap",
