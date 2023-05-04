@@ -11,7 +11,7 @@ ui <- navbarPage(
 # Instructions ----
 
   tabPanel("Instructions",
-           dataTableOutput("test"),
+           imageOutput("test"),
     "Welcome to my proteomics analysis pipeline.",
     "Please move sequentially through the tabs to complete the analysis.", br(),
     "Please prepare an annotations file with the columns \"Run\", \"Condition\", and \"BioReplicate\" (Case sensitive). the Run column should contain the raw file names for each MS run, including the .raw extension. Save it as a .csv file."),

@@ -257,10 +257,15 @@ selected_theme <- reactive({
 
 # create a matrix of protein abundance for use in heatmap
 prot_mat <- reactive({
-  MSstats_processed()$ProteinLevelData %>%
+  df <- MSstats_processed()$ProteinLevelData %>%
     select(Protein, originalRUN, LogIntensities) %>%
     pivot_wider(names_from = originalRUN, values_from = LogIntensities)
+  rownames(df) <- df$Protein
+  df <- df[,-1] %>% as.matrix()
+  df
   })
+
+
 
 #create annotations for sample type
 column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
@@ -317,7 +322,7 @@ column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
   
 #Testing ----
   
-  output$test <- renderDataTable(prot_mat())
+  output$test <- renderImage(heatmap_plot())
   
 # Downloads ----
   #Formatted data tables
