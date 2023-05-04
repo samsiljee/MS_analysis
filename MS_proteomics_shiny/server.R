@@ -7,10 +7,7 @@ library(shiny)
 library(MSstats)
 library(ComplexHeatmap)
 
-if (!require(dplyr)) {
-  install.packages("dplyr")
-  library(dplyr)
-} 
+ 
 
 # Setting option to increase allowed file size to 30MB, I will probably have to increase this further
 options(shiny.maxRequestSize=30*1024^3)
@@ -20,6 +17,21 @@ server <- function(input, output, session){
   if (!require(ggplot2)) {
     install.packages("ggplot2")
     library(ggplot2)
+  }
+  
+  if (!require(tidyr)) {
+    install.packages("tidyr")
+    library(tidyr)
+  }
+  
+  if (!require(dplyr)) {
+    install.packages("dplyr")
+    library(dplyr)
+  }
+  
+  if (!require(tibble)) {
+    install.packages("tibble")
+    library(tibble)
   }
   
 # Input ----
@@ -243,15 +255,12 @@ selected_theme <- reactive({
          "Void" = theme_void())
 })
 
-# create a matrix of protein abundance
-prot_mat <- reactive(
+# create a matrix of protein abundance for use in heatmap
+prot_mat <- reactive({
   MSstats_processed()$ProteinLevelData %>%
     select(Protein, originalRUN, LogIntensities) %>%
-    pivot_wider(names_from = originalRUN, values_from = LogIntensities)[,-1] %>%
-    as.matrix())
-
-# set row names as the proteins
-observe(rownames(prot_mat()) <- prot_mat()$Protein)
+    pivot_wider(names_from = originalRUN, values_from = LogIntensities)
+  })
 
 #create annotations for sample type
 column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
@@ -308,7 +317,7 @@ column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
   
 #Testing ----
   
-  output$test <- renderText(colnames(MSstats_processed()$ProteinLevelData))
+  output$test <- renderDataTable(prot_mat())
   
 # Downloads ----
   #Formatted data tables
