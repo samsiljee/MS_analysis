@@ -261,7 +261,7 @@ prot_mat <- reactive({
     select(Protein, originalRUN, LogIntensities) %>%
     pivot_wider(names_from = originalRUN, values_from = LogIntensities)
   rownames(df) <- df$Protein
-  df <- df[,-1] %>% as.matrix()
+  df <- df[,-1] %>% as.matrix() %>% na.omit()
   df
   })
 
