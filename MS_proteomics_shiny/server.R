@@ -265,8 +265,6 @@ prot_mat <- reactive({
   df
   })
 
-
-
 #create annotations for sample type
 column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
 
@@ -305,24 +303,24 @@ column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
   
   # Make PCA
   pca_plot <- eventReactive(input$go_plot, {
-    # pca <- prcomp(t(count_mat), center = TRUE, scale. = TRUE)
-    # pca_dat <- merge(pca$x, meta_data, by = "row.names")
-    # 
-    # #plot eigen values
-    # eigen_plot <- fviz_eig(pca) + ggtitle("Eigen value plot of Rosalind data")
-    # 
-    # eigen_plot
-    # 
-    # #save plot
-    # ggsave(plot = eigen_plot, filename = paste0(dir, "/", "Rosalind_Eigen_value_plot.png"), device = "png")
-    # 
-    # #plot first two PCs
-    # pca_plot <- ggplot(pca_dat, aes(x = PC1, y = PC2, colour = Condition)) + geom_point() + ggtitle("PCA plot of Rosalind data")
-    # 
-    # pca_plot
-  })
-  
+    pca <- prcomp(t(prot_mat()), center = TRUE, scale. = TRUE)
+    pca_dat <- merge(pca$x, annot_col(), by.x = "row.names", by.y = "Run")
 
+    #plot eigen values
+    eigen_plot <- fviz_eig(pca) + ggtitle("Eigen value plot of Rosalind data")
+
+  #  eigen_plot
+
+    #save plot
+ #   ggsave(plot = eigen_plot, filename = paste0(dir, "/", "Rosalind_Eigen_value_plot.png"), device = "png")
+
+    #plot first two PCs
+    pca_plot <- ggplot(pca_dat, aes(x = PC1, y = PC2, colour = Condition)) +
+      geom_point() +
+      ggtitle("PCA plot")
+
+    pca_plot
+  })
   
   # Output
   output$plot <- renderPlot({
@@ -336,7 +334,7 @@ column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
   
 #Testing ----
   
-  output$test <- renderImage(heatmap_plot())
+  output$test <- renderTable(prot_mat())
   
 # Downloads ----
   #Formatted data tables
