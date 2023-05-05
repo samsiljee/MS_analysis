@@ -260,13 +260,24 @@ prot_mat <- reactive({
   df <- MSstats_processed()$ProteinLevelData %>%
     select(Protein, originalRUN, LogIntensities) %>%
     pivot_wider(names_from = originalRUN, values_from = LogIntensities)
-  rownames(df) <- df$Protein
-  df <- df[,-1] %>% as.matrix()
-  df
+  df_mat <- as.matrix(df[,-1])
+  row.names(df_mat) <- df$Protein
+  df_mat
   })
 
 #create annotations for sample type
 column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
+
+# Do PCA analysis
+# Do PCA analysis
+pca <- reactive({
+  pca_result <- prcomp(t(na.omit(prot_mat())), center = TRUE, scale. = TRUE)
+  print(pca_result)
+  pca_result
+})
+
+pca_dat <- reactive(merge(pca()$x, annot_col(), by.x = "row.names", by.y = "Run"))
+
 
   # Set colours as a named vector - for use in volcano plot
   colours <- c("red", "blue", "black") 
@@ -303,19 +314,11 @@ column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
   
   # Make PCA
   pca_plot <- eventReactive(input$go_plot, {
-    pca <- prcomp(t(prot_mat()), center = TRUE, scale. = TRUE)
-    pca_dat <- merge(pca$x, annot_col(), by.x = "row.names", by.y = "Run")
-
     #plot eigen values
     eigen_plot <- fviz_eig(pca) + ggtitle("Eigen value plot of Rosalind data")
 
-  #  eigen_plot
-
-    #save plot
- #   ggsave(plot = eigen_plot, filename = paste0(dir, "/", "Rosalind_Eigen_value_plot.png"), device = "png")
-
     #plot first two PCs
-    pca_plot <- ggplot(pca_dat, aes(x = PC1, y = PC2, colour = Condition)) +
+    pca_plot <- ggplot(pca_dat(), aes(x = PC1, y = PC2, colour = Condition)) +
       geom_point() +
       ggtitle("PCA plot")
 
@@ -334,7 +337,7 @@ column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
   
 #Testing ----
   
-  output$test <- renderTable(prot_mat())
+  output$test <- renderTable(pca_dat())
   
 # Downloads ----
   #Formatted data tables
