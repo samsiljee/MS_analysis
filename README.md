@@ -9,10 +9,11 @@ First section is to have a basic look at the raw MS data, note that it will need
 
 ### RAW DATA
   - Import raw data
-  - Quality control; import raw data in mzML format to look at chromatograms using R. I'm sure there are many more quality control things that can be 
+  - Quality control; import raw data in mzML format to look at chromatograms using R. I'm sure there are many more quality control things that can be
+  - Note that this was part of the initial workflow - analysing the raw data is not part of the current workflow, I may build this into a separate workflow at some point.
 
 ### PROTEOMICS
-  - Import results from Proteome Discoverer or Max Quant
+  - Import results from Proteome Discoverer or Max Quant - as PSMs
   - Review potential contaminants
   - QC plots; chromatograms
   - Normalisation in `MSstats`
@@ -43,11 +44,9 @@ First section is to have a basic look at the raw MS data, note that it will need
   - Biological network analysis
 
 ## Issues and to-do
-  - Currently working on fine-tuning some of the MSstats I/O options
+  - Currently working on fine-tuning some of the MSstats I/O options - global standards still to be done, otherwise I just need to check that the default values are sensible
   - Adding heatmap and PCA plot function
   - Will start on section for QC after visualisation
-  - I would like to add an option to do the pair-wise comparison in MSstats instead of the matrix
-  - Download plot from visualisation
   - Import .rda files as opposed to calculating from scratch again
   - Better progress bars for slow processes
   - Export log files of the MSstats functions, and export a txt document describing the settings used
@@ -56,6 +55,8 @@ First section is to have a basic look at the raw MS data, note that it will need
   - Add copyright to repository/scripts
   - Levels in the results of the group comparison is currently a number, this should be the name of the comparison - solved by changing from data frame to a named matrix
    - Current issues include getting reasonable results from the comparison output - solved by changing from data frame to a named matrix
+  - Pairwise comparison option added
+  - Plots now downloadable with options for DPI, dimensions, and with selected theme
 
 # License
 Feel free to use this code as you wish under the MIT license, however an anknowledgement would be nice. Thanks!
