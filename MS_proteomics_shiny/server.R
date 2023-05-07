@@ -265,19 +265,13 @@ prot_mat <- reactive({
   df_mat
   })
 
-#create annotations for sample type
+#create heatmap annotations for sample type
 column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
 
 # Do PCA analysis
-# Do PCA analysis
-pca <- reactive({
-  pca_result <- prcomp(t(na.omit(prot_mat())), center = TRUE, scale. = TRUE)
-  print(pca_result)
-  pca_result
-})
+pca <- reactive(prcomp(t(na.omit(prot_mat())), center = TRUE, scale. = TRUE))
 
 pca_dat <- reactive(merge(pca()$x, annot_col(), by.x = "row.names", by.y = "Run"))
-
 
   # Set colours as a named vector - for use in volcano plot
   colours <- c("red", "blue", "black") 
@@ -419,47 +413,56 @@ pca_dat <- reactive(merge(pca()$x, annot_col(), by.x = "row.names", by.y = "Run"
   width_in <- reactive(input$plot_width/25.4)
   height_in <- reactive(input$plot_height/25.4)
   
-  # Download the plot
-  # Download the plot
+  # Download the plot new code
   output$plot_download <- downloadHandler(
-    filename = switch(input$plot_type,
-                      Volcano = paste0(input$comparison_selected, " volcano plot.png"),
-                      PCA = "PCA plot.png",
-                      Heatmap = "Heatmap.png"),
-    
-    content = function(file) {
-      # Define the device function
-      device <- function(filename) {
-        grDevices::png(
-          filename = filename,
-          width = width_in(),
-          height = height_in(),
-          res = 600,
-          bg = "white"
-        )
-      }
-      
-      # Create the plot object
-      plot_obj <- switch(input$plot_type,
-                         Volcano = volcano_plot(),
-                         PCA = pca_plot(),
-                         Heatmap = heatmap_plot()) +
-        selected_theme()
-      
-      # Save the plot object to the PNG file
-      ggplot2::ggsave(
-        file = file,
-        plot = plot_obj,
-        device = device,
-        bg = "white",
-        width = width_in(),
-        height = height_in()
-      )
-    },
-    
-    contentType = "image/png"
-    
+    filename = function(){
+      paste0("volcano",".png")
+      },
+    content = function(file){
+      ggsave(file,plot=volcano_plot())
+    }
   )
+  
+  # Download the plot old code
+  # output$plot_download <- downloadHandler(
+  #   filename = switch(input$plot_type,
+  #                     Volcano = paste0(input$comparison_selected, " volcano plot.png"),
+  #                     PCA = "PCA plot.png",
+  #                     Heatmap = "Heatmap.png"),
+  #   
+  #   content = function(file) {
+  #     # Define the device function
+  #     device <- function(filename) {
+  #       grDevices::png(
+  #         filename = filename,
+  #         width = width_in(),
+  #         height = height_in(),
+  #         res = 600,
+  #         bg = "white"
+  #       )
+  #     }
+  #     
+  #     # Create the plot object
+  #     plot_obj <- switch(input$plot_type,
+  #                        Volcano = volcano_plot(),
+  #                        PCA = pca_plot(),
+  #                        Heatmap = heatmap_plot()) +
+  #       selected_theme()
+  #     
+  #     # Save the plot object to the PNG file
+  #     ggplot2::ggsave(
+  #       file = file,
+  #       plot = plot_obj,
+  #       device = device,
+  #       bg = "white",
+  #       width = width_in(),
+  #       height = height_in()
+  #     )
+  #   },
+  #   
+  #   contentType = "image/png"
+  #   
+  # )
   
   
   
