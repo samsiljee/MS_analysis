@@ -45,11 +45,12 @@ First section is to have a basic look at the raw MS data, note that it will need
 
 ## Issues and to-do
   - Currently working on fine-tuning some of the MSstats I/O options - global standards still to be done, otherwise I just need to check that the default values are sensible
-  - Adding heatmap and PCA plot function
+  - Adding heatmap function
   - Will start on section for QC after visualisation
   - Import .rda files as opposed to calculating from scratch again
   - Better progress bars for slow processes
   - Export log files of the MSstats functions, and export a txt document describing the settings used
+  - PCA plot added, initially not working because `row.names(pca()$x)` and `annot_col()$Run` were different. Fixed by adding a pca_ref column to annot_col and adjusting as needed to match the names of the pca output.
   
 ## Completed issues
   - Add copyright to repository/scripts
