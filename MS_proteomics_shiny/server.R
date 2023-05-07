@@ -38,10 +38,13 @@ server <- function(input, output, session){
 # Set reactive values
   
   annot_col <- reactive({
-    if (!is.null(input$annotations)) {
-      read.table(input$annotations$datapath,
+    df <- if (!is.null(input$annotations)) {
+      df <- read.table(input$annotations$datapath,
                  header = TRUE,
                  sep = input$annotations_sep)
+      df$pca_ref <- str_trim(as.character(df$Run))
+      df$pca_ref <- gsub(".", "", df$pca_ref, fixed = TRUE)
+      df
     } else {
       data.frame()
     }
@@ -271,7 +274,7 @@ column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
 # Do PCA analysis
 pca <- reactive(prcomp(t(na.omit(prot_mat())), center = TRUE, scale. = TRUE))
 
-pca_dat <- reactive(merge(pca()$x, annot_col(), by.x = "row.names", by.y = "Run"))
+pca_dat <- reactive(merge(pca()$x, annot_col(), by.x = "row.names", by.y = "pca_ref"))
 
   # Set colours as a named vector - for use in volcano plot
   colours <- c("red", "blue", "black") 
@@ -308,8 +311,8 @@ pca_dat <- reactive(merge(pca()$x, annot_col(), by.x = "row.names", by.y = "Run"
   
   # Make PCA
   pca_plot <- eventReactive(input$go_plot, {
-    #plot eigen values
-    eigen_plot <- fviz_eig(pca) + ggtitle("Eigen value plot of Rosalind data")
+    #plot eigen values - add in later if desired
+ #   eigen_plot <- fviz_eig(pca) + ggtitle("Eigen value plot of Rosalind data")
 
     #plot first two PCs
     pca_plot <- ggplot(pca_dat(), aes(x = PC1, y = PC2, colour = Condition)) +
