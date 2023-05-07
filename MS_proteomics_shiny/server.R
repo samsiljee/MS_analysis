@@ -419,6 +419,7 @@ pca_dat <- reactive(merge(pca()$x, annot_col(), by.x = "row.names", by.y = "Run"
              plot = volcano_plot(),
              width = input$plot_width,
              height = input$plot_height,
+             dpi = input$plot_dpi,
              units = "mm")
     }
   )

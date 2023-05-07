@@ -219,6 +219,7 @@ tabPanel("Process",
       hr(style = "border-top: 2px solid #000000;"),
       numericInput("plot_width", "Plot width (mm)", value = 240),
       numericInput("plot_height", "Plot height (mm)", value = 160),
+      numericInput("plot_dpi", "DPI", value = 600),
       downloadButton("plot_download", "Download plot")
     ),
     
