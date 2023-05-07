@@ -411,12 +411,21 @@ pca_dat <- reactive(merge(pca()$x, annot_col(), by.x = "row.names", by.y = "Run"
   
   # Download plot
   output$plot_download <- downloadHandler(
+    
     filename = function(){
-      paste0("volcano",".png")
+      switch(input$plot_type,
+        Volcano = paste0(input$comparison_selected, "_Volcano.png"),
+        PCA = "PCA.png",
+        Heatmap = "Heatmap.png")
       },
     content = function(file){
       ggsave(file,
-             plot = volcano_plot(),
+             plot = switch(
+               input$plot_type,
+               Volcano = volcano_plot(),
+               PCA = pca_plot(),
+               Heatmap = heatmap_plot()) +
+                 selected_theme(),
              width = input$plot_width,
              height = input$plot_height,
              dpi = input$plot_dpi,
