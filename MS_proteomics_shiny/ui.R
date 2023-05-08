@@ -29,22 +29,10 @@ ui <- navbarPage(
       fileInput("annotations", "Annotations file",
         buttonLabel = "Browse",
         placeholder = "Upload annotations file here"),
-      radioButtons("annotations_sep", "Separator",
-        choices = c(
-          Tab = "\t",
-          Comma = ",",
-          Semicolon = ";"),
-        selected = ","),
       hr(style = "border-top: 2px solid #000000;"),
       fileInput("PSMs", "PSMs file",
         buttonLabel = "Browse",
-        placeholder = "Upload PSMs file here"),
-      radioButtons("PSMs_sep", "Separator",
-        choices = c(
-          Tab = "\t",
-          Comma = ",",
-          Semicolon = ";"),
-                   selected = "\t")),
+        placeholder = "Upload PSMs file here")),
     
     mainPanel(
       h3("Annotations"),

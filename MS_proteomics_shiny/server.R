@@ -6,6 +6,7 @@
 library(shiny)
 library(MSstats)
 library(ComplexHeatmap)
+library(vroom)
 
  
 
@@ -44,9 +45,7 @@ server <- function(input, output, session){
   
   annot_col <- reactive({
     df <- if (!is.null(input$annotations)) {
-      df <- read.table(input$annotations$datapath,
-                 header = TRUE,
-                 sep = input$annotations_sep)
+      df <- vroom(input$annotations$datapath)
       df$pca_ref <- str_trim(as.character(df$Run))
       df$pca_ref <- gsub(".", "", df$pca_ref, fixed = TRUE)
       df
@@ -57,15 +56,13 @@ server <- function(input, output, session){
   
   raw <- reactive({
     if (!is.null(input$PSMs)) {
-    read.table(
-      input$PSMs$datapath,
-      header = TRUE,
-      sep = input$PSMs_sep) %>%
+    df <- vroom(input$PSMs$datapath)
       # rename columns as required by `MSstats`
-      mutate(
-        ProteinGroupAccessions = .$Master.Protein.Accessions,
-        PrecursorArea = .$Precursor.Abundance,
-        Run = .$Spectrum.File)
+    df <-  mutate(df,
+        ProteinGroupAccessions = `Master.Protein.Accessions`,
+        PrecursorArea = `Precursor.Abundance`,
+        Run = `Spectrum.File`)
+    df
       } else {
         data.frame()
         }
