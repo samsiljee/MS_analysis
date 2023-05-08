@@ -7,6 +7,7 @@ library(shiny)
 library(MSstats)
 library(ComplexHeatmap)
 library(vroom)
+library(janitor)
 
  
 
@@ -46,6 +47,7 @@ server <- function(input, output, session){
   annot_col <- reactive({
     df <- if (!is.null(input$annotations)) {
       df <- vroom(input$annotations$datapath)
+      df <- clean_names(df)
       df$pca_ref <- str_trim(as.character(df$Run))
       df$pca_ref <- gsub(".", "", df$pca_ref, fixed = TRUE)
       df
@@ -56,7 +58,8 @@ server <- function(input, output, session){
   
   raw <- reactive({
     if (!is.null(input$PSMs)) {
-    df <- vroom(input$PSMs$datapath)
+    df <- vroom(input$PSMs$datapath, clean_names = janitor::clean_names)
+    df <- clean_names(df)
       # rename columns as required by `MSstats`
     df <-  mutate(df,
         ProteinGroupAccessions = `Master.Protein.Accessions`,
