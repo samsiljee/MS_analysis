@@ -29,6 +29,11 @@ server <- function(input, output, session){
     library(dplyr)
   }
   
+  if (!require(stringr)) {
+    install.packages("stringr")
+    library(stringr)
+  }
+  
   if (!require(tibble)) {
     install.packages("tibble")
     library(tibble)
@@ -247,8 +252,6 @@ output$outliers <- renderText(paste("There are", length(which(MSstats_comparison
   })
   
 # Reactive variables
-plot_height <- reactive(input$plot_height)
-plot_width <- reactive(input$plot_width)
 selected_theme <- reactive({
   switch(input$select_theme,
          "B&W" = theme_bw(),
@@ -260,9 +263,14 @@ selected_theme <- reactive({
 
 # create a matrix of protein abundance for use in heatmap
 prot_mat <- reactive({
-  df <- MSstats_processed()$ProteinLevelData %>%
-    select(Protein, originalRUN, LogIntensities) %>%
-    pivot_wider(names_from = originalRUN, values_from = LogIntensities)
+  df <- merge(
+    x = MSstats_processed()$ProteinLevelData,
+    y = annot_col(),
+    by.x = "originalRUN",
+    by.y = "pca_ref",
+    all.x = TRUE) %>%
+    select(Protein, Label, LogIntensities) %>%
+    pivot_wider(names_from = Label, values_from = LogIntensities)
   df_mat <- as.matrix(df[,-1])
   row.names(df_mat) <- df$Protein
   df_mat
@@ -273,7 +281,6 @@ column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
 
 # Do PCA analysis
 pca <- reactive(prcomp(t(na.omit(prot_mat())), center = TRUE, scale. = TRUE))
-
 pca_dat <- reactive(merge(pca()$x, annot_col(), by.x = "row.names", by.y = "pca_ref"))
 
   # Set colours as a named vector - for use in volcano plot
@@ -291,14 +298,15 @@ pca_dat <- reactive(merge(pca()$x, annot_col(), by.x = "row.names", by.y = "pca_
     scale_color_manual(values = colours) +
     ylab("-Log10(adjusted p-value)") +
     xlab("Log2 fold change") +
-    ggtitle(input$comparison_selected)
+    ggtitle(input$comparison_selected) +
+    selected_theme()
   })
   
   # Make heatmap
   heatmap_plot <- eventReactive(input$go_plot, {
-    #create heatmap of gene expression, scaled rows (genes)
-    t(scale(t(na.omit(prot_mat())))) %>% 
+    #create heatmap of gene expression, row scaling removed
       Heatmap(
+        matrix = t(scale(t(na.omit(prot_mat())))),
         row_title = "Proteins",
         column_title = "Unfiltered proteome heatmap",
         show_row_dend = FALSE,
@@ -318,8 +326,7 @@ pca_dat <- reactive(merge(pca()$x, annot_col(), by.x = "row.names", by.y = "pca_
     pca_plot <- ggplot(pca_dat(), aes(x = PC1, y = PC2, colour = Condition)) +
       geom_point() +
       ggtitle("PCA plot")
-
-    pca_plot
+    pca_plot + selected_theme()
   })
   
   # Output
@@ -327,14 +334,11 @@ pca_dat <- reactive(merge(pca()$x, annot_col(), by.x = "row.names", by.y = "pca_
     plot_obj <- switch(input$plot_type,
                        Volcano = volcano_plot(),
                        PCA = pca_plot(),
-                       Heatmap = heatmap_plot()) +
-      selected_theme()
+                       Heatmap = heatmap_plot())
     return(plot_obj)
   })
   
 #Testing ----
-  
-  output$test <- renderTable(pca_dat())
   
 # Downloads ----
   #Formatted data tables
@@ -427,8 +431,7 @@ pca_dat <- reactive(merge(pca()$x, annot_col(), by.x = "row.names", by.y = "pca_
                input$plot_type,
                Volcano = volcano_plot(),
                PCA = pca_plot(),
-               Heatmap = heatmap_plot()) +
-                 selected_theme(),
+               Heatmap = heatmap_plot()),
              width = input$plot_width,
              height = input$plot_height,
              dpi = input$plot_dpi,

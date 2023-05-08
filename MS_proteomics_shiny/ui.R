@@ -14,7 +14,13 @@ ui <- navbarPage(
            tableOutput("test"),
     "Welcome to my proteomics analysis pipeline.",
     "Please move sequentially through the tabs to complete the analysis.", br(),
-    "Please prepare an annotations file with the columns \"Run\", \"Condition\", and \"BioReplicate\" (Case sensitive). the Run column should contain the raw file names for each MS run, including the .raw extension. Save it as a .csv file."),
+    "Please prepare an annotations file with the columns (case sensitive):", br(),
+    "\"Run\" describing the filename of the raw data file", br(),
+    "\"Condition\" describing the experimental group", br(),
+    "\"BioReplicate\" describing the biological replicate.", br(),
+    "\"Fraction\" set all to 1 if no fractionation was done", br(),
+    "\"Label\" label to be used in plots", br(),
+    "Technical replicates are automatically detected. Save it as a .csv file."),
  
 # Input ----
 
