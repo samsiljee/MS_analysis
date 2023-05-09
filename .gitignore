@@ -4,6 +4,7 @@ input/*
 output/*
 *.log
 MS_analysis.Rproj
+MS_proteomics_shiny/server-PC-2204-GMR-07.R
 # Ignore reports produced on knitting
 MS_analysis_tutorial.html
 MS_analysis_chromatogram.html
