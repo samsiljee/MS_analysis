@@ -45,8 +45,8 @@ server <- function(input, output, session){
   annot_col <- reactive({
     df <- if (!is.null(input$annotations)) {
       df <- vroom(input$annotations$datapath)
-      df$pca_ref <- str_trim(as.character(df$Run))
-      df$pca_ref <- gsub(".", "", df$pca_ref, fixed = TRUE)
+      df$PcaRef <- str_trim(as.character(df$Run))
+      df$PcaRef <- gsub(".", "", df$PcaRef, fixed = TRUE)
       df
     } else {
       data.frame()
@@ -264,7 +264,7 @@ prot_mat <- reactive({
     x = MSstats_processed()$ProteinLevelData,
     y = annot_col(),
     by.x = "originalRUN",
-    by.y = "pca_ref",
+    by.y = "PcaRef",
     all.x = TRUE) %>%
     select(Protein, Label, LogIntensities) %>%
     pivot_wider(names_from = Label, values_from = LogIntensities)
@@ -278,7 +278,7 @@ column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
 
 # Do PCA analysis
 pca <- reactive(prcomp(t(na.omit(prot_mat())), center = TRUE, scale. = TRUE))
-pca_dat <- reactive(merge(pca()$x, annot_col(), by.x = "row.names", by.y = "pca_ref"))
+pca_dat <- reactive(merge(pca()$x, annot_col(), by.x = "row.names", by.y = "Label"))
 
   # Set colours as a named vector - for use in volcano plot
   colours <- c("red", "blue", "black") 
@@ -336,6 +336,8 @@ pca_dat <- reactive(merge(pca()$x, annot_col(), by.x = "row.names", by.y = "pca_
   })
   
 #Testing ----
+  
+  output$test <- renderTable(pca()$x, rownames = TRUE)
   
 # Downloads ----
   #Formatted data tables
