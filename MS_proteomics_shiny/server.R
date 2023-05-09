@@ -9,8 +9,6 @@ library(ComplexHeatmap)
 library(vroom)
 library(janitor)
 
- 
-
 # Setting option to increase allowed file size to 30MB, I will probably have to increase this further
 options(shiny.maxRequestSize=30*1024^3)
 
@@ -47,7 +45,6 @@ server <- function(input, output, session){
   annot_col <- reactive({
     df <- if (!is.null(input$annotations)) {
       df <- vroom(input$annotations$datapath)
-      df <- clean_names(df)
       df$pca_ref <- str_trim(as.character(df$Run))
       df$pca_ref <- gsub(".", "", df$pca_ref, fixed = TRUE)
       df
@@ -58,13 +55,13 @@ server <- function(input, output, session){
   
   raw <- reactive({
     if (!is.null(input$PSMs)) {
-    df <- vroom(input$PSMs$datapath, clean_names = janitor::clean_names)
-    df <- clean_names(df)
+    df <- vroom(input$PSMs$datapath)
+    df <- clean_names(df, case = "upper_camel")
       # rename columns as required by `MSstats`
-    df <-  mutate(df,
-        ProteinGroupAccessions = `Master.Protein.Accessions`,
-        PrecursorArea = `Precursor.Abundance`,
-        Run = `Spectrum.File`)
+   df <-  mutate(df,
+      ProteinGroupAccessions = MasterProteinAccessions,
+      PrecursorArea = PrecursorAbundance,
+      Run = SpectrumFile)
     df
       } else {
         data.frame()
