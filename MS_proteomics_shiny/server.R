@@ -56,13 +56,20 @@ server <- function(input, output, session){
   raw <- reactive({
     if (!is.null(input$PSMs)) {
     df <- vroom(input$PSMs$datapath)
+    switch(input$platform,
+           PD = {
     df <- clean_names(df, case = "upper_camel")
       # rename columns as required by `MSstats`
    df <-  mutate(df,
       ProteinGroupAccessions = MasterProteinAccessions,
       PrecursorArea = PrecursorAbundance,
       Run = SpectrumFile)
-    df
+   df
+   },
+           MQ = {
+             df 
+           }
+   )
       } else {
         data.frame()
         }
