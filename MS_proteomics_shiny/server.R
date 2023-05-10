@@ -43,7 +43,7 @@ server <- function(input, output, session){
 # Set reactive values
   
   annot_col <- reactive({
-    df <- if (!is.null(input$annotations)) {
+    if (!is.null(input$annotations)){
       df <- vroom(input$annotations$datapath)
       df$PcaRef <- str_trim(as.character(df$Run))
       df$PcaRef <- gsub(".", "", df$PcaRef, fixed = TRUE)
@@ -55,24 +55,32 @@ server <- function(input, output, session){
   
   raw <- reactive({
     if (!is.null(input$PSMs)) {
-    df <- vroom(input$PSMs$datapath)
-    switch(input$platform,
-           PD = {
-    df <- clean_names(df, case = "upper_camel")
-      # rename columns as required by `MSstats`
-   df <-  mutate(df,
-      ProteinGroupAccessions = MasterProteinAccessions,
-      PrecursorArea = PrecursorAbundance,
-      Run = SpectrumFile)
-   df
-   },
-           MQ = {
-             df 
-           }
-   )
-      } else {
-        data.frame()
-        }
+      switch(input$platform,
+        PD = {
+          df <- vroom(input$PSMs$datapath)
+          df <- clean_names(df, case = "upper_camel")
+          # rename columns as required by `MSstats
+          df <-  mutate(df,
+                        ProteinGroupAccessions = MasterProteinAccessions,
+                        PrecursorArea = PrecursorAbundance,
+                        Run = SpectrumFile)
+          df},
+        
+        MQ = {
+          df <- vroom(input$PSMs$datapath)
+          df}
+        )
+    } else {
+      data.frame()
+    }
+  })
+  
+  protein_groups <- reactive({
+    if (!is.null(input$proteinGroups)) {
+      vroom(input$proteinGroups$datapath)
+    } else{
+      data.frame()
+    }
   })
   
 # Generate output
@@ -80,6 +88,8 @@ server <- function(input, output, session){
   output$annotation_tab <- renderDataTable(annot_col())
     
   output$PSMs_tab <- renderDataTable(raw())
+  
+  output$proteinGroups_tab <- renderDataTable(protein_groups())
   
 # Format ----
   # Reactive values
@@ -100,16 +110,12 @@ server <- function(input, output, session){
           which.sequence = input$which.sequence,
           use_log_file = FALSE)
       }, # switch = PD
+      
     MQ = {
       MaxQtoMSstatsFormat(
         evidence = raw(),
         annotation = annot_col(),
-        proteinGroups = if (!is.null(input$protein_groups)) {
-          df <- vroom(input$proteinGroups$datapath)
-          df
-          } else {
-          NULL
-          },
+        proteinGroups = protein_groups(),
         proteinID = input$proteinID,
         useUniquePeptide = input$useUniquePeptide,
         summaryforMultipleRows = ifelse(input$summaryforMultipleRows == "max", max, sum),

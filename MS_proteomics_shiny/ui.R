@@ -41,7 +41,7 @@ ui <- navbarPage(
       conditionalPanel(
         condition = "input.platform == 'MQ'",
         hr(style = "border-top: 2px solid #000000;"),
-        fileInput("protein_groups", "MQ proteinGroups (optional)",
+        fileInput("proteinGroups", "MQ proteinGroups",
                   buttonLabel = "Browse",
                   placeholder = "Upload protein groups"))),
     
@@ -49,8 +49,13 @@ ui <- navbarPage(
       h3("Annotations"),
       withSpinner(dataTableOutput("annotation_tab")),
       hr(style = "border-top: 2px solid #000000;"),
-      h3("PSM data"),
-      withSpinner(dataTableOutput("PSMs_tab")))),
+      h3("PSM/evidence data"),
+      withSpinner(dataTableOutput("PSMs_tab")),
+      conditionalPanel(
+        condition = "input.platform == 'MQ'",
+        hr(style = "border-top: 2px solid #000000;"),
+        h3("Protein groups data"),
+        withSpinner(dataTableOutput("proteinGroups_tab"))))),
   
 # Format ----
 tabPanel("Format", "Pre-filter and format data for MSstats",
