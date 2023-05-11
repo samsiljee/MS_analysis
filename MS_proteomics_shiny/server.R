@@ -351,8 +351,12 @@ pca_dat <- reactive(merge(pca()$x, annot_col(), by.x = "row.names", by.y = "Expe
   heatmap_plot <- eventReactive(input$go_plot, {
     #create heatmap of gene expression, row scaling removed
       Heatmap(
-        matrix = prot_mat() %>%
-          na.omit() %>% t() %>% scale() %>% t(),
+        matrix = if(input$heatmap_filter == "Include all"){
+          prot_mat() %>%
+            na.omit() %>% t() %>% scale() %>% t()
+        } else {
+          prot_mat()[row.names(prot_mat()) %in% dif_proteins(),] %>%
+          na.omit() %>% t() %>% scale() %>% t()},
         row_title = "Proteins",
         column_title = "Unfiltered proteome heatmap",
         show_row_dend = FALSE,
