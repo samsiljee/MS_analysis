@@ -282,6 +282,12 @@ output$outliers <- renderText(paste("There are", length(which(MSstats_comparison
                 choices = sort(unique(MSstats_results()$Label)),
                 multiple = FALSE)
   })
+
+output$select_heatmap_filter <- renderUI({
+  selectInput("heatmap_filter", "Filter by differentially expressed proteins",
+              choices = c("Include all", sort(unique(MSstats_results()$Label))),
+              multiple = FALSE)
+})
   
 # Reactive variables
 selected_theme <- reactive({
@@ -372,7 +378,7 @@ pca_dat <- reactive(merge(pca()$x, annot_col(), by.x = "row.names", by.y = "Labe
   
 #Testing ----
   
-  output$test <- renderTable(pca()$x, rownames = TRUE)
+  output$test <- renderTable(MSstats_results() %>% filter())
   
 # Downloads ----
   #Formatted data tables

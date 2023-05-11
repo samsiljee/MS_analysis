@@ -53,6 +53,7 @@ A shiny app to analyse mass spectromtetry for proteomics data - from PSMs to vis
   - Will start on section for QC after visualisation
   - Better progress bars for slow processes
   - Export log files of the MSstats functions, and export a txt document describing the settings used
+  - Add reset to comparison matrix
   
 ## Completed issues
   - Add copyright to repository/scripts
