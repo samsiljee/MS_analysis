@@ -131,7 +131,7 @@ tabPanel("Process",
       textInput("nameStandards",
         "Named vector for standard peptides (not yet working)")),
       radioButtons("featureSubset",
-        "feature subset to use",
+        "Feature subset to use",
       choiceNames = c("All", "Top 3", "Top N", "High quality"),
       choiceValues = c("all", "top3", "topN", "highQuality")),
     conditionalPanel(

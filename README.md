@@ -56,7 +56,6 @@ A shiny app to analyse mass spectromtetry for proteomics data - from PSMs to vis
   - Add reset to comparison matrix
   - Use vroom to write .csv/.tsv output faster
 
-  
 ## Completed issues
   - Add copyright to repository/scripts
   - Levels in the results of the group comparison is currently a number, this should be the name of the comparison - solved by changing from data frame to a named matrix

@@ -306,7 +306,7 @@ dif_proteins <- reactive({
     as.character()
 })
 
-# create a matrix of protein abundance for use in heatmap
+# create a matrix of protein abundance for heatmap and PCA
 prot_mat <- reactive({
   df <- merge(
     x = MSstats_processed()$ProteinLevelData,
@@ -320,6 +320,16 @@ prot_mat <- reactive({
   row.names(df_mat) <- df$Protein
   df_mat
   })
+
+# Heatmap input matrix
+heatmap_input <- reactive({
+  df <- prot_mat() %>%
+    na.omit() %>% t() %>% scale() %>% t()
+  if(input$heatmap_filter == "Include all"){
+    df
+  } else {
+    df[row.names(df) %in% dif_proteins(),]}
+})
 
 #create heatmap annotations for sample type
 column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
@@ -351,12 +361,7 @@ pca_dat <- reactive(merge(pca()$x, annot_col(), by.x = "row.names", by.y = "Expe
   heatmap_plot <- eventReactive(input$go_plot, {
     #create heatmap of gene expression, row scaling removed
       Heatmap(
-        matrix = if(input$heatmap_filter == "Include all"){
-          prot_mat() %>%
-            na.omit() %>% t() %>% scale() %>% t()
-        } else {
-          prot_mat()[row.names(prot_mat()) %in% dif_proteins(),] %>%
-          na.omit() %>% t() %>% scale() %>% t()},
+        matrix = heatmap_input(),
         row_title = "Proteins",
         column_title = "Unfiltered proteome heatmap",
         show_row_dend = FALSE,
@@ -390,8 +395,7 @@ pca_dat <- reactive(merge(pca()$x, annot_col(), by.x = "row.names", by.y = "Expe
   
 #Testing ----
   
-  output$test <- renderDataTable(MSstats_results() %>%
-                                   filter(Protein %in% dif_proteins()))
+  output$test <- renderDataTable(prot_mat())
   
 # Downloads ----
   #Formatted data tables
