@@ -244,14 +244,14 @@ server <- function(input, output, session){
       use_log_file = FALSE)
   })
   
-  # Results of comparison, and some further processing
+  # Results of comparison, and adding up/downregulation
   MSstats_comparison_results <- reactive({
       MSstats_test()$ComparisonResult %>%
       mutate(Dif = ifelse(
-        MSstats_test()$ComparisonResult$log2FC > 1 & MSstats_test()$ComparisonResult$adj.pvalue < 0.05,
+        MSstats_test()$ComparisonResult$log2FC > input$FC_threshold & MSstats_test()$ComparisonResult$adj.pvalue < input$pvalue_threshold,
         "Upregulated",
         ifelse(
-          MSstats_test()$ComparisonResult$log2FC < -1 & MSstats_test()$ComparisonResult$adj.pvalue < 0.05,
+          MSstats_test()$ComparisonResult$log2FC < -input$FC_threshold & MSstats_test()$ComparisonResult$adj.pvalue < input$pvalue_threshold,
           "Downregulated",
           "Not significant")))
     })
@@ -324,8 +324,8 @@ pca_dat <- reactive(merge(pca()$x, annot_col(), by.x = "row.names", by.y = "Labe
     MSstats_results() %>%
     filter(Label == input$comparison_selected) %>%
     ggplot(aes(x = log2FC, y = -log10(adj.pvalue), col = Dif)) +
-    geom_vline(xintercept = c(-1, 1), linetype = "dashed", colour = "black") +
-    geom_hline(yintercept = -log10(0.05), linetype = "dashed", colour = "red") +
+    geom_vline(xintercept = c(-input$FC_threshold, input$FC_threshold), linetype = "dashed", colour = "black") +
+    geom_hline(yintercept = -log10(input$pvalue_threshold), linetype = "dashed", colour = "red") +
     geom_point(alpha = 0.25, show.legend = FALSE) +
     scale_color_manual(values = colours) +
     ylab("-Log10(adjusted p-value)") +
