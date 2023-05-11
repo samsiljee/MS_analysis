@@ -55,6 +55,7 @@ A shiny app to analyse mass spectromtetry for proteomics data - from PSMs to vis
   - Export log files of the MSstats functions, and export a txt document describing the settings used
   - Add reset to comparison matrix
   - Use vroom to write .csv/.tsv output faster
+  - Add option to change titles and axes
 
 ## Completed issues
   - Add copyright to repository/scripts
