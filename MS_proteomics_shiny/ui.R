@@ -11,7 +11,7 @@ ui <- navbarPage(
 # Instructions ----
 
   tabPanel("Instructions",
-           tableOutput("test"),
+           textOutput("test"),
     "Welcome to my proteomics analysis pipeline.",
     "Please move sequentially through the tabs to complete the analysis.", br(),
     "Please prepare an annotations file with the following columns (case sensitive):", br(),
@@ -19,7 +19,7 @@ ui <- navbarPage(
     "\"Condition\" describing the experimental group", br(),
     "\"BioReplicate\" describing the biological replicate.", br(),
     "\"Fraction\" set all to 1 if no fractionation was done", br(),
-    "\"Label\" label to be used in plots", br(),
+    "\"Experiment\" label to be used to identify the run in plots", br(),
     "Technical replicates are automatically detected. Save it as a csv or tsv file."),
  
 # Input ----
@@ -206,7 +206,7 @@ tabPanel("Process",
       hr(style = "border-top: 2px solid #000000;"),
       numericInput("FC_threshold", "Log 2 fold-change threshold",
                    value = 1),
-      numericInput("pvalue_threshold", "p-value threshold",
+      numericInput("pvalue_threshold", "Adjusted p-value threshold",
                    min = 0,
                    max = 1,
                    value = 0.05),

@@ -299,6 +299,12 @@ selected_theme <- reactive({
          "Void" = theme_void())
 })
 
+dif_proteins <- reactive({
+  MSstats_results() %>%
+    filter(Label == input$heatmap_filter & !Dif == "Not significant") %>%
+    .$Protein
+})
+
 # create a matrix of protein abundance for use in heatmap
 prot_mat <- reactive({
   df <- merge(
@@ -307,8 +313,8 @@ prot_mat <- reactive({
     by.x = "originalRUN",
     by.y = "PcaRef",
     all.x = TRUE) %>%
-    select(Protein, Label, LogIntensities) %>%
-    pivot_wider(names_from = Label, values_from = LogIntensities)
+    select(Protein, Experiment, LogIntensities) %>%
+    pivot_wider(names_from = Experiment, values_from = LogIntensities)
   df_mat <- as.matrix(df[,-1])
   row.names(df_mat) <- df$Protein
   df_mat
@@ -319,7 +325,7 @@ column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
 
 # Do PCA analysis
 pca <- reactive(prcomp(t(na.omit(prot_mat())), center = TRUE, scale. = TRUE))
-pca_dat <- reactive(merge(pca()$x, annot_col(), by.x = "row.names", by.y = "Label"))
+pca_dat <- reactive(merge(pca()$x, annot_col(), by.x = "row.names", by.y = "Experiment"))
 
   # Set colours as a named vector - for use in volcano plot
   colours <- c("red", "blue", "black") 
@@ -344,7 +350,8 @@ pca_dat <- reactive(merge(pca()$x, annot_col(), by.x = "row.names", by.y = "Labe
   heatmap_plot <- eventReactive(input$go_plot, {
     #create heatmap of gene expression, row scaling removed
       Heatmap(
-        matrix = t(scale(t(na.omit(prot_mat())))),
+        matrix = prot_mat() %>%
+          na.omit() %>% t() %>% scale() %>% t(),
         row_title = "Proteins",
         column_title = "Unfiltered proteome heatmap",
         show_row_dend = FALSE,
@@ -378,7 +385,7 @@ pca_dat <- reactive(merge(pca()$x, annot_col(), by.x = "row.names", by.y = "Labe
   
 #Testing ----
   
-  output$test <- renderTable(MSstats_results() %>% filter())
+  output$test <- renderText(dif_proteins())
   
 # Downloads ----
   #Formatted data tables
