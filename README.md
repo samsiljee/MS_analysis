@@ -50,11 +50,12 @@ A shiny app to analyse mass spectromtetry for proteomics data - from PSMs to vis
   - Currently working on fine-tuning some of the MSstats I/O options - global standards still to be done, otherwise I just need to check that the default values are sensible
   - Adding MaxQuant input capability
   - Will need to add option to disable automatic removal of potential contaminants from MQ data, do this by setting all values of the potential contaminant column to -ve before inputting into MaxQtoMSstatsFormat
-  - Will start on section for QC after visualisation
+  - QC section
   - Better progress bars for slow processes
   - Export log files of the MSstats functions, and export a txt document describing the settings used
   - Add reset to comparison matrix
   - Use vroom to write .csv/.tsv output faster
+
   
 ## Completed issues
   - Add copyright to repository/scripts
