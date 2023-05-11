@@ -455,21 +455,41 @@ pca_dat <- reactive(merge(pca()$x, annot_col(), by.x = "row.names", by.y = "Labe
     
     filename = function(){
       switch(input$plot_type,
-        Volcano = paste0(input$comparison_selected, "_Volcano.png"),
-        PCA = "PCA.png",
-        Heatmap = "Heatmap.png")
+        Volcano = paste0(input$comparison_selected, "_Volcano_", Sys.Date(), ".png"),
+        PCA = paste0("PCA_",Sys.Date(), ".png"),
+        Heatmap = paste0("Heatmap_", Sys.Date(), ".png"))
       },
+    
     content = function(file){
-      ggsave(file,
-             plot = switch(
-               input$plot_type,
-               Volcano = volcano_plot(),
-               PCA = pca_plot(),
-               Heatmap = heatmap_plot()),
-             width = input$plot_width,
-             height = input$plot_height,
-             dpi = input$plot_dpi,
-             units = "mm")
+      switch(input$plot_type,
+        Volcano = {
+          ggsave(file,
+                 plot = volcano_plot(),
+                 width = input$plot_width,
+                 height = input$plot_height,
+                 dpi = input$plot_dpi,
+                 units = "mm")
+        },
+        
+        PCA = {
+          ggsave(file,
+                 plot = pca_plot(),
+                 width = input$plot_width,
+                 height = input$plot_height,
+                 dpi = input$plot_dpi,
+                 units = "mm")
+        },
+        
+        Heatmap = {
+          png(file,
+              height = input$plot_height,
+              width = input$plot_width,
+              res = input$plot_dpi,
+              units= "mm")
+          draw(heatmap_plot())
+          dev.off()
+        }
+      )
     }
   )
   
