@@ -244,14 +244,14 @@ server <- function(input, output, session){
       use_log_file = FALSE)
   })
   
-  # Results of comparison, and some further processing
+  # Results of comparison, and adding up/downregulation
   MSstats_comparison_results <- reactive({
       MSstats_test()$ComparisonResult %>%
       mutate(Dif = ifelse(
-        MSstats_test()$ComparisonResult$log2FC > 1 & MSstats_test()$ComparisonResult$adj.pvalue < 0.05,
+        MSstats_test()$ComparisonResult$log2FC > input$FC_threshold & MSstats_test()$ComparisonResult$adj.pvalue < input$pvalue_threshold,
         "Upregulated",
         ifelse(
-          MSstats_test()$ComparisonResult$log2FC < -1 & MSstats_test()$ComparisonResult$adj.pvalue < 0.05,
+          MSstats_test()$ComparisonResult$log2FC < -input$FC_threshold & MSstats_test()$ComparisonResult$adj.pvalue < input$pvalue_threshold,
           "Downregulated",
           "Not significant")))
     })
@@ -282,6 +282,12 @@ output$outliers <- renderText(paste("There are", length(which(MSstats_comparison
                 choices = sort(unique(MSstats_results()$Label)),
                 multiple = FALSE)
   })
+
+output$select_heatmap_filter <- renderUI({
+  selectInput("heatmap_filter", "Filter by differentially expressed proteins",
+              choices = c("Include all", sort(unique(MSstats_results()$Label))),
+              multiple = FALSE)
+})
   
 # Reactive variables
 selected_theme <- reactive({
@@ -293,6 +299,13 @@ selected_theme <- reactive({
          "Void" = theme_void())
 })
 
+dif_proteins <- reactive({
+  MSstats_results() %>%
+    filter(Label == input$heatmap_filter & !Dif == "Not significant") %>%
+    .$Protein %>%
+    as.character()
+})
+
 # create a matrix of protein abundance for use in heatmap
 prot_mat <- reactive({
   df <- merge(
@@ -301,8 +314,8 @@ prot_mat <- reactive({
     by.x = "originalRUN",
     by.y = "PcaRef",
     all.x = TRUE) %>%
-    select(Protein, Label, LogIntensities) %>%
-    pivot_wider(names_from = Label, values_from = LogIntensities)
+    select(Protein, Experiment, LogIntensities) %>%
+    pivot_wider(names_from = Experiment, values_from = LogIntensities)
   df_mat <- as.matrix(df[,-1])
   row.names(df_mat) <- df$Protein
   df_mat
@@ -313,7 +326,7 @@ column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
 
 # Do PCA analysis
 pca <- reactive(prcomp(t(na.omit(prot_mat())), center = TRUE, scale. = TRUE))
-pca_dat <- reactive(merge(pca()$x, annot_col(), by.x = "row.names", by.y = "Label"))
+pca_dat <- reactive(merge(pca()$x, annot_col(), by.x = "row.names", by.y = "Experiment"))
 
   # Set colours as a named vector - for use in volcano plot
   colours <- c("red", "blue", "black") 
@@ -324,8 +337,8 @@ pca_dat <- reactive(merge(pca()$x, annot_col(), by.x = "row.names", by.y = "Labe
     MSstats_results() %>%
     filter(Label == input$comparison_selected) %>%
     ggplot(aes(x = log2FC, y = -log10(adj.pvalue), col = Dif)) +
-    geom_vline(xintercept = c(-1, 1), linetype = "dashed", colour = "black") +
-    geom_hline(yintercept = -log10(0.05), linetype = "dashed", colour = "red") +
+    geom_vline(xintercept = c(-input$FC_threshold, input$FC_threshold), linetype = "dashed", colour = "black") +
+    geom_hline(yintercept = -log10(input$pvalue_threshold), linetype = "dashed", colour = "red") +
     geom_point(alpha = 0.25, show.legend = FALSE) +
     scale_color_manual(values = colours) +
     ylab("-Log10(adjusted p-value)") +
@@ -338,7 +351,12 @@ pca_dat <- reactive(merge(pca()$x, annot_col(), by.x = "row.names", by.y = "Labe
   heatmap_plot <- eventReactive(input$go_plot, {
     #create heatmap of gene expression, row scaling removed
       Heatmap(
-        matrix = t(scale(t(na.omit(prot_mat())))),
+        matrix = if(input$heatmap_filter == "Include all"){
+          prot_mat() %>%
+            na.omit() %>% t() %>% scale() %>% t()
+        } else {
+          prot_mat()[row.names(prot_mat()) %in% dif_proteins(),] %>%
+          na.omit() %>% t() %>% scale() %>% t()},
         row_title = "Proteins",
         column_title = "Unfiltered proteome heatmap",
         show_row_dend = FALSE,
@@ -372,7 +390,8 @@ pca_dat <- reactive(merge(pca()$x, annot_col(), by.x = "row.names", by.y = "Labe
   
 #Testing ----
   
-  output$test <- renderTable(pca()$x, rownames = TRUE)
+  output$test <- renderDataTable(MSstats_results() %>%
+                                   filter(Protein %in% dif_proteins()))
   
 # Downloads ----
   #Formatted data tables
