@@ -302,7 +302,8 @@ selected_theme <- reactive({
 dif_proteins <- reactive({
   MSstats_results() %>%
     filter(Label == input$heatmap_filter & !Dif == "Not significant") %>%
-    .$Protein
+    .$Protein %>%
+    as.character()
 })
 
 # create a matrix of protein abundance for use in heatmap
@@ -385,7 +386,8 @@ pca_dat <- reactive(merge(pca()$x, annot_col(), by.x = "row.names", by.y = "Expe
   
 #Testing ----
   
-  output$test <- renderText(dif_proteins())
+  output$test <- renderDataTable(MSstats_results() %>%
+                                   filter(Protein %in% dif_proteins()))
   
 # Downloads ----
   #Formatted data tables

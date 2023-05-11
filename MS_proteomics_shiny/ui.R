@@ -11,7 +11,7 @@ ui <- navbarPage(
 # Instructions ----
 
   tabPanel("Instructions",
-           textOutput("test"),
+           dataTableOutput("test"),
     "Welcome to my proteomics analysis pipeline.",
     "Please move sequentially through the tabs to complete the analysis.", br(),
     "Please prepare an annotations file with the following columns (case sensitive):", br(),
