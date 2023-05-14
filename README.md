@@ -47,8 +47,8 @@ A shiny app to analyse mass spectromtetry for proteomics data - from PSMs to vis
   - Biological network analysis
 
 ## Issues and to-do
-  - Currently working on fine-tuning some of the MSstats I/O options - global standards still to be done, otherwise I just need to check that the default values are sensible
-  - Adding MaxQuant input capability
+  - Currently working on fine-tuning some of the MSstats I/O options - global standards still to be done, could potentially set Trypsin as the default for this
+  - Check that the default values are sensible - Discuss with appropriate bio-infomatician
   - Will need to add option to disable automatic removal of potential contaminants from MQ data, do this by setting all values of the potential contaminant column to -ve before inputting into MaxQtoMSstatsFormat
   - QC section
   - Better progress bars for slow processes
@@ -66,6 +66,7 @@ A shiny app to analyse mass spectromtetry for proteomics data - from PSMs to vis
   - Heatmap added and saving properly
   - Add options to set FC and pvalue cutoffs where desired
   - Use vroom to write .csv/.tsv output faster
+  - Added MaxQuant input capability
   
 # License
 Feel free to use this code as you wish under the MIT license, however an anknowledgement would be nice. Thanks!
