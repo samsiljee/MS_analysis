@@ -54,8 +54,8 @@ A shiny app to analyse mass spectromtetry for proteomics data - from PSMs to vis
   - Better progress bars for slow processes
   - Export log files of the MSstats functions, and export a txt document describing the settings used
   - Add reset to comparison matrix
-  - Use vroom to write .csv/.tsv output faster
   - Add option to change titles and axes
+  - Add in KEGG/GO term analysis, GSEA etc
 
 ## Completed issues
   - Add copyright to repository/scripts
@@ -66,6 +66,7 @@ A shiny app to analyse mass spectromtetry for proteomics data - from PSMs to vis
   - PCA plot added, initially not working because `row.names(pca()$x)` and `annot_col()$Run` were different. Fixed by adding a pca_ref column to annot_col and adjusting as needed to match the names of the pca output.
   - Heatmap added and saving properly
   - Add options to set FC and pvalue cutoffs where desired
+  - Use vroom to write output faster. Changed to .tsv output only
   
 # License
 Feel free to use this code as you wish under the MIT license, however an anknowledgement would be nice. Thanks!
