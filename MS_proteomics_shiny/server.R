@@ -68,6 +68,9 @@ server <- function(input, output, session){
         
         MQ = {
           df <- vroom(input$PSMs$datapath)
+          if(input$keep_contaminants) {
+            df$`Potential contaminant` <- NA
+          }
           df}
         )
     } else {

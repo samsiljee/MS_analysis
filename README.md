@@ -67,6 +67,7 @@ A shiny app to analyse mass spectromtetry for proteomics data - from PSMs to vis
   - Add options to set FC and pvalue cutoffs where desired
   - Use vroom to write .csv/.tsv output faster
   - Added MaxQuant input capability
+  - Added option to disable automatic removal of potential contaminants from MQ data, done by setting all values of the potential contaminant column to "NA" when loading raw data
   
 # License
 Feel free to use this code as you wish under the MIT license, however an anknowledgement would be nice. Thanks!

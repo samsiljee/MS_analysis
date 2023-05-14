@@ -40,6 +40,8 @@ ui <- navbarPage(
         placeholder = "Upload PSMs/evidence"),
       conditionalPanel(
         condition = "input.platform == 'MQ'",
+        checkboxInput("keep_contaminants", "Keep potential contaminants", 
+                      value = FALSE),
         hr(style = "border-top: 2px solid #000000;"),
         fileInput("proteinGroups", "MQ proteinGroups",
                   buttonLabel = "Browse",
