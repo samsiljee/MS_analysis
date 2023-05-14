@@ -68,6 +68,9 @@ server <- function(input, output, session){
         
         MQ = {
           df <- vroom(input$PSMs$datapath)
+          if(input$keep_contaminants) {
+            df$`Potential contaminant` <- NA
+          }
           df}
         )
     } else {
@@ -399,12 +402,12 @@ pca_dat <- reactive(merge(pca()$x, annot_col(), by.x = "row.names", by.y = "Expe
   
 # Downloads ----
   #Formatted data tables
-  output$formatted_csv <- downloadHandler(
+  output$formatted_tsv <- downloadHandler(
     filename = function() {
-      paste0("MSstats_formatted_", Sys.Date(), ".csv")
+      paste0("MSstats_formatted_", Sys.Date(), ".tsv")
     },
     content = function(file) {
-      write.csv(MSstats_input(), file)
+      vroom_write(MSstats_input(), file, delim = "\t")
     }
   )
   
@@ -418,21 +421,21 @@ pca_dat <- reactive(merge(pca()$x, annot_col(), by.x = "row.names", by.y = "Expe
   )
   
   #Processed data
-  output$processed_protein_csv <- downloadHandler(
+  output$processed_protein_tsv <- downloadHandler(
     filename = function() {
-      paste0("Processed_protein_data_", Sys.Date(), ".csv")
+      paste0("Processed_protein_data_", Sys.Date(), ".tsv")
     },
     content = function(file) {
-      write.csv(MSstats_processed()$ProteinLevelData, file)
+      vroom_write(MSstats_processed()$ProteinLevelData, file, delim = "\t")
     }
   )
   
-  output$processed_feature_csv <- downloadHandler(
+  output$processed_feature_tsv <- downloadHandler(
     filename = function() {
-      paste0("Processed_feature_data_", Sys.Date(), ".csv")
+      paste0("Processed_feature_data_", Sys.Date(), ".tsv")
     },
     content = function(file) {
-      write.csv(MSstats_processed()$FeatureLevelData, file)
+      vroom_write(MSstats_processed()$FeatureLevelData, file, delim = "\t")
     }
   )
   
@@ -446,21 +449,21 @@ pca_dat <- reactive(merge(pca()$x, annot_col(), by.x = "row.names", by.y = "Expe
   )
   
   # Comparison
-  output$results_csv <- downloadHandler(
+  output$results_tsv <- downloadHandler(
     filename = function() {
-      paste0("MSstats_results_", Sys.Date(), ".csv")
+      paste0("MSstats_results_", Sys.Date(), ".tsv")
     },
     content = function(file) {
-      write.csv(MSstats_results(), file)
+      vroom_write(MSstats_results(), file, delim = "\t")
     }
   )
   
-  output$model_qc_csv <- downloadHandler(
+  output$model_qc_tsv <- downloadHandler(
     filename = function() {
-      paste0("MSstats_model_QC_", Sys.Date(), ".csv")
+      paste0("MSstats_model_QC_", Sys.Date(), ".tsv")
     },
     content = function(file) {
-      write.csv(MSstats_test()$ModelQC, file)
+      vroom_write(MSstats_test()$ModelQC, file, delim = "\t")
     }
   )  
   
@@ -473,7 +476,7 @@ pca_dat <- reactive(merge(pca()$x, annot_col(), by.x = "row.names", by.y = "Expe
     }
   )
   
-  # Download plot
+  # Download plots
   output$plot_download <- downloadHandler(
     
     filename = function(){
