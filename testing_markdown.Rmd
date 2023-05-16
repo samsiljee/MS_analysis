@@ -97,34 +97,10 @@ MSstats.results$Dif <- ifelse(MSstats.results$log2FC > 1 & MSstats.results$adj.p
                                         "Not significant"))
 ```
 
-# Matrix and heatmap
-```{r heatmap unfiltered, echo=FALSE}
-# create a matrix of protein abundance
-prot_mat <- processed$ProteinLevelData %>% select(Protein, originalRUN, LogIntensities) %>% pivot_wider(names_from = originalRUN, values_from = LogIntensities)
-# set row names as the proteins
-rownames(prot_mat) <- prot_mat$Protein
-# convert to matrix and remove row of protein names
-prot_mat <- prot_mat[,-1] %>% as.matrix()
-
-#create annotations for sample type
-column_ha <- HeatmapAnnotation(Condition = annot_col$Condition)
-
-#create heatmap of gene expression, scaled rows (genes)
-t(scale(t(prot_mat))) %>% 
-  Heatmap(row_title = "Proteins",
-          column_title = "Unfiltered proteome heatmap",
-          show_row_dend = FALSE,
-          show_column_dend = TRUE, 
-          column_names_gp = gpar(fontsize = 8),
-          bottom_annotation = column_ha,
-          show_row_names = FALSE,
-          show_heatmap_legend = FALSE)
-```
-
 # GO analysis
 ```{r GO analysis, echo = FALSE}
 go_proteins <- MSstats.results %>%
-    filter(Label == "HEK vs SeasonB" & Dif == "Upregulated") %>%
+    filter(Label == "HEK vs SeasonB" & Dif == "Downregulated") %>%
     .$Protein %>%
     as.character() %>%
     unique()
@@ -134,7 +110,9 @@ go_results <- enrichGO(gene = go_proteins,
            keyType = "UNIPROT",
            pAdjustMethod = "BH",
            universe = unique(input$ProteinName),
-           ont = "MF")
+           ont = "MF",
+           pvalueCutoff = 1,
+           qvalueCutoff = 1)
 
 ```
 

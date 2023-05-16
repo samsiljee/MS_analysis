@@ -305,7 +305,9 @@ go_results <- eventReactive(input$go_go, {
            keyType = "UNIPROT",
            pAdjustMethod = "BH",
            universe = unique(MSstats_input()$ProteinName),
-           ont = input$go_ont)
+           ont = input$go_ont,
+           pvalueCutoff = input$go_pvalueCutoff,
+           qvalueCutoff = input$go_qvalueCutoff)
 })
 
 plot_go_result <- reactive({
