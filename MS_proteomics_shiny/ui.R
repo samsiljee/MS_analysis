@@ -11,7 +11,6 @@ ui <- navbarPage(
 # Instructions ----
 
   tabPanel("Instructions",
-           dataTableOutput("test"),
     "Welcome to my proteomics analysis pipeline.",
     "Please move sequentially through the tabs to complete the analysis.", br(),
     "Please prepare an annotations file with the following columns (case sensitive):", br(),
@@ -20,7 +19,11 @@ ui <- navbarPage(
     "\"BioReplicate\" describing the biological replicate.", br(),
     "\"Fraction\" set all to 1 if no fractionation was done", br(),
     "\"Experiment\" label to be used to identify the run in plots", br(),
-    "Technical replicates are automatically detected. Save it as a csv or tsv file."),
+    "Technical replicates are automatically detected. Save it as a csv or tsv file.", br(),
+    hr(style = "border-top: 2px solid #000000;"),
+    "Debugging output", br(),
+    textOutput("test_text"),
+    tableOutput("test_table")),
  
 # Input ----
 
@@ -40,6 +43,8 @@ ui <- navbarPage(
         placeholder = "Upload PSMs/evidence"),
       conditionalPanel(
         condition = "input.platform == 'MQ'",
+        checkboxInput("keep_contaminants", "Keep potential contaminants", 
+                      value = FALSE),
         hr(style = "border-top: 2px solid #000000;"),
         fileInput("proteinGroups", "MQ proteinGroups",
                   buttonLabel = "Browse",
@@ -108,7 +113,7 @@ tabPanel("Format", "Pre-filter and format data for MSstats",
                    choiceValues = c("Sequence", "Annotated.Sequence"))),
     actionButton("go_format", "Format!"),
     hr(style = "border-top: 2px solid #000000;"),
-    downloadButton("formatted_csv", "Save as .csv"),
+    downloadButton("formatted_tsv", "Save as .tsv"),
     downloadButton("formatted_rda", "Save as .rda")),
   
   mainPanel("Preview of formatted input data",
@@ -131,22 +136,24 @@ tabPanel("Process",
       textInput("nameStandards",
         "Named vector for standard peptides (not yet working)")),
       radioButtons("featureSubset",
-        "feature subset to use",
+        "Feature subset to use",
       choiceNames = c("All", "Top 3", "Top N", "High quality"),
       choiceValues = c("all", "top3", "topN", "highQuality")),
     conditionalPanel(
       condition = "input.featureSubset == 'topN'",
       numericInput("n_top_feature",
         "Number of top features to use",
-        value = 3)),
+        value = 3,
+        step = 1)),
   conditionalPanel(
     condition = "input.featureSubset == 'highQuality'",
     checkboxInput("remove_uninformative_feature_outlier",
                   "Remove noisy features and outliers before run-level summarisation",
                   value = FALSE),
     numericInput("min_feature_count",
-      "Minimum features required to be considered in feature selection algorythm",
-      value = 2)),
+      "Minimum features required to be considered in feature selection algorithm",
+      value = 2,
+      step = 1)),
     radioButtons("summaryMethod",
       "Method used to summarise features",
       choiceNames = c("Tukey's median polish", "Linear mixed model"),
@@ -174,11 +181,12 @@ tabPanel("Process",
       choiceValues = c("NULL", "zero_to_na", "na_to_zero")),
     numericInput("maxQuantileforCensored",
       "Maximum quantile for deciding censored missing values",
-      value = 0.999),
+      value = 0.999,
+      step = 0.001),
     actionButton("go_process", "Process!"),
     hr(style = "border-top: 2px solid #000000;"),
-    downloadButton("processed_protein_csv", "Save protein data as .csv"),
-    downloadButton("processed_feature_csv", "Save feature data as .csv"),
+    downloadButton("processed_protein_tsv", "Save protein data as .tsv"),
+    downloadButton("processed_feature_tsv", "Save feature data as .tsv"),
     downloadButton("processed_rda", "Save as .rda")),
   
   mainPanel("This section will be where MSstats processing happens. There will be drop down options here too for the settings.",
@@ -205,17 +213,19 @@ tabPanel("Process",
         actionButton("add_comparison", "Add comparison")),
       hr(style = "border-top: 2px solid #000000;"),
       numericInput("FC_threshold", "Log 2 fold-change threshold",
-                   value = 1),
+                   value = 0.58,
+                   step = 0.1),
       numericInput("pvalue_threshold", "Adjusted p-value threshold",
                    min = 0,
                    max = 1,
-                   value = 0.05),
+                   value = 0.05,
+                   step = 0.01),
       checkboxInput("save_fitted_models", "Save fitted models to the .rda output", value = FALSE),
       checkboxInput("filter_results", "Filter out proteins with infinite fold-change", value = TRUE),
       actionButton("go_compare", "Compare!"),
       hr(style = "border-top: 2px solid #000000;"),
-      downloadButton("results_csv", "Save results as .csv"),
-      downloadButton("model_qc_csv", "Save model QC as .csv"),
+      downloadButton("results_tsv", "Save results as .tsv"),
+      downloadButton("model_qc_tsv", "Save model QC as .tsv"),
       downloadButton("comparisons_rda", "Save as .rda")),
     
     mainPanel("Comparison/s to be made:",
@@ -227,6 +237,35 @@ tabPanel("Process",
         choiceValues = c("ComparisonResult", "ModelQC"),
         inline = TRUE),
       withSpinner(dataTableOutput("results_tab")))),
+
+# Analysis -------------------
+
+tabPanel("Analysis",
+         sidebarPanel(h4("GO term analysis"),
+                      uiOutput("select_go_comparison"),
+                      radioButtons("go_direction", "Direction",
+                                   choices = c("Upregulated", "Downregulated")),
+                      selectInput("go_ont", "Subontology",
+                                  choices = c("Biological Process" = "BP",
+                                              "Molecular Function" = "MF",
+                                              "Cellular Component" = "CC",
+                                              "All" = "ALL")),
+                      numericInput("go_pvalueCutoff", "pvalue cutoff",
+                                   min = 0,
+                                   max = 1,
+                                   value = 0.05,
+                                   step = 0.01),
+                      numericInput("go_qvalueCutoff", "qvalue cutoff",
+                                   min = 0,
+                                   max = 1,
+                                   value = 0.2,
+                                   step = 0.01),
+                      actionButton("go_go", "Run GO term analysis")
+         ),
+         
+         mainPanel(
+           withSpinner(plotOutput("go_plot_results"))
+         )),
 
 # Visualisation ----
 
@@ -250,9 +289,9 @@ tabPanel("Process",
                        uiOutput("select_heatmap_filter")),
       actionButton("go_plot", "Plot!"),
       hr(style = "border-top: 2px solid #000000;"),
-      numericInput("plot_width", "Plot width (mm)", value = 240),
-      numericInput("plot_height", "Plot height (mm)", value = 160),
-      numericInput("plot_dpi", "DPI", value = 600),
+      numericInput("plot_width", "Plot width (mm)", value = 240, step = 10),
+      numericInput("plot_height", "Plot height (mm)", value = 160, step = 10),
+      numericInput("plot_dpi", "DPI", value = 600, step = 100),
       downloadButton("plot_download", "Download plot")
     ),
     
@@ -261,5 +300,5 @@ tabPanel("Process",
     )
     
    )
-# Close UI
-)
+
+) # Close UI

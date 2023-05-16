@@ -8,6 +8,7 @@ library(MSstats)
 library(ComplexHeatmap)
 library(vroom)
 library(janitor)
+library(org.Hs.eg.db)
 
 # Setting option to increase allowed file size to 30MB, I will probably have to increase this further
 options(shiny.maxRequestSize=30*1024^3)
@@ -68,6 +69,9 @@ server <- function(input, output, session){
         
         MQ = {
           df <- vroom(input$PSMs$datapath)
+          if(input$keep_contaminants) {
+            df$`Potential contaminant` <- NA
+          }
           df}
         )
     } else {
@@ -275,6 +279,48 @@ server <- function(input, output, session){
   
 output$outliers <- renderText(paste("There are", length(which(MSstats_comparison_results()$log2FC == Inf | MSstats_comparison_results()$log2FC == -Inf)), "results with infinite fold-change.", sep = " "))
 
+# Analysis ----
+## GO term analysis ----
+
+# Reactive UI
+output$select_go_comparison <- renderUI({
+  selectInput("go_comparison_selected", "Comparison for GO term analysis",
+              choices = sort(unique(MSstats_results()$Label)),
+              multiple = FALSE)
+})
+
+# Reactive variables
+go_proteins <- reactive({
+  MSstats_results() %>%
+    filter(Label == input$go_comparison_selected & Dif == input$go_direction) %>%
+    .$Protein %>%
+    as.character() %>%
+    unique()
+})
+
+# Run GO term analysis
+go_results <- eventReactive(input$go_go, {
+  enrichGO(gene = go_proteins(),
+           OrgDb = org.Hs.eg.db,
+           keyType = "UNIPROT",
+           pAdjustMethod = "BH",
+           universe = unique(MSstats_input()$ProteinName),
+           ont = input$go_ont,
+           pvalueCutoff = input$go_pvalueCutoff,
+           qvalueCutoff = input$go_qvalueCutoff)
+})
+
+plot_go_result <- reactive({
+  dotplot(go_results(),
+          x = "count",
+          showCategory = 10,
+          color = 'p.adjust',
+          title  = "Default title for now")
+})
+
+# Output
+output$go_plot_results <- renderPlot(plot_go_result())
+
 # Visualisation ----
   # Reactive UI
   output$select_comparison <- renderUI({
@@ -299,14 +345,14 @@ selected_theme <- reactive({
          "Void" = theme_void())
 })
 
-dif_proteins <- reactive({
+heatmap_dif_proteins <- reactive({
   MSstats_results() %>%
     filter(Label == input$heatmap_filter & !Dif == "Not significant") %>%
     .$Protein %>%
     as.character()
 })
 
-# create a matrix of protein abundance for use in heatmap
+# create a matrix of protein abundance for heatmap and PCA
 prot_mat <- reactive({
   df <- merge(
     x = MSstats_processed()$ProteinLevelData,
@@ -321,42 +367,28 @@ prot_mat <- reactive({
   df_mat
   })
 
+## Heatmap ----
+heatmap_input <- reactive({
+  df <- prot_mat() %>%
+    na.omit() %>% t() %>% scale() %>% t()
+  if(input$heatmap_filter == "Include all"){
+    df
+  } else {
+    df[row.names(df) %in% heatmap_dif_proteins(),]}
+})
+
 #create heatmap annotations for sample type
 column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
-
-# Do PCA analysis
-pca <- reactive(prcomp(t(na.omit(prot_mat())), center = TRUE, scale. = TRUE))
-pca_dat <- reactive(merge(pca()$x, annot_col(), by.x = "row.names", by.y = "Experiment"))
 
   # Set colours as a named vector - for use in volcano plot
   colours <- c("red", "blue", "black") 
   names(colours) <- c("Upregulated", "Downregulated", "Not significant")
   
-  # Make volcano plot
-  volcano_plot <-  eventReactive(input$go_plot, {
-    MSstats_results() %>%
-    filter(Label == input$comparison_selected) %>%
-    ggplot(aes(x = log2FC, y = -log10(adj.pvalue), col = Dif)) +
-    geom_vline(xintercept = c(-input$FC_threshold, input$FC_threshold), linetype = "dashed", colour = "black") +
-    geom_hline(yintercept = -log10(input$pvalue_threshold), linetype = "dashed", colour = "red") +
-    geom_point(alpha = 0.25, show.legend = FALSE) +
-    scale_color_manual(values = colours) +
-    ylab("-Log10(adjusted p-value)") +
-    xlab("Log2 fold change") +
-    ggtitle(input$comparison_selected) +
-    selected_theme()
-  })
-  
   # Make heatmap
   heatmap_plot <- eventReactive(input$go_plot, {
     #create heatmap of gene expression, row scaling removed
       Heatmap(
-        matrix = if(input$heatmap_filter == "Include all"){
-          prot_mat() %>%
-            na.omit() %>% t() %>% scale() %>% t()
-        } else {
-          prot_mat()[row.names(prot_mat()) %in% dif_proteins(),] %>%
-          na.omit() %>% t() %>% scale() %>% t()},
+        matrix = heatmap_input(),
         row_title = "Proteins",
         column_title = "Unfiltered proteome heatmap",
         show_row_dend = FALSE,
@@ -367,7 +399,12 @@ pca_dat <- reactive(merge(pca()$x, annot_col(), by.x = "row.names", by.y = "Expe
         show_heatmap_legend = FALSE)
   })
   
-  # Make PCA
+  ## PCA plot ----
+  
+  # Do PCA analysis
+  pca <- reactive(prcomp(t(na.omit(prot_mat())), center = TRUE, scale. = TRUE))
+  pca_dat <- reactive(merge(pca()$x, annot_col(), by.x = "row.names", by.y = "Experiment"))
+  
   pca_plot <- eventReactive(input$go_plot, {
     #plot eigen values - add in later if desired
  #   eigen_plot <- fviz_eig(pca) + ggtitle("Eigen value plot of Rosalind data")
@@ -379,6 +416,21 @@ pca_dat <- reactive(merge(pca()$x, annot_col(), by.x = "row.names", by.y = "Expe
     pca_plot + selected_theme()
   })
   
+  ## Volcano plot ----
+  volcano_plot <-  eventReactive(input$go_plot, {
+    MSstats_results() %>%
+      filter(Label == input$comparison_selected) %>%
+      ggplot(aes(x = log2FC, y = -log10(adj.pvalue), col = Dif)) +
+      geom_vline(xintercept = c(-input$FC_threshold, input$FC_threshold), linetype = "dashed", colour = "black") +
+      geom_hline(yintercept = -log10(input$pvalue_threshold), linetype = "dashed", colour = "red") +
+      geom_point(alpha = 0.25, show.legend = FALSE) +
+      scale_color_manual(values = colours) +
+      ylab("-Log10(adjusted p-value)") +
+      xlab("Log2 fold change") +
+      ggtitle(input$comparison_selected) +
+      selected_theme()
+  })
+  
   # Output
   output$plot <- renderPlot({
     plot_obj <- switch(input$plot_type,
@@ -387,20 +439,20 @@ pca_dat <- reactive(merge(pca()$x, annot_col(), by.x = "row.names", by.y = "Expe
                        Heatmap = heatmap_plot())
     return(plot_obj)
   })
+
+  #Testing ----
   
-#Testing ----
-  
-  output$test <- renderDataTable(MSstats_results() %>%
-                                   filter(Protein %in% dif_proteins()))
+  output$test_text <- renderText(go_proteins())
+  output$test_table <- renderTable(as.data.frame(go_results()))
   
 # Downloads ----
   #Formatted data tables
-  output$formatted_csv <- downloadHandler(
+  output$formatted_tsv <- downloadHandler(
     filename = function() {
-      paste0("MSstats_formatted_", Sys.Date(), ".csv")
+      paste0("MSstats_formatted_", Sys.Date(), ".tsv")
     },
     content = function(file) {
-      write.csv(MSstats_input(), file)
+      vroom_write(MSstats_input(), file, delim = "\t")
     }
   )
   
@@ -414,21 +466,21 @@ pca_dat <- reactive(merge(pca()$x, annot_col(), by.x = "row.names", by.y = "Expe
   )
   
   #Processed data
-  output$processed_protein_csv <- downloadHandler(
+  output$processed_protein_tsv <- downloadHandler(
     filename = function() {
-      paste0("Processed_protein_data_", Sys.Date(), ".csv")
+      paste0("Processed_protein_data_", Sys.Date(), ".tsv")
     },
     content = function(file) {
-      write.csv(MSstats_processed()$ProteinLevelData, file)
+      vroom_write(MSstats_processed()$ProteinLevelData, file, delim = "\t")
     }
   )
   
-  output$processed_feature_csv <- downloadHandler(
+  output$processed_feature_tsv <- downloadHandler(
     filename = function() {
-      paste0("Processed_feature_data_", Sys.Date(), ".csv")
+      paste0("Processed_feature_data_", Sys.Date(), ".tsv")
     },
     content = function(file) {
-      write.csv(MSstats_processed()$FeatureLevelData, file)
+      vroom_write(MSstats_processed()$FeatureLevelData, file, delim = "\t")
     }
   )
   
@@ -442,21 +494,21 @@ pca_dat <- reactive(merge(pca()$x, annot_col(), by.x = "row.names", by.y = "Expe
   )
   
   # Comparison
-  output$results_csv <- downloadHandler(
+  output$results_tsv <- downloadHandler(
     filename = function() {
-      paste0("MSstats_results_", Sys.Date(), ".csv")
+      paste0("MSstats_results_", Sys.Date(), ".tsv")
     },
     content = function(file) {
-      write.csv(MSstats_results(), file)
+      vroom_write(MSstats_results(), file, delim = "\t")
     }
   )
   
-  output$model_qc_csv <- downloadHandler(
+  output$model_qc_tsv <- downloadHandler(
     filename = function() {
-      paste0("MSstats_model_QC_", Sys.Date(), ".csv")
+      paste0("MSstats_model_QC_", Sys.Date(), ".tsv")
     },
     content = function(file) {
-      write.csv(MSstats_test()$ModelQC, file)
+      vroom_write(MSstats_test()$ModelQC, file, delim = "\t")
     }
   )  
   
@@ -469,7 +521,7 @@ pca_dat <- reactive(merge(pca()$x, annot_col(), by.x = "row.names", by.y = "Expe
     }
   )
   
-  # Download plot
+  # Download plots
   output$plot_download <- downloadHandler(
     
     filename = function(){

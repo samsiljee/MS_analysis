@@ -1,4 +1,7 @@
 # MS_analysis
+# (c) Sam Siljee
+# Created July 18th 2022
+
 A shiny app to analyse mass spectromtetry for proteomics data - from PSMs to visualisation.
 
 ## How to use this app.
@@ -27,7 +30,7 @@ A shiny app to analyse mass spectromtetry for proteomics data - from PSMs to vis
   - Create a heatmap of samples vs proteins
   - Volcano plots of differentially abundant proteins
   - GO and KEGG term analysis
-  - Nework analysis of some kind? String?
+  - Nework analysis of some kind? STRING?
   - Use COPF analysis to infer proteoform differences: https://www.nature.com/articles/s41467-021-24030-x#code-availability
 
 ### PHOSPHOPROTEOMICS
@@ -47,16 +50,19 @@ A shiny app to analyse mass spectromtetry for proteomics data - from PSMs to vis
   - Biological network analysis
 
 ## Issues and to-do
-  - Currently working on fine-tuning some of the MSstats I/O options - global standards still to be done, otherwise I just need to check that the default values are sensible
-  - Adding MaxQuant input capability
+  - Currently working on fine-tuning some of the MSstats I/O options - global standards still to be done, could potentially set Trypsin as the default for this
+  - Check that the default values are sensible - Discuss with appropriate bio-infomatician
   - Will need to add option to disable automatic removal of potential contaminants from MQ data, do this by setting all values of the potential contaminant column to -ve before inputting into MaxQtoMSstatsFormat
   - QC section
   - Better progress bars for slow processes
   - Export log files of the MSstats functions, and export a txt document describing the settings used
   - Add reset to comparison matrix
-  - Use vroom to write .csv/.tsv output faster
+  - Add option to change titles and axes
+  - Add in KEGG/GO term analysis, GSEA etc
+  - Go term analysis with complete tabular output in the analysis tab, and plots intergrated into the visualisation tab
+  - Pathview analysis
+  - Good overview of different types of analyses to try here: http://bioinformatics.sdstate.edu/go/
 
-  
 ## Completed issues
   - Add copyright to repository/scripts
   - Levels in the results of the group comparison is currently a number, this should be the name of the comparison - solved by changing from data frame to a named matrix
@@ -66,6 +72,10 @@ A shiny app to analyse mass spectromtetry for proteomics data - from PSMs to vis
   - PCA plot added, initially not working because `row.names(pca()$x)` and `annot_col()$Run` were different. Fixed by adding a pca_ref column to annot_col and adjusting as needed to match the names of the pca output.
   - Heatmap added and saving properly
   - Add options to set FC and pvalue cutoffs where desired
+  - Use vroom to write output faster. Changed to .tsv output only
+  - Added MaxQuant input capability
+  - Added option to disable automatic removal of potential contaminants from MQ data, done by setting all values of the potential contaminant column to "NA" when loading raw data
+  - GO analysis starting to be implemented
   
 # License
-Feel free to use this code as you wish under the MIT license, however an anknowledgement would be nice. Thanks!
+Feel free to use this code as you wish under the MIT license, however an acknowledgement would be nice. Thanks!
