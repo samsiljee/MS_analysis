@@ -267,7 +267,7 @@ tabPanel("Analysis",
          
          mainPanel(
            "Note that GO term analysis can be quite slow",
-           withSpinner(dataTableOutput("go_results"))
+           withSpinner(dataTableOutput("go_results_tab"))
          )),
 
 # Visualisation ----

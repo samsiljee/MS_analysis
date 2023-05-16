@@ -9,6 +9,7 @@ library(ComplexHeatmap)
 library(vroom)
 library(janitor)
 library(org.Hs.eg.db)
+library(clusterProfiler)
 
 # Setting option to increase allowed file size to 30MB, I will probably have to increase this further
 options(shiny.maxRequestSize=30*1024^3)
@@ -300,13 +301,16 @@ output$select_go_comparison <- renderUI({
               multiple = TRUE)
 })
 
+# Set up value for results
 go_results <- reactiveVal(data.frame())
 
 # Run GO term analysis
 observeEvent(input$go_go, {
-  for(comparison in input$go_comparison_selected){
-    for(directions in ifelse(input$go_direction == "Both", c("Upregulated", "Downregulated"), input$go_direction)){
-      for(ont in input$go_ont){
+  results_added <- go_results()  # Initialize results_added outside the loop
+  
+  for (comparison in input$go_comparison_selected) {
+    for (directions in ifelse(input$go_direction == "Both", c("Upregulated", "Downregulated"), input$go_direction)) {
+      for (ont in input$go_ont) {
         go_proteins <- MSstats_results() %>%
           filter(Label == comparison & Dif == directions) %>%
           .$Protein %>%
@@ -321,16 +325,17 @@ observeEvent(input$go_go, {
           universe = unique(MSstats_input()$ProteinName),
           ont = ont,
           pvalueCutoff = input$go_pvalueCutoff,
-          qvalueCutoff = input$go_qvalueCutoff) %>%
+          qvalueCutoff = input$go_qvalueCutoff
+        ) %>%
           as.data.frame() %>%
           mutate(Comparison = comparison, Direction = directions, Subontology = ont)
         
-        results_added <- rbind(go_results, results)
-        
-        go_results(results_added)
+        results_added <- rbind(results_added, results)
       } # Ontology for loop
     } # Direction for loop
   } # Comparison for loop
+  
+  go_results(results_added)  # Update go_results after all iterations
 })
 
 # Output
@@ -458,7 +463,7 @@ column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
   #Testing ----
   
   output$test_text <- renderText(input$go_comparison_selected)
-  output$test_table <- renderTable(as.data.frame(go_results()))
+  output$test_table <- renderTable(go_results())
   
 # Downloads ----
   #Formatted data tables
