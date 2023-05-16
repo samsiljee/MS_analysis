@@ -277,7 +277,10 @@ server <- function(input, output, session){
            ModelQC = MSstats_test()$ModelQC)
   })
   
-output$outliers <- renderText(paste("There are", length(which(MSstats_comparison_results()$log2FC == Inf | MSstats_comparison_results()$log2FC == -Inf)), "results with infinite fold-change.", sep = " "))
+output$outliers <- renderText(paste("There are",
+                                    length(which(MSstats_comparison_results()$log2FC == Inf | MSstats_comparison_results()$log2FC == -Inf)),
+                                    "results with infinite fold-change.",
+                                    sep = " "))
 
 # Analysis ----
 ## GO term analysis ----
