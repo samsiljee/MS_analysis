@@ -292,11 +292,11 @@ output$outliers <- renderText(paste("There are",
                                     sep = " "))
 
 # Analysis ----
-## GO term analysis ----
+## GO enrichment analysis ----
 
 # Reactive UI
 output$select_go_comparison <- renderUI({
-  selectInput("go_comparison_selected", "Comparison/s for GO term analysis",
+  selectInput("go_comparison_selected", "Comparison/s to use",
               choices = sort(unique(MSstats_results()$Label)),
               multiple = TRUE)
 })
@@ -304,12 +304,17 @@ output$select_go_comparison <- renderUI({
 # Set up value for results
 go_results <- reactiveVal(data.frame())
 
-# Run GO term analysis
+# Run GO enrichment analysis
 observeEvent(input$go_go, {
   results_added <- go_results()  # Initialize results_added outside the loop
   
   for (comparison in input$go_comparison_selected) {
-    for (directions in ifelse(input$go_direction == "Both", c("Upregulated", "Downregulated"), input$go_direction)) {
+    for (directions in switch(
+      input$go_direction,
+      Both = c("Upregulated", "Downregulated"),
+      Upregulated = "Upregulated",
+      Downregulated = "Downregulated"
+    )){
       for (ont in input$go_ont) {
         go_proteins <- MSstats_results() %>%
           filter(Label == comparison & Dif == directions) %>%
@@ -462,7 +467,12 @@ column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
 
   #Testing ----
   
-  output$test_text <- renderText(input$go_comparison_selected)
+  output$test_text <- renderText(switch(
+    input$go_direction,
+    Both = c("Upregulated", "Downregulated"),
+    Upregulated = "Upregulated",
+    Downregulated = "Downregulated"
+  ))
   output$test_table <- renderTable(go_results())
   
 # Downloads ----
@@ -538,6 +548,16 @@ column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
     },
     content = function(file) {
       saveRDS(MSstats_test(), file = file)
+    }
+  )
+  
+  # Analysis
+  output$go_results_tsv <- downloadHandler(
+    filename = function() {
+      paste0("GO_analysis_results_", Sys.Date(), ".tsv")
+    },
+    content = function(file) {
+      vroom_write(go_results(), file, delim = "\t")
     }
   )
   
