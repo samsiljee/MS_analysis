@@ -1,0 +1,140 @@
+---
+title: "Testing markdown for shiny app"
+author: "Sam Siljee"
+date: '2023-05-16'
+output: html_document
+---
+
+Created: 2023/05/16
+Last modified: 2023/05/16 
+Written by: Sam Siljee
+copyright (c) - 2023 Sam Siljee
+
+This document is not intended to be used to perform analyses, this is where I test certain parts of the code outside of shiny for troubleshooting.
+Please see my "MSstats_workflow" repository for an older version of this script, with proper useful commenting.
+
+# Loading packages
+```{r setup, include=FALSE}
+library(MSstats)
+library(tidyverse)
+library(EnhancedVolcano)
+library(ComplexHeatmap)
+library(clusterProfiler)
+library(org.Hs.eg.db)
+```
+
+# Directories
+```{r directories, include = TRUE}
+# paths depending on which computer I'm running on
+if(getwd() == "C:/Users/Sam/Documents/Coding/MS_analysis"){
+  input_dir <- "~/Documents/Coding/MS_analysis/input/"
+  output_dir <- "~/Documents/Coding/MS_analysis/output/"
+}else{
+  input_dir <- "~/Coding/MS_analysis/input/"
+  output_dir <- "~/Coding/MS_analysis/output/"
+}
+
+# Specify the names of your raw data and annotations csv
+raw_file <- "sam_season_PSMs.txt"
+annotations_file <- "sam_season_annotation.csv"
+```
+
+# Data import
+```{r data import}
+raw <- read.csv(paste0(input_dir, raw_file),
+                sep = "\t",
+                stringsAsFactors = FALSE) %>%
+  mutate(ProteinGroupAccessions = .$Master.Protein.Accessions,
+         PrecursorArea = .$Precursor.Abundance,
+         Run = .$Spectrum.File)
+
+annot_col <- read.csv(paste0(input_dir, annotations_file),
+                      sep = ",",
+                      stringsAsFactors = TRUE)
+
+input <- PDtoMSstatsFormat(raw, 
+                           annotation = annot_col,
+                           removeProtein_with1Peptide = TRUE,
+                           removeFewMeasurements = TRUE,
+                           use_log_file = FALSE,
+                           verbose = FALSE)
+```
+
+# Data Processing
+```{r data processing, echo = FALSE}
+processed <- dataProcess(input,
+                         normalization = FALSE,
+                         summaryMethod = "TMP",
+                         censoredInt = "NA",
+                         MBimpute = FALSE,
+                         maxQuantileforCensored = 0.999,
+                         use_log_file = FALSE,
+                         verbose = FALSE)
+```
+
+# Comparison
+```{r model based comparison, echo = FALSE}
+comparison <- matrix(ncol = (length(levels(annot_col$Condition))), nrow = 3)
+colnames(comparison) <- levels(annot_col$Condition)
+rownames(comparison) <- c("HEK vs SeasonB", "Season lysC vs Trypsin", "Season ZT vs SC")
+
+comparison[1,] <- c(1, -1, -1, -1, -1)
+comparison[2,] <- c(0, 1, 1, -1, -1)
+comparison[3,] <- c(0, -1, 1, -1, 1)
+
+test.MSstats <- groupComparison(contrast.matrix = comparison,
+                                data = processed,
+                                use_log_file = FALSE,
+                                verbose = FALSE)
+
+MSstats.results <- test.MSstats$ComparisonResult
+
+# Add column for up/downregulated or non-significant
+MSstats.results$Dif <- ifelse(MSstats.results$log2FC > 1 & MSstats.results$adj.pvalue < 0.05,
+                                 "Upregulated",
+                                 ifelse(MSstats.results$log2FC < -1 & MSstats.results$adj.pvalue < 0.05,
+                                        "Downregulated",
+                                        "Not significant"))
+```
+
+# Matrix and heatmap
+```{r heatmap unfiltered, echo=FALSE}
+# create a matrix of protein abundance
+prot_mat <- processed$ProteinLevelData %>% select(Protein, originalRUN, LogIntensities) %>% pivot_wider(names_from = originalRUN, values_from = LogIntensities)
+# set row names as the proteins
+rownames(prot_mat) <- prot_mat$Protein
+# convert to matrix and remove row of protein names
+prot_mat <- prot_mat[,-1] %>% as.matrix()
+
+#create annotations for sample type
+column_ha <- HeatmapAnnotation(Condition = annot_col$Condition)
+
+#create heatmap of gene expression, scaled rows (genes)
+t(scale(t(prot_mat))) %>% 
+  Heatmap(row_title = "Proteins",
+          column_title = "Unfiltered proteome heatmap",
+          show_row_dend = FALSE,
+          show_column_dend = TRUE, 
+          column_names_gp = gpar(fontsize = 8),
+          bottom_annotation = column_ha,
+          show_row_names = FALSE,
+          show_heatmap_legend = FALSE)
+```
+
+# GO analysis
+```{r GO analysis, echo = FALSE}
+go_proteins <- MSstats.results %>%
+    filter(Label == "HEK vs SeasonB" & Dif == "Upregulated") %>%
+    .$Protein %>%
+    as.character() %>%
+    unique()
+
+go_results <- enrichGO(gene = go_proteins,
+           OrgDb = org.Hs.eg.db,
+           keyType = "UNIPROT",
+           pAdjustMethod = "BH",
+           universe = unique(input$ProteinName),
+           ont = "MF")
+
+```
+
