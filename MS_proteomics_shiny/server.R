@@ -282,44 +282,50 @@ output$outliers <- renderText(paste("There are", length(which(MSstats_comparison
 # Analysis ----
 ## GO term analysis ----
 
+
+
 # Reactive UI
 output$select_go_comparison <- renderUI({
-  selectInput("go_comparison_selected", "Comparison for GO term analysis",
+  selectInput("go_comparison_selected", "Comparison/s for GO term analysis",
               choices = sort(unique(MSstats_results()$Label)),
-              multiple = FALSE)
+              multiple = TRUE)
 })
 
-# Reactive variables
-go_proteins <- reactive({
-  MSstats_results() %>%
-    filter(Label == input$go_comparison_selected & Dif == input$go_direction) %>%
-    .$Protein %>%
-    as.character() %>%
-    unique()
-})
+go_results <- reactiveVal(data.frame())
 
 # Run GO term analysis
-go_results <- eventReactive(input$go_go, {
-  enrichGO(gene = go_proteins(),
-           OrgDb = org.Hs.eg.db,
-           keyType = "UNIPROT",
-           pAdjustMethod = "BH",
-           universe = unique(MSstats_input()$ProteinName),
-           ont = input$go_ont,
-           pvalueCutoff = input$go_pvalueCutoff,
-           qvalueCutoff = input$go_qvalueCutoff)
-})
-
-plot_go_result <- reactive({
-  dotplot(go_results(),
-          x = "count",
-          showCategory = 10,
-          color = 'p.adjust',
-          title  = "Default title for now")
+observeEvent(input$go_go, {
+  for(comparison in input$go_comparison_selected){
+    for(directions in ifelse(input$go_direction == "Both", c("Upregulated", "Downregulated"), input$go_direction)){
+      for(ont in input$go_ont){
+        go_proteins <- MSstats_results() %>%
+          filter(Label == comparison & Dif == directions) %>%
+          .$Protein %>%
+          as.character() %>%
+          unique()
+        
+        results <- enrichGO(
+          gene = go_proteins,
+          OrgDb = org.Hs.eg.db,
+          keyType = "UNIPROT",
+          pAdjustMethod = "BH",
+          universe = unique(MSstats_input()$ProteinName),
+          ont = ont,
+          pvalueCutoff = input$go_pvalueCutoff,
+          qvalueCutoff = input$go_qvalueCutoff) %>%
+          as.data.frame() %>%
+          mutate(Comparison = comparison, Direction = directions, Subontology = ont)
+        
+        results_added <- rbind(go_results, results)
+        
+        go_results(results_added)
+      } # Ontology for loop
+    } # Direction for loop
+  } # Comparison for loop
 })
 
 # Output
-output$go_plot_results <- renderPlot(plot_go_result())
+output$go_results_tab <- renderDataTable(go_results())
 
 # Visualisation ----
   # Reactive UI
@@ -442,7 +448,7 @@ column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
 
   #Testing ----
   
-  output$test_text <- renderText(go_proteins())
+  output$test_text <- renderText(input$go_comparison_selected)
   output$test_table <- renderTable(as.data.frame(go_results()))
   
 # Downloads ----

@@ -244,12 +244,12 @@ tabPanel("Analysis",
          sidebarPanel(h4("GO term analysis"),
                       uiOutput("select_go_comparison"),
                       radioButtons("go_direction", "Direction",
-                                   choices = c("Upregulated", "Downregulated")),
+                                   choices = c("Both", "Upregulated", "Downregulated")),
                       selectInput("go_ont", "Subontology",
                                   choices = c("Biological Process" = "BP",
                                               "Molecular Function" = "MF",
-                                              "Cellular Component" = "CC",
-                                              "All" = "ALL")),
+                                              "Cellular Component" = "CC"),
+                                  multiple = TRUE),
                       numericInput("go_pvalueCutoff", "pvalue cutoff",
                                    min = 0,
                                    max = 1,
@@ -264,7 +264,7 @@ tabPanel("Analysis",
          ),
          
          mainPanel(
-           withSpinner(plotOutput("go_plot_results"))
+           withSpinner(dataTableOutput("go_results"))
          )),
 
 # Visualisation ----
