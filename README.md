@@ -1,4 +1,7 @@
 # MS_analysis
+# (c) Sam Siljee
+# Created July 18th 2022
+
 A shiny app to analyse mass spectromtetry for proteomics data - from PSMs to visualisation.
 
 ## How to use this app.
@@ -27,7 +30,7 @@ A shiny app to analyse mass spectromtetry for proteomics data - from PSMs to vis
   - Create a heatmap of samples vs proteins
   - Volcano plots of differentially abundant proteins
   - GO and KEGG term analysis
-  - Nework analysis of some kind? String?
+  - Nework analysis of some kind? STRING?
   - Use COPF analysis to infer proteoform differences: https://www.nature.com/articles/s41467-021-24030-x#code-availability
 
 ### PHOSPHOPROTEOMICS
@@ -56,6 +59,8 @@ A shiny app to analyse mass spectromtetry for proteomics data - from PSMs to vis
   - Add reset to comparison matrix
   - Add option to change titles and axes
   - Add in KEGG/GO term analysis, GSEA etc
+  - Pathview analysis
+  - Good overview of different types of analyses to try here: http://bioinformatics.sdstate.edu/go/
 
 ## Completed issues
   - Add copyright to repository/scripts
