@@ -11,7 +11,8 @@ ui <- navbarPage(
 # Instructions ----
 
   tabPanel("Instructions",
-           dataTableOutput("test"),
+           textOutput("test_text"),
+           tableOutput("test_table"),
     "Welcome to my proteomics analysis pipeline.",
     "Please move sequentially through the tabs to complete the analysis.", br(),
     "Please prepare an annotations file with the following columns (case sensitive):", br(),
@@ -230,6 +231,25 @@ tabPanel("Process",
         inline = TRUE),
       withSpinner(dataTableOutput("results_tab")))),
 
+# Analysis -------------------
+
+tabPanel("Analysis",
+         sidebarPanel(h4("GO term analysis"),
+                      uiOutput("select_go_comparison"),
+                      radioButtons("go_direction", "Direction",
+                                   choices = c("Upregulated", "Downregulated")),
+                      selectInput("go_ont", "Subontology",
+                                  choices = c("Biological Process" = "BP",
+                                              "Molecular Function" = "MF",
+                                              "Cellular Component" = "CC",
+                                              "All" = "ALL")),
+                      actionButton("go_go", "Run GO term analysis")
+         ),
+         
+         mainPanel(
+           withSpinner(plotOutput("go_plot_results"))
+         )),
+
 # Visualisation ----
 
   tabPanel("Visualisation",
@@ -263,5 +283,5 @@ tabPanel("Process",
     )
     
    )
-# Close UI
-)
+
+) # Close UI

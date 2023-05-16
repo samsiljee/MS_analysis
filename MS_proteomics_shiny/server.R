@@ -8,6 +8,7 @@ library(MSstats)
 library(ComplexHeatmap)
 library(vroom)
 library(janitor)
+library(org.Hs.eg.db)
 
 # Setting option to increase allowed file size to 30MB, I will probably have to increase this further
 options(shiny.maxRequestSize=30*1024^3)
@@ -278,6 +279,46 @@ server <- function(input, output, session){
   
 output$outliers <- renderText(paste("There are", length(which(MSstats_comparison_results()$log2FC == Inf | MSstats_comparison_results()$log2FC == -Inf)), "results with infinite fold-change.", sep = " "))
 
+# Analysis ----
+## GO term analysis ----
+
+# Reactive UI
+output$select_go_comparison <- renderUI({
+  selectInput("go_comparison_selected", "Comparison for GO term analysis",
+              choices = sort(unique(MSstats_results()$Label)),
+              multiple = FALSE)
+})
+
+# Reactive variables
+go_proteins <- reactive({
+  MSstats_results() %>%
+    filter(Label == input$go_comparison_selected & Dif == input$go_direction) %>%
+    .$Protein %>%
+    as.character() %>%
+    unique()
+})
+
+# Run GO term analysis
+go_results <- eventReactive(input$go_go, {
+  enrichGO(gene = go_proteins(),
+           OrgDb = org.Hs.eg.db,
+           keyType = "UNIPROT",
+           pAdjustMethod = "BH",
+           universe = unique(MSstats_input()$ProteinName),
+           ont = input$go_ont)
+})
+
+plot_go_result <- reactive({
+  dotplot(go_results(),
+          x = "count",
+          showCategory = 10,
+          color = 'p.adjust',
+          title  = "Default title for now")
+})
+
+# Output
+output$go_plot_results <- renderPlot(plot_go_result())
+
 # Visualisation ----
   # Reactive UI
   output$select_comparison <- renderUI({
@@ -302,7 +343,7 @@ selected_theme <- reactive({
          "Void" = theme_void())
 })
 
-dif_proteins <- reactive({
+heatmap_dif_proteins <- reactive({
   MSstats_results() %>%
     filter(Label == input$heatmap_filter & !Dif == "Not significant") %>%
     .$Protein %>%
@@ -324,41 +365,22 @@ prot_mat <- reactive({
   df_mat
   })
 
-# Heatmap input matrix
+## Heatmap ----
 heatmap_input <- reactive({
   df <- prot_mat() %>%
     na.omit() %>% t() %>% scale() %>% t()
   if(input$heatmap_filter == "Include all"){
     df
   } else {
-    df[row.names(df) %in% dif_proteins(),]}
+    df[row.names(df) %in% heatmap_dif_proteins(),]}
 })
 
 #create heatmap annotations for sample type
 column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
 
-# Do PCA analysis
-pca <- reactive(prcomp(t(na.omit(prot_mat())), center = TRUE, scale. = TRUE))
-pca_dat <- reactive(merge(pca()$x, annot_col(), by.x = "row.names", by.y = "Experiment"))
-
   # Set colours as a named vector - for use in volcano plot
   colours <- c("red", "blue", "black") 
   names(colours) <- c("Upregulated", "Downregulated", "Not significant")
-  
-  # Make volcano plot
-  volcano_plot <-  eventReactive(input$go_plot, {
-    MSstats_results() %>%
-    filter(Label == input$comparison_selected) %>%
-    ggplot(aes(x = log2FC, y = -log10(adj.pvalue), col = Dif)) +
-    geom_vline(xintercept = c(-input$FC_threshold, input$FC_threshold), linetype = "dashed", colour = "black") +
-    geom_hline(yintercept = -log10(input$pvalue_threshold), linetype = "dashed", colour = "red") +
-    geom_point(alpha = 0.25, show.legend = FALSE) +
-    scale_color_manual(values = colours) +
-    ylab("-Log10(adjusted p-value)") +
-    xlab("Log2 fold change") +
-    ggtitle(input$comparison_selected) +
-    selected_theme()
-  })
   
   # Make heatmap
   heatmap_plot <- eventReactive(input$go_plot, {
@@ -375,7 +397,12 @@ pca_dat <- reactive(merge(pca()$x, annot_col(), by.x = "row.names", by.y = "Expe
         show_heatmap_legend = FALSE)
   })
   
-  # Make PCA
+  ## PCA plot ----
+  
+  # Do PCA analysis
+  pca <- reactive(prcomp(t(na.omit(prot_mat())), center = TRUE, scale. = TRUE))
+  pca_dat <- reactive(merge(pca()$x, annot_col(), by.x = "row.names", by.y = "Experiment"))
+  
   pca_plot <- eventReactive(input$go_plot, {
     #plot eigen values - add in later if desired
  #   eigen_plot <- fviz_eig(pca) + ggtitle("Eigen value plot of Rosalind data")
@@ -387,6 +414,21 @@ pca_dat <- reactive(merge(pca()$x, annot_col(), by.x = "row.names", by.y = "Expe
     pca_plot + selected_theme()
   })
   
+  ## Volcano plot ----
+  volcano_plot <-  eventReactive(input$go_plot, {
+    MSstats_results() %>%
+      filter(Label == input$comparison_selected) %>%
+      ggplot(aes(x = log2FC, y = -log10(adj.pvalue), col = Dif)) +
+      geom_vline(xintercept = c(-input$FC_threshold, input$FC_threshold), linetype = "dashed", colour = "black") +
+      geom_hline(yintercept = -log10(input$pvalue_threshold), linetype = "dashed", colour = "red") +
+      geom_point(alpha = 0.25, show.legend = FALSE) +
+      scale_color_manual(values = colours) +
+      ylab("-Log10(adjusted p-value)") +
+      xlab("Log2 fold change") +
+      ggtitle(input$comparison_selected) +
+      selected_theme()
+  })
+  
   # Output
   output$plot <- renderPlot({
     plot_obj <- switch(input$plot_type,
@@ -395,10 +437,11 @@ pca_dat <- reactive(merge(pca()$x, annot_col(), by.x = "row.names", by.y = "Expe
                        Heatmap = heatmap_plot())
     return(plot_obj)
   })
+
+  #Testing ----
   
-#Testing ----
-  
-  output$test <- renderDataTable(prot_mat())
+  output$test_text <- renderText(go_proteins())
+  output$test_table <- renderTable(as.data.frame(go_results()))
   
 # Downloads ----
   #Formatted data tables
