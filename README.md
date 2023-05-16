@@ -59,6 +59,7 @@ A shiny app to analyse mass spectromtetry for proteomics data - from PSMs to vis
   - Add reset to comparison matrix
   - Add option to change titles and axes
   - Add in KEGG/GO term analysis, GSEA etc
+  - Go term analysis with complete tabular output in the analysis tab, and plots intergrated into the visualisation tab
   - Pathview analysis
   - Good overview of different types of analyses to try here: http://bioinformatics.sdstate.edu/go/
 
@@ -74,7 +75,7 @@ A shiny app to analyse mass spectromtetry for proteomics data - from PSMs to vis
   - Use vroom to write output faster. Changed to .tsv output only
   - Added MaxQuant input capability
   - Added option to disable automatic removal of potential contaminants from MQ data, done by setting all values of the potential contaminant column to "NA" when loading raw data
-
+  - GO analysis starting to be implemented
   
 # License
-Feel free to use this code as you wish under the MIT license, however an anknowledgement would be nice. Thanks!
+Feel free to use this code as you wish under the MIT license, however an acknowledgement would be nice. Thanks!
