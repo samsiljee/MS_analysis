@@ -194,6 +194,14 @@ server <- function(input, output, session){
     add_comparison()
   })
   
+  # # Removing the last comparison from the matrix
+  # observeEvent(input$reset_comparison, {
+  #   c_vals <- reactiveValues(matrix = NULL, comparison_names = character())
+  #   observeEvent(input$annotations, {
+  #     add_comparison()
+  #   })
+  # })
+  
   # Define function to add a row
   add_comparison <- function() {
     
@@ -284,8 +292,6 @@ output$outliers <- renderText(paste("There are",
 
 # Analysis ----
 ## GO term analysis ----
-
-
 
 # Reactive UI
 output$select_go_comparison <- renderUI({
