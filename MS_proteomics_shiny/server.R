@@ -492,6 +492,10 @@ column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
        scale_y_continuous(breaks = 1:input$go_top_n,
                           labels = go_enrichment_plot_dataset()$Description) +
        labs(y = NULL) +
+       ggtitle(paste0("GO enrichment ",
+                      input$go_comparison_selected, " ",
+                      input$go_direction_selected, " ",
+                      input$go_ont_selected)) +
        selected_theme()
    })
   
