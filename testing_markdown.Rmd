@@ -124,9 +124,9 @@ go_enrichment_plot_dataset <- go_results_dat %>%
   .[1:7,]
 
 go_enrichment_plot <- go_enrichment_plot_dataset %>%
-  ggplot(aes(x = GeneRatio, y = 1:7, col = p.adjust, size = Count, label = Description)) +
+  ggplot(aes(x = GeneRatio, y = 1:7, col = p.adjust, size = Count)) +
   geom_point() +
-  scale_y_continuous(breaks = 1:7, labels = letters[1:7])
+  scale_y_continuous(breaks = 1:7, labels = go_enrichment_plot_dataset$Description)
 
 go_enrichment_plot
 ```
