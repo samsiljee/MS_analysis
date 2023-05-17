@@ -359,6 +359,24 @@ output$select_heatmap_filter <- renderUI({
               choices = c("Include all", sort(unique(MSstats_results()$Label))),
               multiple = FALSE)
 })
+
+output$go_select_comparison <- renderUI({
+  selectInput("go_comparison_selected", "Comparison",
+              choices = sort(unique(go_results()$Comparison)),
+              multiple = FALSE)
+})
+
+output$go_select_direction <- renderUI({
+  selectInput("go_direction_selected", "Direction",
+              choices = sort(unique(go_results()$Direction)),
+              multiple = FALSE)
+})
+
+output$go_select_ont <- renderUI({
+  selectInput("go_ont_selected", "Subontology",
+              choices = sort(unique(go_results()$Subontology)),
+              multiple = FALSE)
+})
   
 # Reactive variables
 selected_theme <- reactive({
@@ -375,6 +393,16 @@ heatmap_dif_proteins <- reactive({
     filter(Label == input$heatmap_filter & !Dif == "Not significant") %>%
     .$Protein %>%
     as.character()
+})
+
+go_enrichment_plot_dataset <- reactive({
+  go_results() %>%
+    filter(Comparison == input$go_comparison_selected &
+             Direction == input$go_direction_selected &
+             Subontology == input$go_ont_selected) %>%
+    mutate(GeneRatio =eval(parse(text = GeneRatio))) %>%
+    arrange(GeneRatio) %>%
+    .[1:input$go_top_n,]
 })
 
 # create a matrix of protein abundance for heatmap and PCA
@@ -458,9 +486,12 @@ column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
   
   ## GO enrichment plot ----
    go_enrichment_plot <- eventReactive(input$go_plot, {
-     go_results() %>%
-       ggplot(aes(x = GeneRatio, col = p.adjust, size = Count)) +
+     go_enrichment_plot_dataset() %>%
+       ggplot(aes(x = GeneRatio, y = 1:input$go_top_n, col = p.adjust, size = Count)) +
        geom_point() +
+       scale_y_continuous(breaks = 1:input$go_top_n,
+                          labels = go_enrichment_plot_dataset()$Description) +
+       labs(y = NULL) +
        selected_theme()
    })
   
@@ -578,7 +609,11 @@ column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
         Volcano = paste0(input$comparison_selected, "_Volcano_", Sys.Date(), ".png"),
         PCA = paste0("PCA_",Sys.Date(), ".png"),
         Heatmap = paste0("Heatmap_", Sys.Date(), ".png"),
-        `GO enrichment` = paste0("GO_enrichment_", Sys.Date(), ".png"))
+        `GO enrichment` = paste0("GO_enrichment_",
+                                 input$go_comparison_selected, "_",
+                                 input$go_direction_selected, "_",
+                                 input$go_ont_selected, "_",
+                                 Sys.Date(), ".png"))
       },
     
     content = function(file){
