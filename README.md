@@ -22,9 +22,9 @@ A shiny app to analyse mass spectromtetry for proteomics data - from PSMs to vis
   - Import results from Proteome Discoverer or Max Quant - as PSMs
   - Review potential contaminants
   - QC plots; chromatograms
-  - Normalisation in `MSstats`
+  - Normalisation and quantification in `MSstats`
   - Search IDs against basal cell markers, and ciliated markers as a control
-  - Perform differential abundance analysis with `DESeq2` - note that this was developed for transcriptomics, it's likely more appropriate to perform this using `MSstats`
+  - Perform differential abundance analysis with `MSstats`, more appropriate as designed specifically for MS proteomics
   - Histogram of log2 foldchanges
   - Perform PCA analysis, and plot clusters
   - Create a heatmap of samples vs proteins
@@ -48,6 +48,10 @@ A shiny app to analyse mass spectromtetry for proteomics data - from PSMs to vis
   - GO annotations
   - Enrichment analysis
   - Biological network analysis
+  
+## Resources
+  - Good overview of different types of analyses to try here: http://bioinformatics.sdstate.edu/go/
+  - Good resource on visualising enrichment analysis: https://yulab-smu.top/biomedical-knowledge-mining-book/enrichplot.html
 
 ## Issues and to-do
   - Currently working on fine-tuning some of the MSstats I/O options - global standards still to be done, could potentially set Trypsin as the default for this
@@ -61,7 +65,7 @@ A shiny app to analyse mass spectromtetry for proteomics data - from PSMs to vis
   - Add in KEGG/GO term analysis, GSEA etc
   - Go term analysis with complete tabular output in the analysis tab, and plots intergrated into the visualisation tab
   - Pathview analysis
-  - Good overview of different types of analyses to try here: http://bioinformatics.sdstate.edu/go/
+ 
 
 ## Completed issues
   - Add copyright to repository/scripts

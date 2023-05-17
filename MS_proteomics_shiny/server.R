@@ -456,12 +456,21 @@ column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
       selected_theme()
   })
   
+  ## GO enrichment plot ----
+   go_enrichment_plot <- eventReactive(input$go_plot, {
+     go_results() %>%
+       ggplot(aes(x = GeneRatio, col = p.adjust, size = Count)) +
+       geom_point() +
+       selected_theme()
+   })
+  
   # Output
   output$plot <- renderPlot({
     plot_obj <- switch(input$plot_type,
                        Volcano = volcano_plot(),
                        PCA = pca_plot(),
-                       Heatmap = heatmap_plot())
+                       Heatmap = heatmap_plot(),
+                       `GO enrichment` = go_enrichment_plot())
     return(plot_obj)
   })
 
@@ -561,14 +570,15 @@ column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
     }
   )
   
-  # Download plots
+  ## Download plots ----
   output$plot_download <- downloadHandler(
     
     filename = function(){
       switch(input$plot_type,
         Volcano = paste0(input$comparison_selected, "_Volcano_", Sys.Date(), ".png"),
         PCA = paste0("PCA_",Sys.Date(), ".png"),
-        Heatmap = paste0("Heatmap_", Sys.Date(), ".png"))
+        Heatmap = paste0("Heatmap_", Sys.Date(), ".png"),
+        `GO enrichment` = paste0("GO_enrichment_", Sys.Date(), ".png"))
       },
     
     content = function(file){
@@ -599,6 +609,15 @@ column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
               units= "mm")
           draw(heatmap_plot())
           dev.off()
+        },
+        
+        `GO enrichment` = {
+          ggsave(file,
+                 plot = go_enrichment_plot(),
+                 width = input$plot_width,
+                 height = input$plot_height,
+                 dpi = input$plot_dpi,
+                 units = "mm")
         }
       )
     }
