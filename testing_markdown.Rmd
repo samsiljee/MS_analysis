@@ -114,5 +114,20 @@ go_results <- enrichGO(gene = go_proteins,
            pvalueCutoff = 1,
            qvalueCutoff = 1)
 
+go_results_dat <- as.data.frame(go_results) %>%
+  mutate(Comparison = "comparisons", Direction = "directions", Subontology = "ont")
+
+go_enrichment_plot_dataset <- go_results_dat %>%
+  filter(Comparison == "comparisons" & Direction == "directions" & Subontology == "ont") %>%
+  mutate(GeneRatio =eval(parse(text = GeneRatio))) %>%
+  arrange(GeneRatio) %>%
+  .[1:7,]
+
+go_enrichment_plot <- go_enrichment_plot_dataset %>%
+  ggplot(aes(x = GeneRatio, y = 1:7, col = p.adjust, size = Count, label = Description)) +
+  geom_point() +
+  scale_y_continuous(breaks = 1:7, labels = letters[1:7])
+
+go_enrichment_plot
 ```
 
