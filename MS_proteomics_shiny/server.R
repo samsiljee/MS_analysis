@@ -9,6 +9,7 @@ library(ComplexHeatmap)
 library(vroom)
 library(janitor)
 library(org.Hs.eg.db)
+library(clusterProfiler)
 
 # Setting option to increase allowed file size to 30MB, I will probably have to increase this further
 options(shiny.maxRequestSize=30*1024^3)
@@ -194,6 +195,14 @@ server <- function(input, output, session){
     add_comparison()
   })
   
+  # # Removing the last comparison from the matrix
+  # observeEvent(input$reset_comparison, {
+  #   c_vals <- reactiveValues(matrix = NULL, comparison_names = character())
+  #   observeEvent(input$annotations, {
+  #     add_comparison()
+  #   })
+  # })
+  
   # Define function to add a row
   add_comparison <- function() {
     
@@ -277,49 +286,65 @@ server <- function(input, output, session){
            ModelQC = MSstats_test()$ModelQC)
   })
   
-output$outliers <- renderText(paste("There are", length(which(MSstats_comparison_results()$log2FC == Inf | MSstats_comparison_results()$log2FC == -Inf)), "results with infinite fold-change.", sep = " "))
+output$outliers <- renderText(paste("There are",
+                                    length(which(MSstats_comparison_results()$log2FC == Inf | MSstats_comparison_results()$log2FC == -Inf)),
+                                    "results with infinite fold-change.",
+                                    sep = " "))
 
 # Analysis ----
-## GO term analysis ----
+## GO enrichment analysis ----
 
 # Reactive UI
 output$select_go_comparison <- renderUI({
-  selectInput("go_comparison_selected", "Comparison for GO term analysis",
+  selectInput("go_comparison_selected", "Comparison/s to use",
               choices = sort(unique(MSstats_results()$Label)),
-              multiple = FALSE)
+              multiple = TRUE)
 })
 
-# Reactive variables
-go_proteins <- reactive({
-  MSstats_results() %>%
-    filter(Label == input$go_comparison_selected & Dif == input$go_direction) %>%
-    .$Protein %>%
-    as.character() %>%
-    unique()
-})
+# Set up value for results
+go_results <- reactiveVal(data.frame())
 
-# Run GO term analysis
-go_results <- eventReactive(input$go_go, {
-  enrichGO(gene = go_proteins(),
-           OrgDb = org.Hs.eg.db,
-           keyType = "UNIPROT",
-           pAdjustMethod = "BH",
-           universe = unique(MSstats_input()$ProteinName),
-           ont = input$go_ont,
-           pvalueCutoff = input$go_pvalueCutoff,
-           qvalueCutoff = input$go_qvalueCutoff)
-})
-
-plot_go_result <- reactive({
-  dotplot(go_results(),
-          x = "count",
-          showCategory = 10,
-          color = 'p.adjust',
-          title  = "Default title for now")
+# Run GO enrichment analysis
+observeEvent(input$go_go, {
+  results_added <- go_results()  # Initialize results_added outside the loop
+  
+  for (comparison in input$go_comparison_selected) {
+    for (directions in switch(
+      input$go_direction,
+      Both = c("Upregulated", "Downregulated"),
+      Upregulated = "Upregulated",
+      Downregulated = "Downregulated"
+    )){
+      for (ont in input$go_ont) {
+        go_proteins <- MSstats_results() %>%
+          filter(Label == comparison & Dif == directions) %>%
+          .$Protein %>%
+          as.character() %>%
+          unique()
+        
+        results <- enrichGO(
+          gene = go_proteins,
+          OrgDb = org.Hs.eg.db,
+          keyType = "UNIPROT",
+          pAdjustMethod = "BH",
+          universe = unique(MSstats_input()$ProteinName),
+          ont = ont,
+          pvalueCutoff = input$go_pvalueCutoff,
+          qvalueCutoff = input$go_qvalueCutoff
+        ) %>%
+          as.data.frame() %>%
+          mutate(Comparison = comparison, Direction = directions, Subontology = ont)
+        
+        results_added <- rbind(results_added, results)
+      } # Ontology for loop
+    } # Direction for loop
+  } # Comparison for loop
+  
+  go_results(results_added)  # Update go_results after all iterations
 })
 
 # Output
-output$go_plot_results <- renderPlot(plot_go_result())
+output$go_results_tab <- renderDataTable(go_results())
 
 # Visualisation ----
   # Reactive UI
@@ -332,6 +357,24 @@ output$go_plot_results <- renderPlot(plot_go_result())
 output$select_heatmap_filter <- renderUI({
   selectInput("heatmap_filter", "Filter by differentially expressed proteins",
               choices = c("Include all", sort(unique(MSstats_results()$Label))),
+              multiple = FALSE)
+})
+
+output$go_select_comparison <- renderUI({
+  selectInput("go_comparison_selected", "Comparison",
+              choices = sort(unique(go_results()$Comparison)),
+              multiple = FALSE)
+})
+
+output$go_select_direction <- renderUI({
+  selectInput("go_direction_selected", "Direction",
+              choices = sort(unique(go_results()$Direction)),
+              multiple = FALSE)
+})
+
+output$go_select_ont <- renderUI({
+  selectInput("go_ont_selected", "Subontology",
+              choices = sort(unique(go_results()$Subontology)),
               multiple = FALSE)
 })
   
@@ -350,6 +393,16 @@ heatmap_dif_proteins <- reactive({
     filter(Label == input$heatmap_filter & !Dif == "Not significant") %>%
     .$Protein %>%
     as.character()
+})
+
+go_enrichment_plot_dataset <- reactive({
+  go_results() %>%
+    filter(Comparison == input$go_comparison_selected &
+             Direction == input$go_direction_selected &
+             Subontology == input$go_ont_selected) %>%
+    mutate(GeneRatio =eval(parse(text = GeneRatio))) %>%
+    arrange(GeneRatio) %>%
+    .[1:input$go_top_n,]
 })
 
 # create a matrix of protein abundance for heatmap and PCA
@@ -431,19 +484,40 @@ column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
       selected_theme()
   })
   
+  ## GO enrichment plot ----
+   go_enrichment_plot <- eventReactive(input$go_plot, {
+     go_enrichment_plot_dataset() %>%
+       ggplot(aes(x = GeneRatio, y = 1:input$go_top_n, col = p.adjust, size = Count)) +
+       geom_point() +
+       scale_y_continuous(breaks = 1:input$go_top_n,
+                          labels = go_enrichment_plot_dataset()$Description) +
+       labs(y = NULL) +
+       ggtitle(paste0("GO enrichment ",
+                      input$go_comparison_selected, " ",
+                      input$go_direction_selected, " ",
+                      input$go_ont_selected)) +
+       selected_theme()
+   })
+  
   # Output
   output$plot <- renderPlot({
     plot_obj <- switch(input$plot_type,
                        Volcano = volcano_plot(),
                        PCA = pca_plot(),
-                       Heatmap = heatmap_plot())
+                       Heatmap = heatmap_plot(),
+                       `GO enrichment` = go_enrichment_plot())
     return(plot_obj)
   })
 
   #Testing ----
   
-  output$test_text <- renderText(go_proteins())
-  output$test_table <- renderTable(as.data.frame(go_results()))
+  output$test_text <- renderText(switch(
+    input$go_direction,
+    Both = c("Upregulated", "Downregulated"),
+    Upregulated = "Upregulated",
+    Downregulated = "Downregulated"
+  ))
+  output$test_table <- renderTable(go_results())
   
 # Downloads ----
   #Formatted data tables
@@ -521,14 +595,29 @@ column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
     }
   )
   
-  # Download plots
+  # Analysis
+  output$go_results_tsv <- downloadHandler(
+    filename = function() {
+      paste0("GO_analysis_results_", Sys.Date(), ".tsv")
+    },
+    content = function(file) {
+      vroom_write(go_results(), file, delim = "\t")
+    }
+  )
+  
+  ## Download plots ----
   output$plot_download <- downloadHandler(
     
     filename = function(){
       switch(input$plot_type,
         Volcano = paste0(input$comparison_selected, "_Volcano_", Sys.Date(), ".png"),
         PCA = paste0("PCA_",Sys.Date(), ".png"),
-        Heatmap = paste0("Heatmap_", Sys.Date(), ".png"))
+        Heatmap = paste0("Heatmap_", Sys.Date(), ".png"),
+        `GO enrichment` = paste0("GO_enrichment_",
+                                 input$go_comparison_selected, "_",
+                                 input$go_direction_selected, "_",
+                                 input$go_ont_selected, "_",
+                                 Sys.Date(), ".png"))
       },
     
     content = function(file){
@@ -559,6 +648,15 @@ column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
               units= "mm")
           draw(heatmap_plot())
           dev.off()
+        },
+        
+        `GO enrichment` = {
+          ggsave(file,
+                 plot = go_enrichment_plot(),
+                 width = input$plot_width,
+                 height = input$plot_height,
+                 dpi = input$plot_dpi,
+                 units = "mm")
         }
       )
     }
