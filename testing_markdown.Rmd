@@ -100,7 +100,7 @@ MSstats.results$Dif <- ifelse(MSstats.results$log2FC > 1 & MSstats.results$adj.p
 # GO analysis
 ```{r GO analysis, echo = FALSE}
 go_proteins <- MSstats.results %>%
-    filter(Label == "HEK vs SeasonB" & Dif == "Downregulated") %>%
+    filter(Label == "HEK vs SeasonB" & !Dif == "Not significant") %>%
     .$Protein %>%
     as.character() %>%
     unique()
