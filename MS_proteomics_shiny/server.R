@@ -309,8 +309,9 @@ observeEvent(input$go_go, {
   results_added <- go_results()  # Initialize results_added outside the loop
   
   for (comparison in input$go_comparison_selected) {
-    for (directions in input$go_directionction){
-      for (ont in input$go_ont) {
+    for (ont in input$go_ont) {
+      for (directions in input$go_direction){
+      
         go_proteins <- MSstats_results() %>%
           filter(Label == comparison & Dif == switch(
             directions,
@@ -334,8 +335,8 @@ observeEvent(input$go_go, {
           mutate(Comparison = comparison, Direction = directions, Subontology = ont)
         
         results_added <- rbind(results_added, results)
-      } # Ontology for loop
-    } # Direction for loop
+      } # Direction for loop
+    } # Sub-ontology for loop
   } # Comparison for loop
   
   go_results(results_added)  # Update go_results after all iterations
