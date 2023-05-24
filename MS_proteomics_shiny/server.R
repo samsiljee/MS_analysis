@@ -309,15 +309,15 @@ observeEvent(input$go_go, {
   results_added <- go_results()  # Initialize results_added outside the loop
   
   for (comparison in input$go_comparison_selected) {
-    for (directions in switch(
-      input$go_direction,
-      Both = c("Upregulated", "Downregulated"),
-      Upregulated = "Upregulated",
-      Downregulated = "Downregulated"
-    )){
-      for (ont in input$go_ont) {
+    for (ont in input$go_ont) {
+      for (directions in input$go_direction){
+      
         go_proteins <- MSstats_results() %>%
-          filter(Label == comparison & Dif == directions) %>%
+          filter(Label == comparison & Dif == switch(
+            directions,
+            Combined = c("Upregulated", "Downregulated"),
+            Upregulated = "Upregulated",
+            Downregulated = "Downregulated")) %>%
           .$Protein %>%
           as.character() %>%
           unique()
@@ -330,14 +330,13 @@ observeEvent(input$go_go, {
           universe = unique(MSstats_input()$ProteinName),
           ont = ont,
           pvalueCutoff = input$go_pvalueCutoff,
-          qvalueCutoff = input$go_qvalueCutoff
-        ) %>%
+          qvalueCutoff = input$go_qvalueCutoff) %>%
           as.data.frame() %>%
           mutate(Comparison = comparison, Direction = directions, Subontology = ont)
         
         results_added <- rbind(results_added, results)
-      } # Ontology for loop
-    } # Direction for loop
+      } # Direction for loop
+    } # Sub-ontology for loop
   } # Comparison for loop
   
   go_results(results_added)  # Update go_results after all iterations
