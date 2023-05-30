@@ -518,7 +518,14 @@ column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
   ))
   output$test_table <- renderTable(go_results())
   
-# Downloads ----
+# STRING ----
+  STRING <- function() {
+    return(includeHTML("STRING.html"))
+  }
+  
+  output$STRING_panel <- renderUI({STRING()})
+  
+  # Downloads ----
   #Formatted data tables
   output$formatted_tsv <- downloadHandler(
     filename = function() {

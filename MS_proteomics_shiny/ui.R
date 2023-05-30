@@ -321,7 +321,7 @@ tabPanel("Analysis",
 
 # STRING ----
 tabPanel("STRING",
-         includeHTML("STRING.html")
+         htmlOutput("STRING_panel")
 ),
 
 # QC ----
