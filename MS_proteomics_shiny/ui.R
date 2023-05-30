@@ -246,34 +246,54 @@ tabPanel("Process",
 # Analysis -------------------
 
 tabPanel("Analysis",
-         sidebarPanel(h4("GO enrichment analysis"),
-                      uiOutput("select_go_comparison"),
-                      selectInput("go_direction", "Direction",
-                                   choices = c("Upregulated", "Downregulated", "Combined"),
-                                   multiple = TRUE),
-                      selectInput("go_ont", "Subontology",
-                                  choices = c("Biological Process" = "BP",
-                                              "Molecular Function" = "MF",
-                                              "Cellular Component" = "CC"),
-                                  multiple = TRUE),
-                      numericInput("go_pvalueCutoff", "pvalue cutoff",
-                                   min = 0,
-                                   max = 1,
-                                   value = 0.05,
-                                   step = 0.01),
-                      numericInput("go_qvalueCutoff", "qvalue cutoff",
-                                   min = 0,
-                                   max = 1,
-                                   value = 0.2,
-                                   step = 0.01),
-                      actionButton("go_go", "Run GO enrichment analysis"),
-                      hr(style = "border-top: 2px solid #000000;"),
-                      downloadButton("go_results_tsv", "Save GO analysis as .tsv")
+         sidebarPanel(h4("Analysis type"),
+           selectInput("analysis_type", "Analysis to run",
+             choices = c("GO enrichment analysis", "STRING")),
+           # GO term analysis input
+             conditionalPanel(
+               condition = "input.analysis_type == 'GO enrichment analysis'",
+               uiOutput("select_go_comparison"),
+               selectInput("go_direction", "Direction",
+                           choices = c("Upregulated", "Downregulated", "Combined"),
+                           multiple = TRUE),
+               selectInput("go_ont", "Subontology",
+                           choices = c("Biological Process" = "BP",
+                                       "Molecular Function" = "MF",
+                                       "Cellular Component" = "CC"),
+                           multiple = TRUE),
+               numericInput("go_pvalueCutoff", "pvalue cutoff",
+                            min = 0,
+                            max = 1,
+                            value = 0.05,
+                            step = 0.01),
+               numericInput("go_qvalueCutoff", "qvalue cutoff",
+                            min = 0,
+                            max = 1,
+                            value = 0.2,
+                            step = 0.01),
+               actionButton("go_go", "Run GO enrichment analysis"),
+               hr(style = "border-top: 2px solid #000000;"),
+               downloadButton("go_results_tsv", "Save GO analysis as .tsv")
+             ), # conditionalPanel; GO enrichment
+           # STRING analysis input
+           conditionalPanel(
+             condition = "input.analysis_type == 'STRING'",
+             hr(style = "border-top: 2px solid #000000;"),
+             downloadButton("STRING_results_tsv", "Save STRING analysis as .tsv")
+             ) # Conditional panel STRING
+           
          ),
          
          mainPanel(
-           "Note that GO enrichment analysis can be quite slow",
-           withSpinner(dataTableOutput("go_results_tab"))
+           # GO analysis table
+           conditionalPanel(
+             condition = "input.analysis_type == 'GO enrichment analysis'",
+             "Note that GO enrichment analysis can be quite slow",
+             withSpinner(dataTableOutput("go_results_tab"))),
+           # STIGN analysis table
+           conditionalPanel(
+             condition = "input.analysis_type == 'STRING'",
+             "Note that STRING analysis can take some time")
          )),
 
 # Visualisation ----
