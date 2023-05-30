@@ -319,11 +319,6 @@ tabPanel("Analysis",
     
    ), # Visualisation
 
-# STRING ----
-tabPanel("STRING",
-         includeHTML("STRING.html")
-),
-
 # QC ----
 tabPanel("QC"
          ) # QC
