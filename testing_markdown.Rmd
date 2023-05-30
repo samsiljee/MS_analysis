@@ -133,24 +133,24 @@ go_enrichment_plot
 
 ```{r QC, echo = FALSE}
 
-unnormalised_boxplot <- unnormalised %>%
-  ggplot(aes(x = Run, y = log2(Intensity), col = Condition)) +
+unnormalised_boxplot <- unnormalised_feature %>%
+  ggplot(aes(x = originalRUN, y = log2(ABUNDANCE), col = GROUP)) +
   geom_boxplot() +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 90)) +
   ggtitle("Un-normalised")
   
 
-equalised_medians_boxplot <- equalised_medians %>%
-  ggplot(aes(x = originalRUN, y = log2(INTENSITY), col = GROUP)) +
+equalised_medians_boxplot <- equalise_medians_feature %>%
+  ggplot(aes(x = originalRUN, y = log2(ABUNDANCE), col = GROUP)) +
   geom_boxplot() +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 90)) +
   ggtitle("Equalise medians")
   
 
-quantile_boxplot <- quantile %>%
-  ggplot(aes(x = originalRUN, y = log2(INTENSITY), col = GROUP)) +
+quantile_boxplot <- quantile_feature %>%
+  ggplot(aes(x = originalRUN, y = log2(ABUNDANCE), col = GROUP)) +
   geom_boxplot() +
    theme_bw() +
   theme(axis.text.x = element_text(angle = 90)) +
