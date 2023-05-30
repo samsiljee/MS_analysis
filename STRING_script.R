@@ -83,14 +83,14 @@ head(enrichment, n=20)
 ###################################################
 ### code chunk number 12: background (eval = FALSE)
 ###################################################
-## backgroundV <- example1_mapped$STRING_id[1:2000]   # as an example, we use the first 2000 genes                                                    
-## string_db$set_background(backgroundV)
+backgroundV <- example1_mapped$STRING_id[1:2000]   # as an example, we use the first 2000 genes                                                    
+string_db$set_background(backgroundV)
 
 
 ###################################################
 ### code chunk number 13: new_background_inst (eval = FALSE)
 ###################################################
-## string_db <- STRINGdb$new( score_threshold=200, backgroundV = backgroundV )
+string_db <- STRINGdb$new( score_threshold=200, backgroundV = backgroundV )
 
 
 ###################################################
@@ -141,7 +141,7 @@ atm = string_db$mp( "atm" )
 ###################################################
 ### code chunk number 20: neighbors (eval = FALSE)
 ###################################################
-## string_db$get_neighbors( c(tp53, atm) )
+string_db$get_neighbors( c(tp53, atm) )
 
 
 ###################################################
@@ -153,21 +153,21 @@ string_db$get_interactions( c(tp53, atm) )
 ###################################################
 ### code chunk number 22: paralogs (eval = FALSE)
 ###################################################
-## # Get all homologs of TP53 in human.
-## string_db$get_paralogs(tp53)
+# Get all homologs of TP53 in human.
+string_db$get_paralogs(tp53)
 
 
 ###################################################
 ### code chunk number 23: Closest homologs from other species (eval = FALSE)
 ###################################################
-## # get the best hits of the following protein in all the STRING species
-## string_db$get_homologs_besthits(tp53)
+# get the best hits of the following protein in all the STRING species
+string_db$get_homologs_besthits(tp53)
 
 
 ###################################################
 ### code chunk number 24: homologs_besthits in target species (eval = FALSE)
 ###################################################
-## # get the homologs of the following two proteins in the mouse (i.e. species_id=10090)
-## string_db$get_homologs_besthits(c(tp53, atm), target_species_id=10090, bitscore_threshold=60)
+# get the homologs of the following two proteins in the mouse (i.e. species_id=10090)
+string_db$get_homologs_besthits(c(tp53, atm), target_species_id=10090, bitscore_threshold=60)
 
 
