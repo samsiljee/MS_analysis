@@ -317,6 +317,15 @@ tabPanel("Analysis",
       withSpinner(plotOutput("plot"))
     )
     
-   )
+   ), # Visualisation
+
+# STRING ----
+tabPanel("STRING",
+         includeHTML("STRING.html")
+),
+
+# QC ----
+tabPanel("QC"
+         ) # QC
 
 ) # Close UI

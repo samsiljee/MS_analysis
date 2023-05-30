@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- Embed the STRING's javascript -->
+    <script type="text/javascript" src="https://string-db.org/javascript/combined_embedded_network_v2.0.4.js"></script>
+  
+  </head>
+  <body onload='javascript:send_request_to_string()'>
+    <center>
+      <h3>Query me: (one human protein or multiple space-separated proteins)</h3>
+      <input type="text" id="inputarea" placeholder="GLI3" /><br /><br />
+      <button onclick="javascript:send_request_to_string();" type="button">Let's go!</button>
+      <h3>Network:</h3>
+      <div id="stringEmbedded"></div>
+    </center>
+  </body>
+</html>
