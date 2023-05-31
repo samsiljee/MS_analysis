@@ -361,6 +361,16 @@ observeEvent(input$go_go, {
 output$go_results_tab <- renderDataTable(go_results())
 
 ## STRING analysis ----
+# Interactive UI
+
+output$select_STRING_comparison <- renderUI({
+  selectInput("STRING_comparison_selected", "Comparison to use",
+              choices = sort(unique(MSstats_results()$Label)),
+              multiple = FALSE)
+})
+
+
+
 # Initialise database, as human currently
 string_db <- reactive({STRINGdb$new(
   version="11.5",
@@ -371,6 +381,17 @@ string_db <- reactive({STRINGdb$new(
   network_type="full",
   input_directory="")
 })
+
+# map STRING_id to dataset
+STRING_dataset <- reactive({
+  string_db$map(
+    filter(MSstats_results(), Label == input$STRING_comparison_selected),
+    "Protein",
+    removeUnmappedRows = TRUE )
+})
+
+# output
+output$STRING_tab <- renderDataTable(STRING_dataset())
 
 # Visualisation ----
   # Reactive UI

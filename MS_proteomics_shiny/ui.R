@@ -282,6 +282,7 @@ tabPanel("Analysis",
            # STRING analysis input
            conditionalPanel(
              condition = "input.analysis_type == 'STRING'",
+             uiOutput("select_STRING_comparison"),
              hr(style = "border-top: 2px solid #000000;"),
              downloadButton("STRING_results_tsv", "Save STRING analysis as .tsv")
              ) # Conditional panel STRING
@@ -297,7 +298,8 @@ tabPanel("Analysis",
            # STIGN analysis table
            conditionalPanel(
              condition = "input.analysis_type == 'STRING'",
-             "Note that STRING analysis can take some time")
+             "Note that STRING analysis can take some time",
+             withSpinner(dataTableOutput("STRING_tab")))
          )),
 
 # Visualisation ----
