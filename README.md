@@ -66,7 +66,7 @@ A shiny app to analyse mass spectromtetry for proteomics data - from PSMs to vis
   - Go term analysis with complete tabular output in the analysis tab, and plots intergrated into the visualisation tab
   - Pathview analysis
   - Change GO term analysis to use aGOtool via API: https://agotool.org/API_Help
- 
+  - Add in link to STRING website to view pathway, or embed the interactive network
 
 ## Completed issues
   - Add copyright to repository/scripts
