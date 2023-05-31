@@ -369,8 +369,6 @@ output$select_STRING_comparison <- renderUI({
               multiple = FALSE)
 })
 
-
-
 # Initialise database, as human currently
 string_db <- reactive({STRINGdb$new(
   version="11.5",
@@ -384,10 +382,12 @@ string_db <- reactive({STRINGdb$new(
 
 # map STRING_id to dataset
 STRING_dataset <- reactive({
-  string_db$map(
-    filter(MSstats_results(), Label == input$STRING_comparison_selected),
-    "Protein",
-    removeUnmappedRows = TRUE )
+  MSstats_results() %>%
+    filter(Label == input$STRING_comparison_selected) %>%
+    select(Protein, pvalue, log2FC) %>%
+    string_db$map(
+      "Protein",
+      removeUnmappedRows = TRUE )
 })
 
 # output

@@ -165,5 +165,11 @@ quantile_boxplot <- quantile_feature %>%
 string_db <- STRINGdb$new( version="11.5", species=9606, 
                            score_threshold=200, network_type="full", input_directory="")
 
+STRING_dataset <- MSstats.results %>%
+  filter(Label == "HEK vs SeasonB") %>%
+  select(Protein, pvalue, log2FC)
+  
+STRING_dataset_mapped <- string_db$map(STRING_dataset, "Protein", removeUnmappedRows = TRUE )
+
 ```
 
