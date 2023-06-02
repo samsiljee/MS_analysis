@@ -362,7 +362,6 @@ output$go_results_tab <- renderDataTable(go_results())
 
 ## STRING analysis ----
 # Interactive UI
-
 output$select_STRING_comparison <- renderUI({
   selectInput("STRING_comparison_selected", "Comparison to use",
               choices = sort(unique(MSstats_results()$Label)),
@@ -385,6 +384,7 @@ STRING_dataset <- reactive({
   MSstats_results() %>%
     filter(Label == input$STRING_comparison_selected) %>%
     select(Protein, pvalue, log2FC) %>%
+    arrange(pvalue) %>%
     string_db$map(
       "Protein",
       removeUnmappedRows = TRUE )
