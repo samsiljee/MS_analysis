@@ -21,6 +21,7 @@ library(EnhancedVolcano)
 library(ComplexHeatmap)
 library(clusterProfiler)
 library(org.Hs.eg.db)
+library(STRINGdb)
 ```
 
 # Directories
@@ -131,6 +132,7 @@ go_enrichment_plot <- go_enrichment_plot_dataset %>%
 go_enrichment_plot
 ```
 
+# QC
 ```{r QC, echo = FALSE}
 
 unnormalised_boxplot <- unnormalised_feature %>%
@@ -157,5 +159,23 @@ quantile_boxplot <- quantile_feature %>%
   ggtitle("Quantile")
 
 
+```
+
+# STRING analysis
+```{r STRING, echo = FALSE}
+string_db <- STRINGdb$new( version="11.5",
+                           species=9606, 
+                           score_threshold=200,
+                           network_type="full", input_directory="")
+
+STRING_dataset <- MSstats.results %>%
+    filter(Label == "HEK vs SeasonB") %>%
+    dplyr::select(Protein, pvalue, log2FC) %>%
+    arrange(pvalue) %>%
+    string_db$map(
+      "Protein",
+      removeUnmappedRows = TRUE)
+  
+STRING_network_plot <- string_db$plot_network(STRING_dataset$STRING_id[1:50]) + theme_dark()
 ```
 

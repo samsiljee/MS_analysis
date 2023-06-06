@@ -246,34 +246,61 @@ tabPanel("Process",
 # Analysis -------------------
 
 tabPanel("Analysis",
-         sidebarPanel(h4("GO enrichment analysis"),
-                      uiOutput("select_go_comparison"),
-                      selectInput("go_direction", "Direction",
-                                   choices = c("Upregulated", "Downregulated", "Combined"),
-                                   multiple = TRUE),
-                      selectInput("go_ont", "Subontology",
-                                  choices = c("Biological Process" = "BP",
-                                              "Molecular Function" = "MF",
-                                              "Cellular Component" = "CC"),
-                                  multiple = TRUE),
-                      numericInput("go_pvalueCutoff", "pvalue cutoff",
-                                   min = 0,
-                                   max = 1,
-                                   value = 0.05,
-                                   step = 0.01),
-                      numericInput("go_qvalueCutoff", "qvalue cutoff",
-                                   min = 0,
-                                   max = 1,
-                                   value = 0.2,
-                                   step = 0.01),
-                      actionButton("go_go", "Run GO enrichment analysis"),
-                      hr(style = "border-top: 2px solid #000000;"),
-                      downloadButton("go_results_tsv", "Save GO analysis as .tsv")
+         sidebarPanel(h4("Analysis type"),
+           selectInput("analysis_type", "Analysis to run",
+             choices = c("GO enrichment analysis", "STRING"),
+             multiple = FALSE),
+           selectInput("species", "Species",
+                       choices = c("Human", "Rat"),
+                       multiple = FALSE),
+           # GO term analysis input
+             conditionalPanel(
+               condition = "input.analysis_type == 'GO enrichment analysis'",
+               uiOutput("select_go_comparison"),
+               selectInput("go_direction", "Direction",
+                           choices = c("Upregulated", "Downregulated", "Combined"),
+                           multiple = TRUE),
+               selectInput("go_ont", "Subontology",
+                           choices = c("Biological Process" = "BP",
+                                       "Molecular Function" = "MF",
+                                       "Cellular Component" = "CC"),
+                           multiple = TRUE),
+               numericInput("go_pvalueCutoff", "pvalue cutoff",
+                            min = 0,
+                            max = 1,
+                            value = 0.05,
+                            step = 0.01),
+               numericInput("go_qvalueCutoff", "qvalue cutoff",
+                            min = 0,
+                            max = 1,
+                            value = 0.2,
+                            step = 0.01),
+               actionButton("go_go", "Run GO enrichment analysis"),
+               hr(style = "border-top: 2px solid #000000;"),
+               downloadButton("go_results_tsv", "Save GO analysis as .tsv")
+             ), # conditionalPanel; GO enrichment
+           # STRING analysis input
+           conditionalPanel(
+             condition = "input.analysis_type == 'STRING'",
+             uiOutput("select_STRING_comparison"),
+             actionButton("go_STRING", "Run STRING analysis"),
+             hr(style = "border-top: 2px solid #000000;"),
+             downloadButton("STRING_dataset_tsv", "Save STRING dataset as .tsv")
+             ) # Conditional panel STRING
+           
          ),
          
          mainPanel(
-           "Note that GO enrichment analysis can be quite slow",
-           withSpinner(dataTableOutput("go_results_tab"))
+           # GO analysis table
+           conditionalPanel(
+             condition = "input.analysis_type == 'GO enrichment analysis'",
+             "Note that GO enrichment analysis can be quite slow",
+             withSpinner(dataTableOutput("go_results_tab"))),
+           # STIGN analysis table
+           conditionalPanel(
+             condition = "input.analysis_type == 'STRING'",
+             "Note that STRING analysis can take some time",
+             withSpinner(dataTableOutput("STRING_tab")))
          )),
 
 # Visualisation ----
@@ -289,7 +316,11 @@ tabPanel("Analysis",
                     "Void"),
         multiple = FALSE),
       selectInput("plot_type", "Plot type",
-        choices = c("Volcano", "PCA", "Heatmap", "GO enrichment"),
+        choices = c("Volcano",
+                    "PCA",
+                    "Heatmap",
+                    "GO enrichment",
+                    "STRING network"),
         multiple = FALSE),
       hr(style = "border-top: 2px solid #000000;"),
       conditionalPanel(condition = "input.plot_type == 'Volcano'",
@@ -304,6 +335,11 @@ tabPanel("Analysis",
         uiOutput("go_select_ont"),
         numericInput("go_top_n", "Number to show",
                      value = 10,
+                     step = 1)),
+      conditionalPanel(
+        condition = "input.plot_type == 'STRING network'",
+        numericInput("STRING_n", "Nodes to plot",
+                     value = 50,
                      step = 1)),
       actionButton("go_plot", "Plot/update!"),
       hr(style = "border-top: 2px solid #000000;"),

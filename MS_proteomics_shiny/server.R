@@ -8,8 +8,8 @@ library(MSstats)
 library(ComplexHeatmap)
 library(vroom)
 library(janitor)
-library(org.Hs.eg.db)
-library(clusterProfiler)
+library(clusterProfiler) # may be replaced with topGO, or a GO tool via API
+library(STRINGdb)
 
 # Setting option to increase allowed file size to 30MB, I will probably have to increase this further
 options(shiny.maxRequestSize=30*1024^3)
@@ -40,6 +40,19 @@ server <- function(input, output, session){
     install.packages("tibble")
     library(tibble)
   }
+  
+  observeEvent(input$species, {
+    selected_species <- input$species
+    
+    # Load the selected package
+    switch(selected_species,
+           "Human" = library(org.Hs.eg.db),
+           "Rat" = library(org.Rn.eg.db))
+  })
+  
+  output$test_text <- renderText({
+    paste("Species", input$species, "selected.")
+  })
   
 # Input ----
 # Set reactive values
@@ -324,7 +337,9 @@ observeEvent(input$go_go, {
         
         results <- enrichGO(
           gene = go_proteins,
-          OrgDb = org.Hs.eg.db,
+          OrgDb = switch(input$species,
+            Human = org.Hs.eg.db,
+            Rat = org.Rn.eg.db),
           keyType = "UNIPROT",
           pAdjustMethod = "BH",
           universe = unique(MSstats_input()$ProteinName),
@@ -344,6 +359,39 @@ observeEvent(input$go_go, {
 
 # Output
 output$go_results_tab <- renderDataTable(go_results())
+
+## STRING analysis ----
+# Interactive UI
+output$select_STRING_comparison <- renderUI({
+  selectInput("STRING_comparison_selected", "Comparison to use",
+              choices = sort(unique(MSstats_results()$Label)),
+              multiple = FALSE)
+})
+
+# Initialise database, as human currently
+string_db <- reactive({STRINGdb$new(
+  version="11.5",
+  species=switch(input$species,
+    Human = 9606,
+    Rat = 10116),
+  score_threshold=200,
+  network_type="full",
+  input_directory="")
+})
+
+# Run STRING analysis
+STRING_dataset <- eventReactive(input$go_STRING, {
+  MSstats_results() %>%
+    filter(Label == input$STRING_comparison_selected) %>%
+    dplyr::select(Protein, pvalue, log2FC) %>%
+    arrange(pvalue) %>%
+    string_db()$map(
+      "Protein",
+      removeUnmappedRows = TRUE)
+})
+
+# output
+output$STRING_tab <- renderDataTable(STRING_dataset())
 
 # Visualisation ----
   # Reactive UI
@@ -412,7 +460,7 @@ prot_mat <- reactive({
     by.x = "originalRUN",
     by.y = "PcaRef",
     all.x = TRUE) %>%
-    select(Protein, Experiment, LogIntensities) %>%
+    dplyr::select(Protein, Experiment, LogIntensities) %>%
     pivot_wider(names_from = Experiment, values_from = LogIntensities)
   df_mat <- as.matrix(df[,-1])
   row.names(df_mat) <- df$Protein
@@ -498,25 +546,31 @@ column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
        selected_theme()
    })
   
+  ## STRING network plot ----
+  STRING_network_plot <- eventReactive(input$go_plot, {
+    string_db()$plot_network(STRING_dataset()$STRING_id[1:input$STRING_n])
+  })
+  
   # Output
   output$plot <- renderPlot({
     plot_obj <- switch(input$plot_type,
                        Volcano = volcano_plot(),
                        PCA = pca_plot(),
                        Heatmap = heatmap_plot(),
-                       `GO enrichment` = go_enrichment_plot())
+                       `GO enrichment` = go_enrichment_plot(),
+                       `STRING network` = STRING_network_plot())
     return(plot_obj)
   })
 
   #Testing ----
   
-  output$test_text <- renderText(switch(
-    input$go_direction,
-    Both = c("Upregulated", "Downregulated"),
-    Upregulated = "Upregulated",
-    Downregulated = "Downregulated"
-  ))
-  output$test_table <- renderTable(go_results())
+  # output$test_text <- renderText(switch(
+  #   input$go_direction,
+  #   Both = c("Upregulated", "Downregulated"),
+  #   Upregulated = "Upregulated",
+  #   Downregulated = "Downregulated"
+  # ))
+  output$test_table <- renderDataTable(STRING_dataset())
   
   # Downloads ----
   #Formatted data tables
@@ -601,6 +655,15 @@ column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
     },
     content = function(file) {
       vroom_write(go_results(), file, delim = "\t")
+    }
+  )
+  
+  output$STRING_dataset_tsv <- downloadHandler(
+    filename = function() {
+      paste0("STRING_dataset_", Sys.Date(), ".tsv")
+    },
+    content = function(file) {
+      vroom_write(STRING_dataset(), file, delim = "\t")
     }
   )
   
