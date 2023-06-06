@@ -383,7 +383,7 @@ string_db <- reactive({STRINGdb$new(
 STRING_dataset <- reactive({
   MSstats_results() %>%
     filter(Label == input$STRING_comparison_selected) %>%
-    select(Protein, pvalue, log2FC) %>%
+    dplyr::select(Protein, pvalue, log2FC) %>%
     arrange(pvalue) %>%
     string_db$map(
       "Protein",
@@ -460,7 +460,7 @@ prot_mat <- reactive({
     by.x = "originalRUN",
     by.y = "PcaRef",
     all.x = TRUE) %>%
-    select(Protein, Experiment, LogIntensities) %>%
+    dplyr::select(Protein, Experiment, LogIntensities) %>%
     pivot_wider(names_from = Experiment, values_from = LogIntensities)
   df_mat <- as.matrix(df[,-1])
   row.names(df_mat) <- df$Protein
