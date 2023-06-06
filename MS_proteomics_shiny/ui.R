@@ -283,8 +283,9 @@ tabPanel("Analysis",
            conditionalPanel(
              condition = "input.analysis_type == 'STRING'",
              uiOutput("select_STRING_comparison"),
+             actionButton("go_STRING", "Run STRING analysis"),
              hr(style = "border-top: 2px solid #000000;"),
-             downloadButton("STRING_results_tsv", "Save STRING analysis as .tsv")
+             downloadButton("STRING_dataset_tsv", "Save STRING dataset as .tsv")
              ) # Conditional panel STRING
            
          ),
@@ -338,7 +339,7 @@ tabPanel("Analysis",
       conditionalPanel(
         condition = "input.plot_type == 'STRING network'",
         numericInput("STRING_n", "Nodes to plot",
-                     value = 100,
+                     value = 50,
                      step = 1)),
       actionButton("go_plot", "Plot/update!"),
       hr(style = "border-top: 2px solid #000000;"),

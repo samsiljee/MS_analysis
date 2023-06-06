@@ -379,13 +379,13 @@ string_db <- reactive({STRINGdb$new(
   input_directory="")
 })
 
-# map STRING_id to dataset
-STRING_dataset <- reactive({
+# Run STRING analysis
+STRING_dataset <- eventReactive(input$go_STRING, {
   MSstats_results() %>%
     filter(Label == input$STRING_comparison_selected) %>%
     dplyr::select(Protein, pvalue, log2FC) %>%
     arrange(pvalue) %>%
-    string_db$map(
+    string_db()$map(
       "Protein",
       removeUnmappedRows = TRUE)
 })
@@ -548,7 +548,7 @@ column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
   
   ## STRING network plot ----
   STRING_network_plot <- eventReactive(input$go_plot, {
-    STRING_dataset()$STRING_id[1:input$STRING_n]
+    string_db()$plot_network(STRING_dataset()$STRING_id[1:input$STRING_n])
   })
   
   # Output
@@ -655,6 +655,15 @@ column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
     },
     content = function(file) {
       vroom_write(go_results(), file, delim = "\t")
+    }
+  )
+  
+  output$STRING_dataset_tsv <- downloadHandler(
+    filename = function() {
+      paste0("STRING_dataset_", Sys.Date(), ".tsv")
+    },
+    content = function(file) {
+      vroom_write(STRING_dataset(), file, delim = "\t")
     }
   )
   
