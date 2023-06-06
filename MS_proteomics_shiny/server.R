@@ -387,7 +387,7 @@ STRING_dataset <- reactive({
     arrange(pvalue) %>%
     string_db$map(
       "Protein",
-      removeUnmappedRows = TRUE )
+      removeUnmappedRows = TRUE)
 })
 
 # output
@@ -546,13 +546,19 @@ column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
        selected_theme()
    })
   
+  ## STRING network plot ----
+  STRING_network_plot <- eventReactive(input$go_plot, {
+    STRING_dataset()$STRING_id[1:input$STRING_n]
+  })
+  
   # Output
   output$plot <- renderPlot({
     plot_obj <- switch(input$plot_type,
                        Volcano = volcano_plot(),
                        PCA = pca_plot(),
                        Heatmap = heatmap_plot(),
-                       `GO enrichment` = go_enrichment_plot())
+                       `GO enrichment` = go_enrichment_plot(),
+                       `STRING network` = STRING_network_plot())
     return(plot_obj)
   })
 
@@ -564,7 +570,7 @@ column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
   #   Upregulated = "Upregulated",
   #   Downregulated = "Downregulated"
   # ))
-  output$test_table <- renderTable(go_results())
+  output$test_table <- renderDataTable(STRING_dataset())
   
   # Downloads ----
   #Formatted data tables
