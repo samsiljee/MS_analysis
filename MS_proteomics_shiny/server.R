@@ -358,7 +358,8 @@ observeEvent(input$go_go, {
 })
 
 # Output
-output$go_results_tab <- renderDataTable(go_results())
+output$go_results_tab <- renderDataTable(go_results(),
+                                         options = list(columnDefs = list(list(targets = c(6, 7), width = "600px"))))
 
 ## STRING analysis ----
 # Interactive UI
