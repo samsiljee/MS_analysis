@@ -548,7 +548,7 @@ column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
   
   ## STRING network plot ----
   STRING_network_plot <- eventReactive(input$go_plot, {
-    string_db()$plot_network(STRING_dataset()$STRING_id[1:input$STRING_n])
+    string_db()$get_png(STRING_dataset()$STRING_id[1:input$STRING_n])
   })
   
   # Output
