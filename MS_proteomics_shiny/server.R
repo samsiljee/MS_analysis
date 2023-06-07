@@ -390,8 +390,13 @@ STRING_dataset <- eventReactive(input$go_STRING, {
       removeUnmappedRows = TRUE)
 })
 
+# STRING enrichment
+STRING_enrichment <- eventReactive(input$go_STRING, {
+  string_db()$get_enrichment(STRING_dataset()$STRING_id)
+})
+
 # output
-output$STRING_tab <- renderDataTable(STRING_dataset())
+output$STRING_tab <- renderDataTable(STRING_enrichment())
 
 # Visualisation ----
   # Reactive UI
