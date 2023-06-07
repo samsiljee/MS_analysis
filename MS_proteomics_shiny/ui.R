@@ -290,7 +290,8 @@ tabPanel("Analysis",
                           step = 10),
              actionButton("go_STRING", "Run STRING analysis"),
              hr(style = "border-top: 2px solid #000000;"),
-             downloadButton("STRING_dataset_tsv", "Save STRING dataset as .tsv")
+             downloadButton("STRING_dataset_tsv", "Save STRING dataset as .tsv"),
+             downloadButton("STRING_enrichment_tsv", "Save STRING enrichment as .tsv")
              ) # Conditional panel STRING
            
          ),

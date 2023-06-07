@@ -10,6 +10,7 @@ library(vroom)
 library(janitor)
 library(clusterProfiler) # may be replaced with topGO, or a GO tool via API
 library(STRINGdb)
+library(DT)
 
 # Setting option to increase allowed file size to 30MB, I will probably have to increase this further
 options(shiny.maxRequestSize=30*1024^3)
@@ -358,8 +359,7 @@ observeEvent(input$go_go, {
 })
 
 # Output
-output$go_results_tab <- renderDataTable(go_results(),
-                                         options = list(columnDefs = list(list(targets = c(6, 7), width = "600px"))))
+output$go_results_tab <- renderDataTable(go_results())
 
 ## STRING analysis ----
 # Interactive UI
@@ -397,7 +397,18 @@ STRING_enrichment <- eventReactive(input$go_STRING, {
 })
 
 # output
-output$STRING_tab <- renderDataTable(STRING_enrichment())
+output$STRING_tab <- renderDataTable({
+  datatable(STRING_enrichment(),
+            options = list(
+              columnDefs = list(
+                list(targets = c(6, 7), render = JS("function(data, type, row, meta) {
+                  return type === 'display' && data.length > 20 ?
+                    data.substr(0, 20) + '...' :
+                    data;
+                }"))
+              )
+            ))
+})
 
 # Visualisation ----
   # Reactive UI
@@ -654,7 +665,7 @@ column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
     }
   )
   
-  # Analysis
+  ## Analysis ----
   output$go_results_tsv <- downloadHandler(
     filename = function() {
       paste0("GO_analysis_results_", Sys.Date(), ".tsv")
@@ -670,6 +681,15 @@ column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
     },
     content = function(file) {
       vroom_write(STRING_dataset(), file, delim = "\t")
+    }
+  )
+  
+  output$STRING_enrichment_tsv <- downloadHandler(
+    filename = function() {
+      paste0("STRING_enrichment_", Sys.Date(), ".tsv")
+    },
+    content = function(file) {
+      vroom_write(STRING_enrichment(), file, delim = "\t")
     }
   )
   
