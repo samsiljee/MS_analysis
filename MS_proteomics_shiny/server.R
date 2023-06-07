@@ -679,7 +679,8 @@ column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
                                  input$go_comparison_selected, "_",
                                  input$go_direction_selected, "_",
                                  input$go_ont_selected, "_",
-                                 Sys.Date(), ".png"))
+                                 Sys.Date(), ".png"),
+        `STRING network` = paste0("STRING_network_", Sys.Date(), ".png"))
       },
     
     content = function(file){
@@ -719,9 +720,19 @@ column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
                  height = input$plot_height,
                  dpi = input$plot_dpi,
                  units = "mm")
+        },
+        
+        `STRING network` = {
+            png(file,
+                height = input$plot_height,
+                width = input$plot_width,
+                res = input$plot_dpi,
+                units= "mm")
+            draw(STRING_network_plot())
+            dev.off()
         }
-      )
-    }
-  )
+      ) # Switch
+    } # Content
+  ) #Download handler
   
   }# Close the server
