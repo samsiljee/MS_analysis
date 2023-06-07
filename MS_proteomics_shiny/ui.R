@@ -283,6 +283,11 @@ tabPanel("Analysis",
            conditionalPanel(
              condition = "input.analysis_type == 'STRING'",
              uiOutput("select_STRING_comparison"),
+             numericInput("STRING_score_threshold", "Score threshold",
+                          value = 400,
+                          min = 0,
+                          max = 1000,
+                          step = 10),
              actionButton("go_STRING", "Run STRING analysis"),
              hr(style = "border-top: 2px solid #000000;"),
              downloadButton("STRING_dataset_tsv", "Save STRING dataset as .tsv")

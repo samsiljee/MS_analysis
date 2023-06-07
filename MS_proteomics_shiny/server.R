@@ -374,7 +374,7 @@ string_db <- reactive({STRINGdb$new(
   species=switch(input$species,
     Human = 9606,
     Rat = 10116),
-  score_threshold=200,
+  score_threshold=input$STRING_score_threshold,
   network_type="full",
   input_directory="")
 })
