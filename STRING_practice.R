@@ -210,3 +210,28 @@ hist(deg, breaks = 1:vcount(g) - 1, main = "Histogram of node degree")
 # Cluster to find modules
 ceb <- cluster_edge_betweenness(g)
 dendPlot(ceb, mode = "hclust")
+
+# And plotting the network again with the modules coloured.
+# The betweeness algorithm used to colour the edges means that the edges in red
+# are the edges that connect distinct modules. These are biologically important
+plot(ceb, g)
+
+# Number of communities
+length(ceb)
+
+# How modular the graph partitioning is
+modularity(ceb)
+
+# Delete isolated nodes
+new_g <- delete.vertices(g, which(degree(g) == 0))
+plot(new_g)
+
+# Make modules again
+new_ceb <- cluster_edge_betweenness(new_g)
+plot(new_ceb, new_g)
+
+# Extract nodes in a specific cluster
+ceb[1]
+
+# Notes - good igraph tutorial
+# https://kateto.net/netscix2016.html
