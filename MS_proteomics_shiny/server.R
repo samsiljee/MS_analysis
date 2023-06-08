@@ -380,6 +380,11 @@ string_db <- reactive({STRINGdb$new(
   input_directory="")
 })
 
+# Set background
+observe({
+  string_db()$set_background(base::unique(MSstats_input()$ProteinName))
+})
+
 # Run STRING analysis
 STRING_dataset <- eventReactive(input$go_STRING, {
   MSstats_results() %>%

@@ -98,6 +98,46 @@ MSstats.results$Dif <- ifelse(MSstats.results$log2FC > 1 & MSstats.results$adj.p
                                         "Not significant"))
 ```
 
+# STRING analysis
+```{r STRING, echo = FALSE}
+# define background first
+bg_prots <- STRINGdb$map(as.data.frame(input), "ProteinName", removeUnmappedRows = TRUE) %>%
+  .$STRING_id %>%
+  unique()
+
+string_db <- STRINGdb$new( version="11.5",
+                           species=9606, 
+                           score_threshold=700,
+                           network_type="full",
+                           input_directory="",
+                           protocol = "http",
+                           backgroundV = unique(input$ProteinName))
+
+STRING_dataset <- MSstats.results %>%
+    filter(Label == "HEK vs SeasonB") %>%
+    dplyr::select(Protein, pvalue, log2FC) %>%
+    arrange(pvalue) %>%
+    string_db$map(
+      "Protein",
+      removeUnmappedRows = TRUE)
+  
+# STRING_network_plot <- string_db$plot_network(STRING_dataset$STRING_id[1:50])
+
+# Run enrichment
+#set background
+bg_prots <- string_db$map(as.data.frame(input), "ProteinName", removeUnmappedRows = TRUE) %>%
+  .$STRING_id %>%
+  unique()
+string_db$set_background(bg_prots)
+
+STRING_enrichment <- string_db$get_enrichment(STRING_dataset$STRING_id)
+
+head(STRING_enrichment)
+STRING_enrichment$category %>% unique
+
+
+```
+
 # GO analysis
 ```{r GO analysis, echo = FALSE}
 go_proteins <- MSstats.results %>%
@@ -159,25 +199,5 @@ quantile_boxplot <- quantile_feature %>%
   ggtitle("Quantile")
 
 
-```
-
-# STRING analysis
-```{r STRING, echo = FALSE}
-string_db <- STRINGdb$new( version="11.5",
-                           species=9606, 
-                           score_threshold=200,
-                           network_type="full",
-                           input_directory="",
-                           protocol = "http")
-
-STRING_dataset <- MSstats.results %>%
-    filter(Label == "HEK vs SeasonB") %>%
-    dplyr::select(Protein, pvalue, log2FC) %>%
-    arrange(pvalue) %>%
-    string_db$map(
-      "Protein",
-      removeUnmappedRows = TRUE)
-  
-STRING_network_plot <- string_db$plot_network(STRING_dataset$STRING_id[1:50])
 ```
 
