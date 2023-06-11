@@ -51,10 +51,6 @@ server <- function(input, output, session){
            "Rat" = library(org.Rn.eg.db))
   })
   
-  output$test_text <- renderText({
-    paste("Species", input$species, "selected.")
-  })
-  
 # Input ----
 # Set reactive values
   
