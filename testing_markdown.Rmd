@@ -103,8 +103,7 @@ string_db <- STRINGdb$new(version="11.5",
                           species=9606, 
                           score_threshold=700,
                           network_type="full",
-                          input_directory="",
-                          backgroundV = unique(input$ProteinName))
+                          input_directory="")
 
 # Map whole dataset and use to set background
 string_background <- string_db$map(as.data.frame(input), "ProteinName", removeUnmappedRows = TRUE) %>%
@@ -112,12 +111,17 @@ string_background <- string_db$map(as.data.frame(input), "ProteinName", removeUn
   unique()
 string_db$set_background(string_background)
 
-# Make new database using background
-string_db <- STRINGdb$new(score_threshold=700, backgroundV = string_background)
+# New database using background
+string_db <- STRINGdb$new(version="11.5",
+                          species=9606, 
+                          score_threshold=700,
+                          network_type="full",
+                          input_directory="",
+                          backgroundV = string_background)
 
 # Run STRING analysis
 STRING_dataset <- MSstats.results %>%
-    filter(Label == "HEK vs SeasonB") %>%
+    filter(Label == "20mM vs control") %>%
     dplyr::select(Protein, pvalue, log2FC) %>%
     arrange(pvalue) %>%
     string_db$map(
