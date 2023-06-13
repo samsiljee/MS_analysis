@@ -52,8 +52,7 @@ server <- function(input, output, session){
   })
   
 # Input ----
-# Set reactive values
-  
+# read in files
   annot_col <- reactive({
     if (!is.null(input$annotations)){
       df <- vroom(input$annotations$datapath)
@@ -365,21 +364,45 @@ output$select_STRING_comparison <- renderUI({
               multiple = FALSE)
 })
 
-# Initialise database, as human currently
-string_db <- reactive({STRINGdb$new(
-  version="11.5",
-  species=switch(input$species,
-    Human = 9606,
-    Rat = 10116),
-  score_threshold=input$STRING_score_threshold,
-  network_type="full",
-  input_directory="")
-})
-
-# Set background
-observe({
-  string_db()$set_background(base::unique(MSstats_input()$ProteinName))
-})
+# Create database
+string_db <- reactive({
+  
+  # First make uncorrected database
+  string_db <- STRINGdb$new(
+    version="11.5",
+    species=switch(input$species,
+                   Human = 9606,
+                   Rat = 10116),
+    score_threshold=input$STRING_score_threshold,
+    network_type="full",
+    input_directory="")
+  
+  # Apply background if selected
+  if(input$set_STRING_background == "all_proteins") {
+    
+    # Map whole dataset and use to set background
+    string_background <- string_db$map(as.data.frame(MSstats_input()),
+                                       "ProteinName",
+                                       removeUnmappedRows = TRUE) %>%
+      .$STRING_id %>%
+      unique()
+    string_db$set_background(string_background)
+    
+    # New database using background
+    string_db <- STRINGdb$new(version="11.5",
+                              species=9606, 
+                              score_threshold=700,
+                              network_type="full",
+                              input_directory="",
+                              backgroundV = string_background)
+    return(string_db)
+    
+  } else {
+    
+    return(string_db) # Whole genome
+    
+  }
+}) # database reactive
 
 # Run STRING analysis
 STRING_dataset <- eventReactive(input$go_STRING, {
@@ -582,12 +605,13 @@ column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
 
   #Testing ----
   
-  # output$test_text <- renderText(switch(
-  #   input$go_direction,
-  #   Both = c("Upregulated", "Downregulated"),
-  #   Upregulated = "Upregulated",
-  #   Downregulated = "Downregulated"
-  # ))
+output$test_text <- renderText(
+  if(input$set_STRING_background == "all_proteins"){
+    print("All proteins selected")
+  } else {
+    print("Whole genome selected")
+  }
+)
   output$test_table <- renderDataTable(STRING_dataset())
   
   # Downloads ----
