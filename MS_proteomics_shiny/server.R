@@ -420,6 +420,17 @@ STRING_enrichment <- eventReactive(input$go_STRING, {
   string_db()$get_enrichment(STRING_dataset()$STRING_id)
 })
 
+# STRING annotations
+
+# STRING clustering
+STRING_clustersList <- eventReactive(input$go_STRING, {
+  if(input$cluster_STRING) {
+    string_db()$get_clusters(
+      STRING_dataset(),
+      algorithm = input$STRING_cluster_method)
+  }
+})
+
 # output
 output$STRING_tab <- renderDataTable({
   datatable(STRING_enrichment(),
@@ -606,11 +617,7 @@ column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
   #Testing ----
   
 output$test_text <- renderText(
-  if(input$set_STRING_background == "all_proteins"){
-    print("All proteins selected")
-  } else {
-    print("Whole genome selected")
-  }
+  input$STRING_cluster_method
 )
   output$test_table <- renderDataTable(STRING_dataset())
   
