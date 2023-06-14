@@ -423,7 +423,7 @@ STRING_enrichment <- eventReactive(input$go_STRING, {
 # STRING annotations
 
 # STRING clustering
-STRING_clustersList <- eventReactive(input$go_STRING, {
+STRING_clusters <- eventReactive(input$go_STRING, {
   if(input$cluster_STRING) {
     string_db()$get_clusters(
       STRING_dataset()$STRING_id,
