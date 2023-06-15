@@ -4,6 +4,7 @@
 
 # Packages ----
 library(shinycssloaders)
+library(DT)
 
 ui <- navbarPage(
   title = "MS analysis",
