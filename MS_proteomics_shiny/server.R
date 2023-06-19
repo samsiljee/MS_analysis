@@ -25,7 +25,6 @@ server <- function(input, output, session){
   
   observeEvent(input$quant_method, {
     selected_quant <- input$quant_method
-    
     switch(selected_quant,
            "LFQ" = library(MSstats),
            "TMT" = library(MSstatsTMT))
@@ -33,7 +32,6 @@ server <- function(input, output, session){
   
   observeEvent(input$species, {
     selected_species <- input$species
-    
     switch(selected_species,
            "Human" = library(org.Hs.eg.db),
            "Rat" = library(org.Rn.eg.db))
@@ -285,7 +283,7 @@ server <- function(input, output, session){
   })
   
 output$outliers <- renderText(paste("There are",
-                                    length(which(MSstats_comparison_results()$log2FC == Inf | MSstats_comparison_results()$log2FC == -Inf)),
+                                    length(base::which(MSstats_comparison_results()$log2FC == Inf | MSstats_comparison_results()$log2FC == -Inf)),
                                     "results with infinite fold-change.",
                                     sep = " "))
 
