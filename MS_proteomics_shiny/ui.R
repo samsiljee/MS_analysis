@@ -12,6 +12,13 @@ ui <- navbarPage(
 # Instructions ----
 
   tabPanel("Instructions",
+    radioButtons("platform",
+                 "Search platform",
+                 choiceNames = c("Proteome Discoverer", "MaxQuant"),
+                 choiceValues = c("PD", "MQ")),
+    radioButtons("quant_method",
+                 "Quantitation method",
+                 choices = c("LFQ", "TMT")),
     "Welcome to my proteomics analysis pipeline.",
     "Please move sequentially through the tabs to complete the analysis.", br(),
     "Certain section require previous tabs to be completed, however others can be run part-way through.",
@@ -33,10 +40,8 @@ ui <- navbarPage(
 
   tabPanel("Input", "Input raw data and annotation files",
     sidebarPanel(
-      radioButtons("platform",
-                   "Search platform",
-                   choiceNames = c("Proteome Discoverer", "MaxQuant"),
-                   choiceValues = c("PD", "MQ")),
+      conditionalPanel(
+        condition = "input.quant_method == 'LFQ'",
       hr(style = "border-top: 2px solid #000000;"),     
       fileInput("annotations", "Annotations file",
         buttonLabel = "Browse",
@@ -52,7 +57,16 @@ ui <- navbarPage(
         hr(style = "border-top: 2px solid #000000;"),
         fileInput("proteinGroups", "MQ proteinGroups",
                   buttonLabel = "Browse",
-                  placeholder = "Upload protein groups"))),
+                  placeholder = "Upload protein groups"))), # Conditional panel LFQ
+     
+       conditionalPanel(
+        condition = "input.quant_method == 'TMT'",
+        hr(style = "border-top: 2px solid #000000;"),     
+        fileInput("annotations", "Annotations file",
+                  buttonLabel = "Browse",
+                  placeholder = "Upload annotations")
+        ) # Conditional panel TMT
+      ), # Side panel
     
     mainPanel(
       h3("Annotations"),

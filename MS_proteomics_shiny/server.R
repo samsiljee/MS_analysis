@@ -4,52 +4,41 @@
 
 # Packages ----
 library(shiny)
-library(MSstats)
 library(ComplexHeatmap)
 library(vroom)
 library(janitor)
 library(clusterProfiler) # may be replaced with topGO, or a GO tool via API
 library(STRINGdb)
 library(DT)
+library(ggplot2)
+library(tidyr)
+library(dplyr)
+library(stringr)
+library(tibble)
 
 # Setting option to increase allowed file size to 30MB, I will probably have to increase this further
 options(shiny.maxRequestSize=30*1024^3)
 
 server <- function(input, output, session){
- # Packages
-  if (!require(ggplot2)) {
-    install.packages("ggplot2")
-    library(ggplot2)
-  }
   
-  if (!require(tidyr)) {
-    install.packages("tidyr")
-    library(tidyr)
-  }
+  # Load packages depending on input selected
   
-  if (!require(dplyr)) {
-    install.packages("dplyr")
-    library(dplyr)
-  }
-  
-  if (!require(stringr)) {
-    install.packages("stringr")
-    library(stringr)
-  }
-  
-  if (!require(tibble)) {
-    install.packages("tibble")
-    library(tibble)
-  }
+  observeEvent(input$quant_method, {
+    selected_quant <- input$quant_method
+    
+    switch(selected_quant,
+           "LFQ" = library(MSstats),
+           "TMT" = library(MSstatsTMT))
+  })
   
   observeEvent(input$species, {
     selected_species <- input$species
     
-    # Load the selected package
     switch(selected_species,
            "Human" = library(org.Hs.eg.db),
            "Rat" = library(org.Rn.eg.db))
   })
+  
   
 # Input ----
 # read in files
