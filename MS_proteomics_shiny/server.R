@@ -91,9 +91,12 @@ server <- function(input, output, session){
   output$PSMs_tab <- renderDataTable(raw())
   
   output$proteinGroups_tab <- renderDataTable(protein_groups())
+
   
 # Format ----
-  # Reactive values
+  
+  ## LFQ ----
+  # Generate input
   MSstats_input <- eventReactive(input$go_format, {
     switch(input$platform,
       PD = {
@@ -128,11 +131,51 @@ server <- function(input, output, session){
     } # switch = MQ
     ) # switch
   }) # eventReactive
+  
+  ## TMT ----
+  MSstats_TMT_input <- eventReactive(input$go_format, {
+    switch(input$platform,
+      PD = {
+        PDtoMSstatsTMTFormat(
+          input = raw(), # same as LFQ
+          annotation = annot_col(), # same as LFQ
+          which.proteinid = input$which.proteinid, # same as LFQ
+          useNumProteinsColumn = input$useNumProteinsColumn, # same as LFQ
+          useUniquePeptide = input$useUniquePeptide, # same as LFQ
+          rmPSM_withfewMea_withinRun = input$removeFewMeasurements, # new name, but otherwise the same as LFQ
+          summaryforMultipleRows = ifelse(input$summaryforMultipleRows == "max", max, sum)) # same as LFQ
+          # Old name removeFewMeasurements = input$removeFewMeasurements,
+          # old removeOxidationMpeptides = input$removeOxidationMpeptides,
+          # old removeProtein_with1Peptide = input$removeProtein_with1Peptide,
+          # old which.quantification = input$which.quantification,
+          # old which.sequence = input$which.sequence,
+          # old use_log_file = FALSE)
+      }, # switch = PD
+      
+      MQ = {
+        MaxQtoMSstatsFormat(
+          evidence = raw(),
+          annotation = annot_col(),
+          proteinGroups = protein_groups(),
+          proteinID = input$proteinID,
+          useUniquePeptide = input$useUniquePeptide,
+          summaryforMultipleRows = ifelse(input$summaryforMultipleRows == "max", max, sum),
+          removeFewMeasurements = input$removeFewMeasurements,
+          removeMpeptides = input$removeMpeptides,
+          removeOxidationMpeptides = input$removeOxidationMpeptides,
+          removeProtein_with1Peptide = input$removeProtein_with1Peptide,
+          use_log_file = FALSE)
+      } # switch = MQ
+    ) # switch
+  }) # eventReactive
 
 # Output
   output$MSstats_input_tab <- renderDataTable(MSstats_input())
 
+
 # Process ----
+  ## LFQ ----
+  
   # Reactive values
   MSstats_processed <- eventReactive(input$go_process, {
     dataProcess(
@@ -153,6 +196,8 @@ server <- function(input, output, session){
       maxQuantileforCensored = input$maxQuantileforCensored,
       use_log_file = FALSE)
   })
+  
+  ## TMT ----
   
   # Output
   output$MSstats_processed_tab <- renderDataTable({
