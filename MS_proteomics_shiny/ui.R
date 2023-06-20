@@ -107,18 +107,13 @@ tabPanel("Format", "Pre-filter and format data for MSstats",
         value = FALSE),
       radioButtons(
         "which.proteinid",
-        "Column to be used for protein names",
+        "Protein ID",
         choiceNames = c("Master protein accessions", "Protein accessions"),
         choiceValues = c("Master.Protein.Accessions", "Protein.Accessions"))),
     
-    # MQ Conditional options
+    # MQ conditional options
     conditionalPanel(
       condition = "input.platform == 'MQ'",
-      radioButtons(
-        "proteinID",
-        "Protein ID",
-        choiceNames = c("Proteins", "Leading razor protein"),
-        choiceValues = c("Proteins", "Leading.razor.protein")),
       checkboxInput(
         "removeMpeptides",
         "Remove peptides including \'M\' sequence",
@@ -149,7 +144,18 @@ tabPanel("Format", "Pre-filter and format data for MSstats",
           "which.sequence",
           "Column to be used for peptide sequences",
           choiceNames = c("Sequence", "Annotated sequence"),
-          choiceValues = c("Sequence", "Annotated.Sequence")))),
+          choiceValues = c("Sequence", "Annotated.Sequence"))),
+      
+      # LFQ and MQ conditional options
+      conditionalPanel(
+        condition = "input.platform == 'MQ'",
+        radioButtons(
+          "MQLFQproteinID",
+          "Protein ID",
+          choiceNames = c("Proteins", "Leading razor protein"),
+          choiceValues = c("Proteins", "Leading.razor.protein"))
+      )
+      ),
     
     # TMT conditional options
     conditionalPanel(
@@ -157,7 +163,23 @@ tabPanel("Format", "Pre-filter and format data for MSstats",
       checkboxInput(
         "rmProtein_with1Feature",
         "Remove proteins with only 1 peptide and charge",
-        value = FALSE)
+        value = FALSE),
+      
+      # TMT and MQ conditional options
+      conditionalPanel(
+        condition = "input.platform == 'MQ'",
+        radioButtons(
+          "MQTMTproteinID",
+          "Protein ID",
+          choiceNames = c("Proteins",
+                          "Leading proteins",
+                          "Leading razor protein",
+                          "Gene names"),
+          choiceValues = c("Proteins",
+                           "Leading.proteins",
+                           "Leading.razor.protein",
+                           "Gene.names"))
+      )
     ),
     
     actionButton(

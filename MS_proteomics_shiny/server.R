@@ -122,7 +122,7 @@ server <- function(input, output, session){
               evidence = raw(),
               annotation = annot_col(),
               proteinGroups = protein_groups(),
-              proteinID = input$proteinID,
+              proteinID = input$MQLFQproteinID,
               useUniquePeptide = input$useUniquePeptide,
               summaryforMultipleRows = ifelse(input$summaryforMultipleRows == "max", max, sum),
               removeFewMeasurements = input$removeFewMeasurements,
@@ -149,11 +149,11 @@ server <- function(input, output, session){
           }, # close PD (TMT)
           
           MQ = {
-            MaxQtoMSstatsFormat(
+            MaxQtoMSstatsTMTFormat(
               evidence = raw(),
               annotation = annot_col(),
               proteinGroups = protein_groups(),
-              proteinID = input$proteinID,
+              which.proteinid = input$MQTMTproteinID,
               useUniquePeptide = input$useUniquePeptide,
               summaryforMultipleRows = ifelse(input$summaryforMultipleRows == "max", max, sum),
               removeFewMeasurements = input$removeFewMeasurements,
