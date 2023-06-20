@@ -165,11 +165,6 @@ server <- function(input, output, session){
       } # Close TMT
     ) # close switch quant method
   }) # eventReactive
-  
-  ## TMT ----
-  MSstats_input <- eventReactive(input$go_format, {
-    
-  }) # eventReactive
 
 # Output
   output$MSstats_input_tab <- renderDataTable(MSstats_input())
