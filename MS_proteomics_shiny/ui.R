@@ -111,15 +111,6 @@ tabPanel("Format", "Pre-filter and format data for MSstats",
         choiceNames = c("Master protein accessions", "Protein accessions"),
         choiceValues = c("Master.Protein.Accessions", "Protein.Accessions"))),
     
-    # MQ conditional options
-    conditionalPanel(
-      condition = "input.platform == 'MQ'",
-      checkboxInput(
-        "removeMpeptides",
-        "Remove peptides including \'M\' sequence",
-        value = FALSE)
-      ),
-    
     # LFQ conditional options
     conditionalPanel(
       condition = "input.quant_method == 'LFQ'",
@@ -153,7 +144,11 @@ tabPanel("Format", "Pre-filter and format data for MSstats",
           "MQLFQproteinID",
           "Protein ID",
           choiceNames = c("Proteins", "Leading razor protein"),
-          choiceValues = c("Proteins", "Leading.razor.protein"))
+          choiceValues = c("Proteins", "Leading.razor.protein")),
+        checkboxInput(
+          "removeMpeptides",
+          "Remove peptides including \'M\' sequence",
+          value = FALSE)
       )
       ),
     
