@@ -178,7 +178,11 @@ tabPanel("Format", "Pre-filter and format data for MSstats",
           choiceValues = c("Proteins",
                            "Leading.proteins",
                            "Leading.razor.protein",
-                           "Gene.names"))
+                           "Gene.names")),
+        checkboxInput(
+          "rmProt_Only.identified.by.site",
+          "Remove proteins only identified by modification site",
+          value = FALSE)
       )
     ),
     

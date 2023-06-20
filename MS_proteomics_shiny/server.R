@@ -154,12 +154,11 @@ server <- function(input, output, session){
               annotation = annot_col(),
               proteinGroups = protein_groups(),
               which.proteinid = input$MQTMTproteinID,
+              rmProt_Only.identified.by.site = input$rmProt_Only.identified.by.site,
               useUniquePeptide = input$useUniquePeptide,
+              rmPSM_withfewMea_withinRun = input$removeFewMeasurements,
+              rmProtein_with1Feature = input$rmProtein_with1Feature,
               summaryforMultipleRows = ifelse(input$summaryforMultipleRows == "max", max, sum),
-              removeFewMeasurements = input$removeFewMeasurements,
-              removeMpeptides = input$removeMpeptides,
-              removeOxidationMpeptides = input$removeOxidationMpeptides,
-              removeProtein_with1Peptide = input$removeProtein_with1Peptide,
               use_log_file = FALSE)
           } # close MQ (TMT)
         )
