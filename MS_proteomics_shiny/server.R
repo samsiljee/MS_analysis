@@ -161,10 +161,9 @@ server <- function(input, output, session){
               summaryforMultipleRows = ifelse(input$summaryforMultipleRows == "max", max, sum),
               use_log_file = FALSE)
           } # close MQ (TMT)
-        )
+        ) # close switch platform
       } # Close TMT
-      
-    ) # Switch quant method
+    ) # close switch quant method
   }) # eventReactive
   
   ## TMT ----
