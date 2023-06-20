@@ -56,7 +56,6 @@ A shiny app to analyse mass spectromtetry for proteomics data - from PSMs to vis
 ## Issues and to-do
   - Currently working on fine-tuning some of the MSstats I/O options - global standards still to be done, could potentially set Trypsin as the default for this
   - Check that the default values are sensible - Discuss with appropriate bio-infomatician
-  - Will need to add option to disable automatic removal of potential contaminants from MQ data, do this by setting all values of the potential contaminant column to -ve before inputting into MaxQtoMSstatsFormat
   - QC section
   - Better progress bars for slow processes
   - Export log files of the MSstats functions, and export a txt document describing the settings used
@@ -67,7 +66,7 @@ A shiny app to analyse mass spectromtetry for proteomics data - from PSMs to vis
   - Pathview analysis
   - Change GO term analysis to use aGOtool via API: https://agotool.org/API_Help
   - Add in link to STRING website to view pathway, or embed the interactive network
-  - Refine selection methods for inclduign string nodes, currently it just takes the top n most significant nodes, regardless of actual significance.
+  - Refine selection methods for including string nodes, currently it just takes the top n most significant nodes, regardless of actual significance.
 
 ## Completed issues
   - Add copyright to repository/scripts

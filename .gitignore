@@ -2,6 +2,7 @@
 data/*
 input/*
 output/*
+STRING_test_data/*
 *.log
 MS_analysis.Rproj
 MS_proteomics_shiny/server-PC-2204-GMR-07.R

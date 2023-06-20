@@ -4,59 +4,42 @@
 
 # Packages ----
 library(shiny)
-library(MSstats)
 library(ComplexHeatmap)
 library(vroom)
 library(janitor)
 library(clusterProfiler) # may be replaced with topGO, or a GO tool via API
 library(STRINGdb)
+library(DT)
+library(ggplot2)
+library(tidyr)
+library(dplyr)
+library(stringr)
+library(tibble)
 
 # Setting option to increase allowed file size to 30MB, I will probably have to increase this further
 options(shiny.maxRequestSize=30*1024^3)
 
 server <- function(input, output, session){
- # Packages
-  if (!require(ggplot2)) {
-    install.packages("ggplot2")
-    library(ggplot2)
-  }
   
-  if (!require(tidyr)) {
-    install.packages("tidyr")
-    library(tidyr)
-  }
+  # Load packages depending on input selected
   
-  if (!require(dplyr)) {
-    install.packages("dplyr")
-    library(dplyr)
-  }
-  
-  if (!require(stringr)) {
-    install.packages("stringr")
-    library(stringr)
-  }
-  
-  if (!require(tibble)) {
-    install.packages("tibble")
-    library(tibble)
-  }
+  observeEvent(input$quant_method, {
+    selected_quant <- input$quant_method
+    switch(selected_quant,
+           "LFQ" = library(MSstats),
+           "TMT" = library(MSstatsTMT))
+  })
   
   observeEvent(input$species, {
     selected_species <- input$species
-    
-    # Load the selected package
     switch(selected_species,
            "Human" = library(org.Hs.eg.db),
            "Rat" = library(org.Rn.eg.db))
   })
   
-  output$test_text <- renderText({
-    paste("Species", input$species, "selected.")
-  })
   
 # Input ----
-# Set reactive values
-  
+# read in files
   annot_col <- reactive({
     if (!is.null(input$annotations)){
       df <- vroom(input$annotations$datapath)
@@ -108,9 +91,12 @@ server <- function(input, output, session){
   output$PSMs_tab <- renderDataTable(raw())
   
   output$proteinGroups_tab <- renderDataTable(protein_groups())
+
   
 # Format ----
-  # Reactive values
+  
+  ## LFQ ----
+  # Generate input
   MSstats_input <- eventReactive(input$go_format, {
     switch(input$platform,
       PD = {
@@ -145,11 +131,51 @@ server <- function(input, output, session){
     } # switch = MQ
     ) # switch
   }) # eventReactive
+  
+  ## TMT ----
+  MSstats_TMT_input <- eventReactive(input$go_format, {
+    switch(input$platform,
+      PD = {
+        PDtoMSstatsTMTFormat(
+          input = raw(), # same as LFQ
+          annotation = annot_col(), # same as LFQ
+          which.proteinid = input$which.proteinid, # same as LFQ
+          useNumProteinsColumn = input$useNumProteinsColumn, # same as LFQ
+          useUniquePeptide = input$useUniquePeptide, # same as LFQ
+          rmPSM_withfewMea_withinRun = input$removeFewMeasurements, # new name, but otherwise the same as LFQ
+          summaryforMultipleRows = ifelse(input$summaryforMultipleRows == "max", max, sum)) # same as LFQ
+          # Old name removeFewMeasurements = input$removeFewMeasurements,
+          # old removeOxidationMpeptides = input$removeOxidationMpeptides,
+          # old removeProtein_with1Peptide = input$removeProtein_with1Peptide,
+          # old which.quantification = input$which.quantification,
+          # old which.sequence = input$which.sequence,
+          # old use_log_file = FALSE)
+      }, # switch = PD
+      
+      MQ = {
+        MaxQtoMSstatsFormat(
+          evidence = raw(),
+          annotation = annot_col(),
+          proteinGroups = protein_groups(),
+          proteinID = input$proteinID,
+          useUniquePeptide = input$useUniquePeptide,
+          summaryforMultipleRows = ifelse(input$summaryforMultipleRows == "max", max, sum),
+          removeFewMeasurements = input$removeFewMeasurements,
+          removeMpeptides = input$removeMpeptides,
+          removeOxidationMpeptides = input$removeOxidationMpeptides,
+          removeProtein_with1Peptide = input$removeProtein_with1Peptide,
+          use_log_file = FALSE)
+      } # switch = MQ
+    ) # switch
+  }) # eventReactive
 
 # Output
   output$MSstats_input_tab <- renderDataTable(MSstats_input())
 
+
 # Process ----
+  ## LFQ ----
+  
   # Reactive values
   MSstats_processed <- eventReactive(input$go_process, {
     dataProcess(
@@ -170,6 +196,8 @@ server <- function(input, output, session){
       maxQuantileforCensored = input$maxQuantileforCensored,
       use_log_file = FALSE)
   })
+  
+  ## TMT ----
   
   # Output
   output$MSstats_processed_tab <- renderDataTable({
@@ -300,7 +328,7 @@ server <- function(input, output, session){
   })
   
 output$outliers <- renderText(paste("There are",
-                                    length(which(MSstats_comparison_results()$log2FC == Inf | MSstats_comparison_results()$log2FC == -Inf)),
+                                    length(base::which(MSstats_comparison_results()$log2FC == Inf | MSstats_comparison_results()$log2FC == -Inf)),
                                     "results with infinite fold-change.",
                                     sep = " "))
 
@@ -368,16 +396,45 @@ output$select_STRING_comparison <- renderUI({
               multiple = FALSE)
 })
 
-# Initialise database, as human currently
-string_db <- reactive({STRINGdb$new(
-  version="11.5",
-  species=switch(input$species,
-    Human = 9606,
-    Rat = 10116),
-  score_threshold=200,
-  network_type="full",
-  input_directory="")
-})
+# Create database
+string_db <- reactive({
+  
+  # First make uncorrected database
+  string_db <- STRINGdb$new(
+    version="11.5",
+    species=switch(input$species,
+                   Human = 9606,
+                   Rat = 10116),
+    score_threshold=input$STRING_score_threshold,
+    network_type="full",
+    input_directory="")
+  
+  # Apply background if selected
+  if(input$set_STRING_background == "all_proteins") {
+    
+    # Map whole dataset and use to set background
+    string_background <- string_db$map(as.data.frame(MSstats_input()),
+                                       "ProteinName",
+                                       removeUnmappedRows = TRUE) %>%
+      .$STRING_id %>%
+      unique()
+    string_db$set_background(string_background)
+    
+    # New database using background
+    string_db <- STRINGdb$new(version="11.5",
+                              species=9606, 
+                              score_threshold=700,
+                              network_type="full",
+                              input_directory="",
+                              backgroundV = string_background)
+    return(string_db)
+    
+  } else {
+    
+    return(string_db) # Whole genome
+    
+  }
+}) # database reactive
 
 # Run STRING analysis
 STRING_dataset <- eventReactive(input$go_STRING, {
@@ -390,8 +447,35 @@ STRING_dataset <- eventReactive(input$go_STRING, {
       removeUnmappedRows = TRUE)
 })
 
+# STRING enrichment
+STRING_enrichment <- eventReactive(input$go_STRING, {
+  string_db()$get_enrichment(STRING_dataset()$STRING_id)
+})
+
+# STRING annotations
+
+# STRING clustering
+STRING_clusters <- eventReactive(input$go_STRING, {
+  if(input$cluster_STRING) {
+    string_db()$get_clusters(
+      STRING_dataset()$STRING_id,
+      algorithm = input$STRING_cluster_method)
+  }
+})
+
 # output
-output$STRING_tab <- renderDataTable(STRING_dataset())
+output$STRING_tab <- renderDataTable({
+  datatable(STRING_enrichment(),
+            options = list(
+              columnDefs = list(
+                list(targets = c(6, 7), render = JS("function(data, type, row, meta) {
+                  return type === 'display' && data.length > 20 ?
+                    data.substr(0, 20) + '...' :
+                    data;
+                }"))
+              )
+            ))
+})
 
 # Visualisation ----
   # Reactive UI
@@ -548,7 +632,7 @@ column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
   
   ## STRING network plot ----
   STRING_network_plot <- eventReactive(input$go_plot, {
-    string_db()$plot_network(STRING_dataset()$STRING_id[1:input$STRING_n])
+    string_db()$get_png(STRING_dataset()$STRING_id[1:input$STRING_n])
   })
   
   # Output
@@ -564,12 +648,9 @@ column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
 
   #Testing ----
   
-  # output$test_text <- renderText(switch(
-  #   input$go_direction,
-  #   Both = c("Upregulated", "Downregulated"),
-  #   Upregulated = "Upregulated",
-  #   Downregulated = "Downregulated"
-  # ))
+output$test_text <- renderText(
+  input$STRING_cluster_method
+)
   output$test_table <- renderDataTable(STRING_dataset())
   
   # Downloads ----
@@ -648,7 +729,7 @@ column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
     }
   )
   
-  # Analysis
+  ## Analysis ----
   output$go_results_tsv <- downloadHandler(
     filename = function() {
       paste0("GO_analysis_results_", Sys.Date(), ".tsv")
@@ -667,6 +748,15 @@ column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
     }
   )
   
+  output$STRING_enrichment_tsv <- downloadHandler(
+    filename = function() {
+      paste0("STRING_enrichment_", Sys.Date(), ".tsv")
+    },
+    content = function(file) {
+      vroom_write(STRING_enrichment(), file, delim = "\t")
+    }
+  )
+  
   ## Download plots ----
   output$plot_download <- downloadHandler(
     
@@ -679,7 +769,8 @@ column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
                                  input$go_comparison_selected, "_",
                                  input$go_direction_selected, "_",
                                  input$go_ont_selected, "_",
-                                 Sys.Date(), ".png"))
+                                 Sys.Date(), ".png"),
+        `STRING network` = paste0("STRING_network_", Sys.Date(), ".png"))
       },
     
     content = function(file){
@@ -719,9 +810,19 @@ column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
                  height = input$plot_height,
                  dpi = input$plot_dpi,
                  units = "mm")
+        },
+        
+        `STRING network` = {
+            png(file,
+                height = input$plot_height,
+                width = input$plot_width,
+                res = input$plot_dpi,
+                units= "mm")
+            draw(STRING_network_plot())
+            dev.off()
         }
-      )
-    }
-  )
+      ) # Switch
+    } # Content
+  ) #Download handler
   
   }# Close the server

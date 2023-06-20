@@ -4,6 +4,7 @@
 
 # Packages ----
 library(shinycssloaders)
+library(DT)
 
 ui <- navbarPage(
   title = "MS analysis",
@@ -11,6 +12,13 @@ ui <- navbarPage(
 # Instructions ----
 
   tabPanel("Instructions",
+    radioButtons("platform",
+                 "Search platform",
+                 choiceNames = c("Proteome Discoverer", "MaxQuant"),
+                 choiceValues = c("PD", "MQ")),
+    radioButtons("quant_method",
+                 "Quantitation method",
+                 choices = c("LFQ", "TMT")),
     "Welcome to my proteomics analysis pipeline.",
     "Please move sequentially through the tabs to complete the analysis.", br(),
     "Certain section require previous tabs to be completed, however others can be run part-way through.",
@@ -32,10 +40,8 @@ ui <- navbarPage(
 
   tabPanel("Input", "Input raw data and annotation files",
     sidebarPanel(
-      radioButtons("platform",
-                   "Search platform",
-                   choiceNames = c("Proteome Discoverer", "MaxQuant"),
-                   choiceValues = c("PD", "MQ")),
+      conditionalPanel(
+        condition = "input.quant_method == 'LFQ'",
       hr(style = "border-top: 2px solid #000000;"),     
       fileInput("annotations", "Annotations file",
         buttonLabel = "Browse",
@@ -51,7 +57,16 @@ ui <- navbarPage(
         hr(style = "border-top: 2px solid #000000;"),
         fileInput("proteinGroups", "MQ proteinGroups",
                   buttonLabel = "Browse",
-                  placeholder = "Upload protein groups"))),
+                  placeholder = "Upload protein groups"))), # Conditional panel LFQ
+     
+       conditionalPanel(
+        condition = "input.quant_method == 'TMT'",
+        hr(style = "border-top: 2px solid #000000;"),     
+        fileInput("annotations", "Annotations file",
+                  buttonLabel = "Browse",
+                  placeholder = "Upload annotations")
+        ) # Conditional panel TMT
+      ), # Side panel
     
     mainPanel(
       h3("Annotations"),
@@ -108,8 +123,8 @@ tabPanel("Format", "Pre-filter and format data for MSstats",
                    choiceValues = c("Precursor.Area", "Intensity", "Area")),
       radioButtons("which.proteinid",
                    "Column to be used for protein names",
-                   choiceNames = c("Protein accessions", "Master protein accessions"),
-                   choiceValues = c("Protein.Accessions", "Master.Protein.Accessions")),
+                   choiceNames = c("Master protein accessions", "Protein accessions"),
+                   choiceValues = c("Master.Protein.Accessions", "Protein.Accessions")),
       radioButtons("which.sequence",
                    "Column to be used for peptide sequences",
                    choiceNames = c("Sequence", "Annotated sequence"),
@@ -283,9 +298,27 @@ tabPanel("Analysis",
            conditionalPanel(
              condition = "input.analysis_type == 'STRING'",
              uiOutput("select_STRING_comparison"),
+             numericInput("STRING_score_threshold", "Score threshold",
+                          value = 400,
+                          min = 0,
+                          max = 1000,
+                          step = 10),
+             radioButtons("set_STRING_background", "Background",
+                          choiceNames = c("All input proteins", "Whole genome"),
+                          choiceValues = c("all_proteins", "whole_genome")),
+             checkboxInput("cluster_STRING", "Cluster string network",
+                           value = FALSE),
+             conditionalPanel(
+               condition = "input.cluster_STRING == true",
+               selectInput("STRING_cluster_method", "Algorithm",
+                           choices = c("Fastgreedy" = "fastgreedy",
+                                       "Walktrap" = "walktrap",
+                                       "Edge betweenness" = "edge.betweenness"))
+             ),
              actionButton("go_STRING", "Run STRING analysis"),
              hr(style = "border-top: 2px solid #000000;"),
-             downloadButton("STRING_dataset_tsv", "Save STRING dataset as .tsv")
+             downloadButton("STRING_dataset_tsv", "Save STRING dataset as .tsv"),
+             downloadButton("STRING_enrichment_tsv", "Save STRING enrichment as .tsv")
              ) # Conditional panel STRING
            
          ),
@@ -299,7 +332,8 @@ tabPanel("Analysis",
            # STIGN analysis table
            conditionalPanel(
              condition = "input.analysis_type == 'STRING'",
-             "Note that STRING analysis can take some time",
+             "Note that STRING analysis can take some time", br(),
+             "STRING enrichment results will be displayed here, please see Visulaisation tab for network plots",
              withSpinner(dataTableOutput("STRING_tab")))
          )),
 
