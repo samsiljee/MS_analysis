@@ -181,7 +181,7 @@ tabPanel("Format", "Pre-filter and format data for MSstats",
                            "Gene.names")),
         checkboxInput(
           "rmProt_Only.identified.by.site",
-          "Remove proteins only identified by modification site",
+          "Remove proteins only identified by a modification site",
           value = FALSE)
       )
     ),
