@@ -94,11 +94,10 @@ server <- function(input, output, session){
 
   
 # Format ----
-  
-  ## LFQ ----
   # Generate input
   MSstats_input <- eventReactive(input$go_format, {
     switch(input$quant_method,
+      ## LFQ ----
       LFQ = {
         switch(input$platform,
           PD = {
@@ -133,6 +132,7 @@ server <- function(input, output, session){
           } # switch = MQ (LFQ)
         )}, # switch = LFQ
       
+      ## TMT ----
       TMT = {
         switch(input$platform,
           PD = {
@@ -171,10 +171,9 @@ server <- function(input, output, session){
 
 
 # Process ----
-  ## LFQ ----
-  
-  # Reactive values
   MSstats_processed <- eventReactive(input$go_process, {
+    switch(input$quant_method,
+      LFQ = {
     dataProcess(
       MSstats_input(),
       logTrans = as.numeric(input$logTrans),
@@ -192,6 +191,20 @@ server <- function(input, output, session){
       fix_missing = ifelse(input$fix_missing == "NULL", NULL, input$fix_missing),
       maxQuantileforCensored = input$maxQuantileforCensored,
       use_log_file = FALSE)
+        },
+    
+    TMT = {
+      proteinSummarization(
+        MSstats_input(),
+        method = input$TMTProtSumMethod,
+        global_norm = input$global_norm,
+        reference_norm = input$reference_norm,
+        remove_norm_channel = input$remove_norm_channel,
+        remove_empty_channel = input$remove_empty_channel,
+        MBimpute = input$MBimpute,
+        maxQuantileforCensored = input$maxQuantileforCensored,
+        use_log_file = FALSE)
+    })
   })
   
   ## TMT ----
