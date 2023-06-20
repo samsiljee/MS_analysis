@@ -83,53 +83,85 @@ ui <- navbarPage(
 # Format ----
 tabPanel("Format", "Pre-filter and format data for MSstats",
   sidebarPanel(h4("MSstats formating options"),
+    # Universal options
+    checkboxInput(
+      "useUniquePeptide",
+      "Remove peptides assigned to more than one protein",
+      value = TRUE),
+    radioButtons(
+      "summaryforMultipleRows",
+      "Summary method for multiple rows",
+      choiceNames = c("Sum", "Max"),
+      choiceValues = c("sum", "max")),
+    checkboxInput(
+      "removeFewMeasurements",
+      "Remove features with one or two measurements across runs",
+      value = TRUE),
+    
+    # PD conditional options
     conditionalPanel(
       condition = "input.platform == 'PD'",
-      checkboxInput("useNumProteinsColumn",
-                    "Remove peptides with more than one in \"number of proteins\" column of PD output",
-                    value = FALSE)),
+      checkboxInput(
+        "useNumProteinsColumn",
+        "Remove peptides with more than one in \"number of proteins\" column",
+        value = FALSE),
+      radioButtons(
+        "which.proteinid",
+        "Column to be used for protein names",
+        choiceNames = c("Master protein accessions", "Protein accessions"),
+        choiceValues = c("Master.Protein.Accessions", "Protein.Accessions"))),
+    
+    # MQ Conditional options
     conditionalPanel(
       condition = "input.platform == 'MQ'",
-      radioButtons("proteinID",
-                   "Protein ID",
-                   choiceNames = c("Proteins", "Leading razor protein"),
-                   choiceValues = c("Proteins", "Leading.razor.protein"))),
-    checkboxInput("useUniquePeptide",
-                  "Remove peptides assigned to more than one protein",
-                  value = TRUE),
-    radioButtons("summaryforMultipleRows",
-                 "Summary method for multiple rows",
-                 choiceNames = c("Max", "Sum"),
-                 choiceValues = c("max", "sum")),
-    checkboxInput("removeFewMeasurements",
-                  "Remove features with one or two measurements across runs",
-                  value = TRUE),
+      radioButtons(
+        "proteinID",
+        "Protein ID",
+        choiceNames = c("Proteins", "Leading razor protein"),
+        choiceValues = c("Proteins", "Leading.razor.protein")),
+      checkboxInput(
+        "removeMpeptides",
+        "Remove peptides including \'M\' sequence",
+        value = FALSE)
+      ),
+    
+    # LFQ conditional options
     conditionalPanel(
-      condition = "input.platform == 'MQ'",
-      checkboxInput("removeMpeptides",
-                    "Remove peptides including \'M\' sequence",
-                    value = FALSE)),
-    checkboxInput("removeOxidationMpeptides",
-                  "Remove peptides with methionine oxidation",
-                  value = FALSE),
-    checkboxInput("removeProtein_with1Peptide",
-                  "Remove proteins with only one peptide and charge",
-                  value = TRUE),
+      condition = "input.quant_method == 'LFQ'",
+      checkboxInput(
+        "removeOxidationMpeptides",
+        "Remove peptides with methionine oxidation",
+        value = FALSE),
+      checkboxInput(
+        "removeProtein_with1Peptide",
+        "Remove proteins with only one peptide and charge",
+        value = TRUE),
+      
+      # LFQ and PD conditional options
+      conditionalPanel(
+        condition = "input.platform == 'PD'",
+        radioButtons(
+          "which.quantification",
+          "Column to be used for quantification",
+          choiceNames = c("Precursor area", "Intensity", "Area"),
+          choiceValues = c("Precursor.Area", "Intensity", "Area")),
+        radioButtons(
+          "which.sequence",
+          "Column to be used for peptide sequences",
+          choiceNames = c("Sequence", "Annotated sequence"),
+          choiceValues = c("Sequence", "Annotated.Sequence")))),
+    
+    # TMT conditional options
     conditionalPanel(
-      condition = "input.platform == 'PD'",
-      radioButtons("which.quantification",
-                   "Column to be used for quantification",
-                   choiceNames = c("Precursor area", "Intensity", "Area"),
-                   choiceValues = c("Precursor.Area", "Intensity", "Area")),
-      radioButtons("which.proteinid",
-                   "Column to be used for protein names",
-                   choiceNames = c("Master protein accessions", "Protein accessions"),
-                   choiceValues = c("Master.Protein.Accessions", "Protein.Accessions")),
-      radioButtons("which.sequence",
-                   "Column to be used for peptide sequences",
-                   choiceNames = c("Sequence", "Annotated sequence"),
-                   choiceValues = c("Sequence", "Annotated.Sequence"))),
-    actionButton("go_format", "Format!"),
+      condition = "input.quant_method == 'TMT'",
+      checkboxInput(
+        "rmProtein_with1Feature",
+        "Remove proteins with only 1 peptide and charge",
+        value = FALSE)
+    ),
+    
+    actionButton(
+      "go_format", "Format!"),
     hr(style = "border-top: 2px solid #000000;"),
     downloadButton("formatted_tsv", "Save as .tsv"),
     downloadButton("formatted_rda", "Save as .rda")),

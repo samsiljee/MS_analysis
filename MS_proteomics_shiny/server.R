@@ -98,75 +98,79 @@ server <- function(input, output, session){
   ## LFQ ----
   # Generate input
   MSstats_input <- eventReactive(input$go_format, {
-    switch(input$platform,
-      PD = {
-        PDtoMSstatsFormat(
-          input = raw(),
-          annotation = annot_col(),
-          useNumProteinsColumn = input$useNumProteinsColumn,
-          useUniquePeptide = input$useUniquePeptide,
-          summaryforMultipleRows = ifelse(input$summaryforMultipleRows == "max", max, sum),
-          removeFewMeasurements = input$removeFewMeasurements,
-          removeOxidationMpeptides = input$removeOxidationMpeptides,
-          removeProtein_with1Peptide = input$removeProtein_with1Peptide,
-          which.quantification = input$which.quantification,
-          which.proteinid = input$which.proteinid,
-          which.sequence = input$which.sequence,
-          use_log_file = FALSE)
-      }, # switch = PD
+    switch(input$quant_method,
+      LFQ = {
+        switch(input$platform,
+          PD = {
+            PDtoMSstatsFormat(
+              input = raw(),
+              annotation = annot_col(),
+              useNumProteinsColumn = input$useNumProteinsColumn,
+              useUniquePeptide = input$useUniquePeptide,
+              summaryforMultipleRows = ifelse(input$summaryforMultipleRows == "max", max, sum),
+              removeFewMeasurements = input$removeFewMeasurements,
+              removeOxidationMpeptides = input$removeOxidationMpeptides,
+              removeProtein_with1Peptide = input$removeProtein_with1Peptide,
+              which.quantification = input$which.quantification,
+              which.proteinid = input$which.proteinid,
+              which.sequence = input$which.sequence,
+              use_log_file = FALSE)
+          }, # switch = PD (LFQ)
+          
+          MQ = {
+            MaxQtoMSstatsFormat(
+              evidence = raw(),
+              annotation = annot_col(),
+              proteinGroups = protein_groups(),
+              proteinID = input$proteinID,
+              useUniquePeptide = input$useUniquePeptide,
+              summaryforMultipleRows = ifelse(input$summaryforMultipleRows == "max", max, sum),
+              removeFewMeasurements = input$removeFewMeasurements,
+              removeMpeptides = input$removeMpeptides,
+              removeOxidationMpeptides = input$removeOxidationMpeptides,
+              removeProtein_with1Peptide = input$removeProtein_with1Peptide,
+              use_log_file = FALSE)
+          } # switch = MQ (LFQ)
+        )}, # switch = LFQ
       
-    MQ = {
-      MaxQtoMSstatsFormat(
-        evidence = raw(),
-        annotation = annot_col(),
-        proteinGroups = protein_groups(),
-        proteinID = input$proteinID,
-        useUniquePeptide = input$useUniquePeptide,
-        summaryforMultipleRows = ifelse(input$summaryforMultipleRows == "max", max, sum),
-        removeFewMeasurements = input$removeFewMeasurements,
-        removeMpeptides = input$removeMpeptides,
-        removeOxidationMpeptides = input$removeOxidationMpeptides,
-        removeProtein_with1Peptide = input$removeProtein_with1Peptide,
-        use_log_file = FALSE)
-    } # switch = MQ
-    ) # switch
+      TMT = {
+        switch(input$platform,
+          PD = {
+            PDtoMSstatsTMTFormat(
+              input = raw(),
+              annotation = annot_col(),
+              which.proteinid = input$which.proteinid,
+              useNumProteinsColumn = input$useNumProteinsColumn,
+              useUniquePeptide = input$useUniquePeptide,
+              rmPSM_withfewMea_withinRun = input$removeFewMeasurements,
+              rmProtein_with1Feature = input$rmProtein_with1Feature,
+              summaryforMultipleRows = ifelse(input$summaryforMultipleRows == "max", max, sum),
+              use_log_file = FALSE)
+          }, # close PD (TMT)
+          
+          MQ = {
+            MaxQtoMSstatsFormat(
+              evidence = raw(),
+              annotation = annot_col(),
+              proteinGroups = protein_groups(),
+              proteinID = input$proteinID,
+              useUniquePeptide = input$useUniquePeptide,
+              summaryforMultipleRows = ifelse(input$summaryforMultipleRows == "max", max, sum),
+              removeFewMeasurements = input$removeFewMeasurements,
+              removeMpeptides = input$removeMpeptides,
+              removeOxidationMpeptides = input$removeOxidationMpeptides,
+              removeProtein_with1Peptide = input$removeProtein_with1Peptide,
+              use_log_file = FALSE)
+          } # close MQ (TMT)
+        )
+      } # Close TMT
+      
+    ) # Switch quant method
   }) # eventReactive
   
   ## TMT ----
-  MSstats_TMT_input <- eventReactive(input$go_format, {
-    switch(input$platform,
-      PD = {
-        PDtoMSstatsTMTFormat(
-          input = raw(), # same as LFQ
-          annotation = annot_col(), # same as LFQ
-          which.proteinid = input$which.proteinid, # same as LFQ
-          useNumProteinsColumn = input$useNumProteinsColumn, # same as LFQ
-          useUniquePeptide = input$useUniquePeptide, # same as LFQ
-          rmPSM_withfewMea_withinRun = input$removeFewMeasurements, # new name, but otherwise the same as LFQ
-          summaryforMultipleRows = ifelse(input$summaryforMultipleRows == "max", max, sum)) # same as LFQ
-          # Old name removeFewMeasurements = input$removeFewMeasurements,
-          # old removeOxidationMpeptides = input$removeOxidationMpeptides,
-          # old removeProtein_with1Peptide = input$removeProtein_with1Peptide,
-          # old which.quantification = input$which.quantification,
-          # old which.sequence = input$which.sequence,
-          # old use_log_file = FALSE)
-      }, # switch = PD
-      
-      MQ = {
-        MaxQtoMSstatsFormat(
-          evidence = raw(),
-          annotation = annot_col(),
-          proteinGroups = protein_groups(),
-          proteinID = input$proteinID,
-          useUniquePeptide = input$useUniquePeptide,
-          summaryforMultipleRows = ifelse(input$summaryforMultipleRows == "max", max, sum),
-          removeFewMeasurements = input$removeFewMeasurements,
-          removeMpeptides = input$removeMpeptides,
-          removeOxidationMpeptides = input$removeOxidationMpeptides,
-          removeProtein_with1Peptide = input$removeProtein_with1Peptide,
-          use_log_file = FALSE)
-      } # switch = MQ
-    ) # switch
+  MSstats_input <- eventReactive(input$go_format, {
+    
   }) # eventReactive
 
 # Output
