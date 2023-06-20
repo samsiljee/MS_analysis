@@ -207,8 +207,6 @@ server <- function(input, output, session){
     })
   })
   
-  ## TMT ----
-  
   # Output
   output$MSstats_processed_tab <- renderDataTable({
     switch(input$processed_tab_view,
@@ -245,14 +243,6 @@ server <- function(input, output, session){
   observeEvent(input$annotations, {
     add_comparison()
   })
-  
-  # # Removing the last comparison from the matrix
-  # observeEvent(input$reset_comparison, {
-  #   c_vals <- reactiveValues(matrix = NULL, comparison_names = character())
-  #   observeEvent(input$annotations, {
-  #     add_comparison()
-  #   })
-  # })
   
   # Define function to add a row
   add_comparison <- function() {
@@ -296,17 +286,34 @@ server <- function(input, output, session){
   
   # Run the comparison function
   MSstats_test <- eventReactive(input$go_compare, {
-    groupComparison(
-      contrast.matrix = if (input$pairwise) {
+    switch(input$quant_method,
+      LFQ = {
+        groupComparison(
+          contrast.matrix = if (input$pairwise) {
+            "pairwise"
+          } else {
+            comparison_matrix_updated()[-1, , drop = FALSE]
+          },
+          data = MSstats_processed(),
+          save_fitted_models = input$save_fitted_models,
+          log_base = 2,
+          use_log_file = FALSE)},
+    
+    TMT = {
+      groupComparisonTMT(
+        contrast.matrix = if (input$pairwise) {
           "pairwise"
         } else {
           comparison_matrix_updated()[-1, , drop = FALSE]
         },
-      data = MSstats_processed(),
-      save_fitted_models = input$save_fitted_models,
-      log_base = input$logTrans,
-      use_log_file = FALSE)
-  })
+        data = MSstats_processed(),
+        moderated = input$moderated,
+        adj.method = input$adj.method,
+        remove_norm_channel = input$remove_norm_channel_comp,
+        remove_empty_channel = input$remove_empty_channel_comp,
+        save_fitted_models = input$save_fitted_models,
+        use_log_file = FALSE)})
+    })
   
   # Results of comparison, and adding up/downregulation
   MSstats_comparison_results <- reactive({

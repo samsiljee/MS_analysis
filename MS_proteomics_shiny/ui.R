@@ -323,15 +323,14 @@ tabPanel("Process",
     "This section will be where MSstats is computed. There will be drop down options here too for the settings.",
     
     sidebarPanel(h4("Comparisons"),
+      # Common options
       checkboxInput("pairwise", "Pairwise", value = FALSE),
       conditionalPanel(condition = "input.pairwise == false",
         h5("Add new comparisons"),
         textInput("comparison_name", "Comparison name"),
         uiOutput("select_numerator"),
         uiOutput("select_denominator"),
-        actionButton("add_comparison", "Add comparison")#,
-        # actionButton("reset_comparison", "Reset comparisons")
-        ),
+        actionButton("add_comparison", "Add comparison")),
       hr(style = "border-top: 2px solid #000000;"),
       numericInput("FC_threshold", "Log 2 fold-change threshold",
                    value = 0.58,
@@ -341,6 +340,36 @@ tabPanel("Process",
                    max = 1,
                    value = 0.05,
                    step = 0.01),
+      
+      # TMT options
+      conditionalPanel(
+        condition = "input.quant_method == 'TMT'",
+        checkboxInput(
+          "moderated",
+          "Use moderated t statistic",
+          value = FALSE),
+        radioButtons(
+          "adj.method",
+          choiceNames = c("BH"),
+          choiceValues = c("BH",
+                           "holm",
+                           "hochberg",
+                           "hommel",
+                           "bonferroni",
+                           "BY",
+                           "fdr",
+                           "none")),
+        checkboxInput(
+          "remove_norm_channel_comp",
+          "Remove normalisation channels",
+          value = TRUE),
+        checkboxInput(
+          "remove_empty_channel_comp",
+          "Remove empty channels",
+          value = TRUE),
+      ),
+      
+      # More common options
       checkboxInput("save_fitted_models", "Save fitted models to the .rda output", value = FALSE),
       checkboxInput("filter_results", "Filter out proteins with infinite fold-change", value = TRUE),
       actionButton("go_compare", "Compare!"),
