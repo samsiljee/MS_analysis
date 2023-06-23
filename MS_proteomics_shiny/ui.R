@@ -40,8 +40,6 @@ ui <- navbarPage(
 
   tabPanel("Input", "Input raw data and annotation files",
     sidebarPanel(
-      conditionalPanel(
-        condition = "input.quant_method == 'LFQ'",
       hr(style = "border-top: 2px solid #000000;"),     
       fileInput("annotations", "Annotations file",
         buttonLabel = "Browse",
@@ -57,16 +55,7 @@ ui <- navbarPage(
         hr(style = "border-top: 2px solid #000000;"),
         fileInput("proteinGroups", "MQ proteinGroups",
                   buttonLabel = "Browse",
-                  placeholder = "Upload protein groups"))), # Conditional panel LFQ
-     
-       conditionalPanel(
-        condition = "input.quant_method == 'TMT'",
-        hr(style = "border-top: 2px solid #000000;"),     
-        fileInput("annotations", "Annotations file",
-                  buttonLabel = "Browse",
-                  placeholder = "Upload annotations")
-        ) # Conditional panel TMT
-      ), # Side panel
+                  placeholder = "Upload protein groups"))),
     
     mainPanel(
       h3("Annotations"),
@@ -366,8 +355,7 @@ tabPanel("Process",
         checkboxInput(
           "remove_empty_channel_comp",
           "Remove empty channels",
-          value = TRUE),
-      ),
+          value = TRUE)),
       
       # More common options
       checkboxInput("save_fitted_models", "Save fitted models to the .rda output", value = FALSE),
