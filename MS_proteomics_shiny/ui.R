@@ -40,8 +40,6 @@ ui <- navbarPage(
 
   tabPanel("Input", "Input raw data and annotation files",
     sidebarPanel(
-      conditionalPanel(
-        condition = "input.quant_method == 'LFQ'",
       hr(style = "border-top: 2px solid #000000;"),     
       fileInput("annotations", "Annotations file",
         buttonLabel = "Browse",
@@ -57,16 +55,7 @@ ui <- navbarPage(
         hr(style = "border-top: 2px solid #000000;"),
         fileInput("proteinGroups", "MQ proteinGroups",
                   buttonLabel = "Browse",
-                  placeholder = "Upload protein groups"))), # Conditional panel LFQ
-     
-       conditionalPanel(
-        condition = "input.quant_method == 'TMT'",
-        hr(style = "border-top: 2px solid #000000;"),     
-        fileInput("annotations", "Annotations file",
-                  buttonLabel = "Browse",
-                  placeholder = "Upload annotations")
-        ) # Conditional panel TMT
-      ), # Side panel
+                  placeholder = "Upload protein groups"))),
     
     mainPanel(
       h3("Annotations"),
@@ -83,53 +72,106 @@ ui <- navbarPage(
 # Format ----
 tabPanel("Format", "Pre-filter and format data for MSstats",
   sidebarPanel(h4("MSstats formating options"),
+    # Universal options
+    checkboxInput(
+      "useUniquePeptide",
+      "Remove peptides assigned to more than one protein",
+      value = TRUE),
+    radioButtons(
+      "summaryforMultipleRows",
+      "Summary method for multiple rows",
+      choiceNames = c("Sum", "Max"),
+      choiceValues = c("sum", "max")),
+    checkboxInput(
+      "removeFewMeasurements",
+      "Remove features with one or two measurements across runs",
+      value = TRUE),
+    
+    # PD conditional options
     conditionalPanel(
       condition = "input.platform == 'PD'",
-      checkboxInput("useNumProteinsColumn",
-                    "Remove peptides with more than one in \"number of proteins\" column of PD output",
-                    value = FALSE)),
+      checkboxInput(
+        "useNumProteinsColumn",
+        "Remove peptides with more than one in \"number of proteins\" column",
+        value = FALSE),
+      radioButtons(
+        "which.proteinid",
+        "Protein ID",
+        choiceNames = c("Master protein accessions", "Protein accessions"),
+        choiceValues = c("Master.Protein.Accessions", "Protein.Accessions"))),
+    
+    # LFQ conditional options
     conditionalPanel(
-      condition = "input.platform == 'MQ'",
-      radioButtons("proteinID",
-                   "Protein ID",
-                   choiceNames = c("Proteins", "Leading razor protein"),
-                   choiceValues = c("Proteins", "Leading.razor.protein"))),
-    checkboxInput("useUniquePeptide",
-                  "Remove peptides assigned to more than one protein",
-                  value = TRUE),
-    radioButtons("summaryforMultipleRows",
-                 "Summary method for multiple rows",
-                 choiceNames = c("Max", "Sum"),
-                 choiceValues = c("max", "sum")),
-    checkboxInput("removeFewMeasurements",
-                  "Remove features with one or two measurements across runs",
-                  value = TRUE),
+      condition = "input.quant_method == 'LFQ'",
+      checkboxInput(
+        "removeOxidationMpeptides",
+        "Remove peptides with methionine oxidation",
+        value = FALSE),
+      checkboxInput(
+        "removeProtein_with1Peptide",
+        "Remove proteins with only one peptide and charge",
+        value = TRUE),
+      
+      # LFQ and PD conditional options
+      conditionalPanel(
+        condition = "input.platform == 'PD'",
+        radioButtons(
+          "which.quantification",
+          "Column to be used for quantification",
+          choiceNames = c("Precursor area", "Intensity", "Area"),
+          choiceValues = c("Precursor.Area", "Intensity", "Area")),
+        radioButtons(
+          "which.sequence",
+          "Column to be used for peptide sequences",
+          choiceNames = c("Sequence", "Annotated sequence"),
+          choiceValues = c("Sequence", "Annotated.Sequence"))),
+      
+      # LFQ and MQ conditional options
+      conditionalPanel(
+        condition = "input.platform == 'MQ'",
+        radioButtons(
+          "MQLFQproteinID",
+          "Protein ID",
+          choiceNames = c("Proteins", "Leading razor protein"),
+          choiceValues = c("Proteins", "Leading.razor.protein")),
+        checkboxInput(
+          "removeMpeptides",
+          "Remove peptides including \'M\' sequence",
+          value = FALSE)
+      )
+      ),
+    
+    # TMT conditional options
     conditionalPanel(
-      condition = "input.platform == 'MQ'",
-      checkboxInput("removeMpeptides",
-                    "Remove peptides including \'M\' sequence",
-                    value = FALSE)),
-    checkboxInput("removeOxidationMpeptides",
-                  "Remove peptides with methionine oxidation",
-                  value = FALSE),
-    checkboxInput("removeProtein_with1Peptide",
-                  "Remove proteins with only one peptide and charge",
-                  value = TRUE),
-    conditionalPanel(
-      condition = "input.platform == 'PD'",
-      radioButtons("which.quantification",
-                   "Column to be used for quantification",
-                   choiceNames = c("Precursor area", "Intensity", "Area"),
-                   choiceValues = c("Precursor.Area", "Intensity", "Area")),
-      radioButtons("which.proteinid",
-                   "Column to be used for protein names",
-                   choiceNames = c("Master protein accessions", "Protein accessions"),
-                   choiceValues = c("Master.Protein.Accessions", "Protein.Accessions")),
-      radioButtons("which.sequence",
-                   "Column to be used for peptide sequences",
-                   choiceNames = c("Sequence", "Annotated sequence"),
-                   choiceValues = c("Sequence", "Annotated.Sequence"))),
-    actionButton("go_format", "Format!"),
+      condition = "input.quant_method == 'TMT'",
+      checkboxInput(
+        "rmProtein_with1Feature",
+        "Remove proteins with only 1 peptide and charge",
+        value = FALSE),
+      
+      # TMT and MQ conditional options
+      conditionalPanel(
+        condition = "input.platform == 'MQ'",
+        radioButtons(
+          "MQTMTproteinID",
+          "Protein ID",
+          choiceNames = c("Proteins",
+                          "Leading proteins",
+                          "Leading razor protein",
+                          "Gene names"),
+          choiceValues = c("Proteins",
+                           "Leading.proteins",
+                           "Leading.razor.protein",
+                           "Gene.names")),
+        checkboxInput(
+          "rmProt_Only.identified.by.site",
+          "Remove proteins only identified by a modification site",
+          value = FALSE)
+      )
+    ),
+    
+    actionButton(
+      "go_format", "Format!"),
     hr(style = "border-top: 2px solid #000000;"),
     downloadButton("formatted_tsv", "Save as .tsv"),
     downloadButton("formatted_rda", "Save as .rda")),
@@ -141,66 +183,114 @@ tabPanel("Format", "Pre-filter and format data for MSstats",
 
 tabPanel("Process",
   sidebarPanel(h4("MSstats processing options"),
+    # LFQ options
+    conditionalPanel(
+      condition = "input.quant_method == 'LFQ'",
     radioButtons("logTrans",
-      "Base of log transformation",
-      choices = c(2, 10),
-      selected = 2),
+                 "Base of log transformation",
+                 choices = c(2, 10),
+                 selected = 2),
     radioButtons("normalization",
-      "Normalisation method used to remove bias between runs",
-      choiceNames = c("Equalize medians", "Quantile", "Global standards", "None"),
-      choiceValues = c("equalizeMedians", "quantile", "globalStandards", FALSE)),
+                 "Normalisation method used to remove bias between runs",
+                 choiceNames = c("Equalize medians", "Quantile", "Global standards", "None"),
+                 choiceValues = c("equalizeMedians", "quantile", "globalStandards", FALSE)),
     conditionalPanel(
       condition = "input.normalization == 'globalStandards'",
       textInput("nameStandards",
-        "Named vector for standard peptides (not yet working)")),
-      radioButtons("featureSubset",
-        "Feature subset to use",
-      choiceNames = c("All", "Top 3", "Top N", "High quality"),
-      choiceValues = c("all", "top3", "topN", "highQuality")),
+                "Named vector for standard peptides (not yet working)")),
+    radioButtons("featureSubset",
+                 "Feature subset to use",
+                 choiceNames = c("All", "Top 3", "Top N", "High quality"),
+                 choiceValues = c("all", "top3", "topN", "highQuality")),
     conditionalPanel(
       condition = "input.featureSubset == 'topN'",
       numericInput("n_top_feature",
-        "Number of top features to use",
-        value = 3,
-        step = 1)),
-  conditionalPanel(
-    condition = "input.featureSubset == 'highQuality'",
-    checkboxInput("remove_uninformative_feature_outlier",
-                  "Remove noisy features and outliers before run-level summarisation",
-                  value = FALSE),
-    numericInput("min_feature_count",
-      "Minimum features required to be considered in feature selection algorithm",
-      value = 2,
-      step = 1)),
+                   "Number of top features to use",
+                   value = 3,
+                   step = 1)),
+    conditionalPanel(
+      condition = "input.featureSubset == 'highQuality'",
+      checkboxInput("remove_uninformative_feature_outlier",
+                    "Remove noisy features and outliers before run-level summarisation",
+                    value = FALSE),
+      numericInput("min_feature_count",
+                   "Minimum features required to be considered in feature selection algorithm",
+                   value = 2,
+                   step = 1)),
     radioButtons("summaryMethod",
-      "Method used to summarise features",
-      choiceNames = c("Tukey's median polish", "Linear mixed model"),
-      choiceValues = c("TMP", "linear")),
+                 "Method used to summarise features",
+                 choiceNames = c("Tukey's median polish", "Linear mixed model"),
+                 choiceValues = c("TMP", "linear")),
     conditionalPanel(
       condition = "input.summaryMethod == 'linear'",
-    checkboxInput("equalFeatureVar",
-      "Account for heterogeneous variation among intensities from different features",
-      value = TRUE)),
+      checkboxInput("equalFeatureVar",
+                    "Account for heterogeneous variation among intensities from different features",
+                    value = TRUE)),
     conditionalPanel(
       condition = "input.summaryMethod == 'TMP'",
-    checkboxInput("MBimpute",
-      "Impute censored values by Accelated failure model",
-      value = TRUE),
-    checkboxInput("remove50missing",
-      "Remove runs with >50% missing values",
-      value = FALSE)),
-    radioButtons("censoredInt",
+      checkboxInput(
+        "MBimpute",
+        "Impute censored values by Accelated failure model",
+        value = TRUE),
+      checkboxInput(
+        "remove50missing",
+        "Remove runs with >50% missing values",
+        value = FALSE)),
+    radioButtons(
+      "censoredInt",
       "Missing values are censored or at random",
       choiceNames = c("NA", "0", "Null"),
       choiceValues = c("NA", "0", "NULL")),
-    radioButtons("fix_missing",
-      "fix missing values (uncertain how this works)",
+    radioButtons(
+      "fix_missing",
+      "fix missing values",
       choiceNames = c("No action", "0 -> NA", "NA -> 0"),
-      choiceValues = c("NULL", "zero_to_na", "na_to_zero")),
-    numericInput("maxQuantileforCensored",
+      choiceValues = c("NULL", "zero_to_na", "na_to_zero"))),
+    
+    # TMT options
+    conditionalPanel(
+      condition = "input.quant_method == 'TMT'",
+      radioButtons(
+        "TMTProtSumMethod",
+        "Protein-level summarisation method",
+        choiceNames = c("MSstats",
+                        "Median polish",
+                        "Median",
+                        "Log sum"),
+        choiceValues = c("msstats",
+                         "MedianPolish",
+                         "Median",
+                         "LogSum")),
+      conditionalPanel(
+        condition = "input.TMTProtSumMethod == 'msstats'",
+        checkboxInput(
+          "MBimpute",
+          "Impute censored values by Accelated failure model",
+          value = TRUE)),
+      checkboxInput(
+        "global_norm",
+        "Global median normalisation (peptide-level)",
+        value = TRUE),
+      checkboxInput(
+        "reference_norm",
+        "Reference channel normalisation between runs (protein-level)",
+        value = TRUE),
+      checkboxInput(
+        "remove_norm_channel",
+        "Remove reference channels",
+        value = TRUE),
+      checkboxInput(
+        "remove_empty_channel",
+        "Remove empty channels",
+        value = TRUE)),
+    
+    # Common options
+    numericInput(
+      "maxQuantileforCensored",
       "Maximum quantile for deciding censored missing values",
       value = 0.999,
       step = 0.001),
+    
     actionButton("go_process", "Process!"),
     hr(style = "border-top: 2px solid #000000;"),
     downloadButton("processed_protein_tsv", "Save protein data as .tsv"),
@@ -222,15 +312,14 @@ tabPanel("Process",
     "This section will be where MSstats is computed. There will be drop down options here too for the settings.",
     
     sidebarPanel(h4("Comparisons"),
+      # Common options
       checkboxInput("pairwise", "Pairwise", value = FALSE),
       conditionalPanel(condition = "input.pairwise == false",
         h5("Add new comparisons"),
         textInput("comparison_name", "Comparison name"),
         uiOutput("select_numerator"),
         uiOutput("select_denominator"),
-        actionButton("add_comparison", "Add comparison")#,
-        # actionButton("reset_comparison", "Reset comparisons")
-        ),
+        actionButton("add_comparison", "Add comparison")),
       hr(style = "border-top: 2px solid #000000;"),
       numericInput("FC_threshold", "Log 2 fold-change threshold",
                    value = 0.58,
@@ -240,6 +329,35 @@ tabPanel("Process",
                    max = 1,
                    value = 0.05,
                    step = 0.01),
+      
+      # TMT options
+      conditionalPanel(
+        condition = "input.quant_method == 'TMT'",
+        checkboxInput(
+          "moderated",
+          "Use moderated t statistic",
+          value = FALSE),
+        selectInput(
+          "adj.method",
+          "Adjustment method",
+          choices = c("BH",
+                      "holm",
+                      "hochberg",
+                      "hommel",
+                      "bonferroni",
+                      "BY",
+                      "fdr",
+                      "none")),
+        checkboxInput(
+          "remove_norm_channel_comp",
+          "Remove normalisation channels",
+          value = TRUE),
+        checkboxInput(
+          "remove_empty_channel_comp",
+          "Remove empty channels",
+          value = TRUE)),
+      
+      # More common options
       checkboxInput("save_fitted_models", "Save fitted models to the .rda output", value = FALSE),
       checkboxInput("filter_results", "Filter out proteins with infinite fold-change", value = TRUE),
       actionButton("go_compare", "Compare!"),

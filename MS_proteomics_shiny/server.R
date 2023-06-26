@@ -58,10 +58,17 @@ server <- function(input, output, session){
           df <- vroom(input$PSMs$datapath)
           df <- clean_names(df, case = "upper_camel")
           # rename columns as required by `MSstats
-          df <-  mutate(df,
-                        ProteinGroupAccessions = MasterProteinAccessions,
-                        PrecursorArea = PrecursorAbundance,
-                        Run = SpectrumFile)
+          df <- switch(input$quant_method,
+            LFQ = {
+              mutate(df,
+                ProteinGroupAccessions = MasterProteinAccessions,
+                PrecursorArea = PrecursorAbundance,
+                Run = SpectrumFile)},
+            TMT = {
+              mutate(df,
+                ProteinGroupAccessions = MasterProteinAccessions,
+                Run = SpectrumFile)
+            })
           df},
         
         MQ = {
@@ -94,79 +101,76 @@ server <- function(input, output, session){
 
   
 # Format ----
-  
-  ## LFQ ----
   # Generate input
   MSstats_input <- eventReactive(input$go_format, {
-    switch(input$platform,
-      PD = {
-        PDtoMSstatsFormat(
-          input = raw(),
-          annotation = annot_col(),
-          useNumProteinsColumn = input$useNumProteinsColumn,
-          useUniquePeptide = input$useUniquePeptide,
-          summaryforMultipleRows = ifelse(input$summaryforMultipleRows == "max", max, sum),
-          removeFewMeasurements = input$removeFewMeasurements,
-          removeOxidationMpeptides = input$removeOxidationMpeptides,
-          removeProtein_with1Peptide = input$removeProtein_with1Peptide,
-          which.quantification = input$which.quantification,
-          which.proteinid = input$which.proteinid,
-          which.sequence = input$which.sequence,
-          use_log_file = FALSE)
-      }, # switch = PD
+    switch(input$quant_method,
+      ## LFQ ----
+      LFQ = {
+        switch(input$platform,
+          PD = {
+            PDtoMSstatsFormat(
+              input = raw(),
+              annotation = annot_col(),
+              useNumProteinsColumn = input$useNumProteinsColumn,
+              useUniquePeptide = input$useUniquePeptide,
+              summaryforMultipleRows = ifelse(input$summaryforMultipleRows == "max", max, sum),
+              removeFewMeasurements = input$removeFewMeasurements,
+              removeOxidationMpeptides = input$removeOxidationMpeptides,
+              removeProtein_with1Peptide = input$removeProtein_with1Peptide,
+              which.quantification = input$which.quantification,
+              which.proteinid = input$which.proteinid,
+              which.sequence = input$which.sequence,
+              use_log_file = FALSE)
+          }, # switch = PD (LFQ)
+          
+          MQ = {
+            MaxQtoMSstatsFormat(
+              evidence = raw(),
+              annotation = annot_col(),
+              proteinGroups = protein_groups(),
+              proteinID = input$MQLFQproteinID,
+              useUniquePeptide = input$useUniquePeptide,
+              summaryforMultipleRows = ifelse(input$summaryforMultipleRows == "max", max, sum),
+              removeFewMeasurements = input$removeFewMeasurements,
+              removeMpeptides = input$removeMpeptides,
+              removeOxidationMpeptides = input$removeOxidationMpeptides,
+              removeProtein_with1Peptide = input$removeProtein_with1Peptide,
+              use_log_file = FALSE)
+          } # switch = MQ (LFQ)
+        )}, # switch = LFQ
       
-    MQ = {
-      MaxQtoMSstatsFormat(
-        evidence = raw(),
-        annotation = annot_col(),
-        proteinGroups = protein_groups(),
-        proteinID = input$proteinID,
-        useUniquePeptide = input$useUniquePeptide,
-        summaryforMultipleRows = ifelse(input$summaryforMultipleRows == "max", max, sum),
-        removeFewMeasurements = input$removeFewMeasurements,
-        removeMpeptides = input$removeMpeptides,
-        removeOxidationMpeptides = input$removeOxidationMpeptides,
-        removeProtein_with1Peptide = input$removeProtein_with1Peptide,
-        use_log_file = FALSE)
-    } # switch = MQ
-    ) # switch
-  }) # eventReactive
-  
-  ## TMT ----
-  MSstats_TMT_input <- eventReactive(input$go_format, {
-    switch(input$platform,
-      PD = {
-        PDtoMSstatsTMTFormat(
-          input = raw(), # same as LFQ
-          annotation = annot_col(), # same as LFQ
-          which.proteinid = input$which.proteinid, # same as LFQ
-          useNumProteinsColumn = input$useNumProteinsColumn, # same as LFQ
-          useUniquePeptide = input$useUniquePeptide, # same as LFQ
-          rmPSM_withfewMea_withinRun = input$removeFewMeasurements, # new name, but otherwise the same as LFQ
-          summaryforMultipleRows = ifelse(input$summaryforMultipleRows == "max", max, sum)) # same as LFQ
-          # Old name removeFewMeasurements = input$removeFewMeasurements,
-          # old removeOxidationMpeptides = input$removeOxidationMpeptides,
-          # old removeProtein_with1Peptide = input$removeProtein_with1Peptide,
-          # old which.quantification = input$which.quantification,
-          # old which.sequence = input$which.sequence,
-          # old use_log_file = FALSE)
-      }, # switch = PD
-      
-      MQ = {
-        MaxQtoMSstatsFormat(
-          evidence = raw(),
-          annotation = annot_col(),
-          proteinGroups = protein_groups(),
-          proteinID = input$proteinID,
-          useUniquePeptide = input$useUniquePeptide,
-          summaryforMultipleRows = ifelse(input$summaryforMultipleRows == "max", max, sum),
-          removeFewMeasurements = input$removeFewMeasurements,
-          removeMpeptides = input$removeMpeptides,
-          removeOxidationMpeptides = input$removeOxidationMpeptides,
-          removeProtein_with1Peptide = input$removeProtein_with1Peptide,
-          use_log_file = FALSE)
-      } # switch = MQ
-    ) # switch
+      ## TMT ----
+      TMT = {
+        switch(input$platform,
+          PD = {
+            PDtoMSstatsTMTFormat(
+              input = raw(),
+              annotation = annot_col(),
+              which.proteinid = input$which.proteinid,
+              useNumProteinsColumn = input$useNumProteinsColumn,
+              useUniquePeptide = input$useUniquePeptide,
+              rmPSM_withfewMea_withinRun = input$removeFewMeasurements,
+              rmProtein_with1Feature = input$rmProtein_with1Feature,
+              summaryforMultipleRows = ifelse(input$summaryforMultipleRows == "max", max, sum),
+              use_log_file = FALSE)
+          }, # close PD (TMT)
+          
+          MQ = {
+            MaxQtoMSstatsTMTFormat(
+              evidence = raw(),
+              annotation = annot_col(),
+              proteinGroups = protein_groups(),
+              which.proteinid = input$MQTMTproteinID,
+              rmProt_Only.identified.by.site = input$rmProt_Only.identified.by.site,
+              useUniquePeptide = input$useUniquePeptide,
+              rmPSM_withfewMea_withinRun = input$removeFewMeasurements,
+              rmProtein_with1Feature = input$rmProtein_with1Feature,
+              summaryforMultipleRows = ifelse(input$summaryforMultipleRows == "max", max, sum),
+              use_log_file = FALSE)
+          } # close MQ (TMT)
+        ) # close switch platform
+      } # Close TMT
+    ) # close switch quant method
   }) # eventReactive
 
 # Output
@@ -174,10 +178,9 @@ server <- function(input, output, session){
 
 
 # Process ----
-  ## LFQ ----
-  
-  # Reactive values
   MSstats_processed <- eventReactive(input$go_process, {
+    switch(input$quant_method,
+      LFQ = {
     dataProcess(
       MSstats_input(),
       logTrans = as.numeric(input$logTrans),
@@ -195,9 +198,21 @@ server <- function(input, output, session){
       fix_missing = ifelse(input$fix_missing == "NULL", NULL, input$fix_missing),
       maxQuantileforCensored = input$maxQuantileforCensored,
       use_log_file = FALSE)
+        },
+    
+    TMT = {
+      proteinSummarization(
+        MSstats_input(),
+        method = input$TMTProtSumMethod,
+        global_norm = input$global_norm,
+        reference_norm = input$reference_norm,
+        remove_norm_channel = input$remove_norm_channel,
+        remove_empty_channel = input$remove_empty_channel,
+        MBimpute = input$MBimpute,
+        maxQuantileforCensored = input$maxQuantileforCensored,
+        use_log_file = FALSE)
+    })
   })
-  
-  ## TMT ----
   
   # Output
   output$MSstats_processed_tab <- renderDataTable({
@@ -235,14 +250,6 @@ server <- function(input, output, session){
   observeEvent(input$annotations, {
     add_comparison()
   })
-  
-  # # Removing the last comparison from the matrix
-  # observeEvent(input$reset_comparison, {
-  #   c_vals <- reactiveValues(matrix = NULL, comparison_names = character())
-  #   observeEvent(input$annotations, {
-  #     add_comparison()
-  #   })
-  # })
   
   # Define function to add a row
   add_comparison <- function() {
@@ -286,17 +293,34 @@ server <- function(input, output, session){
   
   # Run the comparison function
   MSstats_test <- eventReactive(input$go_compare, {
-    groupComparison(
-      contrast.matrix = if (input$pairwise) {
+    switch(input$quant_method,
+      LFQ = {
+        groupComparison(
+          contrast.matrix = if (input$pairwise) {
+            "pairwise"
+          } else {
+            comparison_matrix_updated()[-1, , drop = FALSE]
+          },
+          data = MSstats_processed(),
+          save_fitted_models = input$save_fitted_models,
+          log_base = 2,
+          use_log_file = FALSE)},
+    
+    TMT = {
+      groupComparisonTMT(
+        contrast.matrix = if (input$pairwise) {
           "pairwise"
         } else {
           comparison_matrix_updated()[-1, , drop = FALSE]
         },
-      data = MSstats_processed(),
-      save_fitted_models = input$save_fitted_models,
-      log_base = input$logTrans,
-      use_log_file = FALSE)
-  })
+        data = MSstats_processed(),
+        moderated = input$moderated,
+        adj.method = input$adj.method,
+        remove_norm_channel = input$remove_norm_channel_comp,
+        remove_empty_channel = input$remove_empty_channel_comp,
+        save_fitted_models = input$save_fitted_models,
+        use_log_file = FALSE)})
+    })
   
   # Results of comparison, and adding up/downregulation
   MSstats_comparison_results <- reactive({
