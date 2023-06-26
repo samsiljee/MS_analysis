@@ -58,10 +58,17 @@ server <- function(input, output, session){
           df <- vroom(input$PSMs$datapath)
           df <- clean_names(df, case = "upper_camel")
           # rename columns as required by `MSstats
-          df <-  mutate(df,
-                        ProteinGroupAccessions = MasterProteinAccessions,
-                        PrecursorArea = PrecursorAbundance,
-                        Run = SpectrumFile)
+          df <- switch(input$quant_method,
+            LFQ = {
+              mutate(df,
+                ProteinGroupAccessions = MasterProteinAccessions,
+                PrecursorArea = PrecursorAbundance,
+                Run = SpectrumFile)},
+            TMT = {
+              mutate(df,
+                ProteinGroupAccessions = MasterProteinAccessions,
+                Run = SpectrumFile)
+            })
           df},
         
         MQ = {
