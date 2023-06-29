@@ -8,23 +8,23 @@ library(DT)
 
 # Source files
 source("InstructionsUI.R")
-source("Input.R")
-source("Format.R")
-source("Process.R")
-source("Comparison.R")
-source("Analysis.R")
-source("Visualisation.R")
-source("QC.R")
+source("InputUI.R")
+source("FormatUI.R")
+source("ProcessUI.R")
+source("ComparisonUI.R")
+source("AnalysisUI.R")
+source("VisualisationUI.R")
+source("QCUI.R")
 
 ui <- navbarPage(
   title = "MS analysis",
 
   tabsetPanel(InstructionsUI,
-              Input,
-              Format,
-              Process,
-              Comparison,
-              Analysis,
-              Visualisation,
-              QC)
+              InputUI,
+              FormatUI,
+              ProcessUI,
+              ComparisonUI,
+              AnalysisUI,
+              VisualisationUI,
+              QCUI)
 )
