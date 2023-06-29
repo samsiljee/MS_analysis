@@ -54,19 +54,19 @@ A shiny app to analyse mass spectromtetry for proteomics data - from PSMs to vis
   - Good resource on visualising enrichment analysis: https://yulab-smu.top/biomedical-knowledge-mining-book/enrichplot.html
 
 ## Issues and to-do
-  - Currently working on fine-tuning some of the MSstats I/O options - global standards still to be done, could potentially set Trypsin as the default for this
+  - Global standards still to be done, could potentially set Trypsin as the default for this
   - Check that the default values are sensible - Discuss with appropriate bio-infomatician
   - QC section
   - Better progress bars for slow processes
   - Export log files of the MSstats functions, and export a txt document describing the settings used
   - Add reset to comparison matrix
   - Add option to change titles and axes
-  - Add in KEGG/GO term analysis, GSEA etc
   - Go term analysis with complete tabular output in the analysis tab, and plots intergrated into the visualisation tab
   - Pathview analysis
   - Change GO term analysis to use aGOtool via API: https://agotool.org/API_Help
   - Add in link to STRING website to view pathway, or embed the interactive network
   - Refine selection methods for including string nodes, currently it just takes the top n most significant nodes, regardless of actual significance.
+  - Add WGCNA to analysis section
 
 ## Completed issues
   - Add copyright to repository/scripts
@@ -81,6 +81,8 @@ A shiny app to analyse mass spectromtetry for proteomics data - from PSMs to vis
   - Added MaxQuant input capability
   - Added option to disable automatic removal of potential contaminants from MQ data, done by setting all values of the potential contaminant column to "NA" when loading raw data
   - GO analysis starting to be implemented
+  - STRING analysis started to be added, need to improve graphing methods for this
+  - Added TMT input capability
   
 # License
 Feel free to use this code as you wish under the MIT license, however an acknowledgement would be nice. Thanks!
