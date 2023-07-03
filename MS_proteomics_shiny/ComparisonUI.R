@@ -4,8 +4,10 @@ ComparisonUI <- tabPanel(
     
     sidebarPanel(h4("Comparisons"),
                  # Common options
-                 checkboxInput("pairwise", "Pairwise", value = FALSE),
-                 conditionalPanel(condition = "input.pairwise == false",
+                 radioButtons("contrast_method", "Contrast method",
+                              choiceNames = c("All combinations", "Custom comparisons"),
+                              choiceValues = c("pairwise", "custom")),
+                 conditionalPanel(condition = "input.contrast_method == 'custom'",
                                   h5("Add new comparisons"),
                                   textInput("comparison_name", "Comparison name"),
                                   uiOutput("select_numerator"),

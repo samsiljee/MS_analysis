@@ -1,9 +1,13 @@
 # Process
 # Produce named standards
 standards <- reactive({
-    fasta <- readLines(input$nameStandards$datapath)
-    standards <- str_extract(fasta[grep(">", fasta)],"(?<=sp\\|)[[:alnum:]]+")
-    return(standards)
+    if (!is.null(input$nameStandards)) {
+        fasta <- readLines(input$nameStandards$datapath)
+        standards <- str_extract(fasta[grep(">", fasta)],"(?<=sp\\|)[[:alnum:]]+")
+        return(standards)
+    } else{
+        NULL
+    }
 })
 
 # Process input

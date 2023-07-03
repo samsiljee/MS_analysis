@@ -16,6 +16,11 @@ VisualisationUI <- tabPanel(
                                 "GO enrichment",
                                 "STRING network"),
                     multiple = FALSE),
+        conditionalPanel(
+            condition = "input.plot_type == 'Volcano'",
+            hr(style = "border-top: 2px solid #000000;"),
+            uiOutput("plot_title_input")
+        ),
         hr(style = "border-top: 2px solid #000000;"),
         conditionalPanel(condition = "input.plot_type == 'Volcano'",
                          uiOutput("select_comparison")),

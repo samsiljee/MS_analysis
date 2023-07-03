@@ -69,7 +69,7 @@ MSstats_test <- eventReactive(input$go_compare, {
     switch(input$quant_method,
            LFQ = {
                groupComparison(
-                   contrast.matrix = if (input$pairwise) {
+                   contrast.matrix = if (input$contrast_method == "pairwise") {
                        "pairwise"
                    } else {
                        comparison_matrix_updated()[-1, , drop = FALSE]
@@ -81,7 +81,7 @@ MSstats_test <- eventReactive(input$go_compare, {
            
            TMT = {
                groupComparisonTMT(
-                   contrast.matrix = if (input$pairwise) {
+                   contrast.matrix = if (input$contrast_method == "pairwise") {
                        "pairwise"
                    } else {
                        comparison_matrix_updated()[-1, , drop = FALSE]
