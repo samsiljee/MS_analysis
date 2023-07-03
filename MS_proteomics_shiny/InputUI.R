@@ -2,7 +2,7 @@ InputUI <- tabPanel(
     "Input",
     "Input raw data and annotation files",
     sidebarPanel(
-        hr(style = "border-top: 2px solid #000000;"),     
+        h4("Input files"),     
         fileInput("annotations", "Annotations file",
                   buttonLabel = "Browse",
                   placeholder = "Upload annotations"),
