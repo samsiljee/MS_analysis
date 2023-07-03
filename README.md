@@ -53,7 +53,7 @@ A shiny app to analyse mass spectromtetry for proteomics data - from PSMs to vis
   - Good resource on visualising enrichment analysis: https://yulab-smu.top/biomedical-knowledge-mining-book/enrichplot.html
 
 ## Issues and to-do
-  - Check that the default values are sensible - Discuss with appropriate bio-infomatician
+  - Check that the default values are sensible - currently set to MSstats defaults, discuss with bio-infomatician
   - QC section
   - Better progress bars for slow processes
   - Export log files of the MSstats functions, and export a txt document describing the settings used

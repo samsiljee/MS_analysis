@@ -6,11 +6,7 @@ FormatUI <- tabPanel(
                      "useUniquePeptide",
                      "Remove peptides assigned to more than one protein",
                      value = TRUE),
-                 radioButtons(
-                     "summaryforMultipleRows",
-                     "Summary method for multiple rows",
-                     choiceNames = c("Sum", "Max"),
-                     choiceValues = c("sum", "max")),
+                 uiOutput("select_summary_method"),
                  checkboxInput(
                      "removeFewMeasurements",
                      "Remove features with one or two measurements across runs",
