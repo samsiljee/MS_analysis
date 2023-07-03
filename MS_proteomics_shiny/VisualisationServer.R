@@ -1,5 +1,18 @@
 # Visualisation
-# Reactive UI
+# Reactive UI ----
+output$plot_title_input <- renderUI({
+    textInput("plot_title",
+              "Plot title",
+              value = switch(input$plot_type,
+                             Volcano = {
+                                 paste(input$comparison_selected)
+                             },
+                             PCA = {
+                                 "PCA plot"
+                             }
+                             ))
+})
+
 output$select_comparison <- renderUI({
     selectInput("comparison_selected", "Comparison to plot",
                 choices = sort(unique(MSstats_results()$Label)),
@@ -30,7 +43,7 @@ output$go_select_ont <- renderUI({
                 multiple = FALSE)
 })
 
-# Reactive variables
+# Reactive variables ----
 selected_theme <- reactive({
     switch(input$select_theme,
            "B&W" = theme_bw(),
@@ -117,7 +130,7 @@ pca_plot <- eventReactive(input$go_plot, {
     #plot first two PCs
     pca_plot <- ggplot(pca_dat(), aes(x = PC1, y = PC2, colour = Condition)) +
         geom_point() +
-        ggtitle("PCA plot")
+        ggtitle(input$plot_title)
     pca_plot + selected_theme()
 })
 
@@ -132,7 +145,7 @@ volcano_plot <-  eventReactive(input$go_plot, {
         scale_color_manual(values = colours) +
         ylab("-Log10(adjusted p-value)") +
         xlab("Log2 fold change") +
-        ggtitle(input$comparison_selected) +
+        ggtitle(input$plot_title) +
         selected_theme()
 })
 
