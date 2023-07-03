@@ -14,8 +14,7 @@ ProcessUI <- tabPanel(
                                   choiceValues = c("equalizeMedians", "quantile", "globalStandards", FALSE)),
                      conditionalPanel(
                          condition = "input.normalization == 'globalStandards'",
-                         textInput("nameStandards",
-                                   "Named vector for standard peptides (not yet working)")),
+                         fileInput("nameStandards", "Upload FASTA of standards")),
                      radioButtons("featureSubset",
                                   "Feature subset to use",
                                   choiceNames = c("All", "Top 3", "Top N", "High quality"),
@@ -115,8 +114,7 @@ ProcessUI <- tabPanel(
                  downloadButton("processed_feature_tsv", "Save feature data as .tsv"),
                  downloadButton("processed_rda", "Save as .rda")),
     
-    mainPanel("This section will be where MSstats processing happens. There will be drop down options here too for the settings.",
-              "Note that currently I've not got the \"Global standards\" method working as it takes a named vector as input",
+    mainPanel("Summarise and normalise data",
               radioButtons("processed_tab_view",
                            "Which processed data would you like to view?",
                            choiceNames = c("Protein level data", "Feature level data"),

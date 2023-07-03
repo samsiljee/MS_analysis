@@ -46,7 +46,7 @@ server <- function(input, output, session){
   })
 
   # Testing
-  output$test_text <- renderText(input$STRING_cluster_method)
+  output$test_text <- renderText(standards())
   
   output$test_table <- renderDataTable(STRING_dataset())
   

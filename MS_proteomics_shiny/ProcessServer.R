@@ -1,4 +1,12 @@
 # Process
+# Produce named standards
+standards <- reactive({
+    fasta <- readLines(input$nameStandards$datapath)
+    standards <- str_extract(fasta[grep(">", fasta)],"(?<=sp\\|)[[:alnum:]]+")
+    return(standards)
+})
+
+# Process input
 MSstats_processed <- eventReactive(input$go_process, {
     switch(input$quant_method,
            LFQ = {
@@ -6,7 +14,7 @@ MSstats_processed <- eventReactive(input$go_process, {
                    MSstats_input(),
                    logTrans = as.numeric(input$logTrans),
                    normalization = input$normalization,
-                   nameStandards = input$nameStandards,
+                   nameStandards = standards(),
                    featureSubset = input$featureSubset,
                    remove_uninformative_feature_outlier = input$remove_uninformative_feature_outlier,
                    min_feature_count = input$min_feature_count,
