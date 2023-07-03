@@ -63,8 +63,14 @@ input <- PDtoMSstatsFormat(raw,
 
 # Data Processing
 ```{r data processing, echo = FALSE}
+# Testing spike-in protein normalisation
+fasta <- readLines("input/porcine_trypsin.fasta")
+
+standards <- str_extract(fasta[grep(">", fasta)],"(?<=sp\\|)[[:alnum:]]+")
+
 processed <- dataProcess(input,
-                         normalization = FALSE,
+                         normalization = "globalStandards",
+                         nameStandards = standards,
                          summaryMethod = "TMP",
                          censoredInt = "NA",
                          MBimpute = FALSE,

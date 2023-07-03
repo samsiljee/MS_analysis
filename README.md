@@ -12,25 +12,24 @@ A shiny app to analyse mass spectromtetry for proteomics data - from PSMs to vis
 
 ### Notes:
   - The current stable version should be in the main branch
-  - I plan to add a dev branch for adding new features
+  - The dev branch is what I'm currently working on, and may not be functional
   - Please email samsiljee@gmail.com for help or suggestions, or submit through Github
   - This is currently under development, so it may not always be functional
 
 ## Overall workflow of analysis
 
 ### PROTEOMICS
-  - Import results from Proteome Discoverer or Max Quant - as PSMs
+  - Import results from Proteome Discoverer or Max Quant - as PSMs, for both DDA or TMT methodologies
   - Review potential contaminants
   - QC plots; chromatograms
-  - Normalisation and quantification in `MSstats`
-  - Search IDs against basal cell markers, and ciliated markers as a control
+  - summarisation, normalisation, and quantification in `MSstats`
   - Perform differential abundance analysis with `MSstats`, more appropriate as designed specifically for MS proteomics
   - Histogram of log2 foldchanges
   - Perform PCA analysis, and plot clusters
   - Create a heatmap of samples vs proteins
   - Volcano plots of differentially abundant proteins
   - GO and KEGG term analysis
-  - Nework analysis of some kind? STRING?
+  - Network analysis through STRING?
   - Use COPF analysis to infer proteoform differences: https://www.nature.com/articles/s41467-021-24030-x#code-availability
 
 ### PHOSPHOPROTEOMICS
@@ -54,19 +53,18 @@ A shiny app to analyse mass spectromtetry for proteomics data - from PSMs to vis
   - Good resource on visualising enrichment analysis: https://yulab-smu.top/biomedical-knowledge-mining-book/enrichplot.html
 
 ## Issues and to-do
-  - Currently working on fine-tuning some of the MSstats I/O options - global standards still to be done, could potentially set Trypsin as the default for this
   - Check that the default values are sensible - Discuss with appropriate bio-infomatician
   - QC section
   - Better progress bars for slow processes
   - Export log files of the MSstats functions, and export a txt document describing the settings used
   - Add reset to comparison matrix
   - Add option to change titles and axes
-  - Add in KEGG/GO term analysis, GSEA etc
   - Go term analysis with complete tabular output in the analysis tab, and plots intergrated into the visualisation tab
   - Pathview analysis
   - Change GO term analysis to use aGOtool via API: https://agotool.org/API_Help
   - Add in link to STRING website to view pathway, or embed the interactive network
   - Refine selection methods for including string nodes, currently it just takes the top n most significant nodes, regardless of actual significance.
+  - Add WGCNA to analysis section
 
 ## Completed issues
   - Add copyright to repository/scripts
@@ -81,6 +79,8 @@ A shiny app to analyse mass spectromtetry for proteomics data - from PSMs to vis
   - Added MaxQuant input capability
   - Added option to disable automatic removal of potential contaminants from MQ data, done by setting all values of the potential contaminant column to "NA" when loading raw data
   - GO analysis starting to be implemented
+  - STRING analysis started to be added, need to improve graphing methods for this
+  - Added TMT input capability
   
 # License
 Feel free to use this code as you wish under the MIT license, however an acknowledgement would be nice. Thanks!
