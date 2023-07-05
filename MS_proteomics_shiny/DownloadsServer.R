@@ -47,6 +47,24 @@ output$processed_rda <- downloadHandler(
     }
 )
 
+# Log files
+output$processed_log <- downloadHandler(
+    filename = function() {
+        log_file_path <- file.path("logs", "process_log.txt")
+        if (file.exists(log_file_path)) {
+            basename(log_file_path)
+        } else {
+            NULL
+        }
+    },
+    content = function(file) {
+        log_file_path <- file.path("logs", "process_log.txt")
+        if (file.exists(log_file_path)) {
+            file.copy(log_file_path, file)
+        }
+    }
+)
+
 # Comparison
 output$results_tsv <- downloadHandler(
     filename = function() {

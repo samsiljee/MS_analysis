@@ -1,0 +1,25 @@
+INFO  [2023-07-05 16:39:35] MSstats - dataProcess function
+INFO  [2023-07-05 16:39:35] Summary method: TMP
+INFO  [2023-07-05 16:39:35] censoredInt: NA
+INFO  [2023-07-05 16:39:38] Logarithm transformation with base 2 is done
+INFO  [2023-07-05 16:39:39] Factorize in columns(GROUP, SUBJECT, GROUP_ORIGINAL, SUBJECT_ORIGINAL, FEATURE, RUN)
+INFO  [2023-07-05 16:39:39] ** Use all features that the dataset originally has.
+INFO  [2023-07-05 16:39:41] 
+ # proteins: 1659
+ # peptides per protein: 2-138
+ # features per peptide: 1-1
+INFO  [2023-07-05 16:39:41] 
+                    HLZ SLS SLZ STS STZ
+             # runs   2   2   1   2   1
+    # bioreplicates   1   1   1   1   1
+ # tech. replicates   2   2   1   2   1
+INFO  [2023-07-05 16:39:42] Some features are completely missing in at least one condition:  
+ AGVNFSEFTGVWKNA_2_NA_NA,
+ LSDQFHDILIRNA_3_NA_NA,
+ YITDWQNVFRNA_2_NA_NA,
+ KEPELFQTVAEGLRNA_3_NA_NA,
+ LADVDKDGLLDDEEFALANHLIKNA_4_NA_NA ...
+INFO  [2023-07-05 16:39:42] The following runs have more than 75% missing values: 1,
+ 2
+INFO  [2023-07-05 16:39:42] == Start the summarization per subplot...
+INFO  [2023-07-05 16:40:40] == Summarization is done.
