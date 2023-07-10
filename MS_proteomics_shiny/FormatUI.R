@@ -99,8 +99,7 @@ FormatUI <- tabPanel(
                      "go_format", "Format!"),
                  hr(style = "border-top: 2px solid #000000;"),
                  downloadButton("formatted_tsv", "Save as .tsv"),
-                 downloadButton("formatted_rda", "Save as .rda"),
-                 downloadButton("formatted_log", "Save log file")),
+                 downloadButton("formatted_rda", "Save as .rda")),
     
     mainPanel("Preview of formatted input data",
               withSpinner(dataTableOutput("MSstats_input_tab")))

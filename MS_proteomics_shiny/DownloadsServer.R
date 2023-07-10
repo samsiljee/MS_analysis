@@ -19,24 +19,6 @@ output$formatted_rda <- downloadHandler(
     }
 )
 
-# Log files
-output$formatted_log <- downloadHandler(
-    filename = function() {
-        format_log_file_path <- file.path("logs", "format_log.txt")
-        if (file.exists(format_log_file_path)) {
-            basename(format_log_file_path)
-        } else {
-            NULL
-        }
-    },
-    content = function(file) {
-        format_log_file_path <- file.path("logs", "format_log.txt")
-        if (file.exists(format_log_file_path)) {
-            file.copy(format_log_file_path, file)
-        }
-    }
-)
-
 #Processed data
 output$processed_protein_tsv <- downloadHandler(
     filename = function() {
@@ -68,22 +50,22 @@ output$processed_rda <- downloadHandler(
 # Log files
 output$processed_log <- downloadHandler(
     filename = function() {
-        process_log_file_path <- file.path("logs", "process_log.txt")
-        if (file.exists(process_log_file_path)) {
-            basename(process_log_file_path)
+        log_file_path <- file.path("logs", "process_log.txt")
+        if (file.exists(log_file_path)) {
+            basename(log_file_path)
         } else {
             NULL
         }
     },
     content = function(file) {
-        process_log_file_path <- file.path("logs", "process_log.txt")
-        if (file.exists(process_log_file_path)) {
-            file.copy(process_log_file_path, file)
+        log_file_path <- file.path("logs", "process_log.txt")
+        if (file.exists(log_file_path)) {
+            file.copy(log_file_path, file)
         }
     }
 )
 
-# Comparison ----
+# Comparison
 output$results_tsv <- downloadHandler(
     filename = function() {
         paste0("MSstats_results_", Sys.Date(), ".tsv")
@@ -108,24 +90,6 @@ output$comparisons_rda <- downloadHandler(
     },
     content = function(file) {
         saveRDS(MSstats_test(), file = file)
-    }
-)
-
-# Log files
-output$compared_log <- downloadHandler(
-    filename = function() {
-        comparison_log_file_path <- file.path("logs", "comparison_log.txt")
-        if (file.exists(comparison_log_file_path)) {
-            basename(comparison_log_file_path)
-        } else {
-            NULL
-        }
-    },
-    content = function(file) {
-        comparison_log_file_path <- file.path("logs", "comparison_log.txt")
-        if (file.exists(comparison_log_file_path)) {
-            file.copy(comparison_log_file_path, file)
-        }
     }
 )
 
