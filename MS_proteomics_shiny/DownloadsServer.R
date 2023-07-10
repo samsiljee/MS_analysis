@@ -1,5 +1,4 @@
-
-# Downloads ----
+# Downloads
 #Formatted data tables
 output$formatted_tsv <- downloadHandler(
     filename = function() {
@@ -16,6 +15,24 @@ output$formatted_rda <- downloadHandler(
     },
     content = function(file) {
         saveRDS(MSstats_input(), file = file)
+    }
+)
+
+# Log files
+output$formatted_log <- downloadHandler(
+    filename = function() {
+        format_log_file_path <- file.path("logs", "format_log.txt")
+        if (file.exists(format_log_file_path)) {
+            basename(format_log_file_path)
+        } else {
+            NULL
+        }
+    },
+    content = function(file) {
+        log_file_path <- file.path("logs", "format_log.txt")
+        if (file.exists(format_log_file_path)) {
+            file.copy(format_log_file_path, file)
+        }
     }
 )
 
@@ -44,24 +61,6 @@ output$processed_rda <- downloadHandler(
     },
     content = function(file) {
         saveRDS(MSstats_processed(), file = file)
-    }
-)
-
-# Log files
-output$processed_log <- downloadHandler(
-    filename = function() {
-        log_file_path <- file.path("logs", "process_log.txt")
-        if (file.exists(log_file_path)) {
-            basename(log_file_path)
-        } else {
-            NULL
-        }
-    },
-    content = function(file) {
-        log_file_path <- file.path("logs", "process_log.txt")
-        if (file.exists(log_file_path)) {
-            file.copy(log_file_path, file)
-        }
     }
 )
 

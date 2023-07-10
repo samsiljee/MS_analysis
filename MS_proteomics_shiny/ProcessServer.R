@@ -14,14 +14,6 @@ standards <- reactive({
 MSstats_processed <- eventReactive(input$go_process, {
     switch(input$quant_method,
            LFQ = {
-               log_dir <- "logs"  # Directory name for the log file
-               log_file_path <- file.path(log_dir, "process_log.txt")  # Path to the log file
-               
-               # Create the directory if it doesn't exist
-               if (!dir.exists(log_dir)) {
-                   dir.create(log_dir)
-               }
-               
                dataProcess(
                    MSstats_input(),
                    logTrans = as.numeric(input$logTrans),
@@ -38,8 +30,7 @@ MSstats_processed <- eventReactive(input$go_process, {
                    remove50missing = input$remove50missing,
                    fix_missing = ifelse(input$fix_missing == "NULL", NULL, input$fix_missing),
                    maxQuantileforCensored = input$maxQuantileforCensored,
-                   use_log_file = TRUE,
-                   log_file_path = log_file_path)
+                   use_log_file = FALSE)
            },
            
            TMT = {
