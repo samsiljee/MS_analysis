@@ -113,7 +113,7 @@ ProcessUI <- tabPanel(
                  downloadButton("processed_protein_tsv", "Save protein data as .tsv"),
                  downloadButton("processed_feature_tsv", "Save feature data as .tsv"),
                  downloadButton("processed_rda", "Save as .rda"),
-                 downloadButton("compared_log", "Save log file")),
+                 downloadButton("processed_log", "Save log")),
     
     mainPanel("Summarise and normalise data",
               radioButtons("processed_tab_view",

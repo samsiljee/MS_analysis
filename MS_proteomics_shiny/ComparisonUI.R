@@ -57,8 +57,7 @@ ComparisonUI <- tabPanel(
                  hr(style = "border-top: 2px solid #000000;"),
                  downloadButton("results_tsv", "Save results as .tsv"),
                  downloadButton("model_qc_tsv", "Save model QC as .tsv"),
-                 downloadButton("comparisons_rda", "Save as .rda"),
-                 downloadButton("compared_log", "Save log file")),
+                 downloadButton("comparisons_rda", "Save as .rda")),
     
     mainPanel("Comparisons to be made:",
               tableOutput("comparison_matrix_tab"),
