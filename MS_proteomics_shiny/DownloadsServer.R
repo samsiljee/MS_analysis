@@ -1,5 +1,4 @@
-
-# Downloads ----
+# Downloads
 #Formatted data tables
 output$formatted_tsv <- downloadHandler(
     filename = function() {

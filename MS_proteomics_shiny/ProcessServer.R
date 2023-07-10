@@ -15,7 +15,7 @@ MSstats_processed <- eventReactive(input$go_process, {
     switch(input$quant_method,
            LFQ = {
                log_dir <- "logs"  # Directory name for the log file
-               log_file_path <- file.path(log_dir, "process_log.txt")  # Path to the log file
+               process_log_file_path <- file.path(log_dir, "process_log.txt")  # Path to the log file
                
                # Create the directory if it doesn't exist
                if (!dir.exists(log_dir)) {
@@ -39,7 +39,7 @@ MSstats_processed <- eventReactive(input$go_process, {
                    fix_missing = ifelse(input$fix_missing == "NULL", NULL, input$fix_missing),
                    maxQuantileforCensored = input$maxQuantileforCensored,
                    use_log_file = TRUE,
-                   log_file_path = log_file_path)
+                   log_file_path = process_log_file_path)
            },
            
            TMT = {
@@ -52,7 +52,8 @@ MSstats_processed <- eventReactive(input$go_process, {
                    remove_empty_channel = input$remove_empty_channel,
                    MBimpute = input$MBimpute,
                    maxQuantileforCensored = input$maxQuantileforCensored,
-                   use_log_file = FALSE)
+                   use_log_file = TRUE,
+                   log_file_path = process_log_file_path)
            })
 })
 
