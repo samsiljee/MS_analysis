@@ -12,16 +12,13 @@ standards <- reactive({
 
 # Process input
 MSstats_processed <- eventReactive(input$go_process, {
+    # Create path for log file
+    log_dir <- "logs"
+    process_log_file_path <- file.path(log_dir, "process_log.txt")
+    
+    # Run data process
     switch(input$quant_method,
            LFQ = {
-               log_dir <- "logs"  # Directory name for the log file
-               process_log_file_path <- file.path(log_dir, "process_log.txt")  # Path to the log file
-               
-               # Create the directory if it doesn't exist
-               if (!dir.exists(log_dir)) {
-                   dir.create(log_dir)
-               }
-               
                dataProcess(
                    MSstats_input(),
                    logTrans = as.numeric(input$logTrans),

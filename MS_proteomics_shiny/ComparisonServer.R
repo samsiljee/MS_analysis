@@ -66,6 +66,11 @@ comparison_matrix_updated <- eventReactive(input$add_comparison, {
 
 # Run the comparison function
 MSstats_test <- eventReactive(input$go_compare, {
+    # Create path for log file
+    log_dir <- "logs"
+    comparison_log_file_path <- file.path(log_dir, "comparison_log.txt")
+    
+    # Run comparison
     switch(input$quant_method,
            LFQ = {
                groupComparison(
@@ -77,7 +82,8 @@ MSstats_test <- eventReactive(input$go_compare, {
                    data = MSstats_processed(),
                    save_fitted_models = input$save_fitted_models,
                    log_base = 2,
-                   use_log_file = FALSE)},
+                   use_log_file = TRUE,
+                   log_file_path = comparison_log_file_path)},
            
            TMT = {
                groupComparisonTMT(
@@ -92,7 +98,8 @@ MSstats_test <- eventReactive(input$go_compare, {
                    remove_norm_channel = input$remove_norm_channel_comp,
                    remove_empty_channel = input$remove_empty_channel_comp,
                    save_fitted_models = input$save_fitted_models,
-                   use_log_file = FALSE)})
+                   use_log_file = TRUE,
+                   log_file_path = comparison_log_file_path)})
 })
 
 # Results of comparison, and adding up/downregulation
