@@ -12,16 +12,18 @@ standards <- reactive({
 
 # Process input
 MSstats_processed <- eventReactive(input$go_process, {
+    # Create path for log file
+    log_dir <- "logs"
+    log_file_path <- file.path(log_dir, "process_log.txt")
+    
+    # Create the directory if it doesn't exist
+    if (!dir.exists(log_dir)) {
+        dir.create(log_dir)
+    }
+    
+    # Run data process
     switch(input$quant_method,
            LFQ = {
-               log_dir <- "logs"  # Directory name for the log file
-               log_file_path <- file.path(log_dir, "process_log.txt")  # Path to the log file
-               
-               # Create the directory if it doesn't exist
-               if (!dir.exists(log_dir)) {
-                   dir.create(log_dir)
-               }
-               
                dataProcess(
                    MSstats_input(),
                    logTrans = as.numeric(input$logTrans),
@@ -52,7 +54,8 @@ MSstats_processed <- eventReactive(input$go_process, {
                    remove_empty_channel = input$remove_empty_channel,
                    MBimpute = input$MBimpute,
                    maxQuantileforCensored = input$maxQuantileforCensored,
-                   use_log_file = FALSE)
+                   use_log_file = TRUE,
+                   log_file_path = log_file_path)
            })
 })
 

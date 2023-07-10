@@ -19,6 +19,24 @@ output$formatted_rda <- downloadHandler(
     }
 )
 
+# Log files
+output$formatted_log <- downloadHandler(
+    filename = function() {
+        log_file_path <- file.path("logs", "format_log.txt")
+        if (file.exists(log_file_path)) {
+            basename(log_file_path)
+        } else {
+            NULL
+        }
+    },
+    content = function(file) {
+        log_file_path <- file.path("logs", "format_log.txt")
+        if (file.exists(log_file_path)) {
+            file.copy(log_file_path, file)
+        }
+    }
+)
+
 #Processed data
 output$processed_protein_tsv <- downloadHandler(
     filename = function() {
@@ -65,7 +83,7 @@ output$processed_log <- downloadHandler(
     }
 )
 
-# Comparison
+# Comparison ----
 output$results_tsv <- downloadHandler(
     filename = function() {
         paste0("MSstats_results_", Sys.Date(), ".tsv")
@@ -90,6 +108,24 @@ output$comparisons_rda <- downloadHandler(
     },
     content = function(file) {
         saveRDS(MSstats_test(), file = file)
+    }
+)
+
+# Log files
+output$compared_log <- downloadHandler(
+    filename = function() {
+        log_file_path <- file.path("logs", "compare_log.txt")
+        if (file.exists(log_file_path)) {
+            basename(log_file_path)
+        } else {
+            NULL
+        }
+    },
+    content = function(file) {
+        log_file_path <- file.path("logs", "compare_log.txt")
+        if (file.exists(log_file_path)) {
+            file.copy(log_file_path, file)
+        }
     }
 )
 
