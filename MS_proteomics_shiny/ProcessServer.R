@@ -16,11 +16,6 @@ MSstats_processed <- eventReactive(input$go_process, {
     log_dir <- "logs"
     log_file_path <- file.path(log_dir, "process_log.txt")
     
-    # Create the directory if it doesn't exist
-    if (!dir.exists(log_dir)) {
-        dir.create(log_dir)
-    }
-    
     # Run data process
     switch(input$quant_method,
            LFQ = {

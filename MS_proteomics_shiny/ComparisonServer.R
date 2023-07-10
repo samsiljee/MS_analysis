@@ -70,11 +70,6 @@ MSstats_test <- eventReactive(input$go_compare, {
     log_dir <- "logs"
     log_file_path <- file.path(log_dir, "comparison_log.txt")
     
-    # Create the directory if it doesn't exist
-    if (!dir.exists(log_dir)) {
-        dir.create(log_dir)
-    }
-    
     # Run comparison
     switch(input$quant_method,
            LFQ = {
