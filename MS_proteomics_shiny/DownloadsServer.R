@@ -29,7 +29,7 @@ output$formatted_log <- downloadHandler(
         }
     },
     content = function(file) {
-        log_file_path <- file.path("logs", "format_log.txt")
+        format_log_file_path <- file.path("logs", "format_log.txt")
         if (file.exists(format_log_file_path)) {
             file.copy(format_log_file_path, file)
         }
