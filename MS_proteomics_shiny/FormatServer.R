@@ -23,13 +23,11 @@ output$select_summary_method <- renderUI({
 
 # Generate input
 MSstats_input <- eventReactive(input$go_format, {
-    log_dir <- "logs"
-    format_log_file_path <- file.path(log_dir, "format_log.txt")
+    # Path for log files
+    format_log_file_path <- file.path("logs", "format_log.txt")
     
     # Create the directory if it doesn't exist
-    if (!dir.exists(log_dir)) {
-        dir.create(log_dir)
-    }
+    if (!dir.exists("logs")) { dir.create("logs") }
     
     switch(input$quant_method,
            ## LFQ ----
