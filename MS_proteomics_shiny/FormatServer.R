@@ -23,6 +23,12 @@ output$select_summary_method <- renderUI({
 
 # Generate input
 MSstats_input <- eventReactive(input$go_format, {
+    # Path for log files
+    format_log_file_path <- file.path("logs", "format_log.txt")
+    
+    # Create the directory if it doesn't exist
+    if (!dir.exists("logs")) { dir.create("logs") }
+    
     switch(input$quant_method,
            ## LFQ ----
            LFQ = {
@@ -40,7 +46,8 @@ MSstats_input <- eventReactive(input$go_format, {
                               which.quantification = input$which.quantification,
                               which.proteinid = input$which.proteinid,
                               which.sequence = input$which.sequence,
-                              use_log_file = FALSE)
+                              use_log_file = TRUE,
+                              log_file_path = format_log_file_path)
                       }, # switch = PD (LFQ)
                       
                       MQ = {
@@ -55,7 +62,8 @@ MSstats_input <- eventReactive(input$go_format, {
                               removeMpeptides = input$removeMpeptides,
                               removeOxidationMpeptides = input$removeOxidationMpeptides,
                               removeProtein_with1Peptide = input$removeProtein_with1Peptide,
-                              use_log_file = FALSE)
+                              use_log_file = TRUE,
+                              log_file_path = format_log_file_path)
                       } # switch = MQ (LFQ)
                )}, # switch = LFQ
            
@@ -72,7 +80,8 @@ MSstats_input <- eventReactive(input$go_format, {
                               rmPSM_withfewMea_withinRun = input$removeFewMeasurements,
                               rmProtein_with1Feature = input$rmProtein_with1Feature,
                               summaryforMultipleRows = ifelse(input$summaryforMultipleRows == "max", max, sum),
-                              use_log_file = FALSE)
+                              use_log_file = TRUE,
+                              log_file_path = format_log_file_path)
                       }, # close PD (TMT)
                       
                       MQ = {
@@ -86,7 +95,8 @@ MSstats_input <- eventReactive(input$go_format, {
                               rmPSM_withfewMea_withinRun = input$removeFewMeasurements,
                               rmProtein_with1Feature = input$rmProtein_with1Feature,
                               summaryforMultipleRows = ifelse(input$summaryforMultipleRows == "max", max, sum),
-                              use_log_file = FALSE)
+                              use_log_file = TRUE,
+                              log_file_path = format_log_file_path)
                       } # close MQ (TMT)
                ) # close switch platform
            } # Close TMT

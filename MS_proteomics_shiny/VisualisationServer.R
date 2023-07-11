@@ -1,16 +1,69 @@
 # Visualisation
 # Reactive UI ----
+# Plot title
 output$plot_title_input <- renderUI({
     textInput("plot_title",
               "Plot title",
               value = switch(input$plot_type,
                              Volcano = {
-                                 paste(input$comparison_selected)
+                                 input$comparison_selected
                              },
                              PCA = {
                                  "PCA plot"
+                             },
+                             `GO enrichment` = {
+                                 paste0("GO enrichment ",
+                                        input$go_comparison_selected, " ",
+                                        input$go_direction_selected, " ",
+                                        input$go_ont_selected)
+                             },
+                             Heatmap = {
+                                 "Heatmap"
                              }
                              ))
+})
+
+# Plot x lab
+output$plot_x_lab_input <- renderUI({
+    textInput("plot_x_lab",
+              "X label",
+              value = switch(input$plot_type,
+                             Volcano = {
+                                 "Log2 Fold Change"
+                             },
+                             PCA = {
+                                 "PC1"
+                             },
+                             `GO enrichment` = {
+                                 paste0("GO enrichment ",
+                                        input$go_comparison_selected, " ",
+                                        input$go_direction_selected, " ",
+                                        input$go_ont_selected)
+                             }
+              ))
+})
+
+# Plot y lab
+output$plot_y_lab_input <- renderUI({
+    textInput("plot_y_lab",
+              "Y label",
+              value = switch(input$plot_type,
+                             Volcano = {
+                                 "-Log10(adjusted p-value)"
+                             },
+                             PCA = {
+                                 "PC2"
+                             },
+                             `GO enrichment` = {
+                                 paste0("GO enrichment ",
+                                        input$go_comparison_selected, " ",
+                                        input$go_direction_selected, " ",
+                                        input$go_ont_selected)
+                             },
+                             Heatmap = {
+                                 "Proteins"
+                             }
+              ))
 })
 
 output$select_comparison <- renderUI({
@@ -107,8 +160,8 @@ heatmap_plot <- eventReactive(input$go_plot, {
     #create heatmap of gene expression, row scaling removed
     Heatmap(
         matrix = heatmap_input(),
-        row_title = "Proteins",
-        column_title = "Unfiltered proteome heatmap",
+        row_title = input$plot_y_lab,
+        column_title = input$plot_title,
         show_row_dend = FALSE,
         show_column_dend = TRUE, 
         column_names_gp = gpar(fontsize = 8),
@@ -130,7 +183,9 @@ pca_plot <- eventReactive(input$go_plot, {
     #plot first two PCs
     pca_plot <- ggplot(pca_dat(), aes(x = PC1, y = PC2, colour = Condition)) +
         geom_point() +
-        ggtitle(input$plot_title)
+        ggtitle(input$plot_title) +
+        ylab(input$plot_y_lab) +
+        xlab(input$plot_x_lab)
     pca_plot + selected_theme()
 })
 
@@ -143,8 +198,8 @@ volcano_plot <-  eventReactive(input$go_plot, {
         geom_hline(yintercept = -log10(input$pvalue_threshold), linetype = "dashed", colour = "red") +
         geom_point(alpha = 0.25, show.legend = FALSE) +
         scale_color_manual(values = colours) +
-        ylab("-Log10(adjusted p-value)") +
-        xlab("Log2 fold change") +
+        ylab(input$plot_y_lab) +
+        xlab(input$plot_x_lab) +
         ggtitle(input$plot_title) +
         selected_theme()
 })
@@ -156,11 +211,9 @@ go_enrichment_plot <- eventReactive(input$go_plot, {
         geom_point() +
         scale_y_continuous(breaks = 1:input$go_top_n,
                            labels = go_enrichment_plot_dataset()$Description) +
-        labs(y = NULL) +
-        ggtitle(paste0("GO enrichment ",
-                       input$go_comparison_selected, " ",
-                       input$go_direction_selected, " ",
-                       input$go_ont_selected)) +
+        ylab(input$plot_y_lab) +
+        xlab(input$plot_x_lab) +
+        ggtitle(input$plot_title) +
         selected_theme()
 })
 

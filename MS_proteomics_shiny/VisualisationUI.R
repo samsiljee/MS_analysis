@@ -16,11 +16,31 @@ VisualisationUI <- tabPanel(
                                 "GO enrichment",
                                 "STRING network"),
                     multiple = FALSE),
+        #title
         conditionalPanel(
-            condition = "input.plot_type == 'Volcano'",
+            condition = "input.plot_type == 'Volcano' ||
+            input.plot_type == 'PCA' ||
+            input.plot_type == 'Heatmap' ||
+            input.plot_type == 'GO enrichment'",
             hr(style = "border-top: 2px solid #000000;"),
             uiOutput("plot_title_input")
         ),
+        #X lab
+        conditionalPanel(
+            condition = "input.plot_type == 'Volcano' ||
+            input.plot_type == 'PCA' ||
+            input.plot_type == 'GO enrichment'",
+            uiOutput("plot_x_lab_input")
+        ),
+        #Y lab
+        conditionalPanel(
+            condition = "input.plot_type == 'Volcano' ||
+            input.plot_type == 'PCA' ||
+            input.plot_type == 'Heatmap' ||
+            input.plot_type == 'GO enrichment'",
+            uiOutput("plot_y_lab_input")
+        ),
+        
         hr(style = "border-top: 2px solid #000000;"),
         conditionalPanel(condition = "input.plot_type == 'Volcano'",
                          uiOutput("select_comparison")),

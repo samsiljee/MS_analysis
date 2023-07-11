@@ -1,5 +1,4 @@
-
-# Downloads ----
+# Downloads
 #Formatted data tables
 output$formatted_tsv <- downloadHandler(
     filename = function() {
@@ -16,6 +15,24 @@ output$formatted_rda <- downloadHandler(
     },
     content = function(file) {
         saveRDS(MSstats_input(), file = file)
+    }
+)
+
+# Log files
+output$formatted_log <- downloadHandler(
+    filename = function() {
+        format_log_file_path <- file.path("logs", "format_log.txt")
+        if (file.exists(format_log_file_path)) {
+            basename(format_log_file_path)
+        } else {
+            NULL
+        }
+    },
+    content = function(file) {
+        format_log_file_path <- file.path("logs", "format_log.txt")
+        if (file.exists(format_log_file_path)) {
+            file.copy(format_log_file_path, file)
+        }
     }
 )
 
@@ -47,6 +64,24 @@ output$processed_rda <- downloadHandler(
     }
 )
 
+# Log files
+output$processed_log <- downloadHandler(
+    filename = function() {
+        process_log_file_path <- file.path("logs", "process_log.txt")
+        if (file.exists(process_log_file_path)) {
+            basename(process_log_file_path)
+        } else {
+            NULL
+        }
+    },
+    content = function(file) {
+        process_log_file_path <- file.path("logs", "process_log.txt")
+        if (file.exists(process_log_file_path)) {
+            file.copy(process_log_file_path, file)
+        }
+    }
+)
+
 # Comparison
 output$results_tsv <- downloadHandler(
     filename = function() {
@@ -72,6 +107,24 @@ output$comparisons_rda <- downloadHandler(
     },
     content = function(file) {
         saveRDS(MSstats_test(), file = file)
+    }
+)
+
+# Log files
+output$comparisons_log <- downloadHandler(
+    filename = function() {
+        compare_log_file_path <- file.path("logs", "compare_log.txt")
+        if (file.exists(compare_log_file_path)) {
+            basename(compare_log_file_path)
+        } else {
+            NULL
+        }
+    },
+    content = function(file) {
+        compare_log_file_path <- file.path("logs", "compare_log.txt")
+        if (file.exists(compare_log_file_path)) {
+            file.copy(compare_log_file_path, file)
+        }
     }
 )
 
