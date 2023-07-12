@@ -67,6 +67,7 @@ A shiny app to analyse mass spectromtetry for proteomics data - from PSMs to vis
   - Add WGCNA to analysis section
   - Add logical way to input TMT annotations, may need a channel annotations file alongside others. Look up vignette for MSstatsTMT for more details
   - Correct PcaRef for TMT data
+  - Add option to use/see example data, could use MSstats test data for this perhaps
   
 # License
 Feel free to use this code as you wish under the MIT license, however an acknowledgement would be nice. Thanks!
