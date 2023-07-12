@@ -65,6 +65,8 @@ A shiny app to analyse mass spectromtetry for proteomics data - from PSMs to vis
   - Add in link to STRING website to view pathway, or embed the interactive network
   - Refine selection methods for including string nodes, currently it just takes the top n most significant nodes, regardless of actual significance.
   - Add WGCNA to analysis section
+  - Add logical way to input TMT annotations, may need a channel annotations file alongside others. Look up vignette for MSstatsTMT for more details
+  - Correct PcaRef for TMT data
   
 # License
 Feel free to use this code as you wish under the MIT license, however an acknowledgement would be nice. Thanks!
