@@ -1,23 +1,14 @@
 # Format
 # Reactive UI
 output$select_summary_method <- renderUI({
-    switch(input$quant_method,
-           LFQ = {
-               radioButtons(
-                   "summaryforMultipleRows",
-                   "Summary method for multiple rows",
-                   choiceNames = c("Sum", "Max"),
-                   choiceValues = c("sum", "max"),
-                   selected = "max")
-           },
-           TMT = {
-               radioButtons(
-                   "summaryforMultipleRows",
-                   "Summary method for multiple rows",
-                   choiceNames = c("Sum", "Max"),
-                   choiceValues = c("sum", "max"),
-                   selected = "sum")
-           }
+    radioButtons(
+        "summaryforMultipleRows",
+        "Summary method for multiple rows",
+        choiceNames = c("Sum", "Max"),
+        choiceValues = c("sum", "max"),
+        selected = switch(input$quant_method,
+           LFQ = {"max"},
+           TMT = {"sum"})
     )
 })
 
