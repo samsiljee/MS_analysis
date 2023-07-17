@@ -40,6 +40,15 @@ raw_file <- "0vs20_PSMs.txt"
 annotations_file <- "0vs20_annotations.csv"
 ```
 
+# TMT annotations combining
+```{r combine annotation files}
+run_annot <- vroom("C:/Users/Sam/Documents/Coding/MS_analysis/input/TMT/Rat_TMT_run_annotations.tsv")
+channel_annot <- vroom("C:/Users/Sam/Documents/Coding/MS_analysis/input/TMT/Rat_TMT_channel_annotations.tsv")
+annot <- full_join(run_annot, channel_annot)
+
+```
+
+
 # Data import
 ```{r data import}
 raw <- read.csv(paste0(input_dir, raw_file),
