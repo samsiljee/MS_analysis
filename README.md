@@ -68,6 +68,11 @@ A shiny app to analyse mass spectromtetry for proteomics data - from PSMs to vis
   - Add logical way to input TMT annotations, may need a channel annotations file alongside others. Look up vignette for MSstatsTMT for more details
   - Correct PcaRef for TMT data
   - Add option to use/see example data, could use MSstats test data for this perhaps
+  - Help text for various settings
+  - Hide some options under "advanced settings", otherwise use defaults
+  - Make a wizard to create annotation files - Use DT for interactive table editing and autofilling some columns from the PSMs files
+  - Create a manual?
+  - Add basic summary report
   
 # License
 Feel free to use this code as you wish under the MIT license, however an acknowledgement would be nice. Thanks!
