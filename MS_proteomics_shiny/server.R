@@ -46,7 +46,11 @@ server <- function(input, output, session){
   })
 
   # Testing
-  output$test_text <- renderText(levels(MSstats_processed()$ProteinLevelData$GROUP))
+  test_levels <- eventReactive(input$go_process, {
+   levels(MSstats_processed()$ProteinLevelData$GROUP)
+  })
+  
+  output$test_text <- renderPrint(test_levels())
   
   output$test_table <- renderDataTable(STRING_dataset())
   

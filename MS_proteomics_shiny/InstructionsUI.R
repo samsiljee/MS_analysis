@@ -35,5 +35,5 @@ InstructionsUI <- tabPanel(
     "Technical replicates are automatically detected. Save it as a csv or tsv file.", br(),
     hr(style = "border-top: 2px solid #000000;"),
     "Debugging output here, please ignore", br(),
-    textOutput("test_text"),
+    verbatimTextOutput("test_text"),
     tableOutput("test_table"))

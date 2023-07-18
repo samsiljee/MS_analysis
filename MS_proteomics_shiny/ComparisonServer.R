@@ -15,7 +15,7 @@ output$select_denominator <- renderUI({
 
 # Reactive variables
 conditions <- reactive({
-    levels(MSstats_processed()$ProteinLevelData$GROUP)
+    sort(unique(annot_col()$Condition))
     })
 
 # Define comparison_matrix as a reactiveValues object
