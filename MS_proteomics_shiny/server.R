@@ -47,7 +47,7 @@ server <- function(input, output, session){
 
   # Testing
   test_levels <- eventReactive(input$go_process, {
-   levels(MSstats_processed()$ProteinLevelData$GROUP)
+    "Testing"
   })
   
   output$test_text <- renderPrint(test_levels())

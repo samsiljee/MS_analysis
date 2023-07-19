@@ -15,14 +15,22 @@ output$select_denominator <- renderUI({
 
 # Reactive variables
 conditions <- reactive({
-    sort(unique(annot_col()$Condition))
-    })
+    levels(
+        switch(input$quant_method,
+               LFQ = {
+                   MSstats_processed()$ProteinLevelData$GROUP
+               },
+               TMT = {
+                   MSstats_processed()$ProteinLevelData$Condition
+               })
+    )
+})
 
 # Define comparison_matrix as a reactiveValues object
 c_vals <- reactiveValues(matrix = NULL, comparison_names = character())
 
 # Initialising the comparison matrix on uploading annotations file
-observeEvent(input$annotations, {
+observeEvent(input$go_process, {
     add_comparison()
 })
 
