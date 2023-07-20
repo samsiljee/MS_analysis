@@ -1,6 +1,5 @@
 ComparisonUI <- tabPanel(
     "Comparison",
-    "This section will be where MSstats is computed. There will be drop down options here too for the settings.",
     
     sidebarPanel(h4("Comparisons"),
                  # Common options
@@ -52,7 +51,9 @@ ComparisonUI <- tabPanel(
                  
                  # More common options
                  checkboxInput("save_fitted_models", "Save fitted models to the .rda output", value = FALSE),
-                 checkboxInput("filter_results", "Filter out proteins with infinite fold-change", value = TRUE),
+                 conditionalPanel(
+                     condition = "input.quant_method == 'LFQ'",
+                     checkboxInput("filter_results", "Filter out proteins with infinite fold-change", value = TRUE)),
                  actionButton("go_compare", "Compare!"),
                  hr(style = "border-top: 2px solid #000000;"),
                  downloadButton("results_tsv", "Save results as .tsv"),
