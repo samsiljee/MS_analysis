@@ -46,11 +46,7 @@ server <- function(input, output, session){
   })
 
   # Testing
-  test_levels <- eventReactive(input$go_process, {
-    "Testing"
-  })
-  
-  output$test_text <- renderPrint(test_levels())
+  output$test_text <- renderPrint("Test")
   
   output$test_table <- renderDataTable(STRING_dataset())
   
