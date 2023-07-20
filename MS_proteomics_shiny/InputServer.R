@@ -31,8 +31,12 @@ annot_col <- reactive({
                    # Run annotations
                    run_df <- vroom(input$run_annotations$datapath)
                    
-                   # Combined
+                   # Combine
                    df <- full_join(run_df, channel_df)
+                   
+                   df$PcaRef <- str_trim(as.character(df$Run))
+                   df$PcaRef <- gsub(".", "", df$PcaRef, fixed = TRUE)
+                   df
                } else {
                    data.frame()
                }
@@ -84,7 +88,7 @@ protein_groups <- reactive({
 })
 
 # Generate output
-output$annotation_tab <- renderDataTable(annot_col())
+output$annotation_tab <- renderDataTable(annot_col() %>% dplyr::select(!(PcaRef)))
 
 output$PSMs_tab <- renderDataTable(raw())
 
