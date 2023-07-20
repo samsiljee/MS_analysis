@@ -13,14 +13,30 @@ output$psm_input <- renderUI({
 
 # read in annotations
 annot_col <- reactive({
-    if (!is.null(input$annotations)){
-        df <- vroom(input$annotations$datapath)
-        df$PcaRef <- str_trim(as.character(df$Run))
-        df$PcaRef <- gsub(".", "", df$PcaRef, fixed = TRUE)
-        df
-    } else {
-        data.frame()
-    }
+    switch(input$quant_method,
+           LFQ = {
+               if (!is.null(input$annotations)){
+                   df <- vroom(input$annotations$datapath)
+                   df$PcaRef <- str_trim(as.character(df$Run))
+                   df$PcaRef <- gsub(".", "", df$PcaRef, fixed = TRUE)
+                   df
+               } else {
+                   data.frame()
+               }},
+           TMT = {
+               if (!is.null(input$channel_annotations) & !is.null(input$run_annotations)){
+                   # Channel annotations
+                   channel_df <- vroom(input$channel_annotations$datapath)
+                   
+                   # Run annotations
+                   run_df <- vroom(input$run_annotations$datapath)
+                   
+                   # Combined
+                   df <- full_join(run_df, channel_df)
+               } else {
+                   data.frame()
+               }
+           })
 })
 
 # Read in raw PSM data

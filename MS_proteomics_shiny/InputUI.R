@@ -2,10 +2,22 @@ InputUI <- tabPanel(
     "Input",
     "Input raw data and annotation files",
     sidebarPanel(
-        h4("Input files"),     
-        fileInput("annotations", "Annotations file",
-                  buttonLabel = "Browse",
-                  placeholder = "Upload annotations"),
+        h4("Input files"),
+        # LFQ annotations
+        conditionalPanel(
+            condition = "input.quant_method == 'LFQ'",
+            fileInput("annotations", "Annotations file",
+                      buttonLabel = "Browse",
+                      placeholder = "Upload annotations")),
+        # TMT annotations
+        conditionalPanel(
+            condition = "input.quant_method == 'TMT'",
+            fileInput("channel_annotations", "Channel annotations file",
+                      buttonLabel = "Browse",
+                      placeholder = "Upload channel annotations"),
+            fileInput("run_annotations", "Run annotations file",
+                      buttonLabel = "Browse",
+                      placeholder = "Upload run annotations")),
         hr(style = "border-top: 2px solid #000000;"),
         uiOutput("psm_input"),
         conditionalPanel(
