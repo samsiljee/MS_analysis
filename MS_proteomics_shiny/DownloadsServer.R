@@ -88,7 +88,7 @@ output$results_tsv <- downloadHandler(
         paste0("MSstats_results_", Sys.Date(), ".tsv")
     },
     content = function(file) {
-        vroom_write(MSstats_results(), file, delim = "\t")
+        vroom_write(MSstats_comparison_results(), file, delim = "\t")
     }
 )
 

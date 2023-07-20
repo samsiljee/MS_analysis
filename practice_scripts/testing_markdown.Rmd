@@ -16,6 +16,7 @@ Please see my "MSstats_workflow" repository for an older version of this script,
 # Loading packages
 ```{r setup, include=FALSE}
 library(MSstats)
+library(MSstatsTMT)
 library(tidyverse)
 library(EnhancedVolcano)
 library(ComplexHeatmap)
@@ -46,6 +47,15 @@ run_annot <- vroom("C:/Users/Sam/Documents/Coding/MS_analysis/input/TMT/Rat_TMT_
 channel_annot <- vroom("C:/Users/Sam/Documents/Coding/MS_analysis/input/TMT/Rat_TMT_channel_annotations.tsv")
 annot <- full_join(run_annot, channel_annot)
 
+```
+
+# Test TMT comparison
+```{r TMT comparison}
+TMT_input <- PDtoMSstatsTMTFormat(annotation = annotation.pd, input = raw.pd)
+
+TMT_processed <-proteinSummarization(input.pd)
+
+TMT_compared <- groupComparisonTMT(TMT_processed)
 ```
 
 

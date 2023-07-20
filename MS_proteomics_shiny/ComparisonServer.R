@@ -123,7 +123,7 @@ MSstats_comparison_results <- reactive({
 })
 
 MSstats_results <- reactive({
-    if(input$filter_results) {
+    if(input$filter_results & input$quant_method == "LFQ") {
         MSstats_comparison_results()[-which(MSstats_comparison_results()$log2FC == Inf | MSstats_comparison_results()$log2FC == -Inf),]
     } else {
         MSstats_comparison_results()
