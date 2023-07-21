@@ -19,6 +19,13 @@ annot_col <- reactive({
                    df <- vroom(input$annotations$datapath)
                    df$PcaRef <- str_trim(as.character(df$Run))
                    df$PcaRef <- gsub(".", "", df$PcaRef, fixed = TRUE)
+                   
+                   # Add "Experiment' column for PCA and heatmap labeling
+                   df <- df %>%
+                     group_by(Condition) %>%
+                     mutate(Experiment = paste0(Condition, "_", row_number())) %>%
+                     ungroup()
+                   
                    df
                } else {
                    data.frame()
@@ -36,6 +43,13 @@ annot_col <- reactive({
                    
                    df$PcaRef <- str_trim(as.character(df$Run))
                    df$PcaRef <- gsub(".", "", df$PcaRef, fixed = TRUE)
+                   
+                   # Add "Experiment' column for PCA and heatmap labeling
+                   df <- df %>%
+                     group_by(Condition) %>%
+                     mutate(Experiment = paste0(Condition, "_", row_number())) %>%
+                     ungroup()
+                   
                    df
                } else {
                    data.frame()
