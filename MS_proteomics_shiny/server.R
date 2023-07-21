@@ -16,7 +16,7 @@ library(dplyr)
 library(stringr)
 library(tibble)
 
-# Setting option to increase allowed file size to 30MB, I will probably have to increase this further
+# Setting option to increase allowed file size to 30MB, I may have to increase this further
 options(shiny.maxRequestSize=30*1024^3)
 
 server <- function(input, output, session){

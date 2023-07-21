@@ -75,6 +75,7 @@ A shiny app to analyse mass spectromtetry for proteomics data - from PSMs to vis
   - Add basic summary report
   - Fix issue with modelQC not downloading (for TMT at least)
   - Fix Heatmap and PCA plot for TMT
+  - filter out infinite colfd change
   
 # License
 Feel free to use this code as you wish under the MIT license, however an acknowledgement would be nice. Thanks!
