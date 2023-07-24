@@ -102,7 +102,7 @@ protein_groups <- reactive({
 })
 
 # Generate output
-output$annotation_tab <- renderDataTable(annot_col() %>% dplyr::select(!(PcaRef)))
+output$annotation_tab <- renderDataTable(annot_col())
 
 output$PSMs_tab <- renderDataTable(raw())
 
