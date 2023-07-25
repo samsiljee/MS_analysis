@@ -6,27 +6,25 @@ InputUI <- tabPanel(
                   buttonLabel = "Browse",
                   placeholder = "Upload annotations"),
         hr(style = "border-top: 2px solid #000000;"),
-        fileInput("PSMs", "PSMs/evidence file",
-                  buttonLabel = "Browse",
-                  placeholder = "Upload PSMs/evidence"),
+        uiOutput("psm_input"),
         conditionalPanel(
             condition = "input.platform == 'MQ'",
             checkboxInput("keep_contaminants", "Keep potential contaminants", 
                           value = FALSE),
             hr(style = "border-top: 2px solid #000000;"),
-            fileInput("proteinGroups", "MQ proteinGroups",
+            fileInput("proteinGroups", "MQ protein groups file",
                       buttonLabel = "Browse",
-                      placeholder = "Upload protein groups"))),
+                      placeholder = "Upload proteinGroups.txt"))),
     
     mainPanel(
         h3("Annotations"),
         withSpinner(dataTableOutput("annotation_tab")),
         hr(style = "border-top: 2px solid #000000;"),
-        h3("PSM/evidence data"),
+        h3("PSMs"),
         withSpinner(dataTableOutput("PSMs_tab")),
         conditionalPanel(
             condition = "input.platform == 'MQ'",
             hr(style = "border-top: 2px solid #000000;"),
-            h3("Protein groups data"),
+            h3("Protein groups"),
             withSpinner(dataTableOutput("proteinGroups_tab"))))
 )

@@ -50,37 +50,29 @@ A shiny app to analyse mass spectromtetry for proteomics data - from PSMs to vis
   
 ## Resources
   - Good overview of different types of analyses to try here: http://bioinformatics.sdstate.edu/go/
+  - LFQ Analyst: https://analyst-suite.monash-proteomics.cloud.edu.au/apps/lfq-analyst/
   - Good resource on visualising enrichment analysis: https://yulab-smu.top/biomedical-knowledge-mining-book/enrichplot.html
 
 ## Issues and to-do
-  - Check that the default values are sensible - currently set to MSstats defaults, discuss with bio-infomatician
+  - Currently defaults are set to MSstats defaults, will need to discuss with bio-infomatician to check apprpriateness
   - QC section
   - Better progress bars for slow processes
-  - Export log files of the MSstats functions, and export a txt document describing the settings used
+  - Downloadable document describing the settings used (MSstats logs now available however)
   - Add reset to comparison matrix
-  - Add option to change titles and axes
   - Go term analysis with complete tabular output in the analysis tab, and plots intergrated into the visualisation tab
   - Pathview analysis
   - Change GO term analysis to use aGOtool via API: https://agotool.org/API_Help
   - Add in link to STRING website to view pathway, or embed the interactive network
   - Refine selection methods for including string nodes, currently it just takes the top n most significant nodes, regardless of actual significance.
   - Add WGCNA to analysis section
-
-## Completed issues
-  - Add copyright to repository/scripts
-  - Levels in the results of the group comparison is currently a number, this should be the name of the comparison - solved by changing from data frame to a named matrix
-   - Current issues include getting reasonable results from the comparison output - solved by changing from data frame to a named matrix
-  - Pairwise comparison option added
-  - Plots now downloadable with options for DPI, dimensions, and with selected theme
-  - PCA plot added, initially not working because `row.names(pca()$x)` and `annot_col()$Run` were different. Fixed by adding a pca_ref column to annot_col and adjusting as needed to match the names of the pca output.
-  - Heatmap added and saving properly
-  - Add options to set FC and pvalue cutoffs where desired
-  - Use vroom to write output faster. Changed to .tsv output only
-  - Added MaxQuant input capability
-  - Added option to disable automatic removal of potential contaminants from MQ data, done by setting all values of the potential contaminant column to "NA" when loading raw data
-  - GO analysis starting to be implemented
-  - STRING analysis started to be added, need to improve graphing methods for this
-  - Added TMT input capability
+  - Add logical way to input TMT annotations, may need a channel annotations file alongside others. Look up vignette for MSstatsTMT for more details
+  - Correct PcaRef for TMT data
+  - Add option to use/see example data, could use MSstats test data for this perhaps
+  - Help text for various settings
+  - Hide some options under "advanced settings", otherwise use defaults
+  - Make a wizard to create annotation files - Use DT for interactive table editing and autofilling some columns from the PSMs files
+  - Create a manual?
+  - Add basic summary report
   
 # License
 Feel free to use this code as you wish under the MIT license, however an acknowledgement would be nice. Thanks!

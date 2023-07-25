@@ -14,7 +14,8 @@ ProcessUI <- tabPanel(
                                   choiceValues = c("equalizeMedians", "quantile", "globalStandards", FALSE)),
                      conditionalPanel(
                          condition = "input.normalization == 'globalStandards'",
-                         fileInput("nameStandards", "Upload FASTA of standards")),
+                         fileInput("nameStandards", "Standards FASTA file",
+                                   placeholder = "Upload standards.fasta")),
                      radioButtons("featureSubset",
                                   "Feature subset to use",
                                   choiceNames = c("All", "Top 3", "Top N", "High quality"),
