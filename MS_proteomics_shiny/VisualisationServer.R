@@ -126,13 +126,22 @@ go_enrichment_plot_dataset <- reactive({
 # create a matrix of protein abundance for heatmap and PCA
 prot_mat <- reactive({
     df <- merge(
-        x = MSstats_processed()$ProteinLevelData,
+        x = switch(input$quant_method,
+            LFQ = MSstats_processed()$ProteinLevelData,
+            TMT = {
+                MSstats_processed()$ProteinLevelData %>%
+                    mutate(originalRUN = paste(Run, Channel, sep = "_"))
+            }),
         y = annot_col(),
         by.x = "originalRUN",
         by.y = "PcaRef",
         all.x = TRUE) %>%
-        dplyr::select(Protein, Experiment, LogIntensities) %>%
-        pivot_wider(names_from = Experiment, values_from = LogIntensities)
+        dplyr::select(Protein, Experiment, switch(input$quant_method,
+                                                  LFQ = "LogIntensities",
+                                                  TMT = "Abundance")) %>%
+        pivot_wider(names_from = Experiment, values_from = switch(input$quant_method,
+                                                                  LFQ = "LogIntensities",
+                                                                  TMT = "Abundance"))
     df_mat <- as.matrix(df[,-1])
     row.names(df_mat) <- df$Protein
     df_mat
@@ -149,7 +158,12 @@ heatmap_input <- reactive({
 })
 
 #create heatmap annotations for sample type
-column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
+column_ha <- reactive(HeatmapAnnotation(Condition = if(input$remove_norm_channel){
+    annot_col() %>%
+        filter(Condition != "Norm") %>%
+        .$Condition
+    } else {
+        annot_col()$Condition}))
 
 # Set colours as a named vector - for use in volcano plot
 colours <- c("red", "blue", "black") 

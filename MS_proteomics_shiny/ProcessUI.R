@@ -96,10 +96,6 @@ ProcessUI <- tabPanel(
                      checkboxInput(
                          "remove_norm_channel",
                          "Remove reference channels",
-                         value = TRUE),
-                     checkboxInput(
-                         "remove_empty_channel",
-                         "Remove empty channels",
                          value = TRUE)),
                  
                  # Common options

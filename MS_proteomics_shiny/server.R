@@ -16,7 +16,7 @@ library(dplyr)
 library(stringr)
 library(tibble)
 
-# Setting option to increase allowed file size to 30MB, I will probably have to increase this further
+# Setting option to increase allowed file size to 30MB, I may have to increase this further
 options(shiny.maxRequestSize=30*1024^3)
 
 server <- function(input, output, session){
@@ -46,11 +46,7 @@ server <- function(input, output, session){
   })
 
   # Testing
-  test_levels <- eventReactive(input$go_process, {
-    "Testing"
-  })
-  
-  output$test_text <- renderPrint(test_levels())
+  output$test_text <- renderPrint("Test")
   
   output$test_table <- renderDataTable(STRING_dataset())
   

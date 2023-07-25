@@ -39,15 +39,7 @@ ComparisonUI <- tabPanel(
                                      "bonferroni",
                                      "BY",
                                      "fdr",
-                                     "none")),
-                     checkboxInput(
-                         "remove_norm_channel_comp",
-                         "Remove normalisation channels",
-                         value = TRUE),
-                     checkboxInput(
-                         "remove_empty_channel_comp",
-                         "Remove empty channels",
-                         value = TRUE)),
+                                     "none"))),
                  
                  # More common options
                  checkboxInput("save_fitted_models", "Save fitted models to the .rda output", value = FALSE),
