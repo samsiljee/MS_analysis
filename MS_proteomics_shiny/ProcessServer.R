@@ -43,7 +43,7 @@ MSstats_processed <- eventReactive(input$go_process, {
                    global_norm = input$global_norm,
                    reference_norm = input$reference_norm,
                    remove_norm_channel = input$remove_norm_channel,
-                   remove_empty_channel = input$remove_empty_channel,
+                   remove_empty_channel = TRUE,
                    MBimpute = input$MBimpute,
                    maxQuantileforCensored = input$maxQuantileforCensored,
                    use_log_file = TRUE,

@@ -43,10 +43,6 @@ ComparisonUI <- tabPanel(
                      checkboxInput(
                          "remove_norm_channel_comp",
                          "Remove normalisation channels",
-                         value = TRUE),
-                     checkboxInput(
-                         "remove_empty_channel_comp",
-                         "Remove empty channels",
                          value = TRUE)),
                  
                  # More common options
