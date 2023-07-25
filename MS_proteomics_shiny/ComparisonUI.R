@@ -1,6 +1,5 @@
 ComparisonUI <- tabPanel(
     "Comparison",
-    "This section will be where MSstats is computed. There will be drop down options here too for the settings.",
     
     sidebarPanel(h4("Comparisons"),
                  # Common options

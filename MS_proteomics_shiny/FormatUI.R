@@ -1,6 +1,6 @@
 FormatUI <- tabPanel(
-    "Format", "Pre-filter and format data for MSstats",
-    sidebarPanel(h4("MSstats formating options"),
+    "Format",
+    sidebarPanel(
                  # Universal options
                  checkboxInput(
                      "useUniquePeptide",

@@ -1,6 +1,6 @@
 ProcessUI <- tabPanel(
     "Process",
-    sidebarPanel(h4("MSstats processing options"),
+    sidebarPanel(
                  # LFQ options
                  conditionalPanel(
                      condition = "input.quant_method == 'LFQ'",

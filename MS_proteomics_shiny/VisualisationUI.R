@@ -1,6 +1,5 @@
 VisualisationUI <- tabPanel(
     "Visualisation",
-    "This section will be for making the graphs. Again a sidebar panel to select the types of graphs.",
     sidebarPanel(
         selectInput("select_theme", "Select theme",
                     choices = c("B&W",

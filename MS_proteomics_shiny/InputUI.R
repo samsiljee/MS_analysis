@@ -1,6 +1,5 @@
 InputUI <- tabPanel(
     "Input",
-    "Input raw data and annotation files",
     sidebarPanel(
         h4("Input files"),     
         fileInput("annotations", "Annotations file",
