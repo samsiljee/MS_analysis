@@ -13,48 +13,50 @@ output$psm_input <- renderUI({
 
 # read in annotations
 annot_col <- reactive({
-    switch(input$quant_method,
-           LFQ = {
-               if (!is.null(input$annotations)){
-                   df <- vroom(input$annotations$datapath)
-                   df$PcaRef <- str_trim(as.character(df$Run))
-                   df$PcaRef <- gsub(".", "", df$PcaRef, fixed = TRUE)
-                   
-                   # Add "Experiment' column for PCA and heatmap labeling
-                   df <- df %>%
-                     group_by(Condition) %>%
-                     mutate(Experiment = paste0(Condition, "_", row_number())) %>%
-                     ungroup()
-                   
-                   df
-               } else {
-                   data.frame()
-               }},
-           TMT = {
-               if (!is.null(input$channel_annotations) & !is.null(input$run_annotations)){
-                   # Channel annotations
-                   channel_df <- vroom(input$channel_annotations$datapath)
-                   
-                   # Run annotations
-                   run_df <- vroom(input$run_annotations$datapath)
-                   
-                   # Combine
-                   df <- full_join(run_df, channel_df)
-                   
-                   df$PcaRef <- str_trim(as.character(df$Run))
-                   df$PcaRef <- gsub(".", "", df$PcaRef, fixed = TRUE)
-                   
-                   # Add "Experiment' column for PCA and heatmap labeling
-                   df <- df %>%
-                     group_by(Condition) %>%
-                     mutate(Experiment = paste0(Condition, "_", row_number())) %>%
-                     ungroup()
-                   
-                   df
-               } else {
-                   data.frame()
-               }
-           })
+    # Return a blank data.frame if there is no input to prevent errors showing
+    if (!is.null(input$annotations) | (!is.null(input$channel_annotations) & !is.null(input$run_annotations))){
+        
+        # Input the annotations file
+        df <- switch(
+            input$quant_method,
+            LFQ = {
+                df <- vroom(input$annotations$datapath)
+                df$PcaRef <- str_trim(as.character(df$Run))
+                df$PcaRef <- gsub(".", "", df$PcaRef, fixed = TRUE)
+                
+                df
+            },
+            TMT = {
+                # Channel annotations
+                channel_df <- vroom(input$channel_annotations$datapath)
+                
+                # Run annotations
+                run_df <- vroom(input$run_annotations$datapath)
+                
+                # Combine
+                df <- full_join(run_df, channel_df)
+                
+                df$PcaRef <- str_trim(as.character(df$Run))
+                df$PcaRef <- gsub(".", "", df$PcaRef, fixed = TRUE)
+                df$PcaRef <- paste(df$PcaRef, df$Channel, sep = "_")
+                
+                df
+            })
+    
+    # Add "Experiment' column for PCA and heatmap labeling
+    df <- df %>%
+        group_by(Condition) %>%
+        mutate(Experiment = paste0(Condition, "_", row_number())) %>%
+        ungroup()
+    
+    # Change condition to factor for correct labelling in heatmap and PCA
+    df$Condition <- as.factor(df$Condition)
+    
+    df
+    
+    } else {
+        data.frame()
+    }
 })
 
 # Read in raw PSM data
