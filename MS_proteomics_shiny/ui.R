@@ -18,13 +18,14 @@ source("QCUI.R")
 
 ui <- navbarPage(
   title = "MS analysis",
-
-  tabsetPanel(InstructionsUI,
-              InputUI,
-              FormatUI,
-              ProcessUI,
-              ComparisonUI,
-              AnalysisUI,
-              VisualisationUI,
-              QCUI)
+  tabsetPanel(
+    InstructionsUI,
+    InputUI,
+    FormatUI,
+    ProcessUI,
+    ComparisonUI,
+    AnalysisUI,
+    VisualisationUI,
+    QCUI
+  )
 )

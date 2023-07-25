@@ -1,4 +1,4 @@
 QCUI <- tabPanel(
-    "QC",
-    "QC will go here"
+  "QC",
+  "QC will go here"
 )
