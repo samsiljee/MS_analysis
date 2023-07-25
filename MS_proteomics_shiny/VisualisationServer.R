@@ -149,7 +149,7 @@ heatmap_input <- reactive({
 })
 
 #create heatmap annotations for sample type
-column_ha <- reactive(HeatmapAnnotation(Condition = annot_col()$Condition))
+column_ha <- reactive(HeatmapAnnotation(Condition = as.factor(annot_col()$Condition)))
 
 # Set colours as a named vector - for use in volcano plot
 colours <- c("red", "blue", "black") 
