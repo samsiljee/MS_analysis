@@ -103,7 +103,7 @@ MSstats_test <- eventReactive(input$go_compare, {
                    data = MSstats_processed(),
                    moderated = input$moderated,
                    adj.method = input$adj.method,
-                   remove_norm_channel = input$remove_norm_channel_comp,
+                   remove_norm_channel = input$remove_norm_channel,
                    remove_empty_channel = TRUE,
                    save_fitted_models = input$save_fitted_models,
                    use_log_file = TRUE,
