@@ -225,3 +225,13 @@ output$plot_download <- downloadHandler(
     ) # Switch
   } # Content
 ) # Download handler
+
+# Log summary
+output$log_download <- downloadHandler(
+  filename = function() {
+    paste0("MS_analysis_log_", Sys.Date(), ".txt")
+  },
+  content = function(file) {
+    writeLines(log_summary(), file)
+  }
+)

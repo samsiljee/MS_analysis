@@ -28,6 +28,7 @@ server <- function(input, output, session) {
   source("AnalysisServer.R", local = TRUE)
   source("VisualisationServer.R", local = TRUE)
   source("QCServer.R", local = TRUE)
+  source("LogServer.R", local = TRUE)
   source("DownloadsServer.R", local = TRUE)
 
   # Load packages depending on input selected
@@ -48,7 +49,7 @@ server <- function(input, output, session) {
   })
 
   # Testing
-  output$test_text <- renderPrint("Test")
+  output$test_text <- renderPrint(log_summary())
 
   output$test_table <- renderDataTable(STRING_dataset())
 }
