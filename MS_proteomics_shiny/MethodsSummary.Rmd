@@ -1,0 +1,75 @@
+---
+title: "Methods Summary Report"
+output: pdf_document
+---
+
+# Logs
+
+```{r}
+log_summary <- reactive({
+  c(
+    "Analysis was completed using Sam's amazing analysis pipeline (name still to be decided on)",
+    "The following settings were used:",
+    "",
+    "INPUT",
+    paste("Search platform:", input$platform),
+    paste("Quantitation method:", input$quant_method),
+    "",
+    "FORMAT",
+    # Universal formatting options
+    paste("Remove peptides assigned to more than one protein:", input$useUniquePeptide),
+    paste("Summary method for multiple rows:", input$summaryforMultipleRows),
+    paste("Remove features with one or two measurements across runs:", input$removeFewMeasurements),
+    # PD conditional options
+    if (input$platform == "PD") {
+      c(
+        paste("Remove peptides with more than one in \"number of proteins\" column:", input$useNumProteinsColumn),
+        paste("Protein ID:", input$which.proteinid)
+      )
+    }, # close PD option
+    # LFQ conditional options
+    if (input$quant_method == "LFQ") {
+      c(
+        paste("Remove peptides with methionine oxidation:", input$removeOxidationMpeptides),
+        paste("Remove proteins with only one peptide and charge:", input$removeProtein_with1Peptide),
+        # LFQ and PD conditional options
+        if (input$platform == "PD") {
+          c(
+            paste("Column to be used for quantification:", input$which.quantification),
+            paste("Column to be used for peptide sequences:", input$which.sequence)
+          )
+        }, # Close LFQ and PD options
+        # LFQ and MQ options
+        if(input$platform == "MQ") {
+            c(
+                paste("Protein ID:", input$MQLFQproteinID),
+                paste("Remove peptides including \'M\' sequence:", input$removeMpeptides)
+            )
+        }
+        
+      )
+    }, # CLose LFQ options
+    # TMT conditional options
+    if (input$platform == "TMT") {
+        c(
+            
+        )
+    },
+    "",
+    "MSstats output for the formatting step:",
+    readLines("logs/format_log.txt"),
+    "",
+    "MSstats output for the processing step:",
+    readLines("logs/process_log.txt"),
+    "",
+    "MSstats output for the comparison step:",
+    readLines("logs/compare_log.txt"),
+    "",
+    "References:"
+  )
+})
+
+log_summary()
+
+
+```

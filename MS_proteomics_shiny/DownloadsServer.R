@@ -226,12 +226,21 @@ output$plot_download <- downloadHandler(
   } # Content
 ) # Download handler
 
-# Log summary
-output$log_download <- downloadHandler(
+# Methods summary
+output$downloadReport <- downloadHandler(
   filename = function() {
-    paste0("MS_analysis_log_", Sys.Date(), ".txt")
+    "MethodsSummary.pdf"
   },
   content = function(file) {
-    writeLines(log_summary(), file)
+    # Read the content of the Rmd file
+    rmd_content <- readLines("MethodsSummary.Rmd")
+    
+    # Perform any reactive changes or processing if needed
+    # e.g., render the Rmd content with parameters
+    # rmd_content <- renderRmdWithParameters(rmd_content, input$parameter)
+    
+    # Write the content to the file to be downloaded
+    writeLines(rmd_content, file)
   }
 )
+

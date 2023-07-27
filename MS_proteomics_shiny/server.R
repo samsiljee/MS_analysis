@@ -15,6 +15,7 @@ library(tidyr)
 library(dplyr)
 library(stringr)
 library(tibble)
+library(rmarkdown)
 
 # Setting option to increase allowed file size to 30MB, I may have to increase this further
 options(shiny.maxRequestSize = 30 * 1024^3)
@@ -28,7 +29,6 @@ server <- function(input, output, session) {
   source("AnalysisServer.R", local = TRUE)
   source("VisualisationServer.R", local = TRUE)
   source("QCServer.R", local = TRUE)
-  source("LogServer.R", local = TRUE)
   source("DownloadsServer.R", local = TRUE)
 
   # Load packages depending on input selected
