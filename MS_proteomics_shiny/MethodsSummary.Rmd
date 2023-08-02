@@ -27,4 +27,4 @@ paste("Quantitation method:", params$quant_method)
 ```
 
 # Session info
-`r sessionInfo()`
+`r pander(sessionInfo())`
