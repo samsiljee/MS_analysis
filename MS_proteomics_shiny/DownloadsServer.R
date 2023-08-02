@@ -228,19 +228,19 @@ output$plot_download <- downloadHandler(
 
 # Methods summary
 output$downloadReport <- downloadHandler(
-  filename = function() {
-    "MethodsSummary.pdf"
-  },
+  filename = "MethodsSummary.pdf",
   content = function(file) {
-    # Read the content of the Rmd file
-    rmd_content <- readLines("MethodsSummary.Rmd")
-    
-    # Perform any reactive changes or processing if needed
-    # e.g., render the Rmd content with parameters
-    # rmd_content <- renderRmdWithParameters(rmd_content, input$parameter)
-    
-    # Write the content to the file to be downloaded
-    writeLines(rmd_content, file)
+    # Copy to temp directory in case writing permission not given
+    tempReport <- file.path(tempdir(), "MethodsSummary.Rmd")
+    file.copy("MethodsSummary.Rmd", tempReport, overwrite = TRUE)
+
+    # Set up parameters to pass to the methods summary
+   # params <- list(input = input)
+
+    # Knit the document, with params
+    rmarkdown::render(tempReport,
+      output_file = file#,
+      #params = params
+      )
   }
 )
-

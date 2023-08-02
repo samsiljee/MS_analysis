@@ -5,6 +5,7 @@ output/*
 MS_proteomics_shiny/logs/*
 STRING_test_data/*
 *.log
+*.pdf
 MS_analysis.Rproj
 MS_proteomics_shiny/server-PC-2204-GMR-07.R
 # Ignore reports produced on knitting
@@ -14,7 +15,7 @@ MS_analysis_MQ_summary.html
 MS_analysis_MQ_summary.html
 MS_analysis.html
 # History files
-.Rhistory
+*.Rhistory
 .Rapp.history
 # Session Data files
 .RData
