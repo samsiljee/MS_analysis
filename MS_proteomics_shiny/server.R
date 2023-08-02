@@ -49,7 +49,7 @@ server <- function(input, output, session) {
   })
 
   # Testing
-  output$test_text <- renderPrint(log_summary())
+  output$test_text <- renderPrint("test")
 
   output$test_table <- renderDataTable(STRING_dataset())
 }

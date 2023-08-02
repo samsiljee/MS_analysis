@@ -235,12 +235,14 @@ output$downloadReport <- downloadHandler(
     file.copy("MethodsSummary.Rmd", tempReport, overwrite = TRUE)
 
     # Set up parameters to pass to the methods summary
-   # params <- list(input = input)
+   params <- list(platform = input$platform,
+                  quant_method = input$quant_method)
 
     # Knit the document, with params
     rmarkdown::render(tempReport,
-      output_file = file#,
-      #params = params
+      output_file = file,
+      params = params,
+      envir = new.env(parent = globalenv())
       )
   }
 )
