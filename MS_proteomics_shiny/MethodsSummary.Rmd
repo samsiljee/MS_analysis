@@ -1,9 +1,8 @@
 ---
-title: "Methods summary report"
+title: "Analysis methods summary"
 output: pdf_document
 params:
-  platform: NA
-  quant_method: NA
+  input: NA
 ---
 
 Analysis was completed using Sam's amazing analysis pipeline (name still to be decided on)
@@ -12,19 +11,17 @@ The following settings were used:
 
 # Format
 
-Search platform: `r params$platform`
+Search platform: `r params$input$platform`
 
-Quantification method: `r params$quant_method`
-```{r Format settings, echo = FALSE}
-paste("Search platform:", params$platform)
-paste("Quantitation method:", params$quant_method)
+Quantification method: `r params$input$quant_method`
 
-```
+Remove peptides assigned to more than one protein: `r params$input$useUniquePeptide`
 
+Summary method for multiple rows: `r params$input$summaryforMultipleRows`
+
+Remove features with one or two measurements across runs: `r params$input$removeFewMeasurements`
+       
 # MSstats logs
-```{r MSStats logs, echo = FALSE}
-#readLines("logs/format_log.txt")
-```
 
 # Session info
-`r pander(sessionInfo())`
+
