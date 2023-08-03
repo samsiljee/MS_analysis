@@ -8,4 +8,4 @@ output: pdf_document
 Test text here
 
 # Session info
-
+`r sessionInfo()`
