@@ -20,8 +20,9 @@ Remove peptides assigned to more than one protein: `r params$input$useUniquePept
 Summary method for multiple rows: `r params$input$summaryforMultipleRows`
 
 Remove features with one or two measurements across runs: `r params$input$removeFewMeasurements`
-       
+
+`r if (params$input$platform == "PD") paste("Remove peptides with more than one in \"number of proteins\" column:", params$input$useNumProteinsColumn, "\nProtein ID:", params$input$which.proteinid)`
+
 # MSstats logs
 
 # Session info
-

@@ -236,7 +236,7 @@ output$downloadReport <- downloadHandler(
 
     # Set up parameters to pass to the methods summary
     params <- list(
-      input = as.list(input)
+      input = reactiveValuesToList(input)
     )
 
     # Knit the document, with params
