@@ -1,32 +1,4 @@
----
-    title: "Methods summary report"
-output: pdf_document
----
-    
-    # Logs
-    
-    ```{r}
-log_summary <- reactive({
-    c(
-        "Analysis was completed using Sam's amazing analysis pipeline (name still to be decided on)",
-        "The following settings were used:",
-        "",
-        "INPUT",
-        paste("Search platform:", input$platform),
-        paste("Quantitation method:", input$quant_method),
-        "",
-        "FORMAT",
-        # Universal formatting options
-        paste("Remove peptides assigned to more than one protein:", input$useUniquePeptide),
-        paste("Summary method for multiple rows:", input$summaryforMultipleRows),
-        paste("Remove features with one or two measurements across runs:", input$removeFewMeasurements),
-        # PD conditional options
-        if (input$platform == "PD") {
-            c(
-                paste("Remove peptides with more than one in \"number of proteins\" column:", input$useNumProteinsColumn),
-                paste("Protein ID:", input$which.proteinid)
-            )
-        }, # close PD option
+
         # LFQ conditional options
         if (input$quant_method == "LFQ") {
             c(
