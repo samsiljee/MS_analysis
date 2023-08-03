@@ -10,7 +10,6 @@ Analysis was completed using Sam's amazing analysis pipeline (name still to be d
 The following settings were used:
 
 # Format
-
 Search platform: `r params$input$platform`
 
 Quantification method: `r params$input$quant_method`
@@ -26,3 +25,7 @@ Remove features with one or two measurements across runs: `r params$input$remove
 # MSstats logs
 
 # Session info
+```{r, echo=FALSE}
+# Print session information
+cat(capture.output(sessionInfo()), sep = "\n")
+```
