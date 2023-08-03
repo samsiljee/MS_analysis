@@ -14,17 +14,4 @@ The following settings were used:
 
 Search platform: `r params$platform`
 
-Quantification method: `r params$quant_method`
-```{r Format settings, echo = FALSE}
-paste("Search platform:", params$platform)
-paste("Quantitation method:", params$quant_method)
-
-```
-
-# MSstats logs
-```{r MSStats logs, echo = FALSE}
-#readLines("logs/format_log.txt")
-```
-
-# Session info
-`r pander(sessionInfo())`
+Quantitation method: `r params$quant_method`

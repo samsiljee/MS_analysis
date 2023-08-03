@@ -9,3 +9,7 @@ Test text here
 
 # Session info
 
+```{r, echo=FALSE}
+# Print session information
+cat(capture.output(sessionInfo()), sep = "\n")
+```
