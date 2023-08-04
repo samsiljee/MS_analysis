@@ -16,6 +16,7 @@ library(dplyr)
 library(stringr)
 library(tibble)
 library(rmarkdown)
+library(tinytex)
 
 # Setting option to increase allowed file size to 30MB, I may have to increase this further
 options(shiny.maxRequestSize = 30 * 1024^3)
