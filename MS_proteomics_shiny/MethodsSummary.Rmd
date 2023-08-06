@@ -9,7 +9,7 @@ Analysis was completed using Sam's amazing analysis pipeline (name still to be d
 
 The following settings were used:
 
-# Format
+# Formatting
 Search platform: `r params$input$platform`
 
 Quantification method: `r params$input$quant_method`
@@ -41,6 +41,46 @@ Remove features with one or two measurements across runs: `r params$input$remove
 `r if (params$input$quant_method == "TMT" & params$input$platform == "MQ") paste("Protein ID:", params$input$MQTMTproteinID)`
 
 `r if (params$input$quant_method == "TMT" & params$input$platform == "MQ") paste("Remove proteins only identified by a modification site:", params$input$rmProt_Only.identified.by.site)`
+
+# Processing
+
+`r if (params$input$quant_method == "LFQ") paste("Base of log transformation:", params$input$logTrans)`
+
+`r if (params$input$quant_method == "LFQ") paste("Normalisation method used to remove bias between runs:", params$input$normalization)`
+
+`r if (params$input$quant_method == "LFQ" & params$input$normalization == "globalStandards") paste("Standards FASTA file:", params$input$nameStandards$name)`
+
+`r if (params$input$quant_method == "LFQ") paste("Feature subset to use:", params$input$featureSubset)`
+
+`r if (params$input$quant_method == "LFQ" & params$input$featureSubset == "topN") paste("Number of top features to use:", params$input$n_top_feature)`
+
+`r if (params$input$quant_method == "LFQ" & params$input$featureSubset == "highQuality") paste("Remove noisy features and outliers before run-level summarisation:", params$input$remove_uninformative_feature_outlier)`
+
+`r if (params$input$quant_method == "LFQ" & params$input$featureSubset == "highQuality") paste("Minimum features required to be considered in feature selection algorithm:", params$input$min_feature_count)`
+
+`r if (params$input$quant_method == "LFQ") paste("Method used to summarise features:", params$input$summaryMethod)`
+
+`r if (params$input$quant_method == "LFQ" & params$input$input.summaryMethod == "linear") paste("Account for heterogeneous variation among intensities from different features:", params$input$equalFeatureVar)`
+
+`r if (params$input$quant_method == "LFQ" & params$input$input.summaryMethod == "TMP") paste("Impute censored values by Accelated failure model:", params$input$MBimpute)`
+
+`r if (params$input$quant_method == "LFQ" & params$input$input.summaryMethod == "TMP") paste("Remove runs with >50% missing values:", params$input$remove50missing)`
+
+`r if (params$input$quant_method == "LFQ") paste("Missing values are censored or at random:", params$input$censoredInt)`
+
+`r if (params$input$quant_method == "LFQ") paste("fix missing values:", params$input$fix_missing)`
+
+`r if (params$input$quant_method == "TMT") paste("Protein-level summarisation method:", params$input$TMTProtSumMethod)`
+
+`r if (params$input$quant_method == "TMT" & params$input$TMTProtSumMethod == "msstats") paste("Impute censored values by Accelated failure model:", params$input$MBimpute)`
+
+`r if (params$input$quant_method == "TMT") paste("Global median normalisation (peptide-level):", params$input$global_norm)`
+
+`r if (params$input$quant_method == "TMT") paste("Reference channel normalisation between runs (protein-level):", params$input$reference_norm)`
+
+`r if (params$input$quant_method == "TMT") paste("Remove reference channels:", params$input$remove_norm_channel)`
+
+Maximum quantile for deciding censored missing values: `r params$input$maxQuantileforCensored`
 
 # MSstats logs
 
