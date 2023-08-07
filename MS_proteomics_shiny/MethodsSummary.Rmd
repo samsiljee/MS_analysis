@@ -60,7 +60,7 @@ Remove features with one or two measurements across runs: `r params$input$remove
 
 `r if (params$input$quant_method == "LFQ") paste("Method used to summarise features:", params$input$summaryMethod)`
 
-`r if (params$input$quant_method == "LFQ" & params$inputsummaryMethod == "linear") paste("Account for heterogeneous variation among intensities from different features:", params$input$equalFeatureVar)`
+`r if (params$input$quant_method == "LFQ" & params$input$summaryMethod == "linear") paste("Account for heterogeneous variation among intensities from different features:", params$input$equalFeatureVar)`
 
 `r if (params$input$quant_method == "LFQ" & params$input$summaryMethod == "TMP") paste("Impute censored values by Accelated failure model:", params$input$MBimpute)`
 
