@@ -3,6 +3,7 @@ title: "Analysis methods summary"
 output: pdf_document
 params:
   input: NA
+  contrast_matrix: NA
 ---
 
 Analysis was completed using Sam's amazing analysis pipeline (name still to be decided on)
@@ -81,6 +82,14 @@ Remove features with one or two measurements across runs: `r params$input$remove
 `r if (params$input$quant_method == "TMT") paste("Remove reference channels:", params$input$remove_norm_channel)`
 
 Maximum quantile for deciding censored missing values: `r params$input$maxQuantileforCensored`
+
+# Comparison
+
+Contrast method: `r params$input$contrast_method`
+
+`r if (params$input$contrast_method == "custom") paste("Contrast", "matrix:")`
+
+`r if (params$input$contrast_method == "custom") knitr::kable(params$contrast_matrix)`
 
 # MSstats logs
 

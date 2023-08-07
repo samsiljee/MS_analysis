@@ -1,0 +1,2 @@
+
+`r if (params$input$contrast_method == "custom") kable(params$contrast_matrix)`

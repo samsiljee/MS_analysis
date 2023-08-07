@@ -236,7 +236,10 @@ output$downloadReport <- downloadHandler(
 
     # Set up parameters to pass to the methods summary
     params <- list(
-      input = reactiveValuesToList(input)
+      input = reactiveValuesToList(input),
+      contrast_matrix = ifelse(input$contrast_method == "custom",
+        comparison_matrix_updated()[-1, , drop = FALSE],
+        data.frame())
     )
 
     # Knit the document, with params
