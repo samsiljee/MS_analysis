@@ -233,14 +233,14 @@ output$downloadReport <- downloadHandler(
     # Copy to temp directory in case writing permission not given
     tempReport <- file.path(tempdir(), "MethodsSummary.Rmd")
     file.copy("MethodsSummary.Rmd", tempReport, overwrite = TRUE)
-
+    
     # Set up parameters to pass to the methods summary
     params <- list(
       input = reactiveValuesToList(input),
       contrast_matrix = ifelse(input$contrast_method == "custom",
-        comparison_matrix_updated()[-1, , drop = FALSE],
-        data.frame())
-    )
+                               comparison_matrix_updated()[-1, ],
+                               data.frame())
+      )
 
     # Knit the document, with params
     rmarkdown::render(tempReport,

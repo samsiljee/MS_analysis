@@ -85,13 +85,19 @@ Maximum quantile for deciding censored missing values: `r params$input$maxQuanti
 
 # Comparison
 
+Log 2 fold-change threshold: `r params$input$FC_threshold`
+
+Adjusted p-value threshold: `r params$input$pvalue_threshold`
+
+`r if (params$input$quant_method == "TMT") paste("Use moderated t statistic:", params$input$moderated)`
+
+`r if (params$input$quant_method == "TMT") paste("Adjustment method:", params$input$adj.method)`
+
 Contrast method: `r params$input$contrast_method`
 
 `r if (params$input$contrast_method == "custom") paste("Contrast", "matrix:")`
 
 `r if (params$input$contrast_method == "custom") knitr::kable(params$contrast_matrix)`
-
-# MSstats logs
 
 # Session info
 ```{r, echo=FALSE}
