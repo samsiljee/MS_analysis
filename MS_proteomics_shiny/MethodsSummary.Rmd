@@ -97,7 +97,13 @@ Contrast method: `r params$input$contrast_method`
 
 `r if (params$input$contrast_method == "custom") paste("Contrast", "matrix:")`
 
-`r if (params$input$contrast_method == "custom") knitr::kable(params$contrast_matrix)`
+`r if (params$input$contrast_method == "custom") knitr::kable(as.data.frame(params$contrast_matrix))`
+
+# Formatting log output
+```{r, echo=FALSE}
+# Print format log
+# readLines("logs/format_log.txt")
+```
 
 # Session info
 ```{r, echo=FALSE}

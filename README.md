@@ -54,14 +54,12 @@ A shiny app to analyse mass spectromtetry for proteomics data - from PSMs to vis
   - Good resource on visualising enrichment analysis: https://yulab-smu.top/biomedical-knowledge-mining-book/enrichplot.html
 
 ## Issues and to-do
-  - Currently defaults are set to MSstats defaults, will need to discuss with bio-infomatician to check apprpriateness
   - QC section
   - Better progress bars for slow processes
   - Downloadable document describing the settings used (MSstats logs now available however)
   - Add reset to comparison matrix
   - Go term analysis with complete tabular output in the analysis tab, and plots intergrated into the visualisation tab
   - Pathview analysis
-  - Change GO term analysis to use aGOtool via API: https://agotool.org/API_Help
   - Add in link to STRING website to view pathway, or embed the interactive network
   - Refine selection methods for including string nodes, currently it just takes the top n most significant nodes, regardless of actual significance.
   - Add WGCNA to analysis section
