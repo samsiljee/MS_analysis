@@ -6,6 +6,7 @@ MS_proteomics_shiny/logs/*
 STRING_test_data/*
 *.log
 *.pdf
+*.html
 MS_analysis.Rproj
 MS_proteomics_shiny/server-PC-2204-GMR-07.R
 # Ignore reports produced on knitting

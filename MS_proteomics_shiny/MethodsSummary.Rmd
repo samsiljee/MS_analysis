@@ -100,12 +100,7 @@ Contrast method: `r params$input$contrast_method`
 `r if (params$input$contrast_method == "custom") knitr::kable(as.data.frame(params$contrast_matrix))`
 
 # Formatting log output
-```{r, echo=FALSE, results = 'asis'}
-# Print format log
-format_log <- readLines(file.path("MS_proteomics_shiny", "logs", "format_log.txt"), warn = FALSE, encoding = "UTF-8")
 
-cat(format_log, sep = '\n')
-```
 
 # Session info
 ```{r, echo=FALSE}
