@@ -6,6 +6,10 @@ params:
   contrast_matrix: NA
 ---
 
+```{r, include=FALSE}
+getwd()
+```
+
 Analysis was completed using Sam's amazing analysis pipeline (name still to be decided on)
 
 The following settings were used:
