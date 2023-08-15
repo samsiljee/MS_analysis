@@ -228,7 +228,7 @@ output$plot_download <- downloadHandler(
 
 # Methods summary
 output$downloadReport <- downloadHandler(
-  filename = "MethodsSummary.pdf",
+  filename = paste("Analysis_methods_summary_", Sys.Date(), ".pdf"),
   content = function(file) {
     # Copy to temp directory in case writing permission not given
     tempReport <- file.path(tempdir(), "MethodsSummary.Rmd")
