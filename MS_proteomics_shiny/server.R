@@ -52,5 +52,5 @@ server <- function(input, output, session) {
   # Testing
   output$test_text <- renderPrint(class(comparison_matrix_updated()[-1, , drop = FALSE]))
 
-  output$test_table <- renderDataTable(comparison_matrix_updated()[-1, , drop = FALSE])
+  output$test_table <- renderTable(comparison_matrix_updated()[-1, , drop = FALSE])
 }
