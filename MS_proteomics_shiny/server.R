@@ -15,11 +15,13 @@ library(tidyr)
 library(dplyr)
 library(stringr)
 library(tibble)
+library(rmarkdown)
+library(tinytex)
 
 # Setting option to increase allowed file size to 30MB, I may have to increase this further
-options(shiny.maxRequestSize=30*1024^3)
+options(shiny.maxRequestSize = 30 * 1024^3)
 
-server <- function(input, output, session){
+server <- function(input, output, session) {
   # Source files
   source("InputServer.R", local = TRUE)
   source("FormatServer.R", local = TRUE)
@@ -29,25 +31,26 @@ server <- function(input, output, session){
   source("VisualisationServer.R", local = TRUE)
   source("QCServer.R", local = TRUE)
   source("DownloadsServer.R", local = TRUE)
-  
+
   # Load packages depending on input selected
   observeEvent(input$quant_method, {
     selected_quant <- input$quant_method
     switch(selected_quant,
-           "LFQ" = library(MSstats),
-           "TMT" = library(MSstatsTMT))
+      "LFQ" = library(MSstats),
+      "TMT" = library(MSstatsTMT)
+    )
   })
-  
+
   observeEvent(input$species, {
     selected_species <- input$species
     switch(selected_species,
-           "Human" = library(org.Hs.eg.db),
-           "Rat" = library(org.Rn.eg.db))
+      "Human" = library(org.Hs.eg.db),
+      "Rat" = library(org.Rn.eg.db)
+    )
   })
 
   # Testing
-  output$test_text <- renderPrint("Test")
-  
-  output$test_table <- renderDataTable(STRING_dataset())
-  
-  }
+  output$test_text <- renderPrint(class(comparison_matrix_updated()[-1, , drop = FALSE]))
+
+  output$test_table <- renderDataTable(comparison_matrix_updated()[-1, , drop = FALSE])
+}

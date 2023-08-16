@@ -1,0 +1,125 @@
+---
+title: "Analysis methods summary"
+output: pdf_document
+params:
+  input: NA
+  contrast_matrix: NA
+  working_directory: NA
+---
+
+Analysis was completed using Sam's amazing analysis pipeline (name still to be decided on)
+
+The following settings were used:
+
+# Formatting
+Search platform: `r params$input$platform`
+
+Quantification method: `r params$input$quant_method`
+
+Remove peptides assigned to more than one protein: `r params$input$useUniquePeptide`
+
+Summary method for multiple rows: `r params$input$summaryforMultipleRows`
+
+Remove features with one or two measurements across runs: `r params$input$removeFewMeasurements`
+
+`r if (params$input$platform == "PD") paste("Remove peptides with more than one in \"number of proteins\" column:", params$input$useNumProteinsColumn)`
+
+`r if (params$input$platform == "PD") paste("Protein ID:", params$input$which.proteinid)`
+
+`r if (params$input$quant_method == "LFQ") paste("Remove peptides with methionine oxidation:", params$input$removeOxidationMpeptides)`
+
+`r if (params$input$quant_method == "LFQ") paste("Remove proteins with only one peptide and charge:", params$input$removeProtein_with1Peptide)`
+
+`r if (params$input$quant_method == "LFQ" & params$input$platform == "PD") paste("Column to be used for quantification:", params$input$which.quantification)`
+
+`r if (params$input$quant_method == "LFQ" & params$input$platform == "PD") paste("Column to be used for peptide sequences:", params$input$which.sequence)`
+
+`r if (params$input$quant_method == "LFQ" & params$input$platform == "MQ") paste("Protein ID:", params$input$MQLFQproteinID)`
+
+`r if (params$input$quant_method == "LFQ" & params$input$platform == "MQ") paste("Remove peptides including \'M\' sequence:", params$input$removeMpeptides)`
+
+`r if (params$input$quant_method == "TMT") paste("Remove proteins with only 1 peptide and charge:", params$input$rmProtein_with1Feature)`
+
+`r if (params$input$quant_method == "TMT" & params$input$platform == "MQ") paste("Protein ID:", params$input$MQTMTproteinID)`
+
+`r if (params$input$quant_method == "TMT" & params$input$platform == "MQ") paste("Remove proteins only identified by a modification site:", params$input$rmProt_Only.identified.by.site)`
+
+# Processing
+
+`r if (params$input$quant_method == "LFQ") paste("Base of log transformation:", params$input$logTrans)`
+
+`r if (params$input$quant_method == "LFQ") paste("Normalisation method used to remove bias between runs:", params$input$normalization)`
+
+`r if (params$input$quant_method == "LFQ" & params$input$normalization == "globalStandards") paste("Standards FASTA file:", params$input$nameStandards$name)`
+
+`r if (params$input$quant_method == "LFQ") paste("Feature subset to use:", params$input$featureSubset)`
+
+`r if (params$input$quant_method == "LFQ" & params$input$featureSubset == "topN") paste("Number of top features to use:", params$input$n_top_feature)`
+
+`r if (params$input$quant_method == "LFQ" & params$input$featureSubset == "highQuality") paste("Remove noisy features and outliers before run-level summarisation:", params$input$remove_uninformative_feature_outlier)`
+
+`r if (params$input$quant_method == "LFQ" & params$input$featureSubset == "highQuality") paste("Minimum features required to be considered in feature selection algorithm:", params$input$min_feature_count)`
+
+`r if (params$input$quant_method == "LFQ") paste("Method used to summarise features:", params$input$summaryMethod)`
+
+`r if (params$input$quant_method == "LFQ" & params$input$summaryMethod == "linear") paste("Account for heterogeneous variation among intensities from different features:", params$input$equalFeatureVar)`
+
+`r if (params$input$quant_method == "LFQ" & params$input$summaryMethod == "TMP") paste("Impute censored values by Accelated failure model:", params$input$MBimpute)`
+
+`r if (params$input$quant_method == "LFQ" & params$input$summaryMethod == "TMP") paste("Remove runs with >50% missing values:", params$input$remove50missing)`
+
+`r if (params$input$quant_method == "LFQ") paste("Missing values are censored or at random:", params$input$censoredInt)`
+
+`r if (params$input$quant_method == "LFQ") paste("fix missing values:", params$input$fix_missing)`
+
+`r if (params$input$quant_method == "TMT") paste("Protein-level summarisation method:", params$input$TMTProtSumMethod)`
+
+`r if (params$input$quant_method == "TMT" & params$input$TMTProtSumMethod == "msstats") paste("Impute censored values by Accelated failure model:", params$input$MBimpute)`
+
+`r if (params$input$quant_method == "TMT") paste("Global median normalisation (peptide-level):", params$input$global_norm)`
+
+`r if (params$input$quant_method == "TMT") paste("Reference channel normalisation between runs (protein-level):", params$input$reference_norm)`
+
+`r if (params$input$quant_method == "TMT") paste("Remove reference channels:", params$input$remove_norm_channel)`
+
+Maximum quantile for deciding censored missing values: `r params$input$maxQuantileforCensored`
+
+# Comparison
+
+Log 2 fold-change threshold: `r params$input$FC_threshold`
+
+Adjusted p-value threshold: `r params$input$pvalue_threshold`
+
+`r if (params$input$quant_method == "TMT") paste("Use moderated t statistic:", params$input$moderated)`
+
+`r if (params$input$quant_method == "TMT") paste("Adjustment method:", params$input$adj.method)`
+
+Contrast method: `r params$input$contrast_method`
+
+`r if (params$input$contrast_method == "custom") paste("Contrast", "matrix:")`
+
+`r if (params$input$contrast_method == "custom") knitr::kable(as.data.frame(params$contrast_matrix))`
+
+# Formatting log output
+```{r Formatting log, results='asis', echo=FALSE}
+text <- readLines(paste0(params$working_directory, "/logs/format_log.txt"))
+cat(text, sep = "\n\n")
+```
+
+# Processing log output
+```{r Processing log, results='asis', echo=FALSE}
+text <- readLines(paste0(params$working_directory, "/logs/process_log.txt"))
+cat(text, sep = "\n\n")
+```
+
+# Comparison log output
+```{r Comparison log, results='asis', echo=FALSE}
+text <- readLines(paste0(params$working_directory, "/logs/compare_log.txt"))
+cat(text, sep = "\n\n")
+```
+
+# Session info
+```{r, results='asis', echo=FALSE}
+# Print session information
+cat(capture.output(sessionInfo()), sep = "\n")
+```
