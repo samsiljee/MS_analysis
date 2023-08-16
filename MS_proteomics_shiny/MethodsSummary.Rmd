@@ -7,6 +7,8 @@ params:
   working_directory: NA
 ---
 
+`r class(params$contrast_matrix)`
+
 Analysis was completed using Sam's amazing analysis pipeline (name still to be decided on)
 
 The following settings were used:
@@ -98,7 +100,7 @@ Contrast method: `r params$input$contrast_method`
 
 `r if (params$input$contrast_method == "custom") paste("Contrast", "matrix:")`
 
-`r if (params$input$contrast_method == "custom") knitr::kable(as.data.frame(params$contrast_matrix))`
+`r if (params$input$contrast_method == "custom") knitr::kable(params$contrast_matrix)`
 
 # Formatting log output
 ```{r Formatting log, results='asis', echo=FALSE}

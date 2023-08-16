@@ -183,9 +183,7 @@ output$downloadReport <- downloadHandler(
     # Set up parameters to pass to the methods summary
     params <- list(
       input = reactiveValuesToList(input),
-      contrast_matrix = ifelse(input$contrast_method == "custom",
-                               comparison_matrix_updated()[-1, ],
-                               data.frame()),
+      contrast_matrix = as.data.frame(comparison_matrix_updated()[-1, , drop = FALSE]),
       working_directory = getwd()
       )
 
