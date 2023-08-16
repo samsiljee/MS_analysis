@@ -14,7 +14,7 @@ InstructionsUI <- tabPanel(
   hr(style = "border-top: 2px solid #000000;"),
   conditionalPanel(
     condition = "input.quant_method == 'LFQ'",
-    "Please prepare an annotation file as a .tsv or .csv with the following columns (case sensitive):", br(),
+    "Please prepare an annotation file as a .tsv or .csv with the following columns:", br(),
     "\"Run\" exact filenames of the raw data files, with .raw extension for PD, and without for MQ.", br(),
     "\"Condition\" describing the experimental group.", br(),
     "\"BioReplicate\" describing the biological replicate.", br(),
@@ -22,7 +22,7 @@ InstructionsUI <- tabPanel(
   ),
   conditionalPanel(
     condition = "input.quant_method == 'TMT'",
-    "Please prepare two annotation files as .tsv or .csv with the following columns (case sensitive):", br(),
+    "Please prepare two annotation files as .tsv or .csv with the following columns:", br(),
     h4("Run annotations"),
     "\"Run\" exact filenames of the raw data files, with .raw extension for PD, and without for MQ.", br(),
     "\"Mixture\" batch or mixture of TMT channels. Set all to 1 if only one mixture was run.", br(),

@@ -29,7 +29,14 @@ annot_col <- reactive({
     # Input the annotations file
     df <- switch(input$quant_method,
       LFQ = {
-        df <- vroom(input$annotations$datapath)
+        # Import data and clean names
+        df <- clean_names(vroom(input$annotations$datapath), case = "upper_camel")
+        
+        # Change back "BioReplicate" and "TechRepMixture" column if required
+        colnames(df)[grep("BioReplicate", colnames(df), ignore.case = TRUE)] <- "BioReplicate"
+        colnames(df)[grep("TechRepMixture", colnames(df), ignore.case = TRUE)] <- "TechRepMixture"
+        
+        # Create column for PCA plot and heatmap
         df$PcaRef <- str_trim(as.character(df$Run))
         df$PcaRef <- gsub(".", "", df$PcaRef, fixed = TRUE)
 
@@ -42,8 +49,12 @@ annot_col <- reactive({
         # Run annotations
         run_df <- vroom(input$run_annotations$datapath)
 
-        # Combine
-        df <- full_join(run_df, channel_df)
+        # Combine and clean names
+        df <- clean_names(full_join(run_df, channel_df), case = "upper_camel")
+        
+        # Change back "BioReplicate" and "TechRepMixture" column if required
+        colnames(df)[grep("BioReplicate", colnames(df), ignore.case = TRUE)] <- "BioReplicate"
+        colnames(df)[grep("TechRepMixture", colnames(df), ignore.case = TRUE)] <- "TechRepMixture"
 
         df$PcaRef <- str_trim(as.character(df$Run))
         df$PcaRef <- gsub(".", "", df$PcaRef, fixed = TRUE)
