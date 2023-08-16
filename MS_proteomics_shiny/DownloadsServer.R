@@ -239,7 +239,8 @@ output$downloadReport <- downloadHandler(
       input = reactiveValuesToList(input),
       contrast_matrix = ifelse(input$contrast_method == "custom",
                                comparison_matrix_updated()[-1, ],
-                               data.frame())
+                               data.frame()),
+      working_directory = getwd()
       )
 
     # Knit the document, with params

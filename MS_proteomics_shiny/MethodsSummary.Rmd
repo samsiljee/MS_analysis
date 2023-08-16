@@ -4,11 +4,8 @@ output: pdf_document
 params:
   input: NA
   contrast_matrix: NA
+  working_directory: NA
 ---
-
-```{r, include=FALSE}
-getwd()
-```
 
 Analysis was completed using Sam's amazing analysis pipeline (name still to be decided on)
 
@@ -104,10 +101,25 @@ Contrast method: `r params$input$contrast_method`
 `r if (params$input$contrast_method == "custom") knitr::kable(as.data.frame(params$contrast_matrix))`
 
 # Formatting log output
+```{r Formatting log, results='asis', echo=FALSE}
+text <- readLines(paste0(params$working_directory, "/logs/format_log.txt"))
+cat(text, sep = "\n\n")
+```
 
+# Processing log output
+```{r Processing log, results='asis', echo=FALSE}
+text <- readLines(paste0(params$working_directory, "/logs/process_log.txt"))
+cat(text, sep = "\n\n")
+```
+
+# Comparison log output
+```{r Comparison log, results='asis', echo=FALSE}
+text <- readLines(paste0(params$working_directory, "/logs/compare_log.txt"))
+cat(text, sep = "\n\n")
+```
 
 # Session info
-```{r, echo=FALSE}
+```{r, results='asis', echo=FALSE}
 # Print session information
 cat(capture.output(sessionInfo()), sep = "\n")
 ```
