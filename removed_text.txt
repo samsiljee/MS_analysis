@@ -1,8 +1,0 @@
-
-`r if (params$input$contrast_method == "custom") kable(params$contrast_matrix)`
-
-# MSstats logs
-```{r, echo=FALSE}
-# Print session information
-readLines("logs/format_log.txt")
-```
