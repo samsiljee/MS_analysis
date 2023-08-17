@@ -55,6 +55,13 @@ A shiny app to analyse mass spectromtetry for proteomics data - from PSMs to vis
 
 ## Issues and to-do
   - QC section
+    - sample correlation
+    - Sample CVs
+    - Protein numbers
+    - Sample coverage
+    - Normalisation
+    - Missing values heatmap
+    - Imputation
   - Better progress bars for slow processes
   - Downloadable document describing the settings used (MSstats logs now available however)
   - Add reset to comparison matrix
