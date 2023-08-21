@@ -23,6 +23,7 @@ library(ComplexHeatmap)
 library(clusterProfiler)
 library(org.Hs.eg.db)
 library(STRINGdb)
+library(vroom)
 ```
 
 # Directories
@@ -43,8 +44,8 @@ annotations_file <- "0vs20_annotations.csv"
 
 # TMT annotations combining
 ```{r combine annotation files}
-run_annot <- vroom(paste0(input_dir, "sam_season_annotation.csv"))
-channel_annot <- vroom("C:/Users/Sam/Documents/Coding/MS_analysis/input/TMT/Rat_TMT_channel_annotations.tsv")
+run_annot <- vroom(paste0(input_dir, "TMT/run_annotations.txt"))
+channel_annot <- vroom(paste0(input_dir, "TMT/channel_annotations.txt"))
 annot <- full_join(run_annot, channel_annot)
 ```
 
@@ -54,7 +55,7 @@ TMT_input <- PDtoMSstatsTMTFormat(annotation = annotation.pd, input = raw.pd)
 
 TMT_processed <- proteinSummarization(input.pd)
 
-TMT_compared <- groupComparisonTMT(TMT_processed)
+TMT_compared <- groupComparisonTMT(TMT_processed, save_fitted_models = TRUE)
 ```
 
 
