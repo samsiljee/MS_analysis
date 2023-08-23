@@ -75,7 +75,7 @@ A shiny app to analyse mass spectromtetry for proteomics data - from PSMs to vis
   - Hide some options under "advanced settings", otherwise use defaults
   - Make a wizard to create annotation files - Use DT for interactive table editing and autofilling some columns from the PSMs files
   - Create a manual?
-  - Fix issue with modelQC not downloading (for TMT at least)
+  - Fix issue with modelQC not downloading (for TMT at least) - Currently this is only a placeholder for MSstatsTMT and will not be available
   - filter out infinite fold change broken
   - Add ability to upload annotations and raw PSMs in multiple files
   
