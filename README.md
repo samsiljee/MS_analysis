@@ -6,9 +6,10 @@ A shiny app to analyse mass spectromtetry for proteomics data - from PSMs to vis
 
 ## How to use this app.
 1. Please download and install R and R studio
-2. Download the "MS_proteomics_shiny" folder, open in Rstudio, and install all required packages
+2. Download the "MS_proteomics_shiny" folder, open in Rstudio, and install all required packages, the required packages can be found at the top of the server.R and ui.R files
 3. Click "Run app" in the top right corner of the pane displaying either ui.R, or server.R
 4. Work your way through the app
+5. Enjoy!
 
 ### Notes:
   - The current stable version should be in the main branch
@@ -63,7 +64,6 @@ A shiny app to analyse mass spectromtetry for proteomics data - from PSMs to vis
     - Missing values heatmap
     - Imputation
   - Better progress bars for slow processes
-  - Downloadable document describing the settings used (MSstats logs now available however)
   - Add reset to comparison matrix
   - Go term analysis with complete tabular output in the analysis tab, and plots intergrated into the visualisation tab
   - Pathview analysis
