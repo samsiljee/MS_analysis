@@ -4,7 +4,7 @@ ComparisonUI <- tabPanel(
     h4("Comparisons"),
     # Common options
     radioButtons("contrast_method", "Contrast method",
-      choiceNames = c("All combinations", "Custom comparisons"),
+      choiceNames = c("All combinations (pairwise)", "Custom comparisons"),
       choiceValues = c("pairwise", "custom")
     ),
     conditionalPanel(
