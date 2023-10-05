@@ -49,7 +49,9 @@ MSstats_input <- MaxQtoMSstatsFormat(annotation = annotations,
                                      proteinGroups = protein_groups)
 
 # MSstats process
-MSstats_processed <- dataProcess(MSstats_input)
+MSstats_processed <- dataProcess(MSstats_input,
+                                 normalization = "none",
+                                 MBimpute = FALSE)
 
 # Make comparisons
 MSstats_results <- groupComparison(contrast.matrix = "pairwise",
