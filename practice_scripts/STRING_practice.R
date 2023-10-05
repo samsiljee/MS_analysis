@@ -16,6 +16,8 @@ suppressMessages({
     library(STRINGdb)
     library(readxl)
     library(stringr)
+  library(vroom)
+  library(MSstats)
 })
 
 # Get sup material from paper
@@ -36,6 +38,41 @@ head(df)
 
 table(df$gene_biotype)
 
+# Load test data from Watt et al
+annotations <- vroom("input/Watt_et_al/annotations.tsv")
+evidence <- vroom("input/Watt_et_al/evidence.txt")
+protein_groups <- vroom("input/Watt_et_al/proteinGroups.txt")
+
+# Create MSstats input
+MSstats_input <- MaxQtoMSstatsFormat(annotation = annotations,
+                                     evidence = evidence,
+                                     proteinGroups = protein_groups)
+
+# MSstats process
+MSstats_processed <- dataProcess(MSstats_input)
+
+# Make comparisons
+MSstats_results <- groupComparison(contrast.matrix = "pairwise",
+                                   data = MSstats_processed,
+                                   save_fitted_models = FALSE,
+                                   use_log_file = FALSE)
+
+# Create vecotr of differential genes
+df <- MSstats_results$ComparisonResult %>%
+      mutate(Dif = ifelse(
+        log2FC > 0.58 & adj.pvalue < 0.05,
+        "Upregulated",
+        ifelse(
+          log2FC < -0.58 & adj.pvalue < 0.05,
+          "Downregulated",
+          "Not significant"
+        )
+      )) %>%
+  filter(Dif != "Not significant") %>%
+  mutate(Symbol.ID = Protein)
+  
+
+##----------------------------------------------------------------------
 # intialise STRINGdb
 string_db <- STRINGdb$new(version = "11.5",
                           species = 9606,
