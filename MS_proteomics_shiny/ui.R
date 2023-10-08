@@ -5,6 +5,7 @@
 # Packages
 library(shinycssloaders)
 library(DT)
+library(shinyjs)
 
 # Source files
 source("InstructionsUI.R")
@@ -17,6 +18,7 @@ source("VisualisationUI.R")
 source("QCUI.R")
 
 ui <- navbarPage(
+  useShinyjs(), # Initialise shinyjs
   title = "MS analysis",
   tabsetPanel(
     InstructionsUI,
