@@ -14,7 +14,7 @@ InstructionsUI <- tabPanel(
   hr(style = "border-top: 2px solid #000000;"),
   conditionalPanel(
     condition = "input.quant_method == 'LFQ'",
-    "Please prepare an annotation file as a .tsv or .csv with the following columns:", br(),
+    "Please use the annotation wizard on the \"Input\" tab to create an annotation file, or prepare a .tsv or .csv file with the following columns:", br(),
     "\"Run\" exact filenames of the raw data files, with .raw extension for PD, and without for MQ.", br(),
     "\"Condition\" describing the experimental group.", br(),
     "\"BioReplicate\" describing the biological replicate.", br(),
@@ -34,7 +34,7 @@ InstructionsUI <- tabPanel(
     "\"Condition\" describing the experimental group. Normalisation channel/s must be set to \"Norm\".", br(),
     "\"BioReplicate\" describing the biological replicate. Normalisation channel/s must be set to \"Norm\".", br()
   ),
-  "Technical replicates are automatically detected. Save it as a csv or tsv file.", br(),
+  "Technical replicates are automatically detected.", br(),
   hr(style = "border-top: 2px solid #000000;"),
   "Debugging output here, please ignore", br(),
   verbatimTextOutput("test_text"),

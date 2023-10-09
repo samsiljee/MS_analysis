@@ -4,11 +4,23 @@ observeEvent(input$launch_wizard, {
     # Wizard "server"
     # Create variables
     
-    # Unique runs from raw data
-    wizard_runs <- unique(raw()$Run)
+      # Unique runs from raw data
+      wizard_runs <- unique(
+          switch(input$platform,
+                 PD = {
+                     raw()$Run
+                 },
+                 MQ = {
+                     raw()$Raw.file
+                 }
+          )
+      )
     
     # Create a data frame with the unique runs
-    wizard_runs_df <- data.frame(Runs = wizard_runs)
+    wizard_runs_df <- data.frame(
+        Run = wizard_runs,
+        Fraction = ifelse(input$wizardNotFractionated, "1", NA)
+        )
     
     # Render the data frame as a DataTable
     output$wizard_runs_table <- renderDT({
@@ -18,8 +30,14 @@ observeEvent(input$launch_wizard, {
  
     # Event handler to change the page
     wizard_page <- reactiveVal(1)
-    observeEvent(input$nextButton, {
+    observeEvent(input$nextButtonConditions, {
       wizard_page(wizard_page() + 1)
+    })
+    observeEvent(input$nextButtonBioReplicates, {
+        wizard_page(wizard_page() + 1)
+    })
+    observeEvent(input$nextButtonFractions, {
+        wizard_page(wizard_page() + 1)
     })
     observeEvent(input$backButton, {
       wizard_page(wizard_page() - 1)
@@ -27,15 +45,14 @@ observeEvent(input$launch_wizard, {
     
     # Render the current wizard page
     observe({
-      if (wizard_page() == 1) {
-        output$wizardPageContent <- renderUI({
-          conditions_wizard_ui()
+        output$wizardPageContent <- renderUI ({
+            switch(wizard_page(),
+                   "1" = (conditions_wizard_ui()),
+                   "2" = (bio_replicates_wizard_ui()),
+                   "3" = (fractions_wizard_ui()),
+                   "4" = (runs_wizard_ui())
+                   )
         })
-      } else if (wizard_page() == 2) {
-        output$wizardPageContent <- renderUI({
-          runs_wizard_ui()
-        })
-      }
     })
     
     # Wizard "UI"
@@ -43,9 +60,48 @@ observeEvent(input$launch_wizard, {
     conditions_wizard_ui <- function() {
       fluidPage(
         h2("Conditions"),
-        # Hide "back" button on first page
-        shinyjs::hide("backButton")
+        # Text entry for conditions
+        textAreaInput("wizardConditions", "Enter one condition per line:", ""),
+        # Hide "back" button on first page, and "next buttons from other pages.
+        shinyjs::hide("backButton"),
+        shinyjs::hide("nextButtonBioReplicates"),
+        shinyjs::hide("nextButtonFractions"),
+        # Show conditions next button
+        shinyjs::show("nextButtonConditions")
       )
+    }
+    
+    # UI for the "BioReplicates" page
+    bio_replicates_wizard_ui <- function() {
+        fluidPage(
+            h2("Biological replicates"),
+            # Text entry for conditions
+            textAreaInput("wizardBioReplicates", "Enter one biological replicate per line:", ""),
+            # Hide "next" buttons from other pages.
+            shinyjs::hide("nextButtonConditions"),
+            shinyjs::hide("nextButtonFractions"),
+            # Show "back" and bioreplicates "next" button
+            shinyjs::show("nextButtonBioReplicates"),
+            shinyjs::show("backButton")
+        )
+    }
+    
+    # UI for the "Fractions" page
+    fractions_wizard_ui <- function() {
+        fluidPage(
+            h2("Fractions"),
+            conditionalPanel(
+                condition = "input.wizardFractionated == false",
+                numericInput("wizardFractions", "Number of fractions:", value = 8, step = 1)
+            ),
+            checkboxInput("wizardNotFractionated", "Not fractionated", value = FALSE),
+            # Hide "next" buttons from other pages
+            shinyjs::hide("nextButtonConditions"),
+            shinyjs::hide("nextButtonBioReplicates"),
+            # Show next and back button on subsequent pages
+            shinyjs::show("nextButtonFractions"),
+            shinyjs::show("backButton")
+        )
     }
     
     # UI for the "Runs" page
@@ -53,6 +109,10 @@ observeEvent(input$launch_wizard, {
       fluidPage(
         h2("Runs"),
         DTOutput("wizard_runs_table"),
+        # Hide "next" buttons from other pages
+        shinyjs::hide("nextButtonConditions"),
+        shinyjs::hide("nextButtonBioReplicates"),
+        shinyjs::hide("nextButtonFractions"),
         # Show back button on subsequent pages
         shinyjs::show("backButton")
       )
@@ -64,7 +124,9 @@ observeEvent(input$launch_wizard, {
       uiOutput("wizardPageContent"),
       footer = tagList(
         actionButton("backButton", "Back"),
-        actionButton("nextButton", "Next"),
+        actionButton("nextButtonConditions", "Next"),
+        actionButton("nextButtonBioReplicates", "Next"),
+        actionButton("nextButtonFractions", "Next"),
         modalButton("Dismiss")
       ),
       easyClose = FALSE
