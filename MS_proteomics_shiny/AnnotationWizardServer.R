@@ -19,14 +19,15 @@ observeEvent(input$launch_wizard, {
     # Create a data frame with the unique runs
     wizard_runs_df <- data.frame(
         Run = wizard_runs,
-        Fraction = ifelse(input$wizardNotFractionated, "1", NA)
+        Fraction = ifelse(input$wizardFractionated, 1, NA)
+        # Fraction = ifelse(FALSE, 1, NA)
         )
     
     # Render the data frame as a DataTable
     output$wizard_runs_table <- renderDT({
       datatable(wizard_runs_df, options = list(dom = 't', paging = FALSE, ordering = FALSE), 
-                rownames = FALSE, colnames = c('Runs'), class = 'cell-border stripe')
-    }) 
+                rownames = FALSE, class = 'cell-border stripe')
+    })
  
     # Event handler to change the page
     wizard_page <- reactiveVal(1)
@@ -90,11 +91,11 @@ observeEvent(input$launch_wizard, {
     fractions_wizard_ui <- function() {
         fluidPage(
             h2("Fractions"),
+            checkboxInput("wizardFractionated", "Not fractionated"),
             conditionalPanel(
                 condition = "input.wizardFractionated == false",
                 numericInput("wizardFractions", "Number of fractions:", value = 8, step = 1)
             ),
-            checkboxInput("wizardNotFractionated", "Not fractionated", value = FALSE),
             # Hide "next" buttons from other pages
             shinyjs::hide("nextButtonConditions"),
             shinyjs::hide("nextButtonBioReplicates"),
