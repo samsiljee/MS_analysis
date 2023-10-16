@@ -19,12 +19,12 @@ observeEvent(input$launch_wizard, {
     # Create a data frame with the unique runs
     wizard_runs_df <- data.frame(
         Run = wizard_runs,
-        Fraction = ifelse(input$wizardFractionated, 1, NA)
-        # Fraction = ifelse(FALSE, 1, NA)
+        # Fraction = ifelse(input$wizardFractionated, 1, NA)
+        Fraction = ifelse(FALSE, 1, NA)
         )
     
     # Render the data frame as a DataTable
-    output$wizard_runs_table <- renderDT({
+    output$wizard_runs_table <- DT::renderDataTable({
       datatable(wizard_runs_df, options = list(dom = 't', paging = FALSE, ordering = FALSE), 
                 rownames = FALSE, class = 'cell-border stripe')
     })
@@ -109,7 +109,8 @@ observeEvent(input$launch_wizard, {
     runs_wizard_ui <- function() {
       fluidPage(
         h2("Runs"),
-        DTOutput("wizard_runs_table"),
+        DT::dataTableOutput("wizard_runs_table"),
+        verbatimTextOutput(renderPrint("Hello")),
         # Hide "next" buttons from other pages
         shinyjs::hide("nextButtonConditions"),
         shinyjs::hide("nextButtonBioReplicates"),
@@ -141,4 +142,4 @@ observeEvent(input$launch_wizard, {
     ))
   }
   
-})
+}) # Close launch wizard
