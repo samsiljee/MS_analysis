@@ -1,4 +1,16 @@
 # Downloads
+# .tsv files from annotation wizard
+output$wizard_annotations_tsv <- downloadHandler(
+  filename = function() {
+    paste0("Annotations_", Sys.Date(), ".tsv")
+  },
+  content = function(file) {
+    vroom_write(
+      wizard_data(),
+    file, delim = "\t")
+  }
+)
+
 # Formatted data tables
 output$formatted_tsv <- downloadHandler(
   filename = function() {

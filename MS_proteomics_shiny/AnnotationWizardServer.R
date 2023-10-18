@@ -17,18 +17,20 @@ observeEvent(input$launch_wizard, {
     ) %>%
       sort()
 
-    # Initialise blank columns for other data
+    # Initialise blank columns for data frame
     wizard_conditions <- reactiveVal(rep(NA, length(wizard_runs)))
     wizard_bioreplicates <- reactiveVal(rep(NA, length(wizard_runs)))
     wizard_fractions <- reactiveVal(rep(NA, length(wizard_runs)))
 
     # Initialise data frame to store wizard data
-    wizard_data <- data.frame(
-      Run = wizard_runs,
-      Condition = wizard_conditions(),
-      BioReplicate = wizard_bioreplicates(),
-      Fraction = wizard_fractions()
-    )
+    wizard_data <- reactive({
+      data.frame(
+        Run = wizard_runs,
+        Condition = wizard_conditions(),
+        BioReplicate = wizard_bioreplicates(),
+        Fraction = wizard_fractions()
+      )
+    }) 
 
     # Render the data frame as a DataTable
     output$wizard_table <- DT::renderDataTable({
@@ -118,9 +120,6 @@ observeEvent(input$launch_wizard, {
     observeEvent(input$nextButtonBioReplicates, {
       wizard_page(wizard_page() + 1)
     })
-    observeEvent(input$nextButtonFractions, {
-      wizard_page(wizard_page() + 1)
-    })
     observeEvent(input$backButton, {
       wizard_page(wizard_page() - 1)
     })
@@ -131,8 +130,7 @@ observeEvent(input$launch_wizard, {
         switch(wizard_page(),
           "1" = (conditions_wizard_ui()),
           "2" = (bio_replicates_wizard_ui()),
-          "3" = (fractions_wizard_ui()),
-          "4" = (runs_wizard_ui())
+          "3" = (fractions_wizard_ui())
         )
       })
     })
@@ -151,7 +149,8 @@ observeEvent(input$launch_wizard, {
         # Hide "back" button on first page, and "next buttons from other pages.
         shinyjs::hide("backButton"),
         shinyjs::hide("nextButtonBioReplicates"),
-        shinyjs::hide("nextButtonFractions"),
+        shinyjs::hide("wizard_annotations_tsv"),
+        shinyjs::hide("doneWizard"),
         # Show conditions next button
         shinyjs::show("nextButtonConditions")
       )
@@ -169,7 +168,8 @@ observeEvent(input$launch_wizard, {
 
         # Hide "next" buttons from other pages.
         shinyjs::hide("nextButtonConditions"),
-        shinyjs::hide("nextButtonFractions"),
+        shinyjs::hide("wizard_annotations_tsv"),
+        shinyjs::hide("doneWizard"),
         # Show "back" and bioreplicates "next" button
         shinyjs::show("nextButtonBioReplicates"),
         shinyjs::show("backButton")
@@ -194,22 +194,8 @@ observeEvent(input$launch_wizard, {
         shinyjs::hide("nextButtonConditions"),
         shinyjs::hide("nextButtonBioReplicates"),
         # Show next and back button on subsequent pages
-        shinyjs::show("nextButtonFractions"),
-        shinyjs::show("backButton")
-      )
-    }
-
-    # UI for the "Runs" page
-    runs_wizard_ui <- function() {
-      fluidPage(
-        h2("Runs"),
-        DT::dataTableOutput("wizard_table"),
-
-        # Hide "next" buttons from other pages
-        shinyjs::hide("nextButtonConditions"),
-        shinyjs::hide("nextButtonBioReplicates"),
-        shinyjs::hide("nextButtonFractions"),
-        # Show back button on subsequent pages
+        shinyjs::show("wizard_annotations_tsv"),
+        shinyjs::show("doneWizard"),
         shinyjs::show("backButton")
       )
     }
@@ -222,7 +208,8 @@ observeEvent(input$launch_wizard, {
         actionButton("backButton", "Back"),
         actionButton("nextButtonConditions", "Next"),
         actionButton("nextButtonBioReplicates", "Next"),
-        actionButton("nextButtonFractions", "Next"),
+        downloadButton("wizard_annotations_tsv", "Save as .tsv"),
+        actionButton("doneWizard", "Done"),
         modalButton("Dismiss")
       ),
       size = "m",
