@@ -1,6 +1,6 @@
 # Launch wizard
 observeEvent(input$launch_wizard, {
-  if (nrow(raw()) != 0) { # only run wizard if the raw files are uploaded
+  if (nrow(raw()) != 0) { # only run wizard if the raw files are loaded
     # Wizard "server"
     # Create variables
 
@@ -17,14 +17,27 @@ observeEvent(input$launch_wizard, {
     ) %>%
       sort()
 
+    # Initialise blank columns for other data
+    wizard_conditions <- reactiveVal(rep(NA, length(wizard_runs)))
+    wizard_bioreplicates <- reactiveVal(rep(NA, length(wizard_runs)))
+    wizard_fractions <- reactiveVal(rep(NA, length(wizard_runs)))
+    
+    # Initialise data frame to store wizard data
+    wizard_data <- data.frame(
+      Run = wizard_runs,
+      Condition = wizard_conditions(),
+      BioReplicate = wizard_bioreplicates(),
+      Fraction = wizard_fractions()
+    )
+
     # Render the data frame as a DataTable
     output$wizard_table <- DT::renderDataTable({
       datatable(
         data.frame(
           Run = wizard_runs,
-          Condition = NA,
-          BioReplicate = NA,
-          Fraction = NA
+          Condition = wizard_conditions(),
+          BioReplicate = wizard_bioreplicates(),
+          Fraction = wizard_fractions()
         ),
         options = list(
           dom = "t",
@@ -37,15 +50,60 @@ observeEvent(input$launch_wizard, {
       )
     })
 
-    # Create a variable of selected rows
-    output$wizard_selected_rows <- renderPrint({
-      s <- input$wizard_table_rows_selected
-      if (length(s)) {
-        cat("Runs selected:\n\n")
-        cat(wizard_runs[s])
-      }
+    # initialise and update variable for selected rows
+    selected_rows <- reactiveVal(NULL)
+    observe({
+      selected_rows(input$wizard_table_rows_selected)
     })
 
+    # Handler to edit Condition
+    observeEvent(input$addCondition, {
+      if (!is.null(selected_rows())) {
+        current_wizard_conditions <- wizard_conditions()
+        current_wizard_conditions[selected_rows()] <- input$wizardCondition
+        wizard_conditions(current_wizard_conditions)
+      } else {
+        showModal(modalDialog(
+          title = "",
+          "Please select one or more rows first",
+          size = "s",
+          easyClose = TRUE
+        ))
+      }
+    })
+    
+    # Handler to edit BioReplicate
+    observeEvent(input$addBioReplicate, {
+      if (!is.null(selected_rows())) {
+        current_wizard_bioreplicates <- wizard_bioreplicates()
+        current_wizard_bioreplicates[selected_rows()] <- input$wizardBioReplicates
+        wizard_bioreplicates(current_wizard_bioreplicates)
+      } else {
+        showModal(modalDialog(
+          title = "",
+          "Please select one or more rows first",
+          size = "s",
+          easyClose = TRUE
+        ))
+      }
+    })
+    
+    # Handler to edit Fraction
+    observeEvent(input$addFraction, {
+      if (!is.null(selected_rows())) {
+        current_wizard_fractions <- wizard_fractions()
+        current_wizard_fractions[selected_rows()] <- input$wizardFraction
+        wizard_fractions(current_wizard_fractions)
+      } else {
+        showModal(modalDialog(
+          title = "",
+          "Please select one or more rows first",
+          size = "s",
+          easyClose = TRUE
+        ))
+      }
+    })
+    
     # Event handler to change the page
     wizard_page <- reactiveVal(1)
     observeEvent(input$nextButtonConditions, {
@@ -80,10 +138,9 @@ observeEvent(input$launch_wizard, {
         h2("Conditions"),
         # Text entry for conditions
         "Select one or more rows, and enter condition below:",
-        textInput("wizardConditions", "", "Condition"),
+        textInput("wizardCondition", "", ""),
         actionButton("addCondition", "Add condition"),
         DT::dataTableOutput("wizard_table"),
-        verbatimTextOutput("wizard_selected_rows"),
 
         # Hide "back" button on first page, and "next buttons from other pages.
         shinyjs::hide("backButton"),
@@ -98,8 +155,12 @@ observeEvent(input$launch_wizard, {
     bio_replicates_wizard_ui <- function() {
       fluidPage(
         h2("Biological replicates"),
-        # Text entry for conditions
-        textAreaInput("wizardBioReplicates", "Enter one biological replicate per line:", ""),
+        # Text entry for biological replicates
+        "Select one or more rows, and enter biological replicate below:",
+        textInput("wizardBioReplicates", "", ""),
+        actionButton("addBioReplicate", "Add biological replicate"),
+        DT::dataTableOutput("wizard_table"),
+        
         # Hide "next" buttons from other pages.
         shinyjs::hide("nextButtonConditions"),
         shinyjs::hide("nextButtonFractions"),
@@ -116,8 +177,13 @@ observeEvent(input$launch_wizard, {
         checkboxInput("wizardFractionated", "Not fractionated"),
         conditionalPanel(
           condition = "input.wizardFractionated == false",
-          numericInput("wizardFractions", "Number of fractions:", value = 8, step = 1)
+          # Numeric entry for fraction
+          "Select one or more rows, and enter fraction below:",
+          numericInput("wizardFraction", "", ""),
+          actionButton("addFraction", "Add fraction"),
         ),
+        DT::dataTableOutput("wizard_table"),
+        
         # Hide "next" buttons from other pages
         shinyjs::hide("nextButtonConditions"),
         shinyjs::hide("nextButtonBioReplicates"),
@@ -160,7 +226,7 @@ observeEvent(input$launch_wizard, {
     showModal(modalDialog(
       title = "Annotations wizard",
       "Please upload PSM/evidence/proteinGroups files first",
-      size = "s",
+      size = "m",
       easyClose = TRUE
     ))
   }
