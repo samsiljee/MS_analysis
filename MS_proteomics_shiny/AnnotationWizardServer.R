@@ -21,7 +21,7 @@ observeEvent(input$launch_wizard, {
     wizard_conditions <- reactiveVal(rep(NA, length(wizard_runs)))
     wizard_bioreplicates <- reactiveVal(rep(NA, length(wizard_runs)))
     wizard_fractions <- reactiveVal(rep(NA, length(wizard_runs)))
-    
+
     # Initialise data frame to store wizard data
     wizard_data <- data.frame(
       Run = wizard_runs,
@@ -63,15 +63,15 @@ observeEvent(input$launch_wizard, {
         current_wizard_conditions[selected_rows()] <- input$wizardCondition
         wizard_conditions(current_wizard_conditions)
       } else {
-        showModal(modalDialog(
-          title = "",
+        showNotification(
           "Please select one or more rows first",
-          size = "s",
-          easyClose = TRUE
-        ))
+          type = "error",
+          duration = NULL,
+          closeButton = TRUE
+        )
       }
     })
-    
+
     # Handler to edit BioReplicate
     observeEvent(input$addBioReplicate, {
       if (!is.null(selected_rows())) {
@@ -79,31 +79,37 @@ observeEvent(input$launch_wizard, {
         current_wizard_bioreplicates[selected_rows()] <- input$wizardBioReplicates
         wizard_bioreplicates(current_wizard_bioreplicates)
       } else {
-        showModal(modalDialog(
-          title = "",
+        showNotification(
           "Please select one or more rows first",
-          size = "s",
-          easyClose = TRUE
-        ))
+          type = "error",
+          duration = NULL,
+          closeButton = TRUE
+        )
       }
     })
-    
+
     # Handler to edit Fraction
     observeEvent(input$addFraction, {
       if (!is.null(selected_rows())) {
-        current_wizard_fractions <- wizard_fractions()
-        current_wizard_fractions[selected_rows()] <- input$wizardFraction
-        wizard_fractions(current_wizard_fractions)
+        if (input$wizardFractionated) {
+          current_wizard_fractions <- wizard_fractions()
+          current_wizard_fractions[selected_rows()] <- input$wizardFraction
+          wizard_fractions(current_wizard_fractions)
+        } else {
+          current_wizard_fractions <- wizard_fractions()
+          current_wizard_fractions <- 1
+          wizard_fractions(current_wizard_fractions)
+        }
       } else {
-        showModal(modalDialog(
-          title = "",
+        showNotification(
           "Please select one or more rows first",
-          size = "s",
-          easyClose = TRUE
-        ))
+          type = "error",
+          duration = NULL,
+          closeButton = TRUE
+        )
       }
     })
-    
+
     # Event handler to change the page
     wizard_page <- reactiveVal(1)
     observeEvent(input$nextButtonConditions, {
@@ -160,7 +166,7 @@ observeEvent(input$launch_wizard, {
         textInput("wizardBioReplicates", "", ""),
         actionButton("addBioReplicate", "Add biological replicate"),
         DT::dataTableOutput("wizard_table"),
-        
+
         # Hide "next" buttons from other pages.
         shinyjs::hide("nextButtonConditions"),
         shinyjs::hide("nextButtonFractions"),
@@ -183,7 +189,7 @@ observeEvent(input$launch_wizard, {
           actionButton("addFraction", "Add fraction"),
         ),
         DT::dataTableOutput("wizard_table"),
-        
+
         # Hide "next" buttons from other pages
         shinyjs::hide("nextButtonConditions"),
         shinyjs::hide("nextButtonBioReplicates"),
@@ -223,11 +229,11 @@ observeEvent(input$launch_wizard, {
       easyClose = FALSE
     ))
   } else { # "error" if no raw data uploaded yet
-    showModal(modalDialog(
-      title = "Annotations wizard",
+    showNotification(
       "Please upload PSM/evidence/proteinGroups files first",
-      size = "m",
-      easyClose = TRUE
-    ))
+      type = "error",
+      duration = NULL,
+      closeButton = TRUE
+    )
   }
 }) # Close launch wizard
