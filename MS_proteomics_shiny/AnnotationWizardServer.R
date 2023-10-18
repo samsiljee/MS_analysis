@@ -11,7 +11,11 @@ observeEvent(input$launch_wizard, {
           raw()$Run
         },
         MQ = {
-          raw()$Raw.file
+          if(length(raw()$Raw.file) != 0) {
+            raw()$Raw.file
+          } else {
+            raw()$`Raw file`
+          } 
         }
       )
     ) %>%
@@ -35,12 +39,7 @@ observeEvent(input$launch_wizard, {
     # Render the data frame as a DataTable
     output$wizard_table <- DT::renderDataTable({
       datatable(
-        data.frame(
-          Run = wizard_runs,
-          Condition = wizard_conditions(),
-          BioReplicate = wizard_bioreplicates(),
-          Fraction = wizard_fractions()
-        ),
+        wizard_data(),
         options = list(
           dom = "t",
           paging = FALSE,
@@ -142,9 +141,9 @@ observeEvent(input$launch_wizard, {
         h2("Conditions"),
         # Text entry for conditions
         "Select one or more rows, and enter condition below:",
+        DT::dataTableOutput("wizard_table"),
         textInput("wizardCondition", "", ""),
         actionButton("addCondition", "Add condition"),
-        DT::dataTableOutput("wizard_table"),
 
         # Hide "back" button on first page, and "next buttons from other pages.
         shinyjs::hide("backButton"),
@@ -162,9 +161,9 @@ observeEvent(input$launch_wizard, {
         h2("Biological replicates"),
         # Text entry for biological replicates
         "Select one or more rows, and enter biological replicate below:",
+        DT::dataTableOutput("wizard_table"),
         textInput("wizardBioReplicates", "", ""),
         actionButton("addBioReplicate", "Add biological replicate"),
-        DT::dataTableOutput("wizard_table"),
 
         # Hide "next" buttons from other pages.
         shinyjs::hide("nextButtonConditions"),
@@ -180,15 +179,15 @@ observeEvent(input$launch_wizard, {
     fractions_wizard_ui <- function() {
       fluidPage(
         h2("Fractions"),
+        "Select one or more rows and enter fraction, or select \"Not fractionated\"",
+        DT::dataTableOutput("wizard_table"),
         checkboxInput("wizardFractionated", "Not fractionated"),
         conditionalPanel(
           condition = "input.wizardFractionated == false",
           # Numeric entry for fraction
-          "Select one or more rows, and enter fraction below:",
-          numericInput("wizardFraction", "", ""),
+          numericInput("wizardFraction", "", value = 1),
           actionButton("addFraction", "Add fraction"),
         ),
-        DT::dataTableOutput("wizard_table"),
 
         # Hide "next" buttons from other pages
         shinyjs::hide("nextButtonConditions"),
