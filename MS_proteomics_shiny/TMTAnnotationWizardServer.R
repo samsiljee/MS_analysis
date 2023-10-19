@@ -37,7 +37,7 @@ observeEvent(input$launch_wizard, {
       wizard_conditions <- reactiveVal(rep(NA, length(wizard_runs())))
       wizard_bioreplicates <- reactiveVal(rep(NA, length(wizard_runs())))
 
-      # Wizard "server"
+      # Wizard "server"----
 
       # Update wizard_runs_data
       observe({
@@ -93,50 +93,22 @@ observeEvent(input$launch_wizard, {
         )
       })
 
-      # Variable for selected rows
-      selected_rows <- reactiveVal(NULL)
+      # Variable for selected rows, for runs and channels
+      runs_selected_rows <- reactiveVal(NULL)
       observe({
-        selected_rows(input$wizard_table_rows_selected)
+        runs_selected_rows(input$wizard_runs_table_rows_selected)
+      })
+      channels_selected_rows <- reactiveVal(NULL)
+      observe({
+        channels_selected_rows(input$wizard_channels_table_rows_selected)
       })
       
       # Handler to edit Run mixtures
       observeEvent(input$addMixture, {
-        if (!is.null(selected_rows())) {
+        if (!is.null(runs_selected_rows())) {
           current_wizard_runs_mixtures <- wizard_runs_mixtures()
-          current_wizard_runs_mixtures[selected_rows()] <- input$wizardMixture
+          current_wizard_runs_mixtures[runs_selected_rows()] <- input$wizardMixture
           wizard_runs_mixtures(current_wizard_runs_mixtures)
-        } else {
-          showNotification(
-            "Please select one or more rows first",
-            type = "error",
-            duration = NULL,
-            closeButton = TRUE
-          )
-        }
-      })
-      
-      # Handler to edit Condition
-      observeEvent(input$addCondition, {
-        if (!is.null(selected_rows())) {
-          current_wizard_conditions <- wizard_conditions()
-          current_wizard_conditions[selected_rows()] <- input$wizardCondition
-          wizard_conditions(current_wizard_conditions)
-        } else {
-          showNotification(
-            "Please select one or more rows first",
-            type = "error",
-            duration = NULL,
-            closeButton = TRUE
-          )
-        }
-      })
-
-      # Handler to edit BioReplicate
-      observeEvent(input$addBioReplicate, {
-        if (!is.null(selected_rows())) {
-          current_wizard_bioreplicates <- wizard_bioreplicates()
-          current_wizard_bioreplicates[selected_rows()] <- input$wizardBioReplicates
-          wizard_bioreplicates(current_wizard_bioreplicates)
         } else {
           showNotification(
             "Please select one or more rows first",
@@ -149,9 +121,9 @@ observeEvent(input$launch_wizard, {
 
       # Handler to edit Fraction if adding fractions manually
       observeEvent(input$addFraction, {
-        if (!is.null(selected_rows())) {
+        if (!is.null(runs_selected_rows())) {
           current_wizard_fractions <- wizard_fractions()
-          current_wizard_fractions[selected_rows()] <- input$wizardFraction
+          current_wizard_fractions[runs_selected_rows()] <- input$wizardFraction
           wizard_fractions(current_wizard_fractions)
         } else {
           # Handle the case when no rows are selected
@@ -170,6 +142,32 @@ observeEvent(input$launch_wizard, {
           wizard_fractions(1)
         } else {
           wizard_fractions(rep(NA, length(wizard_runs())))
+        }
+      })
+      
+      # Handler to edit TechRepMixture if adding replicates manually
+      observeEvent(input$addReplicate, {
+        if (!is.null(runs_selected_rows())) {
+          current_wizard_techrepmixtures <- wizard_techrepmixtures()
+          current_wizard_techrepmixtures[runs_selected_rows()] <- input$wizardTechRepMixture
+          wizard_techrepmixtures(current_wizard_techrepmixtures)
+        } else {
+          # Handle the case when no rows are selected
+          showNotification(
+            "Please select one or more rows first",
+            type = "error",
+            duration = NULL,
+            closeButton = TRUE
+          )
+        }
+      })
+      
+      # Handler to edit TechRepMixture if not replicated
+      observeEvent(input$wizardReplicated, {
+        if (input$wizardReplicated) {
+          wizard_techrepmixtures(1)
+        } else {
+          wizard_techrepmixtures(rep(NA, length(wizard_runs())))
         }
       })
 
@@ -201,7 +199,7 @@ observeEvent(input$launch_wizard, {
         })
       })
 
-      # Wizard "UI"
+      # Wizard "UI"----
       # UI for the "Runs - Mixtures" page
       wizard_mixtures_ui <- function() {
         fluidPage(
@@ -212,12 +210,55 @@ observeEvent(input$launch_wizard, {
           numericInput("wizardMixture", "", value = 1),
           actionButton("addMixture", "Add mixture"),
 
-          # Hide back, download and done buttons
+          # Hide buttons
           shinyjs::hide("backButton"),
-          shinyjs::hide("wizard_annotations_tsv"),
-          shinyjs::hide("doneWizard"),
-          # Show next button
+          shinyjs::hide("doneButton"),
+          # Show buttons
           shinyjs::show("nextButton")
+        )
+      }
+      
+      # UI for the "Runs - Fractions" page
+      wizard_fractions_ui <- function() {
+        fluidPage(
+          h2("Runs: Fractions"),
+          "Select one or more rows and enter fraction, or select \"Not fractionated\"",
+          DT::dataTableOutput("wizard_runs_table"),
+          checkboxInput("wizardFractionated", "Not fractionated", value = TRUE),
+          conditionalPanel(
+            condition = "input.wizardFractionated == false",
+            # Numeric entry for fraction
+            numericInput("wizardFraction", "", value = 1),
+            actionButton("addFraction", "Add fraction"),
+          ),
+          
+          # Hide buttons
+          shinyjs::hide("doneButton"),
+          # Show buttons
+          shinyjs::show("nextButton"),
+          shinyjs::show("backButton")
+        )
+      }
+      
+      # UI for the "Runs - TechRepMixture" page
+      wizard_techrepmixtures_ui <- function() {
+        fluidPage(
+          h2("Runs: Mixture Technical Replicates"),
+          "Select one or more rows and enter mixture technical replicate, or select \"No technical replicates\"",
+          DT::dataTableOutput("wizard_runs_table"),
+          checkboxInput("wizardReplicated", "No technical replicates", value = TRUE),
+          conditionalPanel(
+            condition = "input.wizardReplicated == false",
+            # Numeric entry for fraction
+            numericInput("wizardTechRepMixture", "", value = 1),
+            actionButton("addReplicate", "Add replicate"),
+          ),
+          
+          # Hide buttons
+          shinyjs::hide("doneButton"),
+          # Show buttons
+          shinyjs::show("nextButton"),
+          shinyjs::show("backButton")
         )
       }
       
@@ -234,7 +275,7 @@ observeEvent(input$launch_wizard, {
           # Hide "back" button on first page, and "next buttons from other pages.
           shinyjs::hide("backButton"),
           shinyjs::hide("nextButtonBioReplicates"),
-          shinyjs::hide("wizard_annotations_tsv"),
+          
           shinyjs::hide("doneWizard"),
           # Show conditions next button
           shinyjs::show("nextButtonConditions")
@@ -253,7 +294,7 @@ observeEvent(input$launch_wizard, {
 
           # Hide "next" buttons from other pages.
           shinyjs::hide("nextButtonConditions"),
-          shinyjs::hide("wizard_annotations_tsv"),
+          
           shinyjs::hide("doneWizard"),
           # Show "back" and bioreplicates "next" button
           shinyjs::show("nextButtonBioReplicates"),
@@ -261,29 +302,7 @@ observeEvent(input$launch_wizard, {
         )
       }
 
-      # UI for the "Fractions" page
-      fractions_wizard_ui <- function() {
-        fluidPage(
-          h2("Fractions"),
-          "Select one or more rows and enter fraction, or select \"Not fractionated\"",
-          DT::dataTableOutput("wizard_table"),
-          checkboxInput("wizardFractionated", "Not fractionated", value = TRUE),
-          conditionalPanel(
-            condition = "input.wizardFractionated == false",
-            # Numeric entry for fraction
-            numericInput("wizardFraction", "", value = 1),
-            actionButton("addFraction", "Add fraction"),
-          ),
-
-          # Hide "next" buttons from other pages
-          shinyjs::hide("nextButtonConditions"),
-          shinyjs::hide("nextButtonBioReplicates"),
-          # Show next and back button on subsequent pages
-          shinyjs::show("wizard_annotations_tsv"),
-          shinyjs::show("doneWizard"),
-          shinyjs::show("backButton")
-        )
-      }
+      
 
       # Launch wizard
       showModal(modalDialog(
@@ -292,7 +311,6 @@ observeEvent(input$launch_wizard, {
         footer = tagList(
           actionButton("backButton", "Back"),
           actionButton("nextButton", "Next"),
-          downloadButton("wizard_annotations_tsv", "Save as .tsv"),
           actionButton("doneButton", "Done"),
           modalButton("Dismiss")
         ),
