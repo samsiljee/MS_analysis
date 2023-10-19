@@ -1,5 +1,5 @@
 # Input
-# reactive UI
+# Reactive UI
 output$psm_input <- renderUI({
   fileInput("PSMs",
     switch(input$platform,
@@ -24,8 +24,8 @@ output$psm_input <- renderUI({
 
 # read in annotations
 annot_col <- reactive({
-  # Return a blank data.frame if there is no input to prevent errors showing
-  if ({
+  
+  if ({ # Only create annotations if there is data to work with, either uploaded or from wizard
     !is.null(input$annotations) |
       (!is.null(input$channel_annotations) & !is.null(input$run_annotations)) |
       !is.null(wizard_data())
@@ -33,22 +33,20 @@ annot_col <- reactive({
     # Input the annotations file
     df <- switch(input$quant_method,
       LFQ = {
-        # Import data or load from wizard and clean names
-        df <- if (!is.null(wizard_data())) {
-          eventReactive(input$doneWizard, {
+        df <- if (!is.null(wizard_data())) { # Load data from wizard
             df <- wizard_data()
 
             df
-          })
-        } else {
-          df <- clean_names(vroom(input$annotations$datapath), case = "upper_camel")
+        } else { # Import and clean uploaded data
+          df <- vroom(input$annotations$datapath) %>%
+            clean_names(case = "upper_camel")
 
-          # Change back "BioReplicate" and "TechRepMixture" column if required
+          # Change back "BioReplicate" column if required
           colnames(df)[grep("BioReplicate", colnames(df), ignore.case = TRUE)] <- "BioReplicate"
-          colnames(df)[grep("TechRepMixture", colnames(df), ignore.case = TRUE)] <- "TechRepMixture"
           
           df
         }
+        
         # Create column for PCA plot and heatmap
         df$PcaRef <- str_trim(as.character(df$Run))
         df$PcaRef <- gsub(".", "", df$PcaRef, fixed = TRUE)
@@ -88,7 +86,7 @@ annot_col <- reactive({
 
     df
   } else {
-    data.frame()
+    data.frame() # Return a blank data.frame if there is no input to prevent errors showing
   }
 })
 
@@ -126,7 +124,7 @@ raw <- reactive({
       }
     )
   } else {
-    data.frame()
+    data.frame() # Return a blank data.frame if there is no input to prevent errors showing
   }
 })
 

@@ -203,10 +203,10 @@ observeEvent(input$launch_wizard, {
         conditionalPanel(
           condition = "input.wizardFractionated == false",
           # Numeric entry for fraction
-          numericInput("wizardFraction", "", value = 1)
+          numericInput("wizardFraction", "", value = 1),
+          actionButton("addFraction", "Add fraction"),
         ),
-        actionButton("addFraction", "Add fraction"),
-
+       
         # Hide "next" buttons from other pages
         shinyjs::hide("nextButtonConditions"),
         shinyjs::hide("nextButtonBioReplicates"),
