@@ -1,3 +1,6 @@
+# Initialise data frame to store wizard data - initialised outside of the modal to make it globally available
+wizard_data <- reactiveVal(NULL)
+
 # Launch wizard
 observeEvent(input$launch_wizard, {
   if (nrow(raw()) != 0) { # only run wizard if the raw files are loaded
@@ -11,11 +14,11 @@ observeEvent(input$launch_wizard, {
           raw()$Run
         },
         MQ = {
-          if(length(raw()$Raw.file) != 0) {
+          if (length(raw()$Raw.file) != 0) {
             raw()$Raw.file
           } else {
             raw()$`Raw file`
-          } 
+          }
         }
       )
     ) %>%
@@ -25,16 +28,18 @@ observeEvent(input$launch_wizard, {
     wizard_conditions <- reactiveVal(rep(NA, length(wizard_runs)))
     wizard_bioreplicates <- reactiveVal(rep(NA, length(wizard_runs)))
     wizard_fractions <- reactiveVal(rep(NA, length(wizard_runs)))
-
-    # Initialise data frame to store wizard data
-    wizard_data <- reactive({
-      data.frame(
-        Run = wizard_runs,
-        Condition = wizard_conditions(),
-        BioReplicate = wizard_bioreplicates(),
-        Fraction = wizard_fractions()
+    
+    # Update wizard_data
+    observe({
+      wizard_data(
+        data.frame(
+          Run = wizard_runs,
+          Condition = wizard_conditions(),
+          BioReplicate = wizard_bioreplicates(),
+          Fraction = wizard_fractions()
+        )
       )
-    }) 
+    })
 
     # Render the data frame as a DataTable
     output$wizard_table <- DT::renderDataTable({
@@ -91,23 +96,21 @@ observeEvent(input$launch_wizard, {
 
     # Handler to edit Fraction
     observeEvent(input$addFraction, {
-      if (!is.null(selected_rows())) {
-        if (input$wizardFractionated) {
+      if (input$wizardFractionated) {
+        wizard_fractions(1)
+      } else {
+        if (!is.null(selected_rows())) {
           current_wizard_fractions <- wizard_fractions()
           current_wizard_fractions[selected_rows()] <- input$wizardFraction
           wizard_fractions(current_wizard_fractions)
         } else {
-          current_wizard_fractions <- wizard_fractions()
-          current_wizard_fractions <- 1
-          wizard_fractions(current_wizard_fractions)
+          showNotification(
+            "Please select one or more rows first",
+            type = "error",
+            duration = NULL,
+            closeButton = TRUE
+          )
         }
-      } else {
-        showNotification(
-          "Please select one or more rows first",
-          type = "error",
-          duration = NULL,
-          closeButton = TRUE
-        )
       }
     })
 
@@ -185,9 +188,9 @@ observeEvent(input$launch_wizard, {
         conditionalPanel(
           condition = "input.wizardFractionated == false",
           # Numeric entry for fraction
-          numericInput("wizardFraction", "", value = 1),
-          actionButton("addFraction", "Add fraction"),
+          numericInput("wizardFraction", "", value = 1)
         ),
+        actionButton("addFraction", "Add fraction"),
 
         # Hide "next" buttons from other pages
         shinyjs::hide("nextButtonConditions"),

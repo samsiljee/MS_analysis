@@ -25,17 +25,30 @@ output$psm_input <- renderUI({
 # read in annotations
 annot_col <- reactive({
   # Return a blank data.frame if there is no input to prevent errors showing
-  if (!is.null(input$annotations) | (!is.null(input$channel_annotations) & !is.null(input$run_annotations))) {
+  if ({
+    !is.null(input$annotations) |
+      (!is.null(input$channel_annotations) & !is.null(input$run_annotations)) |
+      !is.null(wizard_data())
+  }) {
     # Input the annotations file
     df <- switch(input$quant_method,
       LFQ = {
-        # Import data and clean names
-        df <- clean_names(vroom(input$annotations$datapath), case = "upper_camel")
-        
-        # Change back "BioReplicate" and "TechRepMixture" column if required
-        colnames(df)[grep("BioReplicate", colnames(df), ignore.case = TRUE)] <- "BioReplicate"
-        colnames(df)[grep("TechRepMixture", colnames(df), ignore.case = TRUE)] <- "TechRepMixture"
-        
+        # Import data or load from wizard and clean names
+        df <- if (!is.null(wizard_data())) {
+          eventReactive(input$doneWizard, {
+            df <- wizard_data()
+
+            df
+          })
+        } else {
+          df <- clean_names(vroom(input$annotations$datapath), case = "upper_camel")
+
+          # Change back "BioReplicate" and "TechRepMixture" column if required
+          colnames(df)[grep("BioReplicate", colnames(df), ignore.case = TRUE)] <- "BioReplicate"
+          colnames(df)[grep("TechRepMixture", colnames(df), ignore.case = TRUE)] <- "TechRepMixture"
+          
+          df
+        }
         # Create column for PCA plot and heatmap
         df$PcaRef <- str_trim(as.character(df$Run))
         df$PcaRef <- gsub(".", "", df$PcaRef, fixed = TRUE)
@@ -51,7 +64,7 @@ annot_col <- reactive({
 
         # Combine and clean names
         df <- clean_names(full_join(run_df, channel_df), case = "upper_camel")
-        
+
         # Change back "BioReplicate" and "TechRepMixture" column if required
         colnames(df)[grep("BioReplicate", colnames(df), ignore.case = TRUE)] <- "BioReplicate"
         colnames(df)[grep("TechRepMixture", colnames(df), ignore.case = TRUE)] <- "TechRepMixture"
