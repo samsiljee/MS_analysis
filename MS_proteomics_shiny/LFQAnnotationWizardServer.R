@@ -1,9 +1,6 @@
 # Initialise data frame to store wizard data - initialised outside of the modal to make it globally available
 wizard_data <- reactiveVal(NULL)
 
-# Initialise Selected rows outside of the modal to prevent error message coming up when fractions modal page loaded
-selected_rows <- reactiveVal(NULL)
-
 # Launch wizard
 observeEvent(input$launch_wizard, {
   if (input$quant_method == "LFQ") { # Only run for LFQ experiments
@@ -62,7 +59,8 @@ observeEvent(input$launch_wizard, {
         )
       })
 
-      # Update variable for selected rows
+      # Variable for selected rows
+      selected_rows <- reactiveVal(NULL)
       observe({
         selected_rows(input$wizard_table_rows_selected)
       })
@@ -127,10 +125,7 @@ observeEvent(input$launch_wizard, {
 
       # Event handler to change the page
       wizard_page <- reactiveVal(1)
-      observeEvent(input$nextButtonConditions, {
-        wizard_page(wizard_page() + 1)
-      })
-      observeEvent(input$nextButtonBioReplicates, {
+      observeEvent(input$nextButton, {
         wizard_page(wizard_page() + 1)
       })
       observeEvent(input$backButton, {
@@ -138,7 +133,7 @@ observeEvent(input$launch_wizard, {
       })
 
       # Event handler to close the modal with the "Done" button
-      observeEvent(input$doneWizard, {
+      observeEvent(input$doneButton, {
         removeModal()
       })
 
@@ -164,13 +159,12 @@ observeEvent(input$launch_wizard, {
           textInput("wizardCondition", "", ""),
           actionButton("addCondition", "Add condition"),
 
-          # Hide "back" button on first page, and "next buttons from other pages.
+          # Hide back, download, and done buttons
           shinyjs::hide("backButton"),
-          shinyjs::hide("nextButtonBioReplicates"),
           shinyjs::hide("wizard_annotations_tsv"),
-          shinyjs::hide("doneWizard"),
-          # Show conditions next button
-          shinyjs::show("nextButtonConditions")
+          shinyjs::hide("doneButton"),
+          # Show next button
+          shinyjs::show("nextButton")
         )
       }
 
@@ -184,12 +178,11 @@ observeEvent(input$launch_wizard, {
           textInput("wizardBioReplicates", "", ""),
           actionButton("addBioReplicate", "Add biological replicate"),
 
-          # Hide "next" buttons from other pages.
-          shinyjs::hide("nextButtonConditions"),
+          # Hide done and download buttons
           shinyjs::hide("wizard_annotations_tsv"),
-          shinyjs::hide("doneWizard"),
-          # Show "back" and bioreplicates "next" button
-          shinyjs::show("nextButtonBioReplicates"),
+          shinyjs::hide("doneButton"),
+          # Show next and back buttons
+          shinyjs::show("nextButton"),
           shinyjs::show("backButton")
         )
       }
@@ -208,12 +201,11 @@ observeEvent(input$launch_wizard, {
             actionButton("addFraction", "Add fraction"),
           ),
 
-          # Hide "next" buttons from other pages
-          shinyjs::hide("nextButtonConditions"),
-          shinyjs::hide("nextButtonBioReplicates"),
-          # Show next and back button on subsequent pages
+          # Hide "next" button
+          shinyjs::hide("nextButton"),
+          # Show other buttons
           shinyjs::show("wizard_annotations_tsv"),
-          shinyjs::show("doneWizard"),
+          shinyjs::show("doneButton"),
           shinyjs::show("backButton")
         )
       }
@@ -224,10 +216,9 @@ observeEvent(input$launch_wizard, {
         uiOutput("wizardPageContent"),
         footer = tagList(
           actionButton("backButton", "Back"),
-          actionButton("nextButtonConditions", "Next"),
-          actionButton("nextButtonBioReplicates", "Next"),
+          actionButton("nextButton", "Next"),
           downloadButton("wizard_annotations_tsv", "Save as .tsv"),
-          actionButton("doneWizard", "Done"),
+          actionButton("doneButton", "Done"),
           modalButton("Dismiss")
         ),
         size = "m",
