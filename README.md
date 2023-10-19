@@ -1,8 +1,6 @@
-# MS_analysis
-# (c) Sam Siljee
-# Created July 18th 2022
-
-A shiny app to analyse mass spectromtetry for proteomics data - from PSMs to visualisation.
+# Shiny app to analyse mass spectromtetry for proteomics data - from PSMs to visualisation.
+(c) Sam Siljee
+Created July 18th 2022
 
 ## How to use this app.
 1. Please download and install R and R studio

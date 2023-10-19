@@ -7,35 +7,38 @@ selected_rows <- reactiveVal(NULL)
 # Launch wizard
 observeEvent(input$launch_wizard, {
   if (nrow(raw()) != 0) { # only run wizard if the raw files are loaded
-    # Wizard "server"
     # Create variables
-
+    
     # Vector of unique runs from raw data
-    wizard_runs <- switch(input$platform,
-        PD = {
-          raw()$Run
-        },
-        MQ = {
-          if (length(raw()$Raw.file) != 0) {
-            raw()$Raw.file
-          } else {
-            raw()$`Raw file`
-          }
-        }
+    wizard_runs <- reactive({
+      switch(input$platform,
+             PD = {
+               raw()$Run
+             },
+             MQ = {
+               if (length(raw()$Raw.file) != 0) {
+                 raw()$Raw.file
+               } else {
+                 raw()$`Raw file`
+               }
+             }
       ) %>%
         unique() %>%
         sort()
-
+    })
+    
     # Initialise blank columns for data frame
-    wizard_conditions <- reactiveVal(rep(NA, length(wizard_runs)))
-    wizard_bioreplicates <- reactiveVal(rep(NA, length(wizard_runs)))
-    wizard_fractions <- reactiveVal(rep(NA, length(wizard_runs)))
+    wizard_conditions <- reactiveVal(rep(NA, length(wizard_runs())))
+    wizard_bioreplicates <- reactiveVal(rep(NA, length(wizard_runs())))
+    wizard_fractions <- reactiveVal(rep(NA, length(wizard_runs())))
+    
+    # Wizard "server"
 
     # Update wizard_data
     observe({
       wizard_data(
         data.frame(
-          Run = wizard_runs,
+          Run = wizard_runs(),
           Condition = wizard_conditions(),
           BioReplicate = wizard_bioreplicates(),
           Fraction = wizard_fractions()
@@ -97,27 +100,27 @@ observeEvent(input$launch_wizard, {
 
     # Handler to edit Fraction if adding fractions manually
     observeEvent(input$addFraction, {
-        if (!is.null(selected_rows())) {
-          current_wizard_fractions <- wizard_fractions()
-          current_wizard_fractions[selected_rows()] <- input$wizardFraction
-          wizard_fractions(current_wizard_fractions)
-        } else {
-          # Handle the case when no rows are selected
-          showNotification(
-            "Please select one or more rows first",
-            type = "error",
-            duration = NULL,
-            closeButton = TRUE
-          )
-        }
+      if (!is.null(selected_rows())) {
+        current_wizard_fractions <- wizard_fractions()
+        current_wizard_fractions[selected_rows()] <- input$wizardFraction
+        wizard_fractions(current_wizard_fractions)
+      } else {
+        # Handle the case when no rows are selected
+        showNotification(
+          "Please select one or more rows first",
+          type = "error",
+          duration = NULL,
+          closeButton = TRUE
+        )
+      }
     })
-    
+
     # Handler to edit Fraction if not fractionated
     observeEvent(input$wizardFractionated, {
       if (input$wizardFractionated) {
         wizard_fractions(1)
       } else {
-        wizard_fractions(rep(NA, length(wizard_runs)))
+        wizard_fractions(rep(NA, length(wizard_runs())))
       }
     })
 
@@ -132,10 +135,9 @@ observeEvent(input$launch_wizard, {
     observeEvent(input$backButton, {
       wizard_page(wizard_page() - 1)
     })
-    
-    # Event handler for the "Done" button
+
+    # Event handler to close the modal with the "Done" button
     observeEvent(input$doneWizard, {
-      # Close the modal
       removeModal()
     })
 
