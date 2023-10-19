@@ -105,12 +105,12 @@ observeEvent(input$launch_wizard, {
           current_wizard_fractions[selected_rows()] <- input$wizardFraction
           wizard_fractions(current_wizard_fractions)
         } else {
-          # showNotification(
-          #   "Please select one or more rows first",
-          #   type = "error",
-          #   duration = NULL,
-          #   closeButton = TRUE
-          # )
+          showNotification(
+            "Please select one or more rows first",
+            type = "error",
+            duration = NULL,
+            closeButton = TRUE
+          )
         }
       }
     })
@@ -125,6 +125,12 @@ observeEvent(input$launch_wizard, {
     })
     observeEvent(input$backButton, {
       wizard_page(wizard_page() - 1)
+    })
+    
+    # Event handler for the "Done" button
+    observeEvent(input$doneWizard, {
+      # Close the modal
+      removeModal()
     })
 
     # Render the current wizard page
