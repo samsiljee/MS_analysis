@@ -192,8 +192,11 @@ observeEvent(input$launch_wizard, {
         output$wizardPageContent <- renderUI({
           switch(wizard_page(),
             "1" = (wizard_mixtures_ui()),
-            "2" = (bio_replicates_wizard_ui()),
-            "3" = (fractions_wizard_ui())
+            "2" = (wizard_fractions_ui()),
+            "3" = (wizard_techrepmixtures_ui()),
+            "4" = (wizard_channels_ui()),
+            "5" = (wizard_conditions_ui()),
+            "6" = (wizard_bioreplicates_ui()),
           )
         })
       })
@@ -206,16 +209,15 @@ observeEvent(input$launch_wizard, {
           # Text entry for conditions
           "Select one or more rows, and enter mixture below:",
           DT::dataTableOutput("wizard_runs_table"),
-          numericInput("wizardMixture", value = 1),
+          numericInput("wizardMixture", "", value = 1),
           actionButton("addMixture", "Add mixture"),
 
-          # Hide "back" button on first page, and "next buttons from other pages.
+          # Hide back, download and done buttons
           shinyjs::hide("backButton"),
-          shinyjs::hide("nextButtonBioReplicates"),
           shinyjs::hide("wizard_annotations_tsv"),
           shinyjs::hide("doneWizard"),
-          # Show conditions next button
-          shinyjs::show("nextButtonConditions")
+          # Show next button
+          shinyjs::show("nextButton")
         )
       }
       
