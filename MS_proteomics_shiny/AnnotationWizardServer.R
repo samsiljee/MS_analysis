@@ -8,8 +8,7 @@ observeEvent(input$launch_wizard, {
     # Create variables
 
     # Vector of unique runs from raw data
-    wizard_runs <- unique(
-      switch(input$platform,
+    wizard_runs <- switch(input$platform,
         PD = {
           raw()$Run
         },
@@ -20,15 +19,15 @@ observeEvent(input$launch_wizard, {
             raw()$`Raw file`
           }
         }
-      )
-    ) %>%
-      sort()
+      ) %>%
+        unique() %>%
+        sort()
 
     # Initialise blank columns for data frame
     wizard_conditions <- reactiveVal(rep(NA, length(wizard_runs)))
     wizard_bioreplicates <- reactiveVal(rep(NA, length(wizard_runs)))
     wizard_fractions <- reactiveVal(rep(NA, length(wizard_runs)))
-    
+
     # Update wizard_data
     observe({
       wizard_data(
@@ -95,7 +94,7 @@ observeEvent(input$launch_wizard, {
     })
 
     # Handler to edit Fraction
-    observeEvent(input$addFraction, {
+    observeEvent(c(input$addFraction, input$wizardFractionated), {
       if (input$wizardFractionated) {
         wizard_fractions(1)
       } else {
