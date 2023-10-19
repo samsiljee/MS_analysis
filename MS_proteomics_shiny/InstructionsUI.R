@@ -1,5 +1,7 @@
 InstructionsUI <- tabPanel(
   "Instructions",
+  "Welcome to my proteomics analysis pipeline.", br(),
+  "Please move sequentially through the tabs to complete the pipeline. Analysis however can be skipped if desired, however not all plots will be available in the visualisation tab.", br(),
   radioButtons("platform",
     "Search platform",
     choiceNames = c("Proteome Discoverer", "MaxQuant"),
@@ -9,8 +11,7 @@ InstructionsUI <- tabPanel(
     "Quantitation method",
     choices = c("LFQ", "TMT")
   ),
-  "Welcome to my proteomics analysis pipeline.",
-  "Please move sequentially through the tabs to complete the pipeline. Analysis however can be skipped if desired, however not all plots will be available in the visualisation tab.", br(),
+ 
   hr(style = "border-top: 2px solid #000000;"),
   conditionalPanel(
     condition = "input.quant_method == 'LFQ'",
@@ -22,7 +23,7 @@ InstructionsUI <- tabPanel(
   ),
   conditionalPanel(
     condition = "input.quant_method == 'TMT'",
-    "Please prepare two annotation files as .tsv or .csv with the following columns:", br(),
+    "Please use the annotation wizard on the \"Input\" tab to create an annotation file, or prepare two annotation files as .tsv or .csv with the following columns:", br(),
     h4("Run annotations"),
     "\"Run\" exact filenames of the raw data files, with .raw extension for PD, and without for MQ.", br(),
     "\"Mixture\" batch or mixture of TMT channels. Set all to 1 if only one mixture was run.", br(),
