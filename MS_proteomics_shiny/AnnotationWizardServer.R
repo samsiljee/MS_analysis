@@ -95,16 +95,14 @@ observeEvent(input$launch_wizard, {
       }
     })
 
-    # Handler to edit Fraction
-    observeEvent(c(input$addFraction, input$wizardFractionated), {
-      if (input$wizardFractionated) {
-        wizard_fractions(1)
-      } else {
+    # Handler to edit Fraction if adding fractions manually
+    observeEvent(input$addFraction, {
         if (!is.null(selected_rows())) {
           current_wizard_fractions <- wizard_fractions()
           current_wizard_fractions[selected_rows()] <- input$wizardFraction
           wizard_fractions(current_wizard_fractions)
         } else {
+          # Handle the case when no rows are selected
           showNotification(
             "Please select one or more rows first",
             type = "error",
@@ -112,6 +110,14 @@ observeEvent(input$launch_wizard, {
             closeButton = TRUE
           )
         }
+    })
+    
+    # Handler to edit Fraction if not fractionated
+    observeEvent(input$wizardFractionated, {
+      if (input$wizardFractionated) {
+        wizard_fractions(1)
+      } else {
+        wizard_fractions(rep(NA, length(wizard_runs)))
       }
     })
 
@@ -191,7 +197,7 @@ observeEvent(input$launch_wizard, {
         h2("Fractions"),
         "Select one or more rows and enter fraction, or select \"Not fractionated\"",
         DT::dataTableOutput("wizard_table"),
-        checkboxInput("wizardFractionated", "Not fractionated"),
+        checkboxInput("wizardFractionated", "Not fractionated", value = TRUE),
         conditionalPanel(
           condition = "input.wizardFractionated == false",
           # Numeric entry for fraction
