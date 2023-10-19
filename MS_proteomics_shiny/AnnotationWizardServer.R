@@ -1,6 +1,9 @@
 # Initialise data frame to store wizard data - initialised outside of the modal to make it globally available
 wizard_data <- reactiveVal(NULL)
 
+# Initialise Selected rows outside of the modal to prevent error message coming up when fractions modal page loaded
+selected_rows <- reactiveVal(NULL)
+
 # Launch wizard
 observeEvent(input$launch_wizard, {
   if (nrow(raw()) != 0) { # only run wizard if the raw files are loaded
@@ -55,8 +58,7 @@ observeEvent(input$launch_wizard, {
       )
     })
 
-    # initialise and update variable for selected rows
-    selected_rows <- reactiveVal(NULL)
+    # Update variable for selected rows
     observe({
       selected_rows(input$wizard_table_rows_selected)
     })
@@ -103,12 +105,12 @@ observeEvent(input$launch_wizard, {
           current_wizard_fractions[selected_rows()] <- input$wizardFraction
           wizard_fractions(current_wizard_fractions)
         } else {
-          showNotification(
-            "Please select one or more rows first",
-            type = "error",
-            duration = NULL,
-            closeButton = TRUE
-          )
+          # showNotification(
+          #   "Please select one or more rows first",
+          #   type = "error",
+          #   duration = NULL,
+          #   closeButton = TRUE
+          # )
         }
       }
     })
