@@ -24,7 +24,7 @@ options(shiny.maxRequestSize = 30 * 1024^3)
 server <- function(input, output, session) {
   # Source files
   source("LFQAnnotationWizardServer.R", local = TRUE)
-  # source("TMTAnnotationWizardServer.R", local = TRUE)
+  source("TMTAnnotationWizardServer.R", local = TRUE)
   source("InputServer.R", local = TRUE)
   source("FormatServer.R", local = TRUE)
   source("ProcessServer.R", local = TRUE)
