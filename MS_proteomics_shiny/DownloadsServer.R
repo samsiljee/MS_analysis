@@ -1,11 +1,21 @@
 # Downloads
-# .tsv files from annotation wizard
+# .tsv files from LFQ annotation wizard
 output$wizard_annotations_tsv <- downloadHandler(
   filename = function() {
     paste0("Annotations_", Sys.Date(), ".tsv")
   },
   content = function(file) {
     vroom_write(wizard_data(), file, delim = "\t")
+  }
+)
+
+# .tsv runs files from TMT annotation wizard
+output$wizard_runs_annotations_tsv <- downloadHandler(
+  filename = function() {
+    paste0("Runs_annotations_", Sys.Date(), ".tsv")
+  },
+  content = function(file) {
+    vroom_write(wizard_runs_data(), file, delim = "\t")
   }
 )
 

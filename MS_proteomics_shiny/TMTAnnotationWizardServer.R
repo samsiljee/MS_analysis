@@ -213,6 +213,7 @@ observeEvent(input$launch_wizard, {
           # Hide buttons
           shinyjs::hide("backButton"),
           shinyjs::hide("doneButton"),
+          shinyjs::hide("wizard_runs_annotations_tsv"),
           # Show buttons
           shinyjs::show("nextButton")
         )
@@ -234,6 +235,7 @@ observeEvent(input$launch_wizard, {
           
           # Hide buttons
           shinyjs::hide("doneButton"),
+          shinyjs::hide("wizard_runs_annotations_tsv"),
           # Show buttons
           shinyjs::show("nextButton"),
           shinyjs::show("backButton")
@@ -257,6 +259,7 @@ observeEvent(input$launch_wizard, {
           # Hide buttons
           shinyjs::hide("doneButton"),
           # Show buttons
+          shinyjs::show("wizard_runs_annotations_tsv"),
           shinyjs::show("nextButton"),
           shinyjs::show("backButton")
         )
@@ -311,6 +314,7 @@ observeEvent(input$launch_wizard, {
         footer = tagList(
           actionButton("backButton", "Back"),
           actionButton("nextButton", "Next"),
+          downloadButton("wizard_runs_annotations_tsv", "Save run annotations"),
           actionButton("doneButton", "Done"),
           modalButton("Dismiss")
         ),
