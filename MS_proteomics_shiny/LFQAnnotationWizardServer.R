@@ -1,3 +1,6 @@
+# Source script for UI elements
+
+
 # Initialise data frame to store wizard data - initialised outside of the modal to make it globally available
 wizard_data <- reactiveVal(NULL)
 
@@ -147,68 +150,6 @@ observeEvent(input$launch_wizard, {
           )
         })
       })
-
-      # Wizard "UI"
-      # UI for the "Conditions" page
-      conditions_wizard_ui <- function() {
-        fluidPage(
-          h2("Conditions"),
-          # Text entry for conditions
-          "Select one or more rows, and enter condition below:",
-          DT::dataTableOutput("wizard_table"),
-          textInput("wizardCondition", "", ""),
-          actionButton("addCondition", "Add condition"),
-
-          # Hide back, download, and done buttons
-          shinyjs::hide("backButton"),
-          shinyjs::hide("wizard_annotations_tsv"),
-          shinyjs::hide("doneButton"),
-          # Show next button
-          shinyjs::show("nextButton")
-        )
-      }
-
-      # UI for the "BioReplicates" page
-      bio_replicates_wizard_ui <- function() {
-        fluidPage(
-          h2("Biological replicates"),
-          # Text entry for biological replicates
-          "Select one or more rows, and enter biological replicate below:",
-          DT::dataTableOutput("wizard_table"),
-          textInput("wizardBioReplicates", "", ""),
-          actionButton("addBioReplicate", "Add biological replicate"),
-
-          # Hide done and download buttons
-          shinyjs::hide("wizard_annotations_tsv"),
-          shinyjs::hide("doneButton"),
-          # Show next and back buttons
-          shinyjs::show("nextButton"),
-          shinyjs::show("backButton")
-        )
-      }
-
-      # UI for the "Fractions" page
-      fractions_wizard_ui <- function() {
-        fluidPage(
-          h2("Fractions"),
-          "Select one or more rows and enter fraction, or select \"Not fractionated\"",
-          DT::dataTableOutput("wizard_table"),
-          checkboxInput("wizardFractionated", "Not fractionated", value = TRUE),
-          conditionalPanel(
-            condition = "input.wizardFractionated == false",
-            # Numeric entry for fraction
-            numericInput("wizardFraction", "", value = 1),
-            actionButton("addFraction", "Add fraction"),
-          ),
-
-          # Hide "next" button
-          shinyjs::hide("nextButton"),
-          # Show other buttons
-          shinyjs::show("wizard_annotations_tsv"),
-          shinyjs::show("doneButton"),
-          shinyjs::show("backButton")
-        )
-      }
 
       # Launch wizard
       showModal(modalDialog(
