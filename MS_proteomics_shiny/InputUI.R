@@ -2,7 +2,7 @@ InputUI <- tabPanel(
   "Input",
   sidebarPanel(
     h4("Input files"),
-    
+
     # Raw files input
     uiOutput("psm_input"),
     conditionalPanel(
@@ -15,36 +15,35 @@ InputUI <- tabPanel(
         placeholder = "Upload proteinGroups.txt"
       )
     ),
-    
     hr(style = "border-top: 2px solid #000000;"),
-    
+
     # LFQ annotations
     conditionalPanel(
       condition = "input.quant_method == 'LFQ'",
       fileInput("annotations", "Annotations file",
-                buttonLabel = "Browse",
-                placeholder = "Upload annotations"
+        buttonLabel = "Browse",
+        placeholder = "Upload annotations"
       )
     ),
-    
+
     # TMT annotations
     conditionalPanel(
       condition = "input.quant_method == 'TMT'",
       fileInput("channel_annotations", "Channel annotations file",
-                buttonLabel = "Browse",
-                placeholder = "Upload channel annotations"
+        buttonLabel = "Browse",
+        placeholder = "Upload channel annotations"
       ),
       fileInput("run_annotations", "Run annotations file",
-                buttonLabel = "Browse",
-                placeholder = "Upload run annotations"
+        buttonLabel = "Browse",
+        placeholder = "Upload run annotations"
       )
     ),
-    
+
     # Annotations wizard
-    actionButton("launch_wizard", "Launch annotation wizard")
+    uiOutput("wizard_launch")
     
   ), # sidebar panel
-  
+
   mainPanel(
     h3("Annotations"),
     withSpinner(dataTableOutput("annotation_tab")),

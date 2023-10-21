@@ -22,9 +22,15 @@ output$psm_input <- renderUI({
   )
 })
 
+# Wizard button
+output$wizard_launch <- renderUI(
+  if (is.null(annot_col())) {
+    actionButton("launch_wizard", "Launch annotation wizard")
+  }
+)
+
 # read in annotations
 annot_col <- reactive({
-  
   if ({ # Only create annotations if there is data to work with, either uploaded or from wizard
     !is.null(input$annotations) |
       (!is.null(input$channel_annotations) & !is.null(input$run_annotations)) |
@@ -34,19 +40,19 @@ annot_col <- reactive({
     df <- switch(input$quant_method,
       LFQ = {
         df <- if (!is.null(wizard_data())) { # Load data from wizard
-            df <- wizard_data()
+          df <- wizard_data()
 
-            df
+          df
         } else { # Import and clean uploaded data
           df <- vroom(input$annotations$datapath) %>%
             clean_names(case = "upper_camel")
 
           # Change back "BioReplicate" column if required
           colnames(df)[grep("BioReplicate", colnames(df), ignore.case = TRUE)] <- "BioReplicate"
-          
+
           df
         }
-        
+
         # Create column for PCA plot and heatmap
         df$PcaRef <- str_trim(as.character(df$Run))
         df$PcaRef <- gsub(".", "", df$PcaRef, fixed = TRUE)
@@ -86,7 +92,7 @@ annot_col <- reactive({
 
     df
   } else {
-    data.frame() # Return a blank data.frame if there is no input to prevent errors showing
+    NULL # Return NULL if there is no input to prevent errors showing
   }
 })
 
