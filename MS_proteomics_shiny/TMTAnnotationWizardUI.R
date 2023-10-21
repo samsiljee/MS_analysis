@@ -85,6 +85,8 @@ wizard_channels_ui <- function() {
             )
         ),
         checkboxInput("wizardCustomPlex", "Custom channels", value = FALSE),
+        verbatimTextOutput("channels_test"),
+        DT::dataTableOutput("wizard_channels_table"),
         # Hide buttons
         shinyjs::hide("doneButton"),
         shinyjs::hide("wizard_runs_annotations_tsv"),
@@ -101,7 +103,7 @@ wizard_conditions_ui <- function() {
         "Select one or more rows, and enter condition below:",
         textInput("wizardCondition", "", ""),
         actionButton("addCondition", "Add condition"),
-        
+
         # Hide "back" button on first page, and "next buttons from other pages.
         shinyjs::hide("backButton"),
         shinyjs::hide("nextButtonBioReplicates"),
@@ -111,14 +113,14 @@ wizard_conditions_ui <- function() {
     )
 }
 
-wizard_bio_replicates_ui <- function() {
+wizard_bioreplicates_ui <- function() {
     fluidPage(
         h2("Biological replicates"),
         # Text entry for biological replicates
         "Select one or more rows, and enter biological replicate below:",
         textInput("wizardBioReplicates", "", ""),
         actionButton("addBioReplicate", "Add biological replicate"),
-        
+
         # Hide "next" buttons from other pages.
         shinyjs::hide("nextButtonConditions"),
         shinyjs::hide("doneWizard"),

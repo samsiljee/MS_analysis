@@ -1,9 +1,5 @@
 # Variables ----
 
-# Initialise data frames to store wizard data - initialised outside of the modal to make it globally available
-wizard_runs_data <- reactiveVal(NULL)
-wizard_channels_data <- reactiveVal(NULL)
-
 # list of TMT Plexes
 TMT_vector <- c(
   "126",
@@ -18,6 +14,10 @@ TMT_Plexes <- list(
   TMT_6 = as.character(126:131),
   TMT_2 = c("126", "127")
 )
+
+# Initialise data frames to store wizard data - initialised outside of the modal to make it globally available
+wizard_runs_data <- reactiveVal(NULL)
+wizard_channels_data <- reactiveVal(NULL)
 
 # Launch wizard
 observeEvent(input$launch_wizard, {
@@ -96,19 +96,19 @@ observeEvent(input$launch_wizard, {
       })
 
       # Render the channel level data frame as a DataTable
-      # output$wizard_channels_table <- DT::renderDataTable({
-      #   datatable(
-      #     wizard_channels_data(),
-      #     options = list(
-      #       dom = "t",
-      #       paging = FALSE,
-      #       ordering = FALSE
-      #     ),
-      #     rownames = FALSE,
-      #     editable = TRUE,
-      #     class = "cell-border stripe"
-      #   )
-      # })
+      output$wizard_channels_table <- DT::renderDataTable({
+        datatable(
+          wizard_channels_data(),
+          options = list(
+            dom = "t",
+            paging = FALSE,
+            ordering = FALSE
+          ),
+          rownames = FALSE,
+          editable = TRUE,
+          class = "cell-border stripe"
+        )
+      })
 
       # Variable for selected rows, for runs and channels
       runs_selected_rows <- reactiveVal(NULL)
@@ -116,11 +116,11 @@ observeEvent(input$launch_wizard, {
         runs_selected_rows(input$wizard_runs_table_rows_selected)
       })
       channels_selected_rows <- reactiveVal(NULL)
-      # observe({
-      #   channels_selected_rows(input$wizard_channels_table_rows_selected)
-      # })
+      observe({
+        channels_selected_rows(input$wizard_channels_table_rows_selected)
+      })
 
-      # Handlers for page data ----
+      # Runs handlers ----
       
       # Handler to edit Run mixtures
       observeEvent(input$addMixture, {
@@ -189,31 +189,23 @@ observeEvent(input$launch_wizard, {
           wizard_techrepmixtures(rep(NA, length(wizard_runs())))
         }
       })
-
+      
+      # Channels handlers ----
+      
       # Update mixtures for the channels table
-      observe({
-        wizard_channels_mixtures()
-      })
-
-      # Update channels
-      observe({
-        wizard_channels(TMT_Plexes[input$wizardPlexSelected])
+      observeEvent(input$wizardPlexSelected, {
+        mixtures_list <- rep(
+          unique(wizard_runs_mixtures()),
+          each = length(TMT_Plexes[[input$wizardPlexSelected]]))
+        wizard_channels_mixtures(mixtures_list)
       })
       
-      observeEvent(input$addReplicate, {
-        if (!is.null(runs_selected_rows())) {
-          current_wizard_techrepmixtures <- wizard_techrepmixtures()
-          current_wizard_techrepmixtures[runs_selected_rows()] <- input$wizardTechRepMixture
-          wizard_techrepmixtures(current_wizard_techrepmixtures)
-        } else {
-          # Handle the case when no rows are selected
-          showNotification(
-            "Please select one or more rows first",
-            type = "error",
-            duration = NULL,
-            closeButton = TRUE
-          )
-        }
+      # Update mixtures for the channels table
+      observeEvent(input$wizardPlexSelected, {
+        channels_list <- rep(TMT_Plexes[[input$wizardPlexSelected]], wizard_runs_mixtures() %>%
+                               unique() %>%
+                               length())
+        wizard_channels(channels_list)
       })
 
       # Event handler to change the page
@@ -229,6 +221,8 @@ observeEvent(input$launch_wizard, {
       observeEvent(input$doneButton, {
         removeModal()
       })
+
+      # Run the modal ----
 
       # Render the current wizard page
       observe({
