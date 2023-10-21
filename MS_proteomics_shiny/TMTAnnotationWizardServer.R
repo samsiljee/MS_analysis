@@ -2,6 +2,21 @@
 wizard_runs_data <- reactiveVal(NULL)
 wizard_channels_data <- reactiveVal(NULL)
 
+# list of TMT Plexes
+TMT_vector <- c(
+  "126",
+  paste0(rep(127:134, each = 2), c("N", "C")),
+  "135N"
+)
+TMT_Plexes <- list(
+  TMTPro_18 = TMT_vector,
+  TMTPro_16 = TMT_vector[1:16],
+  TMT_11 = TMT_vector[1:11],
+  TMT_10 = c(TMT_vector[1:9], "131"),
+  TMT_6 = as.character(126:131),
+  TMT_2 = c("126", "127")
+)
+
 # Launch wizard
 observeEvent(input$launch_wizard, {
   if (input$quant_method == "TMT") { # Only run for TMT experiments
@@ -28,14 +43,14 @@ observeEvent(input$launch_wizard, {
 
       # Initialise blank columns for runs data frame
       wizard_runs_mixtures <- reactiveVal(rep(NA, length(wizard_runs())))
-      wizard_fractions <- reactiveVal(rep(NA, length(wizard_runs())))
-      wizard_techrepmixtures <- reactiveVal(rep(NA, length(wizard_runs())))
-      
+      wizard_fractions <- reactiveVal(NA)
+      wizard_techrepmixtures <- reactiveVal(NA)
+
       # Initialise blank columns for channels data frame
-      wizard_channels_mixtures <- reactiveVal(rep(NA, length(wizard_runs())))
-      wizard_channels <- reactiveVal(rep(NA, length(wizard_runs())))
-      wizard_conditions <- reactiveVal(rep(NA, length(wizard_runs())))
-      wizard_bioreplicates <- reactiveVal(rep(NA, length(wizard_runs())))
+      wizard_channels_mixtures <- reactiveVal(NA)
+      wizard_channels <- reactiveVal(NA)
+      wizard_conditions <- reactiveVal(NA)
+      wizard_bioreplicates <- reactiveVal(NA)
 
       # Wizard "server"----
 
@@ -50,7 +65,7 @@ observeEvent(input$launch_wizard, {
           )
         )
       })
-      
+
       # Update wizard_channels_data
       observe({
         wizard_channels_data(
@@ -77,7 +92,7 @@ observeEvent(input$launch_wizard, {
           class = "cell-border stripe"
         )
       })
-      
+
       # Render the channel level data frame as a DataTable
       output$wizard_channels_table <- DT::renderDataTable({
         datatable(
@@ -102,7 +117,7 @@ observeEvent(input$launch_wizard, {
       observe({
         channels_selected_rows(input$wizard_channels_table_rows_selected)
       })
-      
+
       # Handler to edit Run mixtures
       observeEvent(input$addMixture, {
         if (!is.null(runs_selected_rows())) {
@@ -144,7 +159,7 @@ observeEvent(input$launch_wizard, {
           wizard_fractions(rep(NA, length(wizard_runs())))
         }
       })
-      
+
       # Handler to edit TechRepMixture if adding replicates manually
       observeEvent(input$addReplicate, {
         if (!is.null(runs_selected_rows())) {
@@ -161,13 +176,39 @@ observeEvent(input$launch_wizard, {
           )
         }
       })
-      
+
       # Handler to edit TechRepMixture if not replicated
       observeEvent(input$wizardReplicated, {
         if (input$wizardReplicated) {
           wizard_techrepmixtures(1)
         } else {
           wizard_techrepmixtures(rep(NA, length(wizard_runs())))
+        }
+      })
+
+      # Update mixtures for the channels table
+      observe({
+        wizard_channels_mixtures()
+      })
+
+      # Update channels
+      observe({
+        wizard_channels(TMT_Plexes[input$wizardPlexSelected])
+      })
+      
+      observeEvent(input$addReplicate, {
+        if (!is.null(runs_selected_rows())) {
+          current_wizard_techrepmixtures <- wizard_techrepmixtures()
+          current_wizard_techrepmixtures[runs_selected_rows()] <- input$wizardTechRepMixture
+          wizard_techrepmixtures(current_wizard_techrepmixtures)
+        } else {
+          # Handle the case when no rows are selected
+          showNotification(
+            "Please select one or more rows first",
+            type = "error",
+            duration = NULL,
+            closeButton = TRUE
+          )
         }
       })
 
@@ -218,7 +259,7 @@ observeEvent(input$launch_wizard, {
           shinyjs::show("nextButton")
         )
       }
-      
+
       # UI for the "Runs - Fractions" page
       wizard_fractions_ui <- function() {
         fluidPage(
@@ -232,7 +273,7 @@ observeEvent(input$launch_wizard, {
             numericInput("wizardFraction", "", value = 1),
             actionButton("addFraction", "Add fraction"),
           ),
-          
+
           # Hide buttons
           shinyjs::hide("doneButton"),
           shinyjs::hide("wizard_runs_annotations_tsv"),
@@ -241,7 +282,7 @@ observeEvent(input$launch_wizard, {
           shinyjs::show("backButton")
         )
       }
-      
+
       # UI for the "Runs - TechRepMixture" page
       wizard_techrepmixtures_ui <- function() {
         fluidPage(
@@ -255,7 +296,7 @@ observeEvent(input$launch_wizard, {
             numericInput("wizardTechRepMixture", "", value = 1),
             actionButton("addReplicate", "Add replicate"),
           ),
-          
+
           # Hide buttons
           shinyjs::hide("doneButton"),
           # Show buttons
@@ -264,9 +305,41 @@ observeEvent(input$launch_wizard, {
           shinyjs::show("backButton")
         )
       }
-      
+
+      # UI for the channels page
+      wizard_channels_ui <- function() {
+        fluidPage(
+          h2("Channels: Channels"),
+          "Select TMT plex, or enter custom channels",
+          conditionalPanel(
+            condition = "input.wizardCustomPlex == false",
+            selectInput("wizardPlexSelected",
+              "",
+              c(
+                "TMTPro 18-plex" = "TMTPro_18",
+                "TMTPro 16-plex" = "TMTPro_16",
+                "TMT 11-plex" = "TMT_11",
+                "TMT 10-plex" = "TMT_10",
+                "TMT 6-plex" = "TMT_6",
+                "TMT 2-plex" = "TMT_2"
+              ),
+              multiple = FALSE
+            )
+          ),
+          checkboxInput("wizardCustomPlex", "Custom channels", value = FALSE),
+          DT::dataTableOutput("wizard_channels_table"),
+
+          # Hide buttons
+          shinyjs::hide("doneButton"),
+          shinyjs::hide("wizard_runs_annotations_tsv"),
+          # Show buttons
+          shinyjs::show("nextButton"),
+          shinyjs::show("backButton")
+        )
+      }
+
       # UI for the "Conditions" page
-      conditions_wizard_ui <- function() {
+      wizard_conditions_ui <- function() {
         fluidPage(
           h2("Conditions"),
           # Text entry for conditions
@@ -274,11 +347,10 @@ observeEvent(input$launch_wizard, {
           DT::dataTableOutput("wizard_table"),
           textInput("wizardCondition", "", ""),
           actionButton("addCondition", "Add condition"),
-          
+
           # Hide "back" button on first page, and "next buttons from other pages.
           shinyjs::hide("backButton"),
           shinyjs::hide("nextButtonBioReplicates"),
-          
           shinyjs::hide("doneWizard"),
           # Show conditions next button
           shinyjs::show("nextButtonConditions")
@@ -297,15 +369,12 @@ observeEvent(input$launch_wizard, {
 
           # Hide "next" buttons from other pages.
           shinyjs::hide("nextButtonConditions"),
-          
           shinyjs::hide("doneWizard"),
           # Show "back" and bioreplicates "next" button
           shinyjs::show("nextButtonBioReplicates"),
           shinyjs::show("backButton")
         )
       }
-
-      
 
       # Launch wizard
       showModal(modalDialog(
