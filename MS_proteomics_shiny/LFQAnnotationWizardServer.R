@@ -172,6 +172,6 @@ observeEvent(input$launch_wizard, {
         duration = NULL,
         closeButton = TRUE
       )
-    }
-  }
+    } # Close warning if no raw data is uploaded
+  } # Close catch to run only if method quant method is LFQ
 }) # Close launch wizard

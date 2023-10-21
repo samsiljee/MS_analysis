@@ -41,7 +41,7 @@ InputUI <- tabPanel(
     ),
     
     # Annotations wizard
-    actionButton("launch_wizard", "Or, launch annotations wizard")
+    actionButton("launch_wizard", "Launch annotation wizard")
     
   ), # sidebar panel
   
