@@ -33,6 +33,10 @@ server <- function(input, output, session) {
   source("VisualisationServer.R", local = TRUE)
   source("QCServer.R", local = TRUE)
   source("DownloadsServer.R", local = TRUE)
+  
+  # Source files for Wizard UI elements
+  source("LFQAnnotationWizardUI.R", local = TRUE)
+  source("TMTAnnotationWizardUI.R", local = TRUE)
 
   # Load packages depending on input selected
   observeEvent(input$quant_method, {
