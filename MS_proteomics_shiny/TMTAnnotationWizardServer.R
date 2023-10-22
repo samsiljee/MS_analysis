@@ -53,6 +53,9 @@ observeEvent(input$launch_wizard, {
       wizard_channels <- reactiveVal(NA)
       wizard_conditions <- reactiveVal(NA)
       wizard_bioreplicates <- reactiveVal(NA)
+      
+      # Vector of custom channels
+      wizard_custom_channels <- reactiveVal(NA)
 
       # Wizard "server"----
 
@@ -196,16 +199,54 @@ observeEvent(input$launch_wizard, {
       observeEvent(input$wizardPlexSelected, {
         mixtures_list <- rep(
           unique(wizard_runs_mixtures()),
-          each = length(TMT_Plexes[[input$wizardPlexSelected]]))
+          each = if(input$wizardCustomPlex) {
+            length(wizard_custom_channels())
+          } else {
+            length(TMT_Plexes[[input$wizardPlexSelected]])
+            })
         wizard_channels_mixtures(mixtures_list)
       })
       
-      # Update mixtures for the channels table
+      # Update custom channels vector
+      observeEvent(input$addCustomChannels, {
+        wizard_custom_channels(input$wizardCustomChannels %>%
+                                 str_split(pattern = "\n") %>%
+                                 unlist())
+      })
+      
+      # Run test
+      output$channels_test <- renderPrint(wizard_custom_channels())
+      
+      # Update mixtures for the channels table - custom channels
+      observeEvent(input$addCustomChannels, {
+        channels_list <- rep(wizard_custom_channels(), wizard_runs_mixtures() %>%
+                               unique() %>%
+                               length())
+        wizard_channels(channels_list)
+      })
+      
+      # Update mixtures for the channels table - standard channels
       observeEvent(input$wizardPlexSelected, {
         channels_list <- rep(TMT_Plexes[[input$wizardPlexSelected]], wizard_runs_mixtures() %>%
                                unique() %>%
                                length())
         wizard_channels(channels_list)
+      })
+      
+      # Handler to edit Channel Conditions
+      observeEvent(input$addCondition, {
+        if (!is.null(channels_selected_rows())) {
+          current_wizard_conditions <- wizard_conditions()
+          current_wizard_conditions[channels_selected_rows()] <- input$wizardCondition
+          wizard_conditions(current_wizard_conditions)
+        } else {
+          showNotification(
+            "Please select one or more rows first",
+            type = "error",
+            duration = NULL,
+            closeButton = TRUE
+          )
+        }
       })
 
       # Event handler to change the page
