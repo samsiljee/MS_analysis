@@ -23,6 +23,7 @@ wizard_channels_data <- reactiveVal(NULL)
 observeEvent(input$launch_wizard, {
   if (input$quant_method == "TMT") { # Only run for TMT experiments
     if (nrow(raw()) != 0) { # only run wizard if the raw files are loaded
+
       # Create variables
 
       # Vector of unique runs from raw data
@@ -49,13 +50,8 @@ observeEvent(input$launch_wizard, {
       wizard_techrepmixtures <- reactiveVal(NA)
 
       # Initialise blank columns for channels data frame
-      wizard_channels_mixtures <- reactiveVal(NA)
-      wizard_channels <- reactiveVal(NA)
       wizard_conditions <- reactiveVal(NA)
       wizard_bioreplicates <- reactiveVal(NA)
-
-      # Vector of custom channels
-      wizard_custom_channels <- reactiveVal(NA)
 
       # Wizard "server"----
 
@@ -75,8 +71,8 @@ observeEvent(input$launch_wizard, {
       observe({
         wizard_channels_data(
           data.frame(
-            Mixture = wizard_channels_mixtures(),
-            Channel = wizard_channels(),
+            Mixture = wizard_channels_mixtures_rep(),
+            Channel = wizard_channels_rep(),
             Condition = wizard_conditions(),
             BioReplicate = wizard_bioreplicates()
           )
@@ -125,7 +121,7 @@ observeEvent(input$launch_wizard, {
 
       # Runs handlers ----
 
-      # Handler to edit Run mixtures
+      # Handler to edit Run mixtures if adding manually
       observeEvent(input$addMixture, {
         if (!is.null(runs_selected_rows())) {
           current_wizard_runs_mixtures <- wizard_runs_mixtures()
@@ -138,6 +134,15 @@ observeEvent(input$launch_wizard, {
             duration = NULL,
             closeButton = TRUE
           )
+        }
+      })
+      
+      # Handler to edit mixtures if only one mixture
+      observeEvent(input$wizardOneMixture, {
+        if (input$wizardOneMixture) {
+          wizard_runs_mixtures(1)
+        } else {
+          wizard_runs_mixtures(rep(NA, length(wizard_runs())))
         }
       })
 
@@ -195,75 +200,94 @@ observeEvent(input$launch_wizard, {
 
       # Channels handlers ----
 
-      # Update mixtures for the channels table
-      observeEvent(input$wizardPlexSelected, {
-        mixtures_list <- rep(
-          unique(wizard_runs_mixtures()),
-          each = if (input$wizardCustomPlex) {
-            length(wizard_custom_channels())
-            # length(channels_temp_test())
-          } else {
-            length(TMT_Plexes[[input$wizardPlexSelected]])
-          }
+      # Update mixtures
+      wizard_channels_mixtures <- reactive({
+        unique(wizard_runs_mixtures())
+      })
+
+      # Vector of repeated mixtures
+      wizard_channels_mixtures_rep <- reactive({
+        rep(
+          wizard_channels_mixtures(),
+          each = length(wizard_channels())
         )
-        wizard_channels_mixtures(mixtures_list)
       })
 
-      # Update custom channels vector
-      observeEvent(input$addCustomChannels, {
-        wizard_custom_channels(input$wizardCustomChannels %>%
-          str_split(pattern = "\n") %>%
-          unlist())
-      })
-
-      # Run test
-      channels_temp_test <- reactive({
-        channels <- if (input$wizardCustomPlex) {
+      # Update channels
+      wizard_channels <- reactive({
+        if (input$wizardCustomPlex) {
           input$wizardCustomChannels %>%
             str_split(pattern = "\n") %>%
             unlist()
         } else {
           TMT_Plexes[[input$wizardPlexSelected]]
         }
-        return(rep(channels, wizard_runs_mixtures() %>%
-          unique() %>%
-          length()))
       })
-
-      output$channels_test <- renderPrint(channels_temp_test())
       
-      # # Update channels
-      # observeEvent(input$addCustomChannels | input$wizardPlexSelected, {
-      #   # Update mixtures
-      #   mixtures_list <- rep(
-      #     unique(wizard_runs_mixtures()),
-      #     each = if (input$wizardCustomPlex) {
-      #       length(wizard_custom_channels())
-      #       # length(channels_temp_test())
-      #     } else {
-      #       length(TMT_Plexes[[input$wizardPlexSelected]])
-      #     }
-      #   )
-      #   wizard_channels_mixtures(mixtures_list)
-      #   # Update channels
-      #   wizard_channels(channels_temp_test())
+      # Vector of repeated channels
+      wizard_channels_rep <- reactive({
+        rep(
+          wizard_channels(),
+          length(wizard_channels_mixtures())
+        )
+      })
+
+      # observeEvent(input$addCustomChannels, {
+      #   wizard_custom_channels(input$wizardCustomChannels %>%
+      #     str_split(pattern = "\n") %>%
+      #     unlist())
       # })
-
-      # Update channels for the channels table - custom channels
-      observeEvent(input$addCustomChannels, {
-        channels_list <- rep(wizard_custom_channels(), wizard_runs_mixtures() %>%
-          unique() %>%
-          length())
-        wizard_channels(channels_list)
-      })
-
-      # Update channels for the channels table - standard channels
-      observeEvent(input$wizardPlexSelected, {
-        channels_list <- rep(TMT_Plexes[[input$wizardPlexSelected]], wizard_runs_mixtures() %>%
-          unique() %>%
-          length())
-        wizard_channels(channels_list)
-      })
+      # 
+      # # Vector of repeated channels
+      # 
+      # # Run test
+      # channels_temp_test <- reactive({
+      #   channels <- if (input$wizardCustomPlex) {
+      #     input$wizardCustomChannels %>%
+      #       str_split(pattern = "\n") %>%
+      #       unlist()
+      #   } else {
+      #     TMT_Plexes[[input$wizardPlexSelected]]
+      #   }
+      #   return(rep(channels, wizard_runs_mixtures() %>%
+      #     unique() %>%
+      #     length()))
+      # })
+      # 
+      # output$channels_test <- renderPrint(channels_temp_test())
+      # 
+      # # # Update channels
+      # # observeEvent(input$addCustomChannels | input$wizardPlexSelected, {
+      # #   # Update mixtures
+      # #   mixtures_list <- rep(
+      # #     unique(wizard_runs_mixtures()),
+      # #     each = if (input$wizardCustomPlex) {
+      # #       length(wizard_custom_channels())
+      # #       # length(channels_temp_test())
+      # #     } else {
+      # #       length(TMT_Plexes[[input$wizardPlexSelected]])
+      # #     }
+      # #   )
+      # #   wizard_channels_mixtures(mixtures_list)
+      # #   # Update channels
+      # #   wizard_channels(channels_temp_test())
+      # # })
+      # 
+      # # Update channels for the channels table - custom channels
+      # observeEvent(input$addCustomChannels, {
+      #   channels_list <- rep(wizard_custom_channels(), wizard_runs_mixtures() %>%
+      #     unique() %>%
+      #     length())
+      #   wizard_channels(channels_list)
+      # })
+      # 
+      # # Update channels for the channels table - standard channels
+      # observeEvent(input$wizardPlexSelected, {
+      #   channels_list <- rep(TMT_Plexes[[input$wizardPlexSelected]], wizard_runs_mixtures() %>%
+      #     unique() %>%
+      #     length())
+      #   wizard_channels(channels_list)
+      # })
 
       # Handler to edit Channel Conditions
       observeEvent(input$addCondition, {

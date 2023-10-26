@@ -4,11 +4,15 @@
 wizard_mixtures_ui <- function() {
   fluidPage(
     h2("Runs: Mixtures"),
-    # Text entry for conditions
-    "Select one or more rows, and enter mixture below:",
+    "Select one or more rows, and enter mixture,  or select \"One mixture\"",
     DT::dataTableOutput("wizard_runs_table"),
-    numericInput("wizardMixture", "", value = 1),
-    actionButton("addMixture", "Add mixture"),
+    checkboxInput("wizardOneMixture", "One mixture", value = TRUE),
+    conditionalPanel(
+      condition = "input.wizardOneMixture == false",
+      # Numeric entry for Mixtures
+      numericInput("wizardMixture", "", value = 1),
+      actionButton("addMixture", "Add mixture"),
+    ),
 
     # Hide buttons
     shinyjs::hide("backButton"),
@@ -22,9 +26,9 @@ wizard_mixtures_ui <- function() {
 wizard_fractions_ui <- function() {
   fluidPage(
     h2("Runs: Fractions"),
-    "Select one or more rows and enter fraction, or select \"Not fractionated\"",
+    "Select one or more rows and enter fraction, or select \"One fraction\"",
     DT::dataTableOutput("wizard_runs_table"),
-    checkboxInput("wizardFractionated", "Not fractionated", value = TRUE),
+    checkboxInput("wizardFractionated", "One fraction", value = TRUE),
     conditionalPanel(
       condition = "input.wizardFractionated == false",
       # Numeric entry for fraction
@@ -44,9 +48,9 @@ wizard_fractions_ui <- function() {
 wizard_techrepmixtures_ui <- function() {
   fluidPage(
     h2("Runs: Mixture Technical Replicates"),
-    "Select one or more rows and enter mixture technical replicate, or select \"No technical replicates\"",
+    "Select one or more rows and enter mixture technical replicate, or select \"One mixture replicate\"",
     DT::dataTableOutput("wizard_runs_table"),
-    checkboxInput("wizardReplicated", "No technical replicates", value = TRUE),
+    checkboxInput("wizardReplicated", "One mixture replicate", value = TRUE),
     conditionalPanel(
       condition = "input.wizardReplicated == false",
       # Numeric entry for fraction
@@ -86,10 +90,10 @@ wizard_channels_ui <- function() {
     ),
     checkboxInput("wizardCustomPlex", "Custom channels", value = FALSE),
     conditionalPanel(
-        condition = "input.wizardCustomPlex == true",
-        "Please enter all channels, each on a new line:",
-        textAreaInput("wizardCustomChannels", "", ""),
-        actionButton("addCustomChannels", "Add custom channels")
+      condition = "input.wizardCustomPlex == true",
+      "Please enter all channels, each on a new line:",
+      textAreaInput("wizardCustomChannels", "", ""),
+      actionButton("addCustomChannels", "Add custom channels")
     ),
     verbatimTextOutput("channels_test"),
     DT::dataTableOutput("wizard_channels_table"),
