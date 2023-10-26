@@ -201,6 +201,7 @@ observeEvent(input$launch_wizard, {
           unique(wizard_runs_mixtures()),
           each = if (input$wizardCustomPlex) {
             length(wizard_custom_channels())
+            # length(channels_temp_test())
           } else {
             length(TMT_Plexes[[input$wizardPlexSelected]])
           }
@@ -230,8 +231,25 @@ observeEvent(input$launch_wizard, {
       })
 
       output$channels_test <- renderPrint(channels_temp_test())
+      
+      # # Update channels
+      # observeEvent(input$addCustomChannels | input$wizardPlexSelected, {
+      #   # Update mixtures
+      #   mixtures_list <- rep(
+      #     unique(wizard_runs_mixtures()),
+      #     each = if (input$wizardCustomPlex) {
+      #       length(wizard_custom_channels())
+      #       # length(channels_temp_test())
+      #     } else {
+      #       length(TMT_Plexes[[input$wizardPlexSelected]])
+      #     }
+      #   )
+      #   wizard_channels_mixtures(mixtures_list)
+      #   # Update channels
+      #   wizard_channels(channels_temp_test())
+      # })
 
-      # Update mixtures for the channels table - custom channels
+      # Update channels for the channels table - custom channels
       observeEvent(input$addCustomChannels, {
         channels_list <- rep(wizard_custom_channels(), wizard_runs_mixtures() %>%
           unique() %>%
@@ -239,7 +257,7 @@ observeEvent(input$launch_wizard, {
         wizard_channels(channels_list)
       })
 
-      # Update mixtures for the channels table - standard channels
+      # Update channels for the channels table - standard channels
       observeEvent(input$wizardPlexSelected, {
         channels_list <- rep(TMT_Plexes[[input$wizardPlexSelected]], wizard_runs_mixtures() %>%
           unique() %>%
