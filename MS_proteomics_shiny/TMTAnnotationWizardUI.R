@@ -1,5 +1,85 @@
 # TMT annotation wizard UI elements
 
+# Channels ----
+
+wizard_channels_ui <- function() {
+  fluidPage(
+    h2("Channels: Channels/mixtures"),
+    "Select number of mixtures, and TMT plex, or enter custom channels",
+    numericInput(
+      "wizard_channels_mixtures",
+      "Select number of mictures",
+      value = 1,
+      step = 1),
+    conditionalPanel(
+      condition = "input.wizardCustomPlex == false",
+      selectInput("wizardPlexSelected",
+        "",
+        c(
+          "TMTPro 18-plex" = "TMTPro_18",
+          "TMTPro 16-plex" = "TMTPro_16",
+          "TMT 11-plex" = "TMT_11",
+          "TMT 10-plex" = "TMT_10",
+          "TMT 6-plex" = "TMT_6",
+          "TMT 2-plex" = "TMT_2"
+        ),
+        multiple = FALSE
+      )
+    ),
+    checkboxInput("wizardCustomPlex", "Custom channels", value = FALSE),
+    conditionalPanel(
+      condition = "input.wizardCustomPlex == true",
+      "Please enter all channels, each on a new line:",
+      textAreaInput("wizardCustomChannels", "", ""),
+      actionButton("addCustomChannels", "Add custom channels")
+    ),
+    DT::dataTableOutput("wizard_channels_table"),
+    # Hide buttons
+    shinyjs::hide("doneButton"),
+    shinyjs::hide("backButton"),
+    shinyjs::hide("wizard_runs_annotations_tsv"),
+    # Show buttons
+    shinyjs::show("nextButton")
+  )
+}
+
+wizard_conditions_ui <- function() {
+  fluidPage(
+    h2("Conditions"),
+    # Text entry for conditions
+    "Select one or more rows, and enter condition below:",
+    DT::dataTableOutput("wizard_channels_table"),
+    textInput("wizardCondition", "", ""),
+    actionButton("addCondition", "Add condition"),
+
+    # Hide buttons
+    shinyjs::hide("wizard_runs_annotations_tsv"),
+    shinyjs::hide("doneWizard"),
+
+    # Show buttons
+    shinyjs::show("backButton"),
+    shinyjs::show("nextButtonConditions")
+  )
+}
+
+wizard_bioreplicates_ui <- function() {
+  fluidPage(
+    h2("Biological replicates"),
+    # Text entry for biological replicates
+    "Select one or more rows, and enter biological replicate below:",
+    DT::dataTableOutput("wizard_channels_table"),
+    textInput("wizardBioReplicate", "", ""),
+    actionButton("addBioReplicate", "Add biological replicate"),
+
+    # Hide "next" buttons from other pages.
+    shinyjs::hide("nextButtonConditions"),
+    shinyjs::hide("doneWizard"),
+    # Show "back" and bioreplicates "next" button
+    shinyjs::show("nextButtonBioReplicates"),
+    shinyjs::show("backButton")
+  )
+}
+
 # Runs ----
 wizard_mixtures_ui <- function() {
   fluidPage(
@@ -63,82 +143,6 @@ wizard_techrepmixtures_ui <- function() {
     # Show buttons
     shinyjs::show("wizard_runs_annotations_tsv"),
     shinyjs::show("nextButton"),
-    shinyjs::show("backButton")
-  )
-}
-
-# Channels ----
-
-wizard_channels_ui <- function() {
-  fluidPage(
-    h2("Channels: Channels"),
-    "Select TMT plex, or enter custom channels",
-    conditionalPanel(
-      condition = "input.wizardCustomPlex == false",
-      selectInput("wizardPlexSelected",
-        "",
-        c(
-          "TMTPro 18-plex" = "TMTPro_18",
-          "TMTPro 16-plex" = "TMTPro_16",
-          "TMT 11-plex" = "TMT_11",
-          "TMT 10-plex" = "TMT_10",
-          "TMT 6-plex" = "TMT_6",
-          "TMT 2-plex" = "TMT_2"
-        ),
-        multiple = FALSE
-      )
-    ),
-    checkboxInput("wizardCustomPlex", "Custom channels", value = FALSE),
-    conditionalPanel(
-      condition = "input.wizardCustomPlex == true",
-      "Please enter all channels, each on a new line:",
-      textAreaInput("wizardCustomChannels", "", ""),
-      actionButton("addCustomChannels", "Add custom channels")
-    ),
-    verbatimTextOutput("channels_test"),
-    DT::dataTableOutput("wizard_channels_table"),
-    # Hide buttons
-    shinyjs::hide("doneButton"),
-    shinyjs::hide("wizard_runs_annotations_tsv"),
-    # Show buttons
-    shinyjs::show("nextButton"),
-    shinyjs::show("backButton")
-  )
-}
-
-wizard_conditions_ui <- function() {
-  fluidPage(
-    h2("Conditions"),
-    # Text entry for conditions
-    "Select one or more rows, and enter condition below:",
-    DT::dataTableOutput("wizard_channels_table"),
-    textInput("wizardCondition", "", ""),
-    actionButton("addCondition", "Add condition"),
-
-    # Hide buttons
-    shinyjs::hide("wizard_runs_annotations_tsv"),
-    shinyjs::hide("doneWizard"),
-
-    # Show buttons
-    shinyjs::show("backButton"),
-    shinyjs::show("nextButtonConditions")
-  )
-}
-
-wizard_bioreplicates_ui <- function() {
-  fluidPage(
-    h2("Biological replicates"),
-    # Text entry for biological replicates
-    "Select one or more rows, and enter biological replicate below:",
-    DT::dataTableOutput("wizard_channels_table"),
-    textInput("wizardBioReplicate", "", ""),
-    actionButton("addBioReplicate", "Add biological replicate"),
-
-    # Hide "next" buttons from other pages.
-    shinyjs::hide("nextButtonConditions"),
-    shinyjs::hide("doneWizard"),
-    # Show "back" and bioreplicates "next" button
-    shinyjs::show("nextButtonBioReplicates"),
     shinyjs::show("backButton")
   )
 }
