@@ -30,23 +30,10 @@ observeEvent(input$launch_wizard, {
       wizard_conditions <- reactiveVal(NA)
       wizard_bioreplicates <- reactiveVal(NA)
       
-      # Create the first two rows of the channels table
-      first_two_columns <- reactive({
-        expand.grid("Channel" = wizard_channels(), "Mixture" = wizard_channels_mixtures())
-      })
-      
       # Read in mixtures
       wizard_channels_mixtures <- reactive({
         1:input$wizard_channels_mixtures
       })
-      
-      # # Vector of repeated mixtures
-      # wizard_channels_mixtures_rep <- reactive({
-      #   rep(
-      #     wizard_channels_mixtures(),
-      #     each = length(wizard_channels())
-      #   )
-      # })
       
       # Read in channels
       wizard_channels <- reactive({
@@ -59,13 +46,21 @@ observeEvent(input$launch_wizard, {
         }
       })
       
-      # # Vector of repeated channels
-      # wizard_channels_rep <- reactive({
-      #   rep(
-      #     wizard_channels(),
-      #     length(wizard_channels_mixtures())
-      #   )
-      # })
+      # Create the first two columns of the channels table
+      first_two_columns <- reactive({
+        expand.grid(Channel = wizard_channels(), Mixture = wizard_channels_mixtures())
+      })
+      
+      # Update wizard_channels_data
+      observe({
+        wizard_channels_data(
+          data.frame(
+            first_two_columns(),
+            Condition = wizard_conditions(),
+            BioReplicate = wizard_bioreplicates()
+          )
+        )
+      })
       
       # Handler to edit Channel Conditions
       observeEvent(input$addCondition, {
@@ -81,6 +76,27 @@ observeEvent(input$launch_wizard, {
             closeButton = TRUE
           )
         }
+      })
+      
+      # Render the channel level data frame as a DataTable
+      output$wizard_channels_table <- DT::renderDataTable({
+        datatable(
+          wizard_channels_data(),
+          options = list(
+            dom = "t",
+            paging = FALSE,
+            ordering = FALSE
+          ),
+          rownames = FALSE,
+          editable = TRUE,
+          class = "cell-border stripe"
+        )
+      })
+      
+      # Variable for selected channels rows
+      channels_selected_rows <- reactiveVal(NULL)
+      observe({
+        channels_selected_rows(input$wizard_channels_table_rows_selected)
       })
       
       # Runs server ----
@@ -121,18 +137,6 @@ observeEvent(input$launch_wizard, {
         )
       })
 
-      # Update wizard_channels_data
-      observe({
-        wizard_channels_data(
-          data.frame(
-            Mixture = wizard_channels_mixtures_rep(),
-            Channel = wizard_channels_rep(),
-            Condition = wizard_conditions(),
-            BioReplicate = wizard_bioreplicates()
-          )
-        )
-      })
-
       # Render the run level data frame as a DataTable
       output$wizard_runs_table <- DT::renderDataTable({
         datatable(
@@ -148,29 +152,10 @@ observeEvent(input$launch_wizard, {
         )
       })
 
-      # Render the channel level data frame as a DataTable
-      output$wizard_channels_table <- DT::renderDataTable({
-        datatable(
-          wizard_channels_data(),
-          options = list(
-            dom = "t",
-            paging = FALSE,
-            ordering = FALSE
-          ),
-          rownames = FALSE,
-          editable = TRUE,
-          class = "cell-border stripe"
-        )
-      })
-
       # Variable for selected rows, for runs and channels
       runs_selected_rows <- reactiveVal(NULL)
       observe({
         runs_selected_rows(input$wizard_runs_table_rows_selected)
-      })
-      channels_selected_rows <- reactiveVal(NULL)
-      observe({
-        channels_selected_rows(input$wizard_channels_table_rows_selected)
       })
 
       # Handler to edit Run mixtures if adding manually
@@ -250,7 +235,7 @@ observeEvent(input$launch_wizard, {
         }
       })
 
-
+      # Run the modal ----
       # Event handler to change the page
       wizard_page <- reactiveVal(1)
       observeEvent(input$nextButton, {
@@ -259,13 +244,11 @@ observeEvent(input$launch_wizard, {
       observeEvent(input$backButton, {
         wizard_page(wizard_page() - 1)
       })
-
+      
       # Event handler to close the modal with the "Done" button
       observeEvent(input$doneButton, {
         removeModal()
       })
-
-      # Run the modal ----
 
       # Render the current wizard page
       observe({
