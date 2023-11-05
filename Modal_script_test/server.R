@@ -23,25 +23,21 @@ function(input, output, session) {
         TMT_Plexes[[input$wizardPlexSelected]]
     })
         
-    channels <- reactive({
-        1:input$channels
+    mixtures <- reactive({
+        1:input$mixtures
+    })
+    
+    first_two_columns <- reactive({
+        expand.grid("Channel" = TMT(), "Mixture" = mixtures())
     })
     
     conditions <- reactiveVal({
         NA
     })
     
-    TMT_rep <- reactive({
-        rep(TMT(), length(channels()))
-    })
-    
-    channels_rep <- reactive({
-        rep(channels(), each = length(TMT()))
-    })
-    
     output$table <- DT::renderDataTable({
         datatable(
-            data.frame(Mixture = channels_rep(), Channel = TMT_rep(), Condition = conditions()),
+            data.frame(first_two_columns(), Condition = conditions()),
             options = list(
                 dom = "t",
                 paging = FALSE,
@@ -55,14 +51,14 @@ function(input, output, session) {
     
     channels_selected_rows <- reactiveVal(NULL)
     observe({
-        channels_selected_rows(input$wizard_channels_table_rows_selected)
+        channels_selected_rows(input$table_rows_selected)
     })
     
     observeEvent(input$addCondition, {
         if (!is.null(channels_selected_rows())) {
-            current_wizard_conditions <- wizard_conditions()
+            current_wizard_conditions <- conditions()
             current_wizard_conditions[channels_selected_rows()] <- input$wizardCondition
-            wizard_conditions(current_wizard_conditions)
+            conditions(current_wizard_conditions)
         } else {
             showNotification(
                 "Please select one or more rows first",

@@ -14,10 +14,8 @@ fluidPage(
                 ),
                 multiple = FALSE
     ),
-    numericInput("channels", "Channels", 5),
+    numericInput("mixtures", "Mixtures", 5),
     textInput("wizardCondition", "", ""),
     actionButton("addCondition", "Add condition"),
-    verbatimTextOutput("text_1"),
-    verbatimTextOutput("text_2"),
     DT::dataTableOutput("table")
 )
