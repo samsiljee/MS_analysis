@@ -48,8 +48,19 @@ observeEvent(input$launch_wizard, {
       
       # Create the first two columns of the channels table
       first_two_columns <- reactive({
-        expand.grid(Channel = wizard_channels(), Mixture = wizard_channels_mixtures())
+        channels <- isolate(wizard_channels())
+        mixtures <- isolate(wizard_channels_mixtures())
+        
+        if (length(channels) == 0 || length(mixtures) == 0) {
+          # Handle empty inputs, either set defaults or show an error message
+          # Example of setting defaults:
+          channels <- c("Default Channel")
+          mixtures <- c("Default Mixture")
+        }
+        
+        expand.grid(Channel = channels, Mixture = mixtures)
       })
+      
       
       # Update wizard_channels_data
       observe({
