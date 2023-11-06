@@ -17,6 +17,7 @@ TMT_Plexes <- list(
 # Initialise data frames to store wizard data - initialised outside of the modal to make it globally available
 wizard_channels_data <- reactiveVal(NULL)
 wizard_runs_data <- reactiveVal(NULL)
+wizard_channels_data_test <- reactiveVal(NULL)
 
 # Launch wizard
 observeEvent(input$launch_wizard, {
@@ -25,6 +26,11 @@ observeEvent(input$launch_wizard, {
 
       # Channels server ----
       
+      # Test text
+      output$modal_test <- renderDT({
+        data.frame(first_two_columns(), Condition = wizard_conditions(), BioReplicate = wizard_bioreplicates())
+      })
+      
       # Create reactive variables for channels data
       # Initialise blank columns for channels data frame
       wizard_conditions <- reactiveVal(NA)
@@ -32,7 +38,7 @@ observeEvent(input$launch_wizard, {
       
       # Read in mixtures
       wizard_channels_mixtures <- reactive({
-        1:input$wizard_channels_mixtures
+         1:input$wizard_channels_mixtures
       })
       
       # Read in channels
@@ -48,28 +54,18 @@ observeEvent(input$launch_wizard, {
       
       # Create the first two columns of the channels table
       first_two_columns <- reactive({
-        channels <- isolate(wizard_channels())
-        mixtures <- isolate(wizard_channels_mixtures())
-        
-        if (length(channels) == 0 || length(mixtures) == 0) {
-          # Handle empty inputs, either set defaults or show an error message
-          # Example of setting defaults:
-          channels <- c("Default Channel")
-          mixtures <- c("Default Mixture")
-        }
-        
+        channels <- wizard_channels()
+        mixtures <- wizard_channels_mixtures()
+
         expand.grid(Channel = channels, Mixture = mixtures)
       })
       
-      
       # Update wizard_channels_data
-      observe({
-        wizard_channels_data(
+      wizard_channels_data <- reactive({
           data.frame(
             first_two_columns(),
             Condition = wizard_conditions(),
             BioReplicate = wizard_bioreplicates()
-          )
         )
       })
       
@@ -140,11 +136,10 @@ observeEvent(input$launch_wizard, {
       # Update wizard_runs_data
       observe({
         wizard_runs_data(
-          rbind(first_two_columns(),
           data.frame(
             Fraction = wizard_fractions(),
             TechRepMixture = wizard_techrepmixtures()
-          ))
+          )
         )
       })
 
@@ -167,31 +162,6 @@ observeEvent(input$launch_wizard, {
       runs_selected_rows <- reactiveVal(NULL)
       observe({
         runs_selected_rows(input$wizard_runs_table_rows_selected)
-      })
-
-      # Handler to edit Run mixtures if adding manually
-      observeEvent(input$addMixture, {
-        if (!is.null(runs_selected_rows())) {
-          current_wizard_runs_mixtures <- wizard_runs_mixtures()
-          current_wizard_runs_mixtures[runs_selected_rows()] <- input$wizardMixture
-          wizard_runs_mixtures(current_wizard_runs_mixtures)
-        } else {
-          showNotification(
-            "Please select one or more rows first",
-            type = "error",
-            duration = NULL,
-            closeButton = TRUE
-          )
-        }
-      })
-      
-      # Handler to edit mixtures if only one mixture
-      observeEvent(input$wizardOneMixture, {
-        if (input$wizardOneMixture) {
-          wizard_runs_mixtures(1)
-        } else {
-          wizard_runs_mixtures(rep(NA, length(wizard_runs())))
-        }
       })
 
       # Handler to edit Fraction if adding fractions manually

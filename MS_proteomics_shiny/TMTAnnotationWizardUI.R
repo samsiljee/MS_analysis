@@ -6,9 +6,10 @@ wizard_channels_ui <- function() {
   fluidPage(
     h2("Channels: Channels/mixtures"),
     "Select number of mixtures, and TMT plex, or enter custom channels",
+    DTOutput("modal_test"),
     numericInput(
       "wizard_channels_mixtures",
-      "Select number of mictures",
+      "Select number of mixtures",
       value = 1,
       step = 1),
     conditionalPanel(
@@ -30,8 +31,7 @@ wizard_channels_ui <- function() {
     conditionalPanel(
       condition = "input.wizardCustomPlex == true",
       "Please enter all channels, each on a new line:",
-      textAreaInput("wizardCustomChannels", "", ""),
-      actionButton("addCustomChannels", "Add custom channels")
+      textAreaInput("wizardCustomChannels", "", "")
     ),
     DT::dataTableOutput("wizard_channels_table"),
     # Hide buttons
