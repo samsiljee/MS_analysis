@@ -6,7 +6,6 @@ wizard_channels_ui <- function() {
   fluidPage(
     h2("Channels: Channels/mixtures"),
     "Select number of mixtures, and TMT plex, or enter custom channels",
-    DTOutput("modal_test"),
     numericInput(
       "wizard_channels_mixtures",
       "Select number of mixtures",

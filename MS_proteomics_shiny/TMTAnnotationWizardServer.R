@@ -17,7 +17,6 @@ TMT_Plexes <- list(
 # Initialise data frames to store wizard data - initialised outside of the modal to make it globally available
 wizard_channels_data <- reactiveVal(NULL)
 wizard_runs_data <- reactiveVal(NULL)
-wizard_channels_data_test <- reactiveVal(NULL)
 
 # Launch wizard
 observeEvent(input$launch_wizard, {
@@ -25,12 +24,7 @@ observeEvent(input$launch_wizard, {
     if (nrow(raw()) != 0) { # only run wizard if the raw files are loaded
 
       # Channels server ----
-      
-      # Test text
-      output$modal_test <- renderDT({
-        data.frame(first_two_columns(), Condition = wizard_conditions(), BioReplicate = wizard_bioreplicates())
-      })
-      
+     
       # Create reactive variables for channels data
       # Initialise blank columns for channels data frame
       wizard_conditions <- reactiveVal(NA)
