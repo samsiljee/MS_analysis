@@ -18,6 +18,43 @@ TMT_Plexes <- list(
 wizard_channels_data <- reactiveVal(NULL)
 wizard_runs_data <- reactiveVal(NULL)
 
+# Initialise blank columns for channels data frame
+wizard_conditions <- reactiveVal(NA)
+wizard_bioreplicates <- reactiveVal(NA)
+
+# Read in channels
+wizard_channels <- reactive({
+  if (input$wizardCustomPlex) {
+    input$wizardCustomChannels %>%
+      str_split(pattern = "\n") %>%
+      unlist()
+  } else {
+    TMT_Plexes[[input$wizardPlexSelected]]
+  }
+})
+
+# Read in mixtures
+wizard_channels_mixtures <- reactive({
+  1:input$wizard_channels_mixtures
+})
+
+# Create the first two columns of the channels table
+first_two_columns <- reactive({
+  channels <- wizard_channels()
+  mixtures <- wizard_channels_mixtures()
+  
+  expand.grid(Channel = channels, Mixture = mixtures)
+})
+
+# Update wizard_channels_data
+wizard_channels_data <- reactive({
+  data.frame(
+    first_two_columns(),
+    Condition = wizard_conditions(),
+    BioReplicate = wizard_bioreplicates()
+  )
+})
+
 # Launch wizard
 observeEvent(input$launch_wizard, {
   if (input$quant_method == "TMT") { # Only run for TMT experiments
@@ -26,54 +63,12 @@ observeEvent(input$launch_wizard, {
       # Channels server ----
      
       # Create reactive variables for channels data
-      # Initialise blank columns for channels data frame
-      wizard_conditions <- reactiveVal(NA)
-      wizard_bioreplicates <- reactiveVal(NA)
       
-      # Read in mixtures
-      wizard_channels_mixtures <- reactive({
-         1:input$wizard_channels_mixtures
-      })
-      
-      # Read in channels
-      wizard_channels <- reactive({
-        if (input$wizardCustomPlex) {
-          input$wizardCustomChannels %>%
-            str_split(pattern = "\n") %>%
-            unlist()
-        } else {
-          TMT_Plexes[[input$wizardPlexSelected]]
-        }
-      })
-      
-      # Create the first two columns of the channels table
-      first_two_columns <- reactive({
-        channels <- wizard_channels()
-        mixtures <- wizard_channels_mixtures()
-
-        expand.grid(Channel = channels, Mixture = mixtures)
-      })
-      
-      # Update wizard_channels_data
-      observe({
-        wizard_channels_data(
-          data.frame(
-            first_two_columns(),
-            Condition = wizard_conditions(),
-            BioReplicate = wizard_bioreplicates()
-          )
-        )
-      })
-      
-      # Reactive channels data to display in modal
-      wizard_channels_data_reactive <- reactive({
-        wizard_channels_data()
-      })
       
       # Render the channel level data frame as a DataTable
       output$wizard_channels_table <- DT::renderDataTable({
         datatable(
-          wizard_channels_data_reactive(),
+          wizard_channels_data(),
           options = list(
             dom = "t",
             paging = FALSE,
