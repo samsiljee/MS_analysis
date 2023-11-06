@@ -55,11 +55,33 @@ observeEvent(input$launch_wizard, {
       })
       
       # Update wizard_channels_data
-      wizard_channels_data <- reactive({
+      observe({
+        wizard_channels_data(
           data.frame(
             first_two_columns(),
             Condition = wizard_conditions(),
             BioReplicate = wizard_bioreplicates()
+          )
+        )
+      })
+      
+      # Reactive channels data to display in modal
+      wizard_channels_data_reactive <- reactive({
+        wizard_channels_data()
+      })
+      
+      # Render the channel level data frame as a DataTable
+      output$wizard_channels_table <- DT::renderDataTable({
+        datatable(
+          wizard_channels_data_reactive(),
+          options = list(
+            dom = "t",
+            paging = FALSE,
+            ordering = FALSE
+          ),
+          rownames = FALSE,
+          editable = TRUE,
+          class = "cell-border stripe"
         )
       })
       
@@ -77,21 +99,6 @@ observeEvent(input$launch_wizard, {
             closeButton = TRUE
           )
         }
-      })
-      
-      # Render the channel level data frame as a DataTable
-      output$wizard_channels_table <- DT::renderDataTable({
-        datatable(
-          wizard_channels_data(),
-          options = list(
-            dom = "t",
-            paging = FALSE,
-            ordering = FALSE
-          ),
-          rownames = FALSE,
-          editable = TRUE,
-          class = "cell-border stripe"
-        )
       })
       
       # Variable for selected channels rows
