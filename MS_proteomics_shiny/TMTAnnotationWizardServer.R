@@ -23,7 +23,7 @@ wizard_conditions <- reactiveVal(NA)
 wizard_bioreplicates <- reactiveVal(NA)
 
 # Variable for selected channels rows
-channels_selected_rows <- reactiveVal(NULL)
+channels_selected_rows <- reactiveVal(integer(0))
 observe({
   channels_selected_rows(input$wizard_channels_table_rows_selected)
 })
@@ -52,21 +52,18 @@ first_two_columns <- reactive({
   expand.grid(Channel = channels, Mixture = mixtures)
 })
 
-# Update wizard_channels_data
-wizard_channels_data <- reactive({
-  data.frame(
-    first_two_columns(),
-    Condition = wizard_conditions(),
-    BioReplicate = wizard_bioreplicates()
-  )
-})
-
-# Handler to edit Channel Conditions
-observeEvent(input$addCondition, {
-  if (!is.null(channels_selected_rows())) {
+# Handler to edit conditions using eventReactive
+wizard_conditions_updated <- eventReactive(input$addCondition, {
+  selected_rows <- channels_selected_rows()
+  if (!is.null(selected_rows)) {
     current_wizard_conditions <- wizard_conditions()
-    current_wizard_conditions[channels_selected_rows()] <- input$wizardCondition
-    wizard_conditions(current_wizard_conditions)
+    input_condition <- input$wizardCondition
+    
+    # Update conditions for selected rows with the input value
+    current_wizard_conditions[selected_rows] <- input_condition
+    
+    # Return the updated conditions
+    return(rep(input_condition, length(current_wizard_conditions)))
   } else {
     showNotification(
       "Please select one or more rows first",
@@ -74,7 +71,27 @@ observeEvent(input$addCondition, {
       duration = NULL,
       closeButton = TRUE
     )
+    # Return the current conditions if no rows are selected
+    return(wizard_conditions())
   }
+})
+
+# Update wizard_conditions using the eventReactive expression
+observe({
+  wizard_conditions(wizard_conditions_updated())
+})
+
+observe({
+  print(channels_selected_rows())
+})
+
+# Update wizard_channels_data
+wizard_channels_data <- reactive({
+  data.frame(
+    first_two_columns(),
+    Condition = wizard_conditions(),
+    BioReplicate = wizard_bioreplicates()
+  )
 })
 
 # Render the channel level data frame as a DataTable
