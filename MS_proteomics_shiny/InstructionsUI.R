@@ -28,7 +28,7 @@ InstructionsUI <- tabPanel(
     "\"Run\" exact filenames of the raw data files, with .raw extension for PD, and without for MQ.", br(),
     "\"Mixture\" batch or mixture of TMT channels. Set all to 1 if only one mixture was run.", br(),
     "\"Fraction\" set all to 1 if no fractionation was done.", br(),
-    "\"TechRepMixture\" technical replicates of distinct mixtures.", br(),
+    "\"TechRepMixture\" technical replicates of distinct mixtures. Set all to 1 if only one replicate was run.", br(),
     h4("Channel annotations"),
     "\"Mixture\" batch or mixture of TMT channels. Set all to 1 if only one mixture was run.", br(),
     "\"Channel\" TMT channel within each miture, must match the PSMs file.", br(),
