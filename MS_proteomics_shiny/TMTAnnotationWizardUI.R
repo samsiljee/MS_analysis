@@ -2,18 +2,18 @@
 
 # Channels ----
 
-wizard_channels_ui <- function() {
+TMT_wizard_channels_ui <- function() {
   fluidPage(
     h2("Channels: Channels/mixtures"),
     "Select number of mixtures, and TMT plex, or enter custom channels",
     numericInput(
-      "wizard_channels_mixtures",
+      "TMT_wizard_channels_mixtures",
       "Select number of mixtures",
       value = 1,
       step = 1),
     conditionalPanel(
-      condition = "input.wizardCustomPlex == false",
-      selectInput("wizardPlexSelected",
+      condition = "input.TMT_wizardCustomPlex == false",
+      selectInput("TMT_wizardPlexSelected",
         "",
         c(
           "TMTPro 18-plex" = "TMTPro_18",
@@ -26,13 +26,13 @@ wizard_channels_ui <- function() {
         multiple = FALSE
       )
     ),
-    checkboxInput("wizardCustomPlex", "Custom channels", value = FALSE),
+    checkboxInput("TMT_wizardCustomPlex", "Custom channels", value = FALSE),
     conditionalPanel(
-      condition = "input.wizardCustomPlex == true",
+      condition = "input.TMT_wizardCustomPlex == true",
       "Please enter all channels, each on a new line:",
-      textAreaInput("wizardCustomChannels", "", "")
+      textAreaInput("TMT_wizardCustomChannels", "", "")
     ),
-    DT::dataTableOutput("wizard_channels_table"),
+    DT::dataTableOutput("TMT_wizard_channels_table"),
     # Hide buttons
     shinyjs::hide("doneButton"),
     shinyjs::hide("backButton"),
@@ -42,13 +42,13 @@ wizard_channels_ui <- function() {
   )
 }
 
-wizard_conditions_ui <- function() {
+TMT_wizard_conditions_ui <- function() {
   fluidPage(
     h2("Conditions"),
     # Text entry for conditions
     "Select one or more rows, and enter condition below:",
-    DT::dataTableOutput("wizard_channels_table"),
-    textInput("wizardCondition", "", ""),
+    DT::dataTableOutput("TMT_wizard_channels_table"),
+    textInput("TMT_wizardCondition", "", ""),
     actionButton("addCondition", "Add condition"),
 
     # Hide buttons
@@ -61,13 +61,13 @@ wizard_conditions_ui <- function() {
   )
 }
 
-wizard_bioreplicates_ui <- function() {
+TMT_wizard_bioreplicates_ui <- function() {
   fluidPage(
     h2("Biological replicates"),
     # Text entry for biological replicates
     "Select one or more rows, and enter biological replicate below:",
-    DT::dataTableOutput("wizard_channels_table"),
-    textInput("wizardBioReplicate", "", ""),
+    DT::dataTableOutput("TMT_wizard_channels_table"),
+    textInput("TMT_wizardBioReplicate", "", ""),
     actionButton("addBioReplicate", "Add biological replicate"),
 
     # Hide "next" buttons from other pages.
@@ -80,16 +80,16 @@ wizard_bioreplicates_ui <- function() {
 }
 
 # Runs ----
-wizard_mixtures_ui <- function() {
+TMT_wizard_mixtures_ui <- function() {
   fluidPage(
     h2("Runs: Mixtures"),
     "Select one or more rows, and enter mixture,  or select \"One mixture\"",
-    DT::dataTableOutput("wizard_runs_table"),
-    checkboxInput("wizardOneMixture", "One mixture", value = TRUE),
+    DT::dataTableOutput("TMT_wizard_runs_table"),
+    checkboxInput("TMT_wizardOneMixture", "One mixture", value = TRUE),
     conditionalPanel(
-      condition = "input.wizardOneMixture == false",
+      condition = "input.TMT_wizardOneMixture == false",
       # Numeric entry for Mixtures
-      numericInput("wizardMixture", "", value = 1),
+      numericInput("TMT_wizardMixture", "", value = 1),
       actionButton("addMixture", "Add mixture"),
     ),
 
@@ -102,16 +102,16 @@ wizard_mixtures_ui <- function() {
   )
 }
 
-wizard_fractions_ui <- function() {
+TMT_wizard_fractions_ui <- function() {
   fluidPage(
     h2("Runs: Fractions"),
     "Select one or more rows and enter fraction, or select \"One fraction\"",
-    DT::dataTableOutput("wizard_runs_table"),
-    checkboxInput("wizardFractionated", "One fraction", value = TRUE),
+    DT::dataTableOutput("TMT_wizard_runs_table"),
+    checkboxInput("TMT_wizardFractionated", "One fraction", value = TRUE),
     conditionalPanel(
-      condition = "input.wizardFractionated == false",
+      condition = "input.TMT_wizardFractionated == false",
       # Numeric entry for fraction
-      numericInput("wizardFraction", "", value = 1),
+      numericInput("TMT_wizardFraction", "", value = 1),
       actionButton("addFraction", "Add fraction"),
     ),
 
@@ -124,16 +124,16 @@ wizard_fractions_ui <- function() {
   )
 }
 
-wizard_techrepmixtures_ui <- function() {
+TMT_wizard_techrepmixtures_ui <- function() {
   fluidPage(
     h2("Runs: Mixture Technical Replicates"),
     "Select one or more rows and enter mixture technical replicate, or select \"One mixture replicate\"",
-    DT::dataTableOutput("wizard_runs_table"),
-    checkboxInput("wizardReplicated", "One mixture replicate", value = TRUE),
+    DT::dataTableOutput("TMT_wizard_runs_table"),
+    checkboxInput("TMT_wizardReplicated", "One mixture replicate", value = TRUE),
     conditionalPanel(
-      condition = "input.wizardReplicated == false",
+      condition = "input.TMT_wizardReplicated == false",
       # Numeric entry for fraction
-      numericInput("wizardTechRepMixture", "", value = 1),
+      numericInput("TMT_wizardTechRepMixture", "", value = 1),
       actionButton("addReplicate", "Add replicate"),
     ),
 

@@ -17,53 +17,48 @@ TMT_Plexes <- list(
 # Channels level server ----
 # Reactive variables
 # Initialise blank channels data frame
-wizard_channels_data <- reactiveVal(NULL)
-# Initialise blank columns
-wizard_conditions <- reactiveVal(NA)
-wizard_bioreplicates <- reactiveVal(NA)
+TMT_wizard_channels_data <- reactiveVal(NULL)
 
 # Variable for selected channels rows
 channels_selected_rows <- reactiveVal(integer(0))
 observe({
-  channels_selected_rows(input$wizard_channels_table_rows_selected)
+  channels_selected_rows(input$TMT_wizard_channels_table_rows_selected)
 })
 
 # Read in channels
-wizard_channels <- reactive({
-  if (input$wizardCustomPlex) {
-    input$wizardCustomChannels %>%
+TMT_wizard_channels <- reactive({
+  if (input$TMT_wizardCustomPlex) {
+    input$TMT_wizardCustomChannels %>%
       str_split(pattern = "\n") %>%
       unlist()
   } else {
-    TMT_Plexes[[input$wizardPlexSelected]]
+    TMT_Plexes[[input$TMT_wizardPlexSelected]]
   }
 })
 
 # Read in mixtures
-wizard_channels_mixtures <- reactive({
-  1:input$wizard_channels_mixtures
+TMT_wizard_channels_mixtures <- reactive({
+  1:input$TMT_wizard_channels_mixtures
 })
 
 # Create the first two columns of the channels table
 first_two_columns <- reactive({
-  channels <- wizard_channels()
-  mixtures <- wizard_channels_mixtures()
+  channels <- TMT_wizard_channels()
+  mixtures <- TMT_wizard_channels_mixtures()
 
   expand.grid(Channel = channels, Mixture = mixtures)
 })
 
+# Initialise blank columns
+TMT_wizard_conditions <- reactiveVal(rep(NA, nrow(first_two_columns())))
+TMT_wizard_bioreplicates <- reactiveVal(rep(NA, nrow(first_two_columns())))
+
 # Handler to edit conditions using eventReactive
-wizard_conditions_updated <- eventReactive(input$addCondition, {
-  selected_rows <- channels_selected_rows()
-  if (!is.null(selected_rows)) {
-    current_wizard_conditions <- wizard_conditions()
-    input_condition <- input$wizardCondition
-    
-    # Update conditions for selected rows with the input value
-    current_wizard_conditions[selected_rows] <- input_condition
-    
-    # Return the updated conditions
-    return(rep(input_condition, length(current_wizard_conditions)))
+observeEvent(input$addCondition, {
+  if (!is.null(channels_selected_rows())) {
+    current_TMT_wizard_conditions <- TMT_wizard_conditions()
+    current_TMT_wizard_conditions[channels_selected_rows()] <- input$TMT_wizardCondition
+    TMT_wizard_conditions(current_TMT_wizard_conditions)
   } else {
     showNotification(
       "Please select one or more rows first",
@@ -71,33 +66,22 @@ wizard_conditions_updated <- eventReactive(input$addCondition, {
       duration = NULL,
       closeButton = TRUE
     )
-    # Return the current conditions if no rows are selected
-    return(wizard_conditions())
   }
 })
 
-# Update wizard_conditions using the eventReactive expression
-observe({
-  wizard_conditions(wizard_conditions_updated())
-})
-
-observe({
-  print(channels_selected_rows())
-})
-
 # Update wizard_channels_data
-wizard_channels_data <- reactive({
+TMT_wizard_channels_data <- reactive({
   data.frame(
     first_two_columns(),
-    Condition = wizard_conditions(),
-    BioReplicate = wizard_bioreplicates()
+    Condition = TMT_wizard_conditions(),
+    BioReplicate = TMT_wizard_bioreplicates()
   )
 })
 
 # Render the channel level data frame as a DataTable
-output$wizard_channels_table <- DT::renderDataTable({
+output$TMT_wizard_channels_table <- DT::renderDataTable({
   datatable(
-    wizard_channels_data(),
+    TMT_wizard_channels_data(),
     options = list(
       dom = "t",
       paging = FALSE,
@@ -112,20 +96,20 @@ output$wizard_channels_table <- DT::renderDataTable({
 # Runs level server ----
 # Reactive variables for the runs
 # Initialise data frame for run level wizard data
-wizard_runs_data <- reactiveVal(NULL)
+TMT_wizard_runs_data <- reactiveVal(NULL)
 # Initialise blank columns for runs data frame
-wizard_runs_mixtures <- reactiveVal(NA)
-wizard_fractions <- reactiveVal(NA)
-wizard_techrepmixtures <- reactiveVal(NA)
+TMT_wizard_runs_mixtures <- reactiveVal(NA)
+TMT_wizard_fractions <- reactiveVal(NA)
+TMT_wizard_techrepmixtures <- reactiveVal(NA)
 
 # Variable for selected rows, for runs and channels
 runs_selected_rows <- reactiveVal(NULL)
 observe({
-  runs_selected_rows(input$wizard_runs_table_rows_selected)
+  runs_selected_rows(input$TMT_wizard_runs_table_rows_selected)
 })
 
 # Vector of unique runs from raw data
-wizard_runs <- reactive({
+TMT_wizard_runs <- reactive({
   switch(input$platform,
     PD = {
       raw()$Run
@@ -145,9 +129,9 @@ wizard_runs <- reactive({
 # Handler to edit Fraction if adding fractions manually
 observeEvent(input$addFraction, {
   if (!is.null(runs_selected_rows())) {
-    current_wizard_fractions <- wizard_fractions()
-    current_wizard_fractions[runs_selected_rows()] <- input$wizardFraction
-    wizard_fractions(current_wizard_fractions)
+    current_TMT_wizard_fractions <- TMT_wizard_fractions()
+    current_TMT_wizard_fractions[runs_selected_rows()] <- input$TMT_wizardFraction
+    TMT_wizard_fractions(current_TMT_wizard_fractions)
   } else {
     # Handle the case when no rows are selected
     showNotification(
@@ -160,20 +144,20 @@ observeEvent(input$addFraction, {
 })
 
 # Handler to edit Fraction if not fractionated
-observeEvent(input$wizardFractionated, {
-  if (input$wizardFractionated) {
-    wizard_fractions(1)
+observeEvent(input$TMT_wizardFractionated, {
+  if (input$TMT_wizardFractionated) {
+    TMT_wizard_fractions(1)
   } else {
-    wizard_fractions(rep(NA, length(wizard_runs())))
+    TMT_wizard_fractions(rep(NA, length(TMT_wizard_runs())))
   }
 })
 
 # Handler to edit TechRepMixture if adding replicates manually
 observeEvent(input$addReplicate, {
   if (!is.null(runs_selected_rows())) {
-    current_wizard_techrepmixtures <- wizard_techrepmixtures()
-    current_wizard_techrepmixtures[runs_selected_rows()] <- input$wizardTechRepMixture
-    wizard_techrepmixtures(current_wizard_techrepmixtures)
+    current_TMT_wizard_techrepmixtures <- TMT_wizard_techrepmixtures()
+    current_TMT_wizard_techrepmixtures[runs_selected_rows()] <- input$TMT_wizardTechRepMixture
+    TMT_wizard_techrepmixtures(current_TMT_wizard_techrepmixtures)
   } else {
     # Handle the case when no rows are selected
     showNotification(
@@ -186,28 +170,28 @@ observeEvent(input$addReplicate, {
 })
 
 # Handler to edit TechRepMixture if not replicated
-observeEvent(input$wizardReplicated, {
-  if (input$wizardReplicated) {
-    wizard_techrepmixtures(1)
+observeEvent(input$TMT_wizardReplicated, {
+  if (input$TMT_wizardReplicated) {
+    TMT_wizard_techrepmixtures(1)
   } else {
-    wizard_techrepmixtures(rep(NA, length(wizard_runs())))
+    TMT_wizard_techrepmixtures(rep(NA, length(TMT_wizard_runs())))
   }
 })
 
-# Update wizard_runs_data
+# Update TMT_wizard_runs_data
 observe({
-  wizard_runs_data(
+  TMT_wizard_runs_data(
     data.frame(
-      Fraction = wizard_fractions(),
-      TechRepMixture = wizard_techrepmixtures()
+      Fraction = TMT_wizard_fractions(),
+      TechRepMixture = TMT_wizard_techrepmixtures()
     )
   )
 })
 
 # Render the run level data frame as a DataTable
-output$wizard_runs_table <- DT::renderDataTable({
+output$TMT_wizard_runs_table <- DT::renderDataTable({
   datatable(
-    wizard_runs_data(),
+    TMT_wizard_runs_data(),
     options = list(
       dom = "t",
       paging = FALSE,
@@ -221,17 +205,17 @@ output$wizard_runs_table <- DT::renderDataTable({
 
 # Modal functions ----
 # Launch wizard
-observeEvent(input$launch_wizard, {
+observeEvent(input$launch_TMT_wizard, {
   if (input$quant_method == "TMT") { # Only run for TMT experiments
     if (nrow(raw()) != 0) { # only run wizard if the raw files are loaded
 
       # Event handler to change the page
-      wizard_page <- reactiveVal(1)
+      TMT_wizard_page <- reactiveVal(1)
       observeEvent(input$nextButton, {
-        wizard_page(wizard_page() + 1)
+        TMT_wizard_page(TMT_wizard_page() + 1)
       })
       observeEvent(input$backButton, {
-        wizard_page(wizard_page() - 1)
+        TMT_wizard_page(TMT_wizard_page() - 1)
       })
 
       # Event handler to close the modal with the "Done" button
@@ -241,14 +225,14 @@ observeEvent(input$launch_wizard, {
 
       # Render the current wizard page
       observe({
-        output$wizardPageContent <- renderUI({
-          switch(wizard_page(),
-            "1" = (wizard_channels_ui()),
-            "2" = (wizard_conditions_ui()),
-            "3" = (wizard_bioreplicates_ui()),
-            "4" = (wizard_mixtures_ui()),
-            "5" = (wizard_fractions_ui()),
-            "6" = (wizard_techrepmixtures_ui())
+        output$TMT_wizardPageContent <- renderUI({
+          switch(TMT_wizard_page(),
+            "1" = (TMT_wizard_channels_ui()),
+            "2" = (TMT_wizard_conditions_ui()),
+            "3" = (TMT_wizard_bioreplicates_ui()),
+            "4" = (TMT_wizard_mixtures_ui()),
+            "5" = (TMT_wizard_fractions_ui()),
+            "6" = (TMT_wizard_techrepmixtures_ui())
           )
         })
       })
