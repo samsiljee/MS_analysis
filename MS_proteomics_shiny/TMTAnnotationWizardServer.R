@@ -45,13 +45,12 @@ TMT_wizard_channels_mixtures <- reactive({
 first_two_columns <- reactive({
   channels <- TMT_wizard_channels()
   mixtures <- TMT_wizard_channels_mixtures()
-
   expand.grid(Channel = channels, Mixture = mixtures)
 })
 
 # Initialise blank columns
-TMT_wizard_conditions <- reactiveVal(rep(NA, nrow(first_two_columns())))
-TMT_wizard_bioreplicates <- reactiveVal(rep(NA, nrow(first_two_columns())))
+TMT_wizard_conditions <- reactiveVal(NA)
+TMT_wizard_bioreplicates <- reactiveVal(NA)
 
 # Handler to edit conditions using eventReactive
 observeEvent(input$addCondition, {
