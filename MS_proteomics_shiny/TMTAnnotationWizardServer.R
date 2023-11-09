@@ -204,7 +204,7 @@ output$TMT_wizard_runs_table <- DT::renderDataTable({
 
 # Modal functions ----
 # Launch wizard
-observeEvent(input$launch_TMT_wizard, {
+observeEvent(input$launch_wizard, {
   if (input$quant_method == "TMT") { # Only run for TMT experiments
     if (nrow(raw()) != 0) { # only run wizard if the raw files are loaded
 
