@@ -240,7 +240,7 @@ observeEvent(input$launch_wizard, {
       # Launch wizard
       showModal(modalDialog(
         title = "Annotations wizard",
-        uiOutput("wizardPageContent"),
+        uiOutput("TMT_wizardPageContent"),
         footer = tagList(
           actionButton("backButton", "Back"),
           actionButton("nextButton", "Next"),
