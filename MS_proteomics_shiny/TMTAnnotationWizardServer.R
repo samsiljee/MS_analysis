@@ -43,14 +43,22 @@ TMT_wizard_channels_mixtures <- reactive({
 
 # Create the first two columns of the channels table
 first_two_columns <- reactive({
-  channels <- TMT_wizard_channels()
-  mixtures <- TMT_wizard_channels_mixtures()
-  expand.grid(Channel = channels, Mixture = mixtures)
+  expand.grid(Channel = TMT_wizard_channels(), Mixture = TMT_wizard_channels_mixtures())
 })
 
 # Initialise blank columns
-TMT_wizard_conditions <- reactiveVal(NA)
-TMT_wizard_bioreplicates <- reactiveVal(NA)
+TMT_wizard_conditions <- reactiveVal(NULL)
+TMT_wizard_bioreplicates <- reactiveVal(NULL)
+
+# Update blank columns to correct number of rows
+observe({
+  TMT_wizard_conditions({
+    rep(NA, nrow(first_two_columns()))
+  })
+  TMT_wizard_bioreplicates({
+    rep(NA, nrow(first_two_columns()))
+  })
+})
 
 # Handler to edit conditions using eventReactive
 observeEvent(input$addCondition, {
@@ -58,6 +66,22 @@ observeEvent(input$addCondition, {
     current_TMT_wizard_conditions <- TMT_wizard_conditions()
     current_TMT_wizard_conditions[channels_selected_rows()] <- input$TMT_wizardCondition
     TMT_wizard_conditions(current_TMT_wizard_conditions)
+  } else {
+    showNotification(
+      "Please select one or more rows first",
+      type = "error",
+      duration = NULL,
+      closeButton = TRUE
+    )
+  }
+})
+
+# Handler to edit BioRepilicate using eventReactive
+observeEvent(input$addBioReplicate, {
+  if (!is.null(channels_selected_rows())) {
+    current_TMT_wizard_bioreplicates <- TMT_wizard_bioreplicates()
+    current_TMT_wizard_bioreplicates[channels_selected_rows()] <- input$TMT_wizardbioreplicate
+    TMT_wizard_bioreplicates(current_TMT_wizard_bioreplicates)
   } else {
     showNotification(
       "Please select one or more rows first",
@@ -204,7 +228,7 @@ output$TMT_wizard_runs_table <- DT::renderDataTable({
 
 # Modal functions ----
 # Launch wizard
-observeEvent(input$launch_TMT_wizard, {
+observeEvent(input$launch_wizard, {
   if (input$quant_method == "TMT") { # Only run for TMT experiments
     if (nrow(raw()) != 0) { # only run wizard if the raw files are loaded
 
@@ -240,7 +264,7 @@ observeEvent(input$launch_TMT_wizard, {
       # Launch wizard
       showModal(modalDialog(
         title = "Annotations wizard",
-        uiOutput("wizardPageContent"),
+        uiOutput("TMT_wizardPageContent"),
         footer = tagList(
           actionButton("backButton", "Back"),
           actionButton("nextButton", "Next"),
