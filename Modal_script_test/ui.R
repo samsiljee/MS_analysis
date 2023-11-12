@@ -14,7 +14,7 @@ fluidPage(
                 ),
                 multiple = FALSE
     ),
-    numericInput("mixtures", "Mixtures", 5),
+    numericInput("mixtures", "Mixtures", 2),
     textInput("wizardCondition", "", ""),
     actionButton("addCondition", "Add condition"),
     DT::dataTableOutput("table")

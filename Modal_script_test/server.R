@@ -32,7 +32,14 @@ function(input, output, session) {
     })
     
     conditions <- reactiveVal({
-        NA
+        NULL
+    })
+    
+    # Update reactive val to be the length of first_two_columns
+    observe({
+        conditions({
+            rep(NA, nrow(first_two_columns()))
+        })
     })
     
     output$table <- DT::renderDataTable({
@@ -67,13 +74,5 @@ function(input, output, session) {
                 closeButton = TRUE
             )
         }
-    })
-    
-    output$text_1 <- renderPrint({
-        rep(TMT_Plexes[[input$wizardPlexSelected]], input$channels)
-    })
-    
-    output$text_2 <- renderPrint({
-        rep(1:input$channels, each = length(TMT_Plexes[[input$wizardPlexSelected]]))
     })
 }
