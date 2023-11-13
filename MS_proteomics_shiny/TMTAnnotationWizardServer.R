@@ -155,10 +155,6 @@ output$TMT_wizard_channels_table <- DT::renderDataTable({
 # Reactive variables for the runs
 # Initialise data frame for run level wizard data
 TMT_wizard_runs_data <- reactiveVal(NULL)
-# Initialise blank columns for runs data frame
-TMT_wizard_runs_mixtures <- reactiveVal(NA)
-TMT_wizard_fractions <- reactiveVal(NA)
-TMT_wizard_techrepmixtures <- reactiveVal(NA)
 
 # Variable for selected rows, for runs and channels
 runs_selected_rows <- reactiveVal(NULL)
@@ -167,7 +163,7 @@ observe({
 })
 
 # Vector of unique runs from raw data
-TMT_wizard_runs <- reactive({
+TMT_wizard_runs_runs <- reactive({
   switch(input$platform,
     PD = {
       raw()$Run
@@ -182,6 +178,18 @@ TMT_wizard_runs <- reactive({
   ) %>%
     unique() %>%
     sort()
+})
+
+# Initialise blank columns for runs data frame
+TMT_wizard_runs_mixtures <- reactiveVal(NA)
+TMT_wizard_fractions <- reactiveVal(NA)
+TMT_wizard_techrepmixtures <- reactiveVal(NA)
+
+# Update based on length of number of runs
+observe({
+  TMT_wizard_runs_mixtures(rep(NA, length(TMT_wizard_runs_runs())))
+  TMT_wizard_fractions(rep(NA, length(TMT_wizard_runs_runs())))
+  TMT_wizard_techrepmixtures(rep(NA, length(TMT_wizard_runs_runs())))
 })
 
 # Handler to edit Fraction if adding fractions manually
@@ -206,7 +214,7 @@ observeEvent(input$TMT_wizardFractionated, {
   if (input$TMT_wizardFractionated) {
     TMT_wizard_fractions(1)
   } else {
-    TMT_wizard_fractions(rep(NA, length(TMT_wizard_runs())))
+    TMT_wizard_fractions(rep(NA, length(TMT_wizard_runs_runs())))
   }
 })
 
@@ -232,7 +240,7 @@ observeEvent(input$TMT_wizardReplicated, {
   if (input$TMT_wizardReplicated) {
     TMT_wizard_techrepmixtures(1)
   } else {
-    TMT_wizard_techrepmixtures(rep(NA, length(TMT_wizard_runs())))
+    TMT_wizard_techrepmixtures(rep(NA, length(TMT_wizard_runs_runs())))
   }
 })
 
@@ -240,6 +248,8 @@ observeEvent(input$TMT_wizardReplicated, {
 observe({
   TMT_wizard_runs_data(
     data.frame(
+      Runs = TMT_wizard_runs_runs(),
+      Mixture = TMT_wizard_runs_mixtures(),
       Fraction = TMT_wizard_fractions(),
       TechRepMixture = TMT_wizard_techrepmixtures()
     )
