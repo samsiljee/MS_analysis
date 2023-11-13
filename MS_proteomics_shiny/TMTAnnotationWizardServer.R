@@ -178,36 +178,40 @@ observe({
   TMT_wizard_techrepmixtures(rep(NA, length(TMT_wizard_runs_runs())))
 })
 
-# Reactive UI for runs mixtures
-output$addRunsMixture <- renderUI({
-  selectInput("TMT_wizardRunMixture", "Add mixture",
-              choices = TMT_wizard_channels_mixtures())
+# Set mixture to 1 if only one mixture
+observe({
+  req(input$TMT_wizard_channels_mixtures)
+  if (input$TMT_wizard_channels_mixtures == 1) {
+    TMT_wizard_runs_mixtures(rep(1, length(TMT_wizard_runs_runs())))
+  } else {
+    TMT_wizard_runs_mixtures(rep(NA, length(TMT_wizard_runs_runs())))
+  }
 })
 
-# Set all mixtures to one and skip to the next page if only one mixture, else show mixture handler
-# if (input$TMT_wizard_channels_mixtures == 1) {
-#   # Set all mixtures to 1
-#   TMT_wizard_runs_mixtures(1)
-#   # Advance to the next page
-#   TMT_wizard_page(TMT_wizard_page() + 1)
-# } else {
-  # Handler to add mixture
-  observeEvent(input$addMixture, {
-    if (!is.null(runs_selected_rows())) {
-      current_TMT_wizard_runs_mixtures <- TMT_wizard_runs_mixtures()
-      current_TMT_wizard_runs_mixtures[runs_selected_rows()] <- input$TMT_wizardRunMixture
-      TMT_wizard_runs_mixtures(current_TMT_wizard_runs_mixtures)
-    } else {
-      # Handle the case when no rows are selected
-      showNotification(
-        "Please select one or more rows first",
-        type = "error",
-        duration = NULL,
-        closeButton = TRUE
-      )
-    }
-  })
-# }
+# Reactive UI for runs mixtures
+output$addRunsMixture <- renderUI({
+  selectInput(
+    "TMT_wizardRunMixture",
+    "Add mixture",
+    choices = TMT_wizard_channels_mixtures())
+})
+
+# Handler to add mixture
+observeEvent(input$addMixture, {
+  if (!is.null(runs_selected_rows())) {
+    current_TMT_wizard_runs_mixtures <- TMT_wizard_runs_mixtures()
+    current_TMT_wizard_runs_mixtures[runs_selected_rows()] <- input$TMT_wizardRunMixture
+    TMT_wizard_runs_mixtures(current_TMT_wizard_runs_mixtures)
+  } else {
+    # Handle the case when no rows are selected
+    showNotification(
+      "Please select one or more rows first",
+      type = "error",
+      duration = NULL,
+      closeButton = TRUE
+    )
+  }
+})
 
 # Handler to edit Fraction if adding fractions manually
 observeEvent(input$addFraction, {
@@ -309,21 +313,21 @@ observeEvent(input$launch_wizard, {
       observeEvent(input$doneButton, {
         removeModal()
       })
-
+      
       # Render the current wizard page
       observe({
         output$TMT_wizardPageContent <- renderUI({
-          switch(TMT_wizard_page(),
-            "1" = (TMT_wizard_channels_ui()),
-            "2" = (TMT_wizard_conditions_ui()),
-            "3" = (TMT_wizard_bioreplicates_ui()),
-            "4" = (TMT_wizard_mixtures_ui()),
-            "5" = (TMT_wizard_fractions_ui()),
-            "6" = (TMT_wizard_techrepmixtures_ui())
-          )
+            switch(TMT_wizard_page(),
+                   "1" = (TMT_wizard_channels_ui()),
+                   "2" = (TMT_wizard_conditions_ui()),
+                   "3" = (TMT_wizard_bioreplicates_ui()),
+                   "4" = (TMT_wizard_mixtures_ui()),
+                   "5" = (TMT_wizard_fractions_ui()),
+                   "6" = (TMT_wizard_techrepmixtures_ui())
+            ) 
         })
       })
-
+      
       # Show the wizard
       showModal(modalDialog(
         title = "Annotations wizard",
