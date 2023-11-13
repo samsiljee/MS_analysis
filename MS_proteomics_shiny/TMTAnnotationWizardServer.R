@@ -47,18 +47,18 @@ first_two_columns <- reactive({
 })
 
 # Initialise blank columns
-TMT_wizard_conditions <- reactiveVal(NULL)
-TMT_wizard_bioreplicates <- reactiveVal(NULL)
+TMT_wizard_conditions <- reactiveVal(NA)
+TMT_wizard_bioreplicates <- reactiveVal(NA)
 
 # Update blank columns to correct number of rows
-observe({
-  TMT_wizard_conditions({
-    rep(NA, nrow(first_two_columns()))
-  })
-  TMT_wizard_bioreplicates({
-    rep(NA, nrow(first_two_columns()))
-  })
-})
+observeEvent(input$TMT_wizard_channels_mixtures, {
+      TMT_wizard_conditions({
+        rep(NA, nrow(first_two_columns()))
+      })
+      TMT_wizard_bioreplicates({
+        rep(NA, nrow(first_two_columns()))
+      })
+    })
 
 # Handler to edit conditions using eventReactive
 observeEvent(input$addCondition, {
