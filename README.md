@@ -76,6 +76,13 @@ Created July 18th 2022
   - Fix issue with modelQC not downloading (for TMT at least) - Currently this is only a placeholder for MSstatsTMT and will not be available
   - filter out infinite fold change broken
   - Add ability to upload annotations and raw PSMs in multiple files
+  - Fix error in LFQ annotations wizard where warning message pops up, even if rows are selected
+  - set automatic time-out on warning for when no rows are selected
+  - Add error stop in comparisons section when adding a comaprison, stops progress if there is no name entered
+  - Spell out direction A vs B say in comparison
+  - Fix error with update required when changing to heatmap
+  - Fix GO analysis and STRING
+  - Question mark button for description of settings
   
 # License
 Feel free to use this code as you wish under the MIT license, however an acknowledgement would be nice. Thanks!
