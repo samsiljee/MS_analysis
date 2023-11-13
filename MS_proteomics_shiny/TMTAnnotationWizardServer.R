@@ -76,7 +76,7 @@ observeEvent(input$TMT_wizard_channels_mixtures, {
   })
 })
 
-# Handler to edit conditions using eventReactive
+# Handler to edit conditions
 observeEvent(input$addCondition, {
   if (!is.null(channels_selected_rows())) {
     current_TMT_wizard_conditions <- TMT_wizard_conditions()
@@ -92,11 +92,30 @@ observeEvent(input$addCondition, {
   }
 })
 
-# Handler to edit BioRepilicate using eventReactive
+# Handler to edit BioRepilicates
 observeEvent(input$addBioReplicate, {
   if (!is.null(channels_selected_rows())) {
     current_TMT_wizard_bioreplicates <- TMT_wizard_bioreplicates()
     current_TMT_wizard_bioreplicates[channels_selected_rows()] <- input$TMT_wizardBioReplicate
+    TMT_wizard_bioreplicates(current_TMT_wizard_bioreplicates)
+  } else {
+    showNotification(
+      "Please select one or more rows first",
+      type = "error",
+      duration = NULL,
+      closeButton = TRUE
+    )
+  }
+})
+
+# Handler to set normalisation channels, for both Condition and BioReplicate
+observeEvent(input$setNorm, {
+  if (!is.null(channels_selected_rows())) {
+    current_TMT_wizard_conditions <- TMT_wizard_conditions()
+    current_TMT_wizard_conditions[channels_selected_rows()] <- "Norm"
+    TMT_wizard_conditions(current_TMT_wizard_conditions)
+    current_TMT_wizard_bioreplicates <- TMT_wizard_bioreplicates()
+    current_TMT_wizard_bioreplicates[channels_selected_rows()] <- "Norm"
     TMT_wizard_bioreplicates(current_TMT_wizard_bioreplicates)
   } else {
     showNotification(

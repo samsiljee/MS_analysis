@@ -49,7 +49,9 @@ TMT_wizard_conditions_ui <- function() {
     "Select one or more rows, and enter condition below:",
     DT::dataTableOutput("TMT_wizard_channels_table"),
     textInput("TMT_wizardCondition", "", ""),
-    actionButton("addCondition", "Add condition"),
+    fluidRow(
+      column(3, actionButton("addCondition", "Add condition")),
+      column(3, actionButton("setNorm", "Set as normalisation"))),
 
     # Hide buttons
     shinyjs::hide("wizard_runs_annotations_tsv"),
@@ -68,7 +70,9 @@ TMT_wizard_bioreplicates_ui <- function() {
     "Select one or more rows, and enter biological replicate below:",
     DT::dataTableOutput("TMT_wizard_channels_table"),
     textInput("TMT_wizardBioReplicate", "", ""),
-    actionButton("addBioReplicate", "Add biological replicate"),
+    fluidRow(
+      column(4, actionButton("addBioReplicate", "Add biological replicate")),
+      column(3, actionButton("setNorm", "Set as normalisation"))),
 
     # Hide "next" buttons from other pages.
     shinyjs::hide("nextButtonConditions"),
