@@ -76,7 +76,6 @@ observeEvent(input$TMT_wizard_channels_mixtures, {
   })
 })
 
-
 # Handler to edit conditions using eventReactive
 observeEvent(input$addCondition, {
   if (!is.null(channels_selected_rows())) {
@@ -97,7 +96,7 @@ observeEvent(input$addCondition, {
 observeEvent(input$addBioReplicate, {
   if (!is.null(channels_selected_rows())) {
     current_TMT_wizard_bioreplicates <- TMT_wizard_bioreplicates()
-    current_TMT_wizard_bioreplicates[channels_selected_rows()] <- input$TMT_wizardbioreplicate
+    current_TMT_wizard_bioreplicates[channels_selected_rows()] <- input$TMT_wizardBioReplicate
     TMT_wizard_bioreplicates(current_TMT_wizard_bioreplicates)
   } else {
     showNotification(
