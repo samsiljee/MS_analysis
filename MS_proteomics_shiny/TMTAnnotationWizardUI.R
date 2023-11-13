@@ -37,6 +37,7 @@ TMT_wizard_channels_ui <- function() {
     shinyjs::hide("doneButton"),
     shinyjs::hide("backButton"),
     shinyjs::hide("wizard_runs_annotations_tsv"),
+    shinyjs::hide("wizard_channels_annotations_tsv"),
     # Show buttons
     shinyjs::show("nextButton")
   )
@@ -56,10 +57,10 @@ TMT_wizard_conditions_ui <- function() {
     # Hide buttons
     shinyjs::hide("wizard_runs_annotations_tsv"),
     shinyjs::hide("doneWizard"),
-
+    shinyjs::hide("wizard_channels_annotations_tsv"),
     # Show buttons
     shinyjs::show("backButton"),
-    shinyjs::show("nextButtonConditions")
+    shinyjs::show("nextButton")
   )
 }
 
@@ -78,7 +79,8 @@ TMT_wizard_bioreplicates_ui <- function() {
     shinyjs::hide("nextButtonConditions"),
     shinyjs::hide("doneWizard"),
     # Show "back" and bioreplicates "next" button
-    shinyjs::show("nextButtonBioReplicates"),
+    shinyjs::show("wizard_channels_annotations_tsv"),
+    shinyjs::show("nextButton"),
     shinyjs::show("backButton")
   )
 }
@@ -98,10 +100,10 @@ TMT_wizard_mixtures_ui <- function() {
     ),
 
     # Hide buttons
-    shinyjs::hide("backButton"),
     shinyjs::hide("doneButton"),
     shinyjs::hide("wizard_runs_annotations_tsv"),
     # Show buttons
+    shinyjs::show("backButton"),
     shinyjs::show("nextButton")
   )
 }
