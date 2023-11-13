@@ -92,11 +92,12 @@ TMT_wizard_mixtures_ui <- function() {
     "Select one or more rows, and enter mixture",
     DT::dataTableOutput("TMT_wizard_runs_table"),
     uiOutput("addRunsMixture"),
-    actionButton("addMixture", "Select mixture"),
+    actionButton("addMixture", "Add mixture"),
 
     # Hide buttons
     shinyjs::hide("doneButton"),
     shinyjs::hide("wizard_runs_annotations_tsv"),
+    shinyjs::hide("wizard_channels_annotations_tsv"),
     # Show buttons
     shinyjs::show("backButton"),
     shinyjs::show("nextButton")
