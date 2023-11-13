@@ -192,6 +192,29 @@ observe({
   TMT_wizard_techrepmixtures(rep(NA, length(TMT_wizard_runs_runs())))
 })
 
+# Reactive UI for runs mixtures
+output$addRunsMixture <- renderUI({
+  selectInput("TMT_wizardRunMixture", "Add mixture",
+              choices = TMT_wizard_channels_mixtures())
+})
+
+# Handler to add mixture
+observeEvent(input$addMixture, {
+  if (!is.null(runs_selected_rows())) {
+    current_TMT_wizard_runs_mixtures <- TMT_wizard_runs_mixtures()
+    current_TMT_wizard_runs_mixtures[runs_selected_rows()] <- input$TMT_wizardRunMixture
+    TMT_wizard_runs_mixtures(current_TMT_wizard_runs_mixtures)
+  } else {
+    # Handle the case when no rows are selected
+    showNotification(
+      "Please select one or more rows first",
+      type = "error",
+      duration = NULL,
+      closeButton = TRUE
+    )
+  }
+})
+
 # Handler to edit Fraction if adding fractions manually
 observeEvent(input$addFraction, {
   if (!is.null(runs_selected_rows())) {

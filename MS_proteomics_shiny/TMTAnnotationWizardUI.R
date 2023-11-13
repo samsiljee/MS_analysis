@@ -89,15 +89,10 @@ TMT_wizard_bioreplicates_ui <- function() {
 TMT_wizard_mixtures_ui <- function() {
   fluidPage(
     h2("Runs: Mixtures"),
-    "Select one or more rows, and enter mixture,  or select \"One mixture\"",
+    "Select one or more rows, and enter mixture",
     DT::dataTableOutput("TMT_wizard_runs_table"),
-    checkboxInput("TMT_wizardOneMixture", "One mixture", value = TRUE),
-    conditionalPanel(
-      condition = "input.TMT_wizardOneMixture == false",
-      # Numeric entry for Mixtures
-      numericInput("TMT_wizardMixture", "", value = 1),
-      actionButton("addMixture", "Add mixture"),
-    ),
+    uiOutput("addRunsMixture"),
+    actionButton("addMixture", "Select mixture"),
 
     # Hide buttons
     shinyjs::hide("doneButton"),
