@@ -301,12 +301,26 @@ observeEvent(input$launch_wizard, {
       # Initialise variable for TMT wizard page
       TMT_wizard_page <- reactiveVal(1)
       
-      # Event handler to change the page
+      # Event handler to change to the next page
       observeEvent(input$nextButton, {
-        TMT_wizard_page(TMT_wizard_page() + 1)
+        req(TMT_wizard_page())
+        
+        if (input$TMT_wizard_channels_mixtures == 1 && TMT_wizard_page() == 3) { # skip mixtures page if only one replicate
+          TMT_wizard_page(TMT_wizard_page() + 2)
+        } else {
+          TMT_wizard_page(TMT_wizard_page() + 1)
+        }
       })
+      
+      # Event handler to change to the previous page
       observeEvent(input$backButton, {
-        TMT_wizard_page(TMT_wizard_page() - 1)
+        req(TMT_wizard_page())
+        
+        if (input$TMT_wizard_channels_mixtures == 1 && TMT_wizard_page() == 5) { # skip mixtures page if only one replicate
+          TMT_wizard_page(TMT_wizard_page() - 2)
+        } else {
+          TMT_wizard_page(TMT_wizard_page() - 1)
+        }
       })
 
       # Event handler to close the modal with the "Done" button
