@@ -51,7 +51,9 @@ TMT_wizard_conditions <- reactiveVal(NA)
 TMT_wizard_bioreplicates <- reactiveVal(NA)
 
 # Update blank columns to correct number of rows
-observeEvent(input$TMT_wizardPlexSelected, {
+observeEvent(c(input$TMT_wizardPlexSelected,
+               input$TMT_wizardCustomChannels,
+               input$TMT_wizard_channels_mixtures), {
       TMT_wizard_conditions({
         rep(NA, nrow(first_two_columns()))
       })
@@ -59,22 +61,6 @@ observeEvent(input$TMT_wizardPlexSelected, {
         rep(NA, nrow(first_two_columns()))
       })
     })
-observeEvent(input$TMT_wizardCustomChannels, {
-  TMT_wizard_conditions({
-    rep(NA, nrow(first_two_columns()))
-  })
-  TMT_wizard_bioreplicates({
-    rep(NA, nrow(first_two_columns()))
-  })
-})
-observeEvent(input$TMT_wizard_channels_mixtures, {
-  TMT_wizard_conditions({
-    rep(NA, nrow(first_two_columns()))
-  })
-  TMT_wizard_bioreplicates({
-    rep(NA, nrow(first_two_columns()))
-  })
-})
 
 # Handler to edit conditions
 observeEvent(input$addCondition, {
@@ -199,12 +185,12 @@ output$addRunsMixture <- renderUI({
 })
 
 # Set all mixtures to one and skip to the next page if only one mixture, else show mixture handler
-if (input$TMT_wizard_channels_mixtures == 1) {
-  # Set all mixtures to 1
-  TMT_wizard_runs_mixtures(1)
-  # Advance to the next page
-  TMT_wizard_page(TMT_wizard_page() + 1)
-} else {
+# if (input$TMT_wizard_channels_mixtures == 1) {
+#   # Set all mixtures to 1
+#   TMT_wizard_runs_mixtures(1)
+#   # Advance to the next page
+#   TMT_wizard_page(TMT_wizard_page() + 1)
+# } else {
   # Handler to add mixture
   observeEvent(input$addMixture, {
     if (!is.null(runs_selected_rows())) {
@@ -220,8 +206,8 @@ if (input$TMT_wizard_channels_mixtures == 1) {
         closeButton = TRUE
       )
     }
-  }) 
-}
+  })
+# }
 
 # Handler to edit Fraction if adding fractions manually
 observeEvent(input$addFraction, {
