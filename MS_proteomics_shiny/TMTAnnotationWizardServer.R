@@ -198,22 +198,30 @@ output$addRunsMixture <- renderUI({
               choices = TMT_wizard_channels_mixtures())
 })
 
-# Handler to add mixture
-observeEvent(input$addMixture, {
-  if (!is.null(runs_selected_rows())) {
-    current_TMT_wizard_runs_mixtures <- TMT_wizard_runs_mixtures()
-    current_TMT_wizard_runs_mixtures[runs_selected_rows()] <- input$TMT_wizardRunMixture
-    TMT_wizard_runs_mixtures(current_TMT_wizard_runs_mixtures)
-  } else {
-    # Handle the case when no rows are selected
-    showNotification(
-      "Please select one or more rows first",
-      type = "error",
-      duration = NULL,
-      closeButton = TRUE
-    )
-  }
-})
+# Set all mixtures to one and skip to the next page if only one mixture, else show mixture handler
+if (input$TMT_wizard_channels_mixtures == 1) {
+  # Set all mixtures to 1
+  TMT_wizard_runs_mixtures(1)
+  # Advance to the next page
+  TMT_wizard_page(TMT_wizard_page() + 1)
+} else {
+  # Handler to add mixture
+  observeEvent(input$addMixture, {
+    if (!is.null(runs_selected_rows())) {
+      current_TMT_wizard_runs_mixtures <- TMT_wizard_runs_mixtures()
+      current_TMT_wizard_runs_mixtures[runs_selected_rows()] <- input$TMT_wizardRunMixture
+      TMT_wizard_runs_mixtures(current_TMT_wizard_runs_mixtures)
+    } else {
+      # Handle the case when no rows are selected
+      showNotification(
+        "Please select one or more rows first",
+        type = "error",
+        duration = NULL,
+        closeButton = TRUE
+      )
+    }
+  }) 
+}
 
 # Handler to edit Fraction if adding fractions manually
 observeEvent(input$addFraction, {
@@ -299,9 +307,11 @@ output$TMT_wizard_runs_table <- DT::renderDataTable({
 observeEvent(input$launch_wizard, {
   if (input$quant_method == "TMT") { # Only run for TMT experiments
     if (nrow(raw()) != 0) { # only run wizard if the raw files are loaded
-
-      # Event handler to change the page
+      
+      # Initialise variable for TMT wizard page
       TMT_wizard_page <- reactiveVal(1)
+      
+      # Event handler to change the page
       observeEvent(input$nextButton, {
         TMT_wizard_page(TMT_wizard_page() + 1)
       })
@@ -328,8 +338,7 @@ observeEvent(input$launch_wizard, {
         })
       })
 
-      
-      # Launch wizard
+      # Show the wizard
       showModal(modalDialog(
         title = "Annotations wizard",
         uiOutput("TMT_wizardPageContent"),
