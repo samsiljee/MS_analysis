@@ -25,13 +25,6 @@ observeEvent(input$launch_wizard, {
     if (nrow(raw()) != 0) { # only run wizard if the raw files are loaded
 
       # Channels level server ----
-      # Reactive variables
-      custom_plex <- reactiveVal(FALSE)
-      
-      # Update custom plex
-      observe({
-        custom_plex(input$TMT_wizardCustomPlex)
-      })
 
       # Variable for selected channels rows
       channels_selected_rows <- reactiveVal(integer(0))
@@ -41,7 +34,7 @@ observeEvent(input$launch_wizard, {
 
       # Update channels
       TMT_wizard_channels <- reactive({
-        if (custom_plex()) {
+        if (input$TMT_wizardCustomPlex) {
           input$TMT_wizardCustomChannels %>%
             str_split(pattern = "\n") %>%
             unlist()
@@ -130,15 +123,14 @@ observeEvent(input$launch_wizard, {
       })
       
       # Update wizard_channels_data
-      observe({
-        TMT_wizard_channels_data(
-          data.frame(
-            first_two_columns(),
-            Condition = TMT_wizard_conditions(),
-            BioReplicate = TMT_wizard_bioreplicates()
-          ))
+      TMT_wizard_channels_data <- reactive({
+        data.frame(
+          first_two_columns(),
+          Condition = TMT_wizard_conditions(),
+          BioReplicate = TMT_wizard_bioreplicates()
+        )
       })
-
+      
       # Render the channel level data frame as a DataTable
       output$TMT_wizard_channels_table <- DT::renderDataTable({
         datatable(
