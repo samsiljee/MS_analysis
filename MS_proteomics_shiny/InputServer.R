@@ -39,10 +39,9 @@ annot_col <- reactive({
   ) {
     # Input the annotations file
     df <- switch(input$quant_method,
-      LFQ = {
-        df <- if (!is.null(wizard_data())) { # Load data from wizard
+      LFQ = { # input if LFQ selected
+        df <- if (!is.null(wizard_data())) { # Load data from wizard if applicable
           df <- wizard_data()
-
           df
         } else { # Import and clean uploaded data
           df <- vroom(input$annotations$datapath) %>%
@@ -50,7 +49,6 @@ annot_col <- reactive({
 
           # Change back "BioReplicate" column if required
           colnames(df)[grep("BioReplicate", colnames(df), ignore.case = TRUE)] <- "BioReplicate"
-
           df
         }
 
@@ -60,12 +58,25 @@ annot_col <- reactive({
 
         df
       },
-      TMT = {
+      
+      TMT = { # load annotations for TMT methods
         # Channel annotations
-        channel_df <- vroom(input$channel_annotations$datapath)
+        channel_df <- if (!is.null(TMT_wizard_channels_data())) {
+          df <- TMT_wizard_channels_data()
+          df
+        }  else {
+          df <- vroom(input$channel_annotations$datapath)
+          df
+        }
 
         # Run annotations
-        run_df <- vroom(input$run_annotations$datapath)
+        run_df <- if (!is.null(TMT_wizard_runs_data())) {
+          df <- TMT_wizard_runs_data()
+          df
+        }  else {
+          df <- vroom(input$run_annotations$datapath)
+          df
+        }
 
         # Combine and clean names
         df <- clean_names(full_join(run_df, channel_df), case = "upper_camel")
