@@ -56,5 +56,5 @@ server <- function(input, output, session) {
   })
 
   # Testing
-  output$test_text <- renderPrint(TMT_wizard_runs_data())
+  output$test_text <- renderPrint(!nrow(TMT_wizard_runs_data()) == 0)
 }
