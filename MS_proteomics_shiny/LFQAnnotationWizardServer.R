@@ -1,6 +1,5 @@
 # Source script for UI elements
 
-
 # Initialise data frame to store wizard data - initialised outside of the modal to make it globally available
 wizard_data <- reactiveVal(NULL)
 
