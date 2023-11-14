@@ -301,7 +301,7 @@ observeEvent(input$launch_wizard, {
       # Initialise variable for TMT wizard page
       TMT_wizard_page <- reactiveVal(1)
       
-      # Event handler to change to the next page
+      # Event handler to change to the next page - with skipping
       observeEvent(input$nextButton, {
         req(TMT_wizard_page())
         
@@ -312,7 +312,7 @@ observeEvent(input$launch_wizard, {
         }
       })
       
-      # Event handler to change to the previous page
+      # Event handler to change to the previous page - with skipping
       observeEvent(input$backButton, {
         req(TMT_wizard_page())
         

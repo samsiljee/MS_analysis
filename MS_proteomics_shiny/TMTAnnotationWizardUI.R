@@ -120,6 +120,7 @@ TMT_wizard_fractions_ui <- function() {
     # Hide buttons
     shinyjs::hide("doneButton"),
     shinyjs::hide("wizard_runs_annotations_tsv"),
+    shinyjs::hide("wizard_channels_annotations_tsv"),
     # Show buttons
     shinyjs::show("nextButton"),
     shinyjs::show("backButton")
@@ -140,10 +141,11 @@ TMT_wizard_techrepmixtures_ui <- function() {
     ),
 
     # Hide buttons
-    shinyjs::hide("doneButton"),
+    shinyjs::hide("nextButton"),
+    shinyjs::hide("wizard_channels_annotations_tsv"),
     # Show buttons
     shinyjs::show("wizard_runs_annotations_tsv"),
-    shinyjs::show("nextButton"),
+    shinyjs::show("doneButton"),
     shinyjs::show("backButton")
   )
 }

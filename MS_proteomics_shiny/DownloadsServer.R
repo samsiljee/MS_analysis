@@ -15,7 +15,7 @@ output$wizard_runs_annotations_tsv <- downloadHandler(
     paste0("Runs_annotations_", Sys.Date(), ".tsv")
   },
   content = function(file) {
-    vroom_write(wizard_runs_data(), file, delim = "\t")
+    vroom_write(TMT_wizard_runs_data(), file, delim = "\t")
   }
 )
 
