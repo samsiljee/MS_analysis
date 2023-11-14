@@ -34,7 +34,8 @@ annot_col <- reactive({
   if ( # Only create annotations if there is data to work with, either uploaded or from wizard
     !is.null(input$annotations) |
     (!is.null(input$channel_annotations) & !is.null(input$run_annotations)) |
-    !is.null(wizard_data())
+    !is.null(wizard_data()) |
+    (!is.null(TMT_wizard_runs_data()) & !is.null(TMT_wizard_channels_data()))
   ) {
     # Input the annotations file
     df <- switch(input$quant_method,
