@@ -8,7 +8,7 @@ conditions_wizard_ui <- function() {
         "Select one or more rows, and enter condition below:",
         DT::dataTableOutput("wizard_table"),
         textInput("wizardCondition", "", ""),
-        actionButton("addCondition", "Add condition"),
+        actionButton("LFQ_addCondition", "Add condition"),
         
         # Hide back, download, and done buttons
         shinyjs::hide("backButton"),
@@ -27,7 +27,7 @@ bio_replicates_wizard_ui <- function() {
         "Select one or more rows, and enter biological replicate below:",
         DT::dataTableOutput("wizard_table"),
         textInput("wizardBioReplicates", "", ""),
-        actionButton("addBioReplicate", "Add biological replicate"),
+        actionButton("LFQ_addBioReplicate", "Add biological replicate"),
         
         # Hide done and download buttons
         shinyjs::hide("wizard_annotations_tsv"),
@@ -49,7 +49,7 @@ fractions_wizard_ui <- function() {
             condition = "input.wizardFractionated == false",
             # Numeric entry for fraction
             numericInput("wizardFraction", "", value = 1),
-            actionButton("addFraction", "Add fraction"),
+            actionButton("LFQ_addFraction", "Add fraction"),
         ),
         
         # Hide "next" button

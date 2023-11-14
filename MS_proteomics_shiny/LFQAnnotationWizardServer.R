@@ -8,7 +8,6 @@ observeEvent(input$launch_wizard, {
   if (input$quant_method == "LFQ") { # Only run for LFQ experiments
     if (nrow(raw()) != 0) { # only run wizard if the raw files are loaded
       # Create variables
-
       # Vector of unique runs from raw data
       wizard_runs <- reactive({
         switch(input$platform,
@@ -32,7 +31,7 @@ observeEvent(input$launch_wizard, {
       wizard_bioreplicates <- reactiveVal(rep(NA, length(wizard_runs())))
       wizard_fractions <- reactiveVal(rep(NA, length(wizard_runs())))
 
-      # Wizard "server"
+      # Wizard "server" ----
 
       # Update wizard_data
       observe({
@@ -68,7 +67,7 @@ observeEvent(input$launch_wizard, {
       })
 
       # Handler to edit Condition
-      observeEvent(input$addCondition, {
+      observeEvent(input$LFQ_addCondition, {
         if (!is.null(selected_rows())) {
           current_wizard_conditions <- wizard_conditions()
           current_wizard_conditions[selected_rows()] <- input$wizardCondition
@@ -84,7 +83,7 @@ observeEvent(input$launch_wizard, {
       })
 
       # Handler to edit BioReplicate
-      observeEvent(input$addBioReplicate, {
+      observeEvent(input$LFQ_addBioReplicate, {
         if (!is.null(selected_rows())) {
           current_wizard_bioreplicates <- wizard_bioreplicates()
           current_wizard_bioreplicates[selected_rows()] <- input$wizardBioReplicates
@@ -100,7 +99,7 @@ observeEvent(input$launch_wizard, {
       })
 
       # Handler to edit Fraction if adding fractions manually
-      observeEvent(input$addFraction, {
+      observeEvent(input$LFQ_addFraction, {
         if (!is.null(selected_rows())) {
           current_wizard_fractions <- wizard_fractions()
           current_wizard_fractions[selected_rows()] <- input$wizardFraction
