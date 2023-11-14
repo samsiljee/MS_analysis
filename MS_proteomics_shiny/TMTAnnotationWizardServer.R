@@ -72,7 +72,7 @@ observeEvent(input$addCondition, {
     showNotification(
       "Please select one or more rows first",
       type = "error",
-      duration = NULL,
+      duration = 5,
       closeButton = TRUE
     )
   }
@@ -88,7 +88,7 @@ observeEvent(input$addBioReplicate, {
     showNotification(
       "Please select one or more rows first",
       type = "error",
-      duration = NULL,
+      duration = 5,
       closeButton = TRUE
     )
   }
@@ -107,7 +107,7 @@ observeEvent(input$setNorm, {
     showNotification(
       "Please select one or more rows first",
       type = "error",
-      duration = NULL,
+      duration = 5,
       closeButton = TRUE
     )
   }
@@ -207,7 +207,7 @@ observeEvent(input$addMixture, {
     showNotification(
       "Please select one or more rows first",
       type = "error",
-      duration = NULL,
+      duration = 5,
       closeButton = TRUE
     )
   }
@@ -224,7 +224,7 @@ observeEvent(input$addFraction, {
     showNotification(
       "Please select one or more rows first",
       type = "error",
-      duration = NULL,
+      duration = 5,
       closeButton = TRUE
     )
   }
@@ -250,7 +250,7 @@ observeEvent(input$addReplicate, {
     showNotification(
       "Please select one or more rows first",
       type = "error",
-      duration = NULL,
+      duration = 5,
       closeButton = TRUE
     )
   }
@@ -361,7 +361,7 @@ observeEvent(input$launch_wizard, {
       showNotification(
         "Please upload PSM/evidence/proteinGroups files first",
         type = "error",
-        duration = NULL,
+        duration = 5,
         closeButton = TRUE
       )
     } # Close error pop-up if no raw data is uploaded

@@ -78,7 +78,7 @@ observeEvent(input$launch_wizard, {
           showNotification(
             "Please select one or more rows first",
             type = "error",
-            duration = NULL,
+            duration = 5,
             closeButton = TRUE
           )
         }
@@ -94,7 +94,7 @@ observeEvent(input$launch_wizard, {
           showNotification(
             "Please select one or more rows first",
             type = "error",
-            duration = NULL,
+            duration = 5,
             closeButton = TRUE
           )
         }
@@ -111,7 +111,7 @@ observeEvent(input$launch_wizard, {
           showNotification(
             "Please select one or more rows first",
             type = "error",
-            duration = NULL,
+            duration = 5,
             closeButton = TRUE
           )
         }
@@ -169,7 +169,7 @@ observeEvent(input$launch_wizard, {
       showNotification(
         "Please upload PSM/evidence/proteinGroups files first",
         type = "error",
-        duration = NULL,
+        duration = 5,
         closeButton = TRUE
       )
     } # Close warning if no raw data is uploaded

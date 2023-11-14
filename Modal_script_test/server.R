@@ -70,7 +70,7 @@ function(input, output, session) {
             showNotification(
                 "Please select one or more rows first",
                 type = "error",
-                duration = NULL,
+                duration = 5,
                 closeButton = TRUE
             )
         }
