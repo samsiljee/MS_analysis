@@ -38,6 +38,5 @@ InstructionsUI <- tabPanel(
   "Technical replicates are automatically detected.", br(),
   hr(style = "border-top: 2px solid #000000;"),
   "Debugging output here, please ignore", br(),
-  verbatimTextOutput("test_text"),
-  tableOutput("test_table")
+  verbatimTextOutput("test_text")
 )
