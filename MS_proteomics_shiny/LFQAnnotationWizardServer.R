@@ -158,11 +158,18 @@ observeEvent(input$launch_wizard, {
           actionButton("backButton", "Back"),
           actionButton("nextButton", "Next"),
           actionButton("doneButton", "Done"),
-          modalButton("Dismiss")
+          actionButton("dismissButton","Cancel")
         ),
-        size = "m",
+        size = "xl",
         easyClose = FALSE
       ))
+      
+      # Event handler to set wizard_data to NULL when the "Dismiss" button is clicked
+      observeEvent(input$dismissButton, {
+        wizard_data(NULL)
+        removeModal()
+      })
+      
     } else { # "error" if no raw data uploaded yet
       showNotification(
         "Please upload PSM/evidence/proteinGroups files first",
