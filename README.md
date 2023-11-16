@@ -1,20 +1,19 @@
-# MS_analysis
-# (c) Sam Siljee
-# Created July 18th 2022
-
-A shiny app to analyse mass spectromtetry for proteomics data - from PSMs to visualisation.
+# Shiny app to analyse mass spectromtetry for proteomics data - from PSMs to visualisation.
+(c) Sam Siljee
+Created July 18th 2022
 
 ## How to use this app.
 1. Please download and install R and R studio
-2. Download the "MS_proteomics_shiny" folder, open in Rstudio, and install all required packages
+2. Download the "MS_proteomics_shiny" folder, open in Rstudio, and install all required packages, the required packages can be found at the top of the server.R and ui.R files
 3. Click "Run app" in the top right corner of the pane displaying either ui.R, or server.R
 4. Work your way through the app
+5. Enjoy!
 
 ### Notes:
   - The current stable version should be in the main branch
   - The dev branch is what I'm currently working on, and may not be functional
   - Please email samsiljee@gmail.com for help or suggestions, or submit through Github
-  - This is currently under development, so it may not always be functional
+  - This is currently under development
 
 ## Overall workflow of analysis
 
@@ -52,11 +51,18 @@ A shiny app to analyse mass spectromtetry for proteomics data - from PSMs to vis
   - Good overview of different types of analyses to try here: http://bioinformatics.sdstate.edu/go/
   - LFQ Analyst: https://analyst-suite.monash-proteomics.cloud.edu.au/apps/lfq-analyst/
   - Good resource on visualising enrichment analysis: https://yulab-smu.top/biomedical-knowledge-mining-book/enrichplot.html
+  - ShinyGo: http://bioinformatics.sdstate.edu/go/
 
 ## Issues and to-do
   - QC section
+    - sample correlation
+    - Sample CVs
+    - Protein numbers
+    - Sample coverage
+    - Normalisation
+    - Missing values heatmap
+    - Imputation
   - Better progress bars for slow processes
-  - Downloadable document describing the settings used (MSstats logs now available however)
   - Add reset to comparison matrix
   - Go term analysis with complete tabular output in the analysis tab, and plots intergrated into the visualisation tab
   - Pathview analysis
@@ -66,11 +72,15 @@ A shiny app to analyse mass spectromtetry for proteomics data - from PSMs to vis
   - Add option to use/see example data, could use MSstats test data for this perhaps
   - Help text for various settings
   - Hide some options under "advanced settings", otherwise use defaults
-  - Make a wizard to create annotation files - Use DT for interactive table editing and autofilling some columns from the PSMs files
   - Create a manual?
-  - Fix issue with modelQC not downloading (for TMT at least)
+  - Fix issue with modelQC not downloading (for TMT at least) - Currently this is only a placeholder for MSstatsTMT and will not be available
   - filter out infinite fold change broken
   - Add ability to upload annotations and raw PSMs in multiple files
+  - Add error stop in comparisons section when adding a comparison, stops progress if there is no name entered
+  - Spell out direction A vs B say in comparison
+  - Fix error with update required when changing to heatmap
+  - Fix GO analysis and STRING
+  - Question mark button for description of settings
   
 # License
 Feel free to use this code as you wish under the MIT license, however an acknowledgement would be nice. Thanks!

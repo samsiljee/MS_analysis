@@ -23,6 +23,8 @@ options(shiny.maxRequestSize = 30 * 1024^3)
 
 server <- function(input, output, session) {
   # Source files
+  source("LFQAnnotationWizardServer.R", local = TRUE)
+  source("TMTAnnotationWizardServer.R", local = TRUE)
   source("InputServer.R", local = TRUE)
   source("FormatServer.R", local = TRUE)
   source("ProcessServer.R", local = TRUE)
@@ -31,6 +33,10 @@ server <- function(input, output, session) {
   source("VisualisationServer.R", local = TRUE)
   source("QCServer.R", local = TRUE)
   source("DownloadsServer.R", local = TRUE)
+  
+  # Source files for Wizard UI elements
+  source("LFQAnnotationWizardUI.R", local = TRUE)
+  source("TMTAnnotationWizardUI.R", local = TRUE)
 
   # Load packages depending on input selected
   observeEvent(input$quant_method, {
@@ -50,7 +56,5 @@ server <- function(input, output, session) {
   })
 
   # Testing
-  output$test_text <- renderPrint(class(comparison_matrix_updated()[-1, , drop = FALSE]))
-
-  output$test_table <- renderTable(comparison_matrix_updated()[-1, , drop = FALSE])
+  output$test_text <- renderPrint(TMT_wizard_channels_data())
 }

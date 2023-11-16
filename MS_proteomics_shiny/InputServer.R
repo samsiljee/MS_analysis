@@ -1,5 +1,5 @@
 # Input
-# reactive UI
+# Reactive UI
 output$psm_input <- renderUI({
   fileInput("PSMs",
     switch(input$platform,
@@ -22,36 +22,65 @@ output$psm_input <- renderUI({
   )
 })
 
+# Wizard button
+output$wizard_launch <- renderUI(
+  if (is.null(annot_col())) {
+    actionButton("launch_wizard", "Launch annotation wizard")
+  }
+)
+
 # read in annotations
 annot_col <- reactive({
-  # Return a blank data.frame if there is no input to prevent errors showing
-  if (!is.null(input$annotations) | (!is.null(input$channel_annotations) & !is.null(input$run_annotations))) {
+  if ( # Only create annotations if there is data to work with, either uploaded or from wizard
+    !is.null(input$annotations) |
+    (!is.null(input$channel_annotations) & !is.null(input$run_annotations)) |
+    !is.null(wizard_data()) |
+    !is.null(TMT_wizard_runs_data())
+  ) {
     # Input the annotations file
     df <- switch(input$quant_method,
-      LFQ = {
-        # Import data and clean names
-        df <- clean_names(vroom(input$annotations$datapath), case = "upper_camel")
-        
-        # Change back "BioReplicate" and "TechRepMixture" column if required
-        colnames(df)[grep("BioReplicate", colnames(df), ignore.case = TRUE)] <- "BioReplicate"
-        colnames(df)[grep("TechRepMixture", colnames(df), ignore.case = TRUE)] <- "TechRepMixture"
-        
+      LFQ = { # input if LFQ selected
+        df <- if (!is.null(wizard_data())) { # Load data from wizard if applicable
+          df <- wizard_data()
+          df
+        } else { # Import and clean uploaded data
+          df <- vroom(input$annotations$datapath) %>%
+            clean_names(case = "upper_camel")
+
+          # Change back "BioReplicate" column if required
+          colnames(df)[grep("BioReplicate", colnames(df), ignore.case = TRUE)] <- "BioReplicate"
+          df
+        }
+
         # Create column for PCA plot and heatmap
         df$PcaRef <- str_trim(as.character(df$Run))
         df$PcaRef <- gsub(".", "", df$PcaRef, fixed = TRUE)
 
         df
       },
-      TMT = {
+      
+      TMT = { # load annotations for TMT methods
         # Channel annotations
-        channel_df <- vroom(input$channel_annotations$datapath)
+        channel_df <- if (!is.null(TMT_wizard_channels_data())) {
+          df <- TMT_wizard_channels_data()
+          df
+        }  else {
+          df <- vroom(input$channel_annotations$datapath)
+          df
+        }
 
         # Run annotations
-        run_df <- vroom(input$run_annotations$datapath)
+        run_df <- if (!is.null(TMT_wizard_runs_data())) {
+          df <- TMT_wizard_runs_data()
+          df
+        }  else {
+          df <- vroom(input$run_annotations$datapath)
+          df
+        }
 
         # Combine and clean names
         df <- clean_names(full_join(run_df, channel_df), case = "upper_camel")
-        
+
         # Change back "BioReplicate" and "TechRepMixture" column if required
         colnames(df)[grep("BioReplicate", colnames(df), ignore.case = TRUE)] <- "BioReplicate"
         colnames(df)[grep("TechRepMixture", colnames(df), ignore.case = TRUE)] <- "TechRepMixture"
@@ -75,7 +104,7 @@ annot_col <- reactive({
 
     df
   } else {
-    data.frame()
+    NULL # Return NULL if there is no input to prevent errors showing
   }
 })
 
@@ -113,7 +142,7 @@ raw <- reactive({
       }
     )
   } else {
-    data.frame()
+    data.frame() # Return a blank data.frame if there is no input to prevent errors showing
   }
 })
 

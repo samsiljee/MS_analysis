@@ -7,8 +7,6 @@ params:
   working_directory: NA
 ---
 
-`r class(params$contrast_matrix)`
-
 Analysis was completed using Sam's amazing analysis pipeline (name still to be decided on)
 
 The following settings were used:

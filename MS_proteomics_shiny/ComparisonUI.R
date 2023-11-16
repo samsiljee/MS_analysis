@@ -4,7 +4,7 @@ ComparisonUI <- tabPanel(
     h4("Comparisons"),
     # Common options
     radioButtons("contrast_method", "Contrast method",
-      choiceNames = c("All combinations", "Custom comparisons"),
+      choiceNames = c("All combinations (pairwise)", "Custom comparisons"),
       choiceValues = c("pairwise", "custom")
     ),
     conditionalPanel(
@@ -60,7 +60,9 @@ ComparisonUI <- tabPanel(
     actionButton("go_compare", "Compare!"),
     hr(style = "border-top: 2px solid #000000;"),
     downloadButton("results_tsv", "Save results as .tsv"),
-    downloadButton("model_qc_tsv", "Save model QC as .tsv"),
+    conditionalPanel(
+      condition = "input.quant_method == 'LFQ'",
+      downloadButton("model_qc_tsv", "Save model QC as .tsv")),
     downloadButton("comparisons_rda", "Save as .rda")
   ),
   mainPanel(
@@ -68,11 +70,13 @@ ComparisonUI <- tabPanel(
     tableOutput("comparison_matrix_tab"),
     hr(style = "border-top: 2px solid #000000;"),
     textOutput("outliers"),
-    radioButtons("results_tab_view", "Which results would you like to view?",
-      choiceNames = c("Comparison result", "Model QC"),
-      choiceValues = c("ComparisonResult", "ModelQC"),
-      inline = TRUE
-    ),
+    conditionalPanel(
+      condition = "input.quant_method == 'LFQ'",
+      radioButtons("results_tab_view", "Which results would you like to view?",
+                   choiceNames = c("Comparison result", "Model QC"),
+                   choiceValues = c("ComparisonResult", "ModelQC"),
+                   inline = TRUE
+      )),
     withSpinner(dataTableOutput("results_tab"))
   )
 )

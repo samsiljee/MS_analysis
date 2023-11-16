@@ -2,6 +2,21 @@ InputUI <- tabPanel(
   "Input",
   sidebarPanel(
     h4("Input files"),
+
+    # Raw files input
+    uiOutput("psm_input"),
+    conditionalPanel(
+      condition = "input.platform == 'MQ'",
+      checkboxInput("keep_contaminants", "Keep potential contaminants",
+        value = FALSE
+      ),
+      fileInput("proteinGroups", "MQ protein groups file",
+        buttonLabel = "Browse",
+        placeholder = "Upload proteinGroups.txt"
+      )
+    ),
+    hr(style = "border-top: 2px solid #000000;"),
+
     # LFQ annotations
     conditionalPanel(
       condition = "input.quant_method == 'LFQ'",
@@ -10,6 +25,7 @@ InputUI <- tabPanel(
         placeholder = "Upload annotations"
       )
     ),
+
     # TMT annotations
     conditionalPanel(
       condition = "input.quant_method == 'TMT'",
@@ -22,20 +38,30 @@ InputUI <- tabPanel(
         placeholder = "Upload run annotations"
       )
     ),
-    hr(style = "border-top: 2px solid #000000;"),
-    uiOutput("psm_input"),
+
+    # Annotations wizard
+    uiOutput("wizard_launch"),
+    
+    # Show annotation downloads if using the wizard
     conditionalPanel(
-      condition = "input.platform == 'MQ'",
-      checkboxInput("keep_contaminants", "Keep potential contaminants",
-        value = FALSE
+      condition = "input.doneButton > 0",
+      # Annotations for LFQ
+      conditionalPanel(
+        condition = "input.quant_method == 'LFQ'",
+        downloadButton("wizard_annotations_tsv", "Save annotations")
       ),
-      hr(style = "border-top: 2px solid #000000;"),
-      fileInput("proteinGroups", "MQ protein groups file",
-        buttonLabel = "Browse",
-        placeholder = "Upload proteinGroups.txt"
+      # Annotations for TMT
+      conditionalPanel(
+        condition = "input.quant_method == 'TMT'",
+        downloadButton("wizard_channels_annotations_tsv", "Save channel annotations"),
+        downloadButton("wizard_runs_annotations_tsv", "Save run annotations")
       )
-    )
-  ),
+    ),
+    
+   
+    
+  ), # sidebar panel
+
   mainPanel(
     h3("Annotations"),
     withSpinner(dataTableOutput("annotation_tab")),
