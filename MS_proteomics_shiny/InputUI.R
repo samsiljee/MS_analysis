@@ -40,7 +40,11 @@ InputUI <- tabPanel(
     ),
 
     # Annotations wizard
-    uiOutput("wizard_launch")
+    uiOutput("wizard_launch"),
+    
+    # Download annotations if wizard used
+    downloadButton("wizard_channels_annotations_tsv", "Save channel annotations"),
+    downloadButton("wizard_runs_annotations_tsv", "Save run annotations")
     
   ), # sidebar panel
 

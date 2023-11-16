@@ -122,8 +122,8 @@ observeEvent(input$launch_wizard, {
         }
       })
       
-      # Update wizard_channels_data
-      TMT_wizard_channels_data <- reactive({
+      # Reactive expression for intermittent channels data
+      interim_TMT_channel_data <- reactive({
         data.frame(
           first_two_columns(),
           Condition = TMT_wizard_conditions(),
@@ -131,10 +131,15 @@ observeEvent(input$launch_wizard, {
         )
       })
       
+      # Update wizard_channels_data
+      observeEvent(input$doneButton, {
+        TMT_wizard_channels_data(interim_TMT_channel_data())
+      })
+      
       # Render the channel level data frame as a DataTable
       output$TMT_wizard_channels_table <- DT::renderDataTable({
         datatable(
-          TMT_wizard_channels_data(),
+          interim_TMT_channel_data(),
           options = list(
             dom = "t",
             paging = FALSE,
@@ -277,7 +282,7 @@ observeEvent(input$launch_wizard, {
       observe({
         TMT_wizard_runs_data(
           data.frame(
-            Runs = TMT_wizard_runs_runs(),
+            Run = TMT_wizard_runs_runs(),
             Mixture = TMT_wizard_runs_mixtures(),
             Fraction = TMT_wizard_fractions(),
             TechRepMixture = TMT_wizard_techrepmixtures()
@@ -354,8 +359,6 @@ observeEvent(input$launch_wizard, {
         footer = tagList(
           actionButton("backButton", "Back"),
           actionButton("nextButton", "Next"),
-          downloadButton("wizard_channels_annotations_tsv", "Save channel annotations"),
-          downloadButton("wizard_runs_annotations_tsv", "Save run annotations"),
           actionButton("doneButton", "Done"),
           modalButton("Dismiss")
         ),

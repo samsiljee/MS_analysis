@@ -35,7 +35,7 @@ annot_col <- reactive({
     !is.null(input$annotations) |
     (!is.null(input$channel_annotations) & !is.null(input$run_annotations)) |
     !is.null(wizard_data()) |
-    (!is.null(TMT_wizard_runs_data()) & !is.null(TMT_wizard_channels_data()))
+    !is.null(TMT_wizard_runs_data())
   ) {
     # Input the annotations file
     df <- switch(input$quant_method,
