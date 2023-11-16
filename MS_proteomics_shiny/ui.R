@@ -25,8 +25,8 @@ ui <- navbarPage(
     tags$style(
       HTML("
       .modal-content {
-        width: 180% !important;  /* Adjust the width as needed */
-        margin-left: -5%;  /* Adjust the negative margin as needed */
+        width: 180% !important;  /* Adjust the width */
+        margin-left: -5%;  /* Adjust the negative margin */
         max-width: 120%;  /* Set a maximum width to prevent excessive width */
       }
     ")
