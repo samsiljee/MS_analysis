@@ -20,6 +20,19 @@ source("QCUI.R")
 
 ui <- navbarPage(
   useShinyjs(), # Initialise shinyjs
+  # Code to make the modal pop-up larger
+  tags$head(
+    tags$style(
+      HTML("
+      .modal-content {
+        width: 180% !important;  /* Adjust the width as needed */
+        margin-left: -5%;  /* Adjust the negative margin as needed */
+        max-width: 120%;  /* Set a maximum width to prevent excessive width */
+      }
+    ")
+    )
+  ),
+  
   title = "MS analysis",
   tabsetPanel(
     InstructionsUI,

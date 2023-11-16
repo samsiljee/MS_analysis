@@ -56,7 +56,8 @@ observeEvent(input$launch_wizard, {
           ),
           rownames = FALSE,
           editable = TRUE,
-          class = "cell-border stripe"
+          class = "cell-border stripe",
+          width = "100%"
         )
       })
 
