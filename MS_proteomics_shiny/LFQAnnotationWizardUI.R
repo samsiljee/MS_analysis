@@ -12,7 +12,6 @@ conditions_wizard_ui <- function() {
         
         # Hide back, download, and done buttons
         shinyjs::hide("backButton"),
-        shinyjs::hide("wizard_annotations_tsv"),
         shinyjs::hide("doneButton"),
         # Show next button
         shinyjs::show("nextButton")
@@ -30,7 +29,6 @@ bio_replicates_wizard_ui <- function() {
         actionButton("LFQ_addBioReplicate", "Add biological replicate"),
         
         # Hide done and download buttons
-        shinyjs::hide("wizard_annotations_tsv"),
         shinyjs::hide("doneButton"),
         # Show next and back buttons
         shinyjs::show("nextButton"),
@@ -55,7 +53,6 @@ fractions_wizard_ui <- function() {
         # Hide "next" button
         shinyjs::hide("nextButton"),
         # Show other buttons
-        shinyjs::show("wizard_annotations_tsv"),
         shinyjs::show("doneButton"),
         shinyjs::show("backButton")
     )

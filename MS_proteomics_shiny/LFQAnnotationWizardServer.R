@@ -156,7 +156,6 @@ observeEvent(input$launch_wizard, {
         footer = tagList(
           actionButton("backButton", "Back"),
           actionButton("nextButton", "Next"),
-          downloadButton("wizard_annotations_tsv", "Save as .tsv"),
           actionButton("doneButton", "Done"),
           modalButton("Dismiss")
         ),

@@ -12,7 +12,7 @@ output$wizard_annotations_tsv <- downloadHandler(
 # .tsv runs files from TMT annotation wizard
 output$wizard_runs_annotations_tsv <- downloadHandler(
   filename = function() {
-    paste0("Runs_annotations_", Sys.Date(), ".tsv")
+    paste0("Run_annotations_", Sys.Date(), ".tsv")
   },
   content = function(file) {
     vroom_write(TMT_wizard_runs_data(), file, delim = "\t")
@@ -22,7 +22,7 @@ output$wizard_runs_annotations_tsv <- downloadHandler(
 # .tsv channels files from TMT annotation wizard
 output$wizard_channels_annotations_tsv <- downloadHandler(
   filename = function() {
-    paste0("channels_annotations_", Sys.Date(), ".tsv")
+    paste0("Channel_annotations_", Sys.Date(), ".tsv")
   },
   content = function(file) {
     vroom_write(TMT_wizard_channels_data(), file, delim = "\t")

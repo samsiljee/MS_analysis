@@ -45,9 +45,17 @@ InputUI <- tabPanel(
     # Show annotation downloads if using the wizard
     conditionalPanel(
       condition = "input.doneButton > 0",
-      # Download annotations if wizard used
-      downloadButton("wizard_channels_annotations_tsv", "Save channel annotations"),
-      downloadButton("wizard_runs_annotations_tsv", "Save run annotations")
+      # Annotations for LFQ
+      conditionalPanel(
+        condition = "input.quant_method == 'LFQ'",
+        downloadButton("wizard_annotations_tsv", "Save annotations")
+      ),
+      # Annotations for TMT
+      conditionalPanel(
+        condition = "input.quant_method == 'TMT'",
+        downloadButton("wizard_channels_annotations_tsv", "Save channel annotations"),
+        downloadButton("wizard_runs_annotations_tsv", "Save run annotations")
+      )
     ),
     
    
