@@ -37,6 +37,9 @@ server <- function(input, output, session) {
   # Source files for Wizard UI elements
   source("LFQAnnotationWizardUI.R", local = TRUE)
   source("TMTAnnotationWizardUI.R", local = TRUE)
+  
+  # Source files for functions
+  source("DIANNtoMSstatsFormat.R", local = TRUE)
 
   # Load packages depending on input selected
   observeEvent(input$quant_method, {

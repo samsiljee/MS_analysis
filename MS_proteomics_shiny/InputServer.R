@@ -8,6 +8,9 @@ output$psm_input <- renderUI({
       },
       MQ = {
         "MQ evidence file"
+      },
+      DIANN = {
+        "Report file"
       }
     ),
     buttonLabel = "Browse",
@@ -17,6 +20,9 @@ output$psm_input <- renderUI({
       },
       MQ = {
         "Upload evidence.txt"
+      },
+      DIANN = {
+        "Upload report.tsv"
       }
     )
   )
@@ -138,6 +144,12 @@ raw <- reactive({
         if (input$keep_contaminants) {
           df$`Potential contaminant` <- NA
         }
+        df
+      },
+      DIANN = {
+        df <- vroom(input$PSMs$datapath)
+        df$File.Name <- str_replace(df$File.Name, ".*\\\\", "")
+        df$File.Name <- str_replace(df$File.Name, ".raw.mzml$", "")
         df
       }
     )
