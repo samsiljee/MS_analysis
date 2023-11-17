@@ -4,8 +4,8 @@ InstructionsUI <- tabPanel(
   "Please move sequentially through the tabs to complete the pipeline. Analysis however can be skipped if desired, however not all plots will be available in the visualisation tab.", br(),
   radioButtons("platform",
     "Search platform",
-    choiceNames = c("Proteome Discoverer", "MaxQuant"),
-    choiceValues = c("PD", "MQ")
+    choiceNames = c("Proteome Discoverer", "MaxQuant", "DIA-NN"),
+    choiceValues = c("PD", "MQ", "DIANN")
   ),
   radioButtons("quant_method",
     "Quantitation method",
