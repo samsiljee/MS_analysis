@@ -1,27 +1,8 @@
-### DIA-NN to MSstats formatting for LFQ normalization ----
 
-## Install required packages if necessary ----
-
-packages <- c("dplyr", "here", "readr", "tidyr", "diann", "tidyverse")
-
-biopackgs <- c("MSstats")
-
-if (length(setdiff(packages, rownames(installed.packages()))) > 0) {
-      install.packages(setdiff(packages, rownames(installed.packages())))  
-}
-
-if (length(setdiff(biopackgs, rownames(installed.packages()))) > 0){
-      if (!requireNamespace("BiocManager", quietly = TRUE)) install.packages("BiocManager")
-      
-      BiocManager::install(setdiff(biopackgs, rownames(installed.packages())))
-      
-}
-
-
-# Modified on 16.02.2021 ----
 #install.packages("devtools")
 library(tidyverse)
-library(dplyr)
+library(vroom)
+library(MSstats)
 
 ##Genes.MaxLFQ gives already normalized MQ-LFQ data for every protein group and is recommended
 ## Genes.MaxLFQ would be used to extract the quantitative information per feature from the DIANN output

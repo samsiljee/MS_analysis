@@ -63,7 +63,13 @@ MSstats_input <- eventReactive(input$go_format, {
             use_log_file = TRUE,
             log_file_path = format_log_file_path
           )
-        } # switch = MQ (LFQ)
+        }, # switch = MQ (LFQ)
+        DIANN = {
+          DIANNtoMSstatsFormat(
+            raw_data = raw(),
+            annotations = annot_col()
+          )
+        } # swich = DIANN (LFQ)
       )
     }, # switch = LFQ
 

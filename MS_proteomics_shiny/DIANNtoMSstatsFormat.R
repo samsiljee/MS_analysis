@@ -3,14 +3,9 @@
 # changes made include adding some comments, re-naming some variables, and changing the column name from "FileName" to "Run" in annotations
 
 DIANNtoMSstatsFormat <- function(raw_data, annotations) {
-
-  # Read in the data and format File.Name
-diann_data1 <- raw_data %>% mutate(File.Name = str_replace(raw_data[[1]], ".*\\\\", ""))
-diann_data1 <- mutate(diann_data1, File.Name = str_replace(diann_data1[[1]], ".raw.mzml$", ""))
-
 #select relevant columns -> choose which parameter to use for quantitation
 
-for_msstats_prot <- diann_data1 %>% 
+for_msstats_prot <- raw_data %>% 
   group_by(Stripped.Sequence, 
            Protein.Group, 
            Precursor.Charge, 
