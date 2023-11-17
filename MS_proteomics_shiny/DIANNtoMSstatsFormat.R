@@ -1,21 +1,10 @@
-# Sam Siljee
-# Written 17/11/23
+# Function adapted from MiguelCos; found at: https://github.com/MiguelCos/MSstats_labelfree_preprocessing/blob/master/R/diann2msstats.R
+# Original code under the GPL-3.0 licence
+# changes made include adding some comments, re-naming some variables, and changing the column name from "FileName" to "Run" in annotations
 
-# Libraries
-library(vroom)
-library(tidyverse)
-library(MSstats)
+DIANNtoMSstatsFormat <- function(raw_data, annotations) {
 
-# Load raw data
-raw_data <- vroom("input/DIANN/report.tsv")
-
-# load annotations
-annotations <- vroom("input/DIANN/annotations.tsv")
-
-
-# Function ----
-# Copied from the function by MiguelCos
-
+  # Read in the data and format File.Name
 diann_data1 <- raw_data %>% mutate(File.Name = str_replace(raw_data[[1]], ".*\\\\", ""))
 diann_data1 <- mutate(diann_data1, File.Name = str_replace(diann_data1[[1]], ".raw.mzml$", ""))
 
@@ -55,5 +44,7 @@ for_msstats_prot2$FragmentIon <- NA
 for_msstats_prot3 <- for_msstats_prot2[, c("ProteinName", "PeptideSequence", "PrecursorCharge", 
                                            "FragmentIon", "ProductCharge", "IsotopeLabelType", 
                                            "Condition", "BioReplicate", "Run", "Intensity")]
-
+# Return formatted data
 return(for_msstats_prot3)
+
+}
