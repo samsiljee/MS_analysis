@@ -10,6 +10,7 @@ Created July 18th 2022
 5. Enjoy!
 
 ### Notes:
+  - The first time you launch the app it may take some time to install all of the required packages
   - The current stable version should be in the main branch
   - The dev branch is what I'm currently working on, and may not be functional
   - Please email samsiljee@gmail.com for help or suggestions, or submit through Github
