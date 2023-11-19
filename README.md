@@ -5,9 +5,10 @@ Created July 18th 2022
 ## How to use this app.
 1. Please download and install R and R studio
 2. Download the "MS_proteomics_shiny" folder, open in Rstudio, and install all required packages, the required packages can be found at the top of the server.R and ui.R files
-3. Click "Run app" in the top right corner of the pane displaying either ui.R, or server.R
-4. Work your way through the app
-5. Enjoy!
+3. Open the file "Launch_application_here.R" in RStudio
+4. Click on "Run App" at top right of the editor in RStudio
+5. Work your way through the app
+6. Enjoy!
 
 ### Notes:
   - The current stable version should be in the main branch
