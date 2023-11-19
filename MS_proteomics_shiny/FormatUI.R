@@ -7,7 +7,6 @@ FormatUI <- tabPanel(
       "Remove peptides assigned to more than one protein",
       value = TRUE
     ),
-    uiOutput("select_summary_method"),
     checkboxInput(
       "removeFewMeasurements",
       "Remove features with one or two measurements across runs",
@@ -29,6 +28,42 @@ FormatUI <- tabPanel(
         choiceValues = c("Master.Protein.Accessions", "Protein.Accessions")
       )
     ),
+    
+    # DIA-NN conditional options
+    conditionalPanel(
+      condition = "input.platform == 'DIANN'",
+      numericInput(
+        "global_qvalue_cutoff",
+        "Global qvalue cutoff",
+        value = 0.01,
+        step = 0.01),
+      numericInput(
+        "qvalue_cutoff",
+        "qvalue cutoff",
+        value = 0.01,
+        step = 0.01),
+      numericInput(
+        "pg_qvalue_cutoff",
+        "Protein groups qvalue cutoff",
+        value = 0.01,
+        step = 0.01),
+      checkboxInput(
+        "removeProtein_with1Feature",
+        "remove proteins with a single feature",
+        value = TRUE
+      ),
+      checkboxInput(
+        "MBR",
+        "Was match between runs used in DIA-NN?",
+        value = TRUE
+      )
+    ),
+    
+    # PD or MQ conditional options
+    conditionalPanel(
+      condition = "input.platform !== 'DIANN'",
+      uiOutput("select_summary_method")
+    ),
 
     # LFQ conditional options
     conditionalPanel(
@@ -38,10 +73,15 @@ FormatUI <- tabPanel(
         "Remove peptides with methionine oxidation",
         value = FALSE
       ),
-      checkboxInput(
-        "removeProtein_with1Peptide",
-        "Remove proteins with only one peptide and charge",
-        value = TRUE
+      
+      # LFQ and PD or MQ conditional options
+      conditionalPanel(
+        condition = "input.platform == 'PD' || input.platform == 'MQ'",
+        checkboxInput(
+          "removeProtein_with1Peptide",
+          "Remove proteins with only one peptide and charge",
+          value = TRUE
+        ),
       ),
 
       # LFQ and PD conditional options
