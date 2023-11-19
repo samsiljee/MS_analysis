@@ -16,7 +16,7 @@ InstructionsUI <- tabPanel(
   conditionalPanel(
     condition = "input.quant_method == 'LFQ'",
     "Please use the annotation wizard on the \"Input\" tab to create an annotation file, or prepare a .tsv or .csv file with the following columns:", br(),
-    "\"Run\" exact filenames of the raw data files, with .raw or .mzML extension for PD or DIA-NN, and without for MQ.", br(),
+    "\"Run\" exact filenames of the raw data files, with .raw extension for PD, and without for MQ or DIA-NN.", br(),
     "\"Condition\" describing the experimental group.", br(),
     "\"BioReplicate\" describing the biological replicate.", br(),
     "\"Fraction\" set all to 1 if no fractionation was done.", br()
@@ -25,7 +25,7 @@ InstructionsUI <- tabPanel(
     condition = "input.quant_method == 'TMT'",
     "Please use the annotation wizard on the \"Input\" tab to create an annotation file, or prepare two annotation files as .tsv or .csv with the following columns:", br(),
     h4("Run annotations"),
-    "\"Run\" exact filenames of the raw data files, with .raw or .mzML extension for PD or DIA-NN, and without for MQ.", br(),
+    "\"Run\" exact filenames of the raw data files, with .raw extension for PD, and without for MQ.", br(),
     "\"Mixture\" batch or mixture of TMT channels. Set all to 1 if only one mixture was run.", br(),
     "\"Fraction\" set all to 1 if no fractionation was done.", br(),
     "\"TechRepMixture\" technical replicates of distinct mixtures. Set all to 1 if only one replicate was run.", br(),

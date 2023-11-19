@@ -22,7 +22,7 @@ observeEvent(input$launch_wizard, {
             }
           },
           DIANN = {
-            raw()$File.Name
+            raw()$Run
           }
         ) %>%
           unique() %>%
