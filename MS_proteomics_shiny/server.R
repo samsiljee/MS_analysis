@@ -31,11 +31,25 @@ server <- function(input, output, session) {
     )
   })
 
+  # Load/install the dataset for STRING analysis - species specific
   observeEvent(input$species, {
     selected_species <- input$species
+    
+    # Function to check and install Bioconductor annotation packages
+    install_bioconductor_package <- function(package_name) {
+      if (!requireNamespace(package_name, quietly = TRUE)) {
+        if (!requireNamespace("BiocManager", quietly = TRUE)) {
+          install.packages("BiocManager")
+        }
+        BiocManager::install(package_name)
+      }
+      library(package_name, character.only = TRUE)
+    }
+    
+    # Switch based on selected species
     switch(selected_species,
-      "Human" = library(org.Hs.eg.db),
-      "Rat" = library(org.Rn.eg.db)
+           "Human" = install_bioconductor_package("org.Hs.eg.db"),
+           "Rat" = install_bioconductor_package("org.Rn.eg.db")
     )
   })
 
