@@ -2,11 +2,45 @@
 # Sam Siljee
 # 20 November 2023
 
-# Libraries
-library(parallel)
+# List of required packages
+required_packages <- c(
+  "shiny",
+  "vroom",
+  "janitor",
+  "DT",
+  "ggplot2",
+  "tidyr",
+  "dplyr",
+  "stringr",
+  "tibble",
+  "rmarkdown",
+  "tinytex",
+  "shinycssloaders",
+  "shinyjs",
+  "ComplexHeatmap",
+  "clusterProfiler",
+  "STRINGdb"
+)
+
+# Load or check and install missing packages
+for (package in required_packages) {
+  if (!requireNamespace(package, quietly = TRUE)) {
+    if (package %in% c("ComplexHeatmap", "clusterProfiler", "STRINGdb")) {
+      # Bioconductor packages
+      if (!requireNamespace("BiocManager", quietly = TRUE)) {
+        install.packages("BiocManager")
+      }
+      BiocManager::install(package)
+    } else {
+      # CRAN packages
+      install.packages(package)
+    }
+  }
+  library(package, character.only = TRUE)
+}
 
 # Get the number of available cores, reserve 20% for other tasks
-available_cores <- floor(0.8 * detectCores())
+available_cores <- floor(0.8 * parallel::detectCores())
 
 # Set the number of CPU cores for Shiny app
 options(shiny.num_procs = available_cores)

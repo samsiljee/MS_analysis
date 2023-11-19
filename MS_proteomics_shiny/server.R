@@ -2,24 +2,6 @@
 # Written by Sam Siljee - (c) 2023
 # Created 04/04/2023
 
-# Packages
-library(shiny)
-library(vroom)
-library(janitor)
-library(DT)
-library(ggplot2)
-library(tidyr)
-library(dplyr)
-library(stringr)
-library(tibble)
-library(rmarkdown)
-library(tinytex)
-
-# BiocManager packages
-library(ComplexHeatmap)
-library(clusterProfiler) # may be replaced with topGO, or a GO tool via API
-library(STRINGdb)
-
 # Setting option to increase allowed file size to 30MB, I may have to increase this further
 options(shiny.maxRequestSize = 30 * 1024^3)
 
