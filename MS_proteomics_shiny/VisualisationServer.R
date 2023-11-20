@@ -194,7 +194,7 @@ colours <- c("red", "blue", "black")
 names(colours) <- c("Upregulated", "Downregulated", "Not significant")
 
 # Make heatmap
-heatmap_plot <- eventReactive(input$go_plot, {
+heatmap_plot <- reactive({
   # create heatmap of gene expression, row scaling removed
   Heatmap(
     matrix = heatmap_input(),
@@ -215,7 +215,7 @@ heatmap_plot <- eventReactive(input$go_plot, {
 pca <- reactive(prcomp(t(na.omit(prot_mat())), center = TRUE, scale. = TRUE))
 pca_dat <- reactive(merge(pca()$x, annot_col(), by.x = "row.names", by.y = "Experiment"))
 
-pca_plot <- eventReactive(input$go_plot, {
+pca_plot <- reactive({
   # plot eigen values - add in later if desired
   #   eigen_plot <- fviz_eig(pca) + ggtitle("Eigen value plot of Rosalind data")
 
@@ -229,7 +229,7 @@ pca_plot <- eventReactive(input$go_plot, {
 })
 
 ## Volcano plot ----
-volcano_plot <- eventReactive(input$go_plot, {
+volcano_plot <- reactive({
   MSstats_results() %>%
     filter(Label == input$comparison_selected) %>%
     ggplot(aes(x = log2FC, y = -log10(adj.pvalue), col = Dif)) +
@@ -244,7 +244,7 @@ volcano_plot <- eventReactive(input$go_plot, {
 })
 
 ## GO enrichment plot ----
-go_enrichment_plot <- eventReactive(input$go_plot, {
+go_enrichment_plot <- reactive({
   go_enrichment_plot_dataset() %>%
     ggplot(aes(x = GeneRatio, y = 1:input$go_top_n, col = p.adjust, size = Count)) +
     geom_point() +
@@ -259,18 +259,18 @@ go_enrichment_plot <- eventReactive(input$go_plot, {
 })
 
 ## STRING network plot ----
-STRING_network_plot <- eventReactive(input$go_plot, {
+STRING_network_plot <- reactive({
   string_db()$get_png(STRING_dataset()$STRING_id[1:input$STRING_n])
 })
 
 # Output
 output$plot <- renderPlot({
   plot_obj <- switch(input$plot_type,
-    Volcano = volcano_plot(),
-    PCA = pca_plot(),
-    Heatmap = heatmap_plot(),
-    `GO enrichment` = go_enrichment_plot(),
-    `STRING network` = STRING_network_plot()
+                     Volcano = volcano_plot(),
+                     PCA = pca_plot(),
+                     Heatmap = heatmap_plot(),
+                     `GO enrichment` = go_enrichment_plot(),
+                     `STRING network` = STRING_network_plot()
   )
   return(plot_obj)
 })
