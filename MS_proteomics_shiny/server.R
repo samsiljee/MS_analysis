@@ -2,25 +2,6 @@
 # Written by Sam Siljee - (c) 2023
 # Created 04/04/2023
 
-# Packages
-library(shiny)
-library(ComplexHeatmap)
-library(vroom)
-library(janitor)
-library(clusterProfiler) # may be replaced with topGO, or a GO tool via API
-library(STRINGdb)
-library(DT)
-library(ggplot2)
-library(tidyr)
-library(dplyr)
-library(stringr)
-library(tibble)
-library(rmarkdown)
-library(tinytex)
-
-# Setting option to increase allowed file size to 30MB, I may have to increase this further
-options(shiny.maxRequestSize = 30 * 1024^3)
-
 server <- function(input, output, session) {
   # Source files
   source("LFQAnnotationWizardServer.R", local = TRUE)
@@ -47,11 +28,25 @@ server <- function(input, output, session) {
     )
   })
 
+  # Load/install the dataset for STRING analysis - species specific
   observeEvent(input$species, {
     selected_species <- input$species
+    
+    # Function to check and install Bioconductor annotation packages
+    install_bioconductor_package <- function(package_name) {
+      if (!requireNamespace(package_name, quietly = TRUE)) {
+        if (!requireNamespace("BiocManager", quietly = TRUE)) {
+          install.packages("BiocManager")
+        }
+        BiocManager::install(package_name)
+      }
+      library(package_name, character.only = TRUE)
+    }
+    
+    # Switch based on selected species
     switch(selected_species,
-      "Human" = library(org.Hs.eg.db),
-      "Rat" = library(org.Rn.eg.db)
+           "Human" = install_bioconductor_package("org.Hs.eg.db"),
+           "Rat" = install_bioconductor_package("org.Rn.eg.db")
     )
   })
 

@@ -20,6 +20,9 @@ observeEvent(input$launch_wizard, {
             } else {
               raw()$`Raw file`
             }
+          },
+          DIANN = {
+            raw()$Run
           }
         ) %>%
           unique() %>%

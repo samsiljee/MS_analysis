@@ -4,8 +4,8 @@ InstructionsUI <- tabPanel(
   "Please move sequentially through the tabs to complete the pipeline. Analysis however can be skipped if desired, however not all plots will be available in the visualisation tab.", br(),
   radioButtons("platform",
     "Search platform",
-    choiceNames = c("Proteome Discoverer", "MaxQuant"),
-    choiceValues = c("PD", "MQ")
+    choiceNames = c("Proteome Discoverer", "MaxQuant", "DIA-NN"),
+    choiceValues = c("PD", "MQ", "DIANN")
   ),
   radioButtons("quant_method",
     "Quantitation method",
@@ -16,7 +16,7 @@ InstructionsUI <- tabPanel(
   conditionalPanel(
     condition = "input.quant_method == 'LFQ'",
     "Please use the annotation wizard on the \"Input\" tab to create an annotation file, or prepare a .tsv or .csv file with the following columns:", br(),
-    "\"Run\" exact filenames of the raw data files, with .raw extension for PD, and without for MQ.", br(),
+    "\"Run\" exact filenames of the raw data files, with .raw extension for PD, and without for MQ or DIA-NN.", br(),
     "\"Condition\" describing the experimental group.", br(),
     "\"BioReplicate\" describing the biological replicate.", br(),
     "\"Fraction\" set all to 1 if no fractionation was done.", br()

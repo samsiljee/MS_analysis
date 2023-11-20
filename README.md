@@ -4,12 +4,13 @@ Created July 18th 2022
 
 ## How to use this app.
 1. Please download and install R and R studio
-2. Download the "MS_proteomics_shiny" folder, open in Rstudio, and install all required packages, the required packages can be found at the top of the server.R and ui.R files
-3. Click "Run app" in the top right corner of the pane displaying either ui.R, or server.R
+2. Open the file "Launch_application_here.R" in RStudio
+3. Click on "Run App" at top right of the editor in RStudio
 4. Work your way through the app
 5. Enjoy!
 
 ### Notes:
+  - The first time you launch the app it may take some time to install all of the required packages
   - The current stable version should be in the main branch
   - The dev branch is what I'm currently working on, and may not be functional
   - Please email samsiljee@gmail.com for help or suggestions, or submit through Github
@@ -81,6 +82,7 @@ Created July 18th 2022
   - Fix error with update required when changing to heatmap
   - Fix GO analysis and STRING
   - Question mark button for description of settings
+  - Add DIANN input
   
 # License
 Feel free to use this code as you wish under the MIT license, however an acknowledgement would be nice. Thanks!
