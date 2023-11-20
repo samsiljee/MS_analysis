@@ -42,8 +42,8 @@ for (package in required_packages) {
 # Get the number of available cores, reserve 20% for other tasks
 available_cores <- floor(0.8 * parallel::detectCores())
 
-# Set the number of CPU cores for Shiny app
-options(shiny.num_procs = available_cores)
+# Set the number of CPU cores for Shiny app for faster processing, and maximum file size
+options(shiny.num_procs = available_cores, shiny.maxRequestSize = 30 * 1024^3)
 
 # Load your Shiny app
 shiny::runApp("MS_proteomics_shiny/")
