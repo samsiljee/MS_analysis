@@ -54,5 +54,5 @@ server <- function(input, output, session) {
   })
 
   # Testing
-  output$test_text <- renderPrint(TMT_wizard_channels_data())
+  output$test_text <- renderPrint(prot_mat())
 }
