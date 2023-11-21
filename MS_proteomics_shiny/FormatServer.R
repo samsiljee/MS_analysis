@@ -70,7 +70,6 @@ MSstats_input <- eventReactive(input$go_format, {
       )
     }, # switch = LFQ
 
-    ## TMT ----
     TMT = {
       switch(
         input$platform,
@@ -82,25 +81,26 @@ MSstats_input <- eventReactive(input$go_format, {
             which.proteinid = input$TMTPDwhich.proteinid,
             useNumProteinsColumn = input$TMTPDuseNumProteinsColumn,
             useUniquePeptide = input$TMTPDuseUniquePeptide,
-            rmPSM_withfewMea_withinRun = input$TMTPDremoveFewMeasurements,
+            rmPSM_withfewMea_withinRun = input$TMTPDrmPSM_withfewMea_withinRun,
             rmProtein_with1Feature = input$TMTPDrmProtein_with1Feature,
             summaryforMultipleRows = ifelse(input$TMTPDsummaryforMultipleRows == "max", max, sum),
             use_log_file = TRUE,
             log_file_path = format_log_file_path
           )
         }, # close PD (TMT)
+        
         # TMT MQ ----
         MQ = {
           MaxQtoMSstatsTMTFormat(
             evidence = raw(),
             annotation = annot_col(),
             proteinGroups = protein_groups(),
-            which.proteinid = input$MQTMTproteinID,
-            rmProt_Only.identified.by.site = input$rmProt_Only.identified.by.site,
-            useUniquePeptide = input$useUniquePeptide,
-            rmPSM_withfewMea_withinRun = input$removeFewMeasurements,
-            rmProtein_with1Feature = input$rmProtein_with1Feature,
-            summaryforMultipleRows = ifelse(input$summaryforMultipleRows == "max", max, sum),
+            which.proteinid = input$TMTMQwhich.proteinid,
+            rmProt_Only.identified.by.site = input$TMTMQrmProt_Only.identified.by.site,
+            useUniquePeptide = input$TMTMQuseUniquePeptide,
+            rmPSM_withfewMea_withinRun = input$TMTMQrmPSM_withfewMea_withinRun,
+            rmProtein_with1Feature = input$TMTMQrmProtein_with1Feature,
+            summaryforMultipleRows = ifelse(input$TMTMQsummaryforMultipleRows == "max", max, sum),
             use_log_file = TRUE,
             log_file_path = format_log_file_path
           )
