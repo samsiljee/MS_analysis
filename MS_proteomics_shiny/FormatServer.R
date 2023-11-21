@@ -72,7 +72,9 @@ MSstats_input <- eventReactive(input$go_format, {
 
     ## TMT ----
     TMT = {
-      switch(input$platform,
+      switch(
+        input$platform,
+        # TMT PD ----
         PD = {
           PDtoMSstatsTMTFormat(
             input = raw(),
@@ -87,6 +89,7 @@ MSstats_input <- eventReactive(input$go_format, {
             log_file_path = format_log_file_path
           )
         }, # close PD (TMT)
+        # TMT MQ ----
         MQ = {
           MaxQtoMSstatsTMTFormat(
             evidence = raw(),
