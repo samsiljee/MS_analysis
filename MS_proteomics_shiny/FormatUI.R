@@ -59,17 +59,44 @@ FormatUI <- tabPanel(
     # LFQ/MQ options ----
     conditionalPanel(
       condition = "input.quant_method == 'LFQ' & input.platform == 'MQ'",
+      radioButtons(
+        "LFQMQproteinID",
+        "Protein ID",
+        choiceNames = c("Proteins", "Leading razor protein"),
+        choiceValues = c("Proteins", "Leading.razor.protein")
+      ),
       checkboxInput(
-        "LFQPDuseUniquePeptide",
+        "LFQMQuseUniquePeptide",
         "Remove peptides assigned to more than one protein",
         value = TRUE
       ),
+      radioButtons(
+        "LFQMQsummaryforMultipleRows",
+        "Summary method for multiple rows",
+        choiceNames = c("Sum", "Max"),
+        choiceValues = c("sum", "max"),
+        selected = "max"
+      ),
       checkboxInput(
-        "LFQPDremoveFewMeasurements",
+        "LFQMQremoveFewMeasurements",
         "Remove features with one or two measurements across runs",
         value = TRUE
       ),
-      
+      checkboxInput(
+        "LFQMQremoveMpeptides",
+        "Remove peptides including \'M\' sequence",
+        value = FALSE
+      ),
+      checkboxInput(
+        "LFQMQremoveOxidationMpeptides",
+        "Remove peptides with methionine oxidation",
+        value = FALSE
+      ),
+      checkboxInput(
+        "LFQMQremoveProtein_with1Peptide",
+        "Remove proteins with only one peptide and charge",
+        value = FALSE
+      )
     ),
     
     # LFQ/DIA-NN ----
@@ -92,16 +119,29 @@ FormatUI <- tabPanel(
     conditionalPanel(
       condition = "input.quant_method == 'TMT' & input.platform == 'PD'",
       checkboxInput(
-        "LFQPDuseUniquePeptide",
+        "TMTPDuseUniquePeptide",
         "Remove peptides assigned to more than one protein",
         value = TRUE
       ),
       checkboxInput(
-        "LFQPDremoveFewMeasurements",
+        "TMTPDremoveFewMeasurements",
         "Remove features with one or two measurements across runs",
         value = TRUE
       ),
-      
+      conditionalPanel(
+        condition = "input.platform == 'PD'",
+        checkboxInput(
+          "TMTPDuseNumProteinsColumn",
+          "Remove peptides with more than one in \"number of proteins\" column",
+          value = FALSE
+        ),
+        radioButtons(
+          "TMTPDwhich.proteinid",
+          "Protein ID",
+          choiceNames = c("Master protein accessions", "Protein accessions"),
+          choiceValues = c("Master.Protein.Accessions", "Protein.Accessions")
+        )
+      ),
     ),
     
     # TMT/MQ options ----
@@ -121,34 +161,6 @@ FormatUI <- tabPanel(
     ),
     
     # Old options ----
-    
-    # Universal options ----
-    checkboxInput(
-      "useUniquePeptide",
-      "Remove peptides assigned to more than one protein",
-      value = TRUE
-    ),
-    checkboxInput(
-      "removeFewMeasurements",
-      "Remove features with one or two measurements across runs",
-      value = TRUE
-    ),
-
-    # PD conditional options ----
-    conditionalPanel(
-      condition = "input.platform == 'PD'",
-      checkboxInput(
-        "useNumProteinsColumn",
-        "Remove peptides with more than one in \"number of proteins\" column",
-        value = FALSE
-      ),
-      radioButtons(
-        "which.proteinid",
-        "Protein ID",
-        choiceNames = c("Master protein accessions", "Protein accessions"),
-        choiceValues = c("Master.Protein.Accessions", "Protein.Accessions")
-      )
-    ),
     
     # DIA-NN conditional options ----
     conditionalPanel(
@@ -185,6 +197,21 @@ FormatUI <- tabPanel(
       condition = "input.platform !== 'DIANN'",
       uiOutput("select_summary_method")
     ),
+    
+    radioButtons(
+      "summaryforMultipleRows",
+      "Summary method for multiple rows",
+      choiceNames = c("Sum", "Max"),
+      choiceValues = c("sum", "max"),
+      selected = switch(input$quant_method,
+                        LFQ = {
+                          "max"
+                        },
+                        TMT = {
+                          "sum"
+                        }
+      )
+    ),
 
     # LFQ conditional options ----
     conditionalPanel(
@@ -204,39 +231,6 @@ FormatUI <- tabPanel(
           value = TRUE
         ),
       ),
-
-      # LFQ and PD conditional options ----
-      conditionalPanel(
-        condition = "input.platform == 'PD'",
-        radioButtons(
-          "which.quantification",
-          "Column to be used for quantification",
-          choiceNames = c("Precursor area", "Intensity", "Area"),
-          choiceValues = c("Precursor.Area", "Intensity", "Area")
-        ),
-        radioButtons(
-          "which.sequence",
-          "Column to be used for peptide sequences",
-          choiceNames = c("Sequence", "Annotated sequence"),
-          choiceValues = c("Sequence", "Annotated.Sequence")
-        )
-      ),
-
-      # LFQ and MQ conditional options ----
-      conditionalPanel(
-        condition = "input.platform == 'MQ'",
-        radioButtons(
-          "MQLFQproteinID",
-          "Protein ID",
-          choiceNames = c("Proteins", "Leading razor protein"),
-          choiceValues = c("Proteins", "Leading.razor.protein")
-        ),
-        checkboxInput(
-          "removeMpeptides",
-          "Remove peptides including \'M\' sequence",
-          value = FALSE
-        )
-      )
     ),
 
     # TMT conditional options ----

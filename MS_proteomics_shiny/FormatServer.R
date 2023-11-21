@@ -1,21 +1,4 @@
 # Format
-# Reactive UI
-output$select_summary_method <- renderUI({
-  radioButtons(
-    "summaryforMultipleRows",
-    "Summary method for multiple rows",
-    choiceNames = c("Sum", "Max"),
-    choiceValues = c("sum", "max"),
-    selected = switch(input$quant_method,
-      LFQ = {
-        "max"
-      },
-      TMT = {
-        "sum"
-      }
-    )
-  )
-})
 
 # Generate input
 MSstats_input <- eventReactive(input$go_format, {
@@ -27,43 +10,47 @@ MSstats_input <- eventReactive(input$go_format, {
     dir.create("logs")
   }
 
-  switch(input$quant_method,
+  switch(
+    input$quant_method,
     LFQ = {
-      switch(input$platform,
-             # LFQ PD ----
-             PD = {
-               PDtoMSstatsFormat(
-                 input = raw(),
-                 annotation = annot_col(),
-                 useNumProteinsColumn = input$LFQPDuseNumProteinsColumn,
-                 useUniquePeptide = input$LFQPDuseUniquePeptide,
-                 summaryforMultipleRows = ifelse(input$LFQPDsummaryforMultipleRows == "max", max, sum),
-                 removeFewMeasurements = input$LFQPDremoveFewMeasurements,
-                 removeOxidationMpeptides = input$LFQPDremoveOxidationMpeptides,
-                 removeProtein_with1Peptide = input$LFQPDremoveProtein_with1Peptide,
-                 which.quantification = input$LFQPDwhich.quantification,
-                 which.proteinid = input$LFQPDwhich.proteinid,
-                 which.sequence = input$LFQPDwhich.sequence,
-                 use_log_file = TRUE,
-                 log_file_path = format_log_file_path
-               )
+      switch(
+        input$platform,
+        # LFQ PD ----
+        PD = {
+          PDtoMSstatsFormat(
+            input = raw(),
+            annotation = annot_col(),
+            useNumProteinsColumn = input$LFQPDuseNumProteinsColumn,
+            useUniquePeptide = input$LFQPDuseUniquePeptide,
+            summaryforMultipleRows = ifelse(input$LFQPDsummaryforMultipleRows == "max", max, sum),
+            removeFewMeasurements = input$LFQPDremoveFewMeasurements,
+            removeOxidationMpeptides = input$LFQPDremoveOxidationMpeptides,
+            removeProtein_with1Peptide = input$LFQPDremoveProtein_with1Peptide,
+            which.quantification = input$LFQPDwhich.quantification,
+            which.proteinid = input$LFQPDwhich.proteinid,
+            which.sequence = input$LFQPDwhich.sequence,
+            use_log_file = TRUE,
+            log_file_path = format_log_file_path
+          )
         }, # switch = PD (LFQ)
+        # LFQ MQ ----
         MQ = {
           MaxQtoMSstatsFormat(
             evidence = raw(),
             annotation = annot_col(),
             proteinGroups = protein_groups(),
-            proteinID = input$MQLFQproteinID,
-            useUniquePeptide = input$useUniquePeptide,
-            summaryforMultipleRows = ifelse(input$summaryforMultipleRows == "max", max, sum),
-            removeFewMeasurements = input$removeFewMeasurements,
-            removeMpeptides = input$removeMpeptides,
-            removeOxidationMpeptides = input$removeOxidationMpeptides,
-            removeProtein_with1Peptide = input$removeProtein_with1Peptide,
+            proteinID = input$LFQMQproteinID,
+            useUniquePeptide = input$LFQMQuseUniquePeptide,
+            summaryforMultipleRows = ifelse(input$LFQMQsummaryforMultipleRows == "max", max, sum),
+            removeFewMeasurements = input$LFQMQremoveFewMeasurements,
+            removeMpeptides = input$LFQMQremoveMpeptides,
+            removeOxidationMpeptides = input$LFQMQremoveOxidationMpeptides,
+            removeProtein_with1Peptide = input$LFQMQremoveProtein_with1Peptide,
             use_log_file = TRUE,
             log_file_path = format_log_file_path
           )
         }, # switch = MQ (LFQ)
+        # LFQ DIA-NN ----
         DIANN = {
           DIANNtoMSstatsFormat(
             input = raw(),
