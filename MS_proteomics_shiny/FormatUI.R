@@ -1,7 +1,128 @@
 FormatUI <- tabPanel(
   "Format",
   sidebarPanel(
-    # Universal options
+    # LFQ/PD options ----
+    conditionalPanel(
+      condition = "input.quant_method == 'LFQ' & input.platform == 'PD'",
+      checkboxInput(
+        "LFQPDuseNumProteinsColumn",
+        "Remove peptides with more than one in \"number of proteins\" column",
+        value = TRUE
+      ),
+      checkboxInput(
+        "LFQPDuseUniquePeptide",
+        "Remove peptides assigned to more than one protein",
+        value = TRUE
+      ),
+      radioButtons(
+        "LFQPDsummaryforMultipleRows",
+        "Summary method for multiple rows",
+        choiceNames = c("Max", "Sum"),
+        choiceValues = c("max", "sum"),
+        selected = "max"
+      ),
+      checkboxInput(
+        "LFQPDremoveFewMeasurements",
+        "Remove features with one or two measurements across runs",
+        value = TRUE
+      ),
+      checkboxInput(
+        "LFQPDremoveOxidationMpeptides",
+        "Remove peptides with methionine oxidation",
+        value = FALSE
+      ),
+      checkboxInput(
+        "LFQPDremoveProtein_with1Peptide",
+        "Remove proteins with only one peptide and charge",
+        value = FALSE
+      ),
+      radioButtons(
+        "LFQPDwhich.quantification",
+        "Column to be used for quantification",
+        choiceNames = c("Precursor area", "Intensity", "Area"),
+        choiceValues = c("Precursor.Area", "Intensity", "Area")
+      ),
+      radioButtons(
+        "LFQPDwhich.proteinid",
+        "Protein ID",
+        choiceNames = c("Protein accessions", "Master protein accessions"),
+        choiceValues = c("Protein.Accessions", "Master.Protein.Accessions")
+      ),
+      radioButtons(
+        "LFQPDwhich.sequence",
+        "Column to be used for peptide sequences",
+        choiceNames = c("Sequence", "Annotated sequence"),
+        choiceValues = c("Sequence", "Annotated.Sequence")
+      )
+    ),
+    
+    # LFQ/MQ options ----
+    conditionalPanel(
+      condition = "input.quant_method == 'LFQ' & input.platform == 'MQ'",
+      checkboxInput(
+        "LFQPDuseUniquePeptide",
+        "Remove peptides assigned to more than one protein",
+        value = TRUE
+      ),
+      checkboxInput(
+        "LFQPDremoveFewMeasurements",
+        "Remove features with one or two measurements across runs",
+        value = TRUE
+      ),
+      
+    ),
+    
+    # LFQ/DIA-NN ----
+    conditionalPanel(
+      condition = "input.quant_method == 'LFQ' & input.platform == 'DIANN'",
+      checkboxInput(
+        "LFQPDuseUniquePeptide",
+        "Remove peptides assigned to more than one protein",
+        value = TRUE
+      ),
+      checkboxInput(
+        "LFQPDremoveFewMeasurements",
+        "Remove features with one or two measurements across runs",
+        value = TRUE
+      ),
+      
+    ),
+    
+    # TMT/PD options ----
+    conditionalPanel(
+      condition = "input.quant_method == 'TMT' & input.platform == 'PD'",
+      checkboxInput(
+        "LFQPDuseUniquePeptide",
+        "Remove peptides assigned to more than one protein",
+        value = TRUE
+      ),
+      checkboxInput(
+        "LFQPDremoveFewMeasurements",
+        "Remove features with one or two measurements across runs",
+        value = TRUE
+      ),
+      
+    ),
+    
+    # TMT/MQ options ----
+    conditionalPanel(
+      condition = "input.quant_method == 'TMT' & input.platform == 'MQ'",
+      checkboxInput(
+        "LFQPDuseUniquePeptide",
+        "Remove peptides assigned to more than one protein",
+        value = TRUE
+      ),
+      checkboxInput(
+        "LFQPDremoveFewMeasurements",
+        "Remove features with one or two measurements across runs",
+        value = TRUE
+      ),
+      
+    ),
+    
+    # Old options ----
+    
+    # Universal options ----
     checkboxInput(
       "useUniquePeptide",
       "Remove peptides assigned to more than one protein",
@@ -13,7 +134,7 @@ FormatUI <- tabPanel(
       value = TRUE
     ),
 
-    # PD conditional options
+    # PD conditional options ----
     conditionalPanel(
       condition = "input.platform == 'PD'",
       checkboxInput(
@@ -29,7 +150,7 @@ FormatUI <- tabPanel(
       )
     ),
     
-    # DIA-NN conditional options
+    # DIA-NN conditional options ----
     conditionalPanel(
       condition = "input.platform == 'DIANN'",
       numericInput(
@@ -59,13 +180,13 @@ FormatUI <- tabPanel(
       )
     ),
     
-    # PD or MQ conditional options
+    # PD or MQ conditional options ----
     conditionalPanel(
       condition = "input.platform !== 'DIANN'",
       uiOutput("select_summary_method")
     ),
 
-    # LFQ conditional options
+    # LFQ conditional options ----
     conditionalPanel(
       condition = "input.quant_method == 'LFQ'",
       checkboxInput(
@@ -74,7 +195,7 @@ FormatUI <- tabPanel(
         value = FALSE
       ),
       
-      # LFQ and PD or MQ conditional options
+      # LFQ and PD or MQ conditional options ----
       conditionalPanel(
         condition = "input.platform == 'PD' || input.platform == 'MQ'",
         checkboxInput(
@@ -84,7 +205,7 @@ FormatUI <- tabPanel(
         ),
       ),
 
-      # LFQ and PD conditional options
+      # LFQ and PD conditional options ----
       conditionalPanel(
         condition = "input.platform == 'PD'",
         radioButtons(
@@ -101,7 +222,7 @@ FormatUI <- tabPanel(
         )
       ),
 
-      # LFQ and MQ conditional options
+      # LFQ and MQ conditional options ----
       conditionalPanel(
         condition = "input.platform == 'MQ'",
         radioButtons(
@@ -118,7 +239,7 @@ FormatUI <- tabPanel(
       )
     ),
 
-    # TMT conditional options
+    # TMT conditional options ----
     conditionalPanel(
       condition = "input.quant_method == 'TMT'",
       checkboxInput(
@@ -127,7 +248,7 @@ FormatUI <- tabPanel(
         value = FALSE
       ),
 
-      # TMT and MQ conditional options
+      # TMT and MQ conditional options ----
       conditionalPanel(
         condition = "input.platform == 'MQ'",
         radioButtons(
