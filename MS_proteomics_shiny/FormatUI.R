@@ -102,17 +102,46 @@ FormatUI <- tabPanel(
     # LFQ/DIA-NN ----
     conditionalPanel(
       condition = "input.quant_method == 'LFQ' & input.platform == 'DIANN'",
+      numericInput(
+        "LFQDIANNglobal_qvalue_cutoff",
+        "Global qvalue cutoff",
+        value = 0.01,
+        step = 0.01),
+      numericInput(
+        "LFQDIANNqvalue_cutoff",
+        "qvalue cutoff",
+        value = 0.01,
+        step = 0.01),
+      numericInput(
+        "LFQDIANNpg_qvalue_cutoff",
+        "Protein groups qvalue cutoff",
+        value = 0.01,
+        step = 0.01),
       checkboxInput(
-        "LFQPDuseUniquePeptide",
+        "LFQDIANNuseUniquePeptide",
         "Remove peptides assigned to more than one protein",
         value = TRUE
       ),
       checkboxInput(
-        "LFQPDremoveFewMeasurements",
+        "LFQDIANNremoveFewMeasurements",
         "Remove features with one or two measurements across runs",
         value = TRUE
       ),
-      
+      checkboxInput(
+        "LFQDIANNremoveOxidationMpeptides",
+        "Remove peptides with methionine oxidation",
+        value = TRUE
+      ),
+      checkboxInput(
+        "LFQDIANNremoveProtein_with1Feature",
+        "remove proteins with a single feature",
+        value = TRUE
+      ),
+      checkboxInput(
+        "LFQDIANNMBR",
+        "Was match between runs used in DIA-NN?",
+        value = TRUE
+      )
     ),
     
     # TMT/PD options ----
@@ -162,35 +191,6 @@ FormatUI <- tabPanel(
     
     # Old options ----
     
-    # DIA-NN conditional options ----
-    conditionalPanel(
-      condition = "input.platform == 'DIANN'",
-      numericInput(
-        "global_qvalue_cutoff",
-        "Global qvalue cutoff",
-        value = 0.01,
-        step = 0.01),
-      numericInput(
-        "qvalue_cutoff",
-        "qvalue cutoff",
-        value = 0.01,
-        step = 0.01),
-      numericInput(
-        "pg_qvalue_cutoff",
-        "Protein groups qvalue cutoff",
-        value = 0.01,
-        step = 0.01),
-      checkboxInput(
-        "removeProtein_with1Feature",
-        "remove proteins with a single feature",
-        value = TRUE
-      ),
-      checkboxInput(
-        "MBR",
-        "Was match between runs used in DIA-NN?",
-        value = TRUE
-      )
-    ),
     
     # PD or MQ conditional options ----
     conditionalPanel(
@@ -213,14 +213,7 @@ FormatUI <- tabPanel(
       )
     ),
 
-    # LFQ conditional options ----
-    conditionalPanel(
-      condition = "input.quant_method == 'LFQ'",
-      checkboxInput(
-        "removeOxidationMpeptides",
-        "Remove peptides with methionine oxidation",
-        value = FALSE
-      ),
+    
       
       # LFQ and PD or MQ conditional options ----
       conditionalPanel(

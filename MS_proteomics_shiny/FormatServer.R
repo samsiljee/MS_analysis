@@ -55,16 +55,16 @@ MSstats_input <- eventReactive(input$go_format, {
           DIANNtoMSstatsFormat(
             input = raw(),
             annotation = annot_col(),
-            global_qvalue_cutoff = input$global_qvalue_cutoff,
-            qvalue_cutoff = input$qvalue_cutoff,
-            pg_qvalue_cutoff = input$pg_qvalue_cutoff,
-            useUniquePeptide = input$useUniquePeptide,
-            removeFewMeasurements = input$removeFewMeasurements,
-            removeOxidationMpeptides = input$removeOxidationMpeptides,
-            removeProtein_with1Feature = input$removeProtein_with1Feature,
+            global_qvalue_cutoff = input$LFQDIANNglobal_qvalue_cutoff,
+            qvalue_cutoff = input$LFQDIANNqvalue_cutoff,
+            pg_qvalue_cutoff = input$LFQDIANNpg_qvalue_cutoff,
+            useUniquePeptide = input$LFQDIANNuseUniquePeptide,
+            removeFewMeasurements = input$LFQDIANNremoveFewMeasurements,
+            removeOxidationMpeptides = input$LFQDIANNremoveOxidationMpeptides,
+            removeProtein_with1Feature = input$LFQDIANNremoveProtein_with1Feature,
+            MBR = input$LFQDIANNMBR,
             use_log_file = TRUE,
-            log_file_path = format_log_file_path,
-            MBR = input$MBR,
+            log_file_path = format_log_file_path
           )
         } # swich = DIANN (LFQ)
       )
