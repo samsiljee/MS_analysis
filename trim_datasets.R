@@ -6,7 +6,11 @@ library(vroom)
 library(dplyr)
 
 # Load the dataset
-dat <- vroom("input/DIANN/cleaned_report.tsv")
+dat <- vroom("input/DIANN/report.tsv")
+
+# # Optional code to remove certain runs from the data
+# dat <- dat %>%
+#     filter(!Run %in% c("20231107_Alex_Saliva_1", "20231107_Alex_Saliva_2", "20231107_Alex_Saliva_3"))
 
 # Get number of runs
 distinct_runs <- length(unique(dat$Run))
