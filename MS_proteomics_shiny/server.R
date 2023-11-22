@@ -52,9 +52,18 @@ server <- function(input, output, session) {
 
   # Testing
   output$test_text <- renderPrint({
-    c(
-      MSstats_processed()$ProteinLevelData,
-      annot_col()
+    merge(
+      x = switch(input$quant_method,
+                 LFQ = MSstats_processed()$ProteinLevelData,
+                 TMT = {
+                   MSstats_processed()$ProteinLevelData %>%
+                     mutate(originalRUN = paste(Run, Channel, sep = "_"))
+                 }
+      ),
+      y = annot_col(),
+      by.x = "originalRUN",
+      by.y = "PcaRef",
+      all.x = TRUE
     )
   })
 }
