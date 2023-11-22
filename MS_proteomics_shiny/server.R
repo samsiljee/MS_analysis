@@ -51,5 +51,10 @@ server <- function(input, output, session) {
   })
 
   # Testing
-  output$test_text <- renderPrint(prot_mat())
+  output$test_text <- renderPrint({
+    c(
+      MSstats_processed()$ProteinLevelData,
+      annot_col()
+    )
+  })
 }
