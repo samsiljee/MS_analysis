@@ -147,7 +147,8 @@ prot_mat <- reactive({
         MSstats_processed()$ProteinLevelData %>%
           mutate(originalRUN = paste(Run, Channel, sep = "_"))
       }
-    ),
+    ) %>%
+      mutate(originalRUN = as.character(originalRUN)),
     y = annot_col(),
     by.x = "originalRUN",
     by.y = "PcaRef",

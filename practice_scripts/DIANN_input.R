@@ -7,6 +7,7 @@ library(dplyr)
 library(vroom)
 library(MSstats)
 library(janitor)
+library(stringr)
 
 # Load data
 data <- vroom("input/DIANN/report_truncated.tsv")
@@ -21,6 +22,7 @@ colnames(annot_col)[grep("BioReplicate", colnames(annot_col), ignore.case = TRUE
 # Create column for PCA plot and heatmap
 annot_col$PcaRef <- str_trim(as.character(annot_col$Run))
 annot_col$PcaRef <- gsub(".", "", annot_col$PcaRef, fixed = TRUE)
+annot_col$PcaRef <- gsub(" ", "", annot_col$PcaRef, fixed = TRUE)
 
 # Add "Experiment' column for PCA and heatmap labeling
 annot_col <- annot_col %>%
@@ -38,11 +40,17 @@ MSstatsInput <- DIANNtoMSstatsFormat(input = data, annotation = annot_col, use_l
 MSstats_processed <- dataProcess(MSstatsInput, use_log_file = FALSE)
 
 # Make protein matrix
+annotations_small <- annot_col %>%
+    mutate(originalRUN = PcaRef) %>%
+    select(originalRUN, Experiment)
+data_small <- MSstats_processed$ProteinLevelData %>%
+    mutate(originalRUN = as.character(originalRUN)) %>%
+    select(originalRUN, LogIntensities, Protein)
+
 prot_mat <- merge(
-    x = MSstats_processed$ProteinLevelData,
-    y = annot_col,
-    by.x = "originalRUN",
-    by.y = "PcaRef",
+    x = data_small,
+    y = annotations_small,
+    by = "originalRUN",
     all.x = TRUE
 ) %>%
     dplyr::select(
@@ -52,4 +60,4 @@ prot_mat <- merge(
         id_cols = Protein,
         names_from = Experiment,
         values_from = LogIntensities
-    ) 
+    )

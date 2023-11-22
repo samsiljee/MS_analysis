@@ -61,6 +61,7 @@ annot_col <- reactive({
         # Create column for PCA plot and heatmap
         df$PcaRef <- str_trim(as.character(df$Run))
         df$PcaRef <- gsub(".", "", df$PcaRef, fixed = TRUE)
+        df$PcaRef <- gsub(" ", "", df$PcaRef, fixed = TRUE)
 
         df
       },
@@ -93,6 +94,7 @@ annot_col <- reactive({
 
         df$PcaRef <- str_trim(as.character(df$Run))
         df$PcaRef <- gsub(".", "", df$PcaRef, fixed = TRUE)
+        df$PcaRef <- gsub(" ", "", df$PcaRef, fixed = TRUE)
         df$PcaRef <- paste(df$PcaRef, df$Channel, sep = "_")
 
         df
