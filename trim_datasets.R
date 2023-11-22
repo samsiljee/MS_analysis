@@ -6,14 +6,17 @@ library(vroom)
 library(dplyr)
 
 # Load the dataset
-dat <- vroom("input/DIANN/report.tsv")
+dat <- vroom("input/DIANN/cleaned_report.tsv")
+
+# Get number of runs
+distinct_runs <- length(unique(dat$Run))
 
 # Identify proteins present in all runs
 summary <- dat %>%
     group_by(Protein.Group) %>%
     summarise(Protein = Protein.Group, Number = length(unique(Run)))
 eligible_proteins <- summary %>%
-    filter(Number == 6) %>%
+    filter(Number == distinct_runs) %>%
     .$Protein.Group %>%
     unique()
 filtered_dat <- dat %>%
@@ -37,4 +40,5 @@ dat <- dat %>%
     filter(Protein.Group %in% proteins)
 
 # Write table
-vroom_write(dat, "input/DIANN/report_truncated.tsv")
+vroom_write(dat, "input/DIANN/report_cleaned_truncated.tsv")
+
