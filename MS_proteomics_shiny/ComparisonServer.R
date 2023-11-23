@@ -1,6 +1,6 @@
 # Comparison
 
-# Reactive UI
+# Reactive UI ----
 output$select_numerator <- renderUI({
   selectInput("numerator", "Numerator/s",
     choices = conditions(),
@@ -15,7 +15,7 @@ output$select_denominator <- renderUI({
   )
 })
 
-# Reactive variables
+# Reactive variables ----
 conditions <- reactive({
   levels(
     switch(input$quant_method,
@@ -37,7 +37,7 @@ observeEvent(input$go_process, {
   add_comparison()
 })
 
-# Define function to add a row
+# Function to add a row to the comparison ----
 add_comparison <- function() {
   # Read the values used to create the row
   row <- ifelse(
@@ -75,10 +75,20 @@ add_comparison <- function() {
 
 # Update the comparison matrix when add_comparison is clicked
 comparison_matrix_updated <- eventReactive(input$add_comparison, {
-  add_comparison()
+  if(input$comparison_name != "") {
+    add_comparison()
+  } else {
+    showNotification(
+      "Please enter a name for the comparison first",
+      type = "error",
+      duration = 5,
+      closeButton = TRUE
+    )
+  }
+  
 })
 
-# Run the comparison function
+# Run the comparison function ----
 MSstats_test <- eventReactive(input$go_compare, {
   # Path for log files
   compare_log_file_path <- file.path("logs", "compare_log.txt")
@@ -140,7 +150,7 @@ MSstats_results <- reactive({
   }
 })
 
-# Output
+# Output ----
 output$comparison_matrix_tab <- renderTable(comparison_matrix_updated()[-1, , drop = FALSE], rownames = TRUE)
 
 output$results_tab <- renderDataTable({
