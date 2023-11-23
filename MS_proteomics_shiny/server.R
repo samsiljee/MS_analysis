@@ -51,5 +51,23 @@ server <- function(input, output, session) {
   })
 
   # Testing
-  output$test_text <- renderPrint(TMT_wizard_channels_data())
+  output$test_text <- renderPrint({
+    c(switch(input$quant_method,
+             LFQ = MSstats_processed()$ProteinLevelData,
+             TMT = {
+               MSstats_processed()$ProteinLevelData %>%
+                 mutate(originalRUN = paste(Run, Channel, sep = "_"))
+             }
+    ) %>%
+      mutate(originalRUN = as.character(originalRUN)) %>% .$originalRUN %>% unique(),
+    annot_col()$PcaRef,
+    switch(input$quant_method,
+           LFQ = MSstats_processed()$ProteinLevelData,
+           TMT = {
+             MSstats_processed()$ProteinLevelData %>%
+               mutate(originalRUN = paste(Run, Channel, sep = "_"))
+           }
+    ) %>%
+      mutate(originalRUN = as.character(originalRUN)) %>% .$originalRUN %>% unique() %>% sort == annot_col()$PcaRef %>% sort)
+  })
 }

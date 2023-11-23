@@ -71,7 +71,6 @@ VisualisationUI <- tabPanel(
         step = 1
       )
     ),
-    actionButton("go_plot", "Plot/update!"),
     hr(style = "border-top: 2px solid #000000;"),
     numericInput("plot_width", "Plot width (mm)", value = 240, step = 10),
     numericInput("plot_height", "Plot height (mm)", value = 160, step = 10),
