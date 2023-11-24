@@ -202,7 +202,29 @@ output$plot_download <- downloadHandler(
   } # Content
 ) # Download handler
 
-# Methods summary
+## Download plots ----
+output$plot_qc_download <- downloadHandler(
+  filename = function() {
+    switch(input$plot_type_qc,
+           Abundance = paste0("Abundance_QC_plot_", Sys.Date(), ".png")
+    )
+  },
+  content = function(file) {
+    switch(input$plot_type_qc,
+           Abundance = {
+             ggsave(file,
+                    plot = abundance_plot(),
+                    width = input$plot_width_qc,
+                    height = input$plot_height_qc,
+                    dpi = input$plot_dpi_qc,
+                    units = "mm"
+             )
+           }
+    ) # Switch
+  } # Content
+) # Download handler
+
+## Methods summary ----
 output$downloadReport <- downloadHandler(
   filename = paste("Analysis_methods_summary_", Sys.Date(), ".pdf"),
   content = function(file) {

@@ -52,6 +52,13 @@ server <- function(input, output, session) {
 
   # Testing
   output$test_text <- renderPrint({
-    input$comparison_name
+    merge(
+      x = MSstats_processed()$ProteinLevelData %>%
+        mutate(originalRUN = as.character(originalRUN)),
+      y = annot_col(),
+      by.x = "originalRUN",
+      by.y = "PcaRef",
+      all.x = TRUE
+    )
   })
 }
