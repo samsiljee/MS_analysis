@@ -52,13 +52,6 @@ server <- function(input, output, session) {
 
   # Testing
   output$test_text <- renderPrint({
-    merge(
-      x = MSstats_processed()$ProteinLevelData %>%
-        mutate(originalRUN = as.character(originalRUN)),
-      y = annot_col(),
-      by.x = "originalRUN",
-      by.y = "PcaRef",
-      all.x = TRUE
-    )
+    abundance_plot_data()
   })
 }

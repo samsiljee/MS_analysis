@@ -26,7 +26,7 @@ output$plot_y_lab_input_qc <- renderUI({
               "Y label",
               value = switch(
                   input$plot_type_qc,
-                  Abundance = "Intensity"
+                  Abundance = "Log intensity"
               )
     )
 })
@@ -72,18 +72,40 @@ observeEvent(input$go_process, {
 })
 
 # Combine to make data for abundance plot
+abundance_plot_data <- reactive({
+    # Clean normalised data
+   norm_dat <- merge(
+       x = MSstats_processed()$ProteinLevelData %>%
+           mutate(originalRUN = as.character(originalRUN)),
+       y = annot_col(),
+       by.x = "originalRUN",
+       by.y = "PcaRef",
+       all.x = TRUE
+   ) %>%
+      mutate(Normalisation = "Normalised") %>%
+       dplyr::select(originalRUN, LogIntensities, Normalisation)
+   
+   # Clean un-normalised data
+   un_norm_dat <- merge(
+       x = un_normalised_data() %>%
+           mutate(originalRUN = as.character(originalRUN)),
+       y = annot_col(),
+       by.x = "originalRUN",
+       by.y = "PcaRef",
+       all.x = TRUE
+   ) %>%
+       mutate(Normalisation = "Un-normalised") %>%
+       dplyr::select(originalRUN, LogIntensities, Normalisation)
+   
+   # Return combined datasets
+   return(rbind(norm_dat, un_norm_dat))
+})
+
 
 # Create plot
 abundance_plot <- reactive({
-    merge(
-        x = MSstats_processed()$ProteinLevelData %>%
-            mutate(originalRUN = as.character(originalRUN)),
-        y = annot_col(),
-        by.x = "originalRUN",
-        by.y = "PcaRef",
-        all.x = TRUE
-    ) %>%
-        ggplot(aes(x = originalRUN, y = LogIntensities)) +
+    abundance_plot_data() %>%
+        ggplot(aes(x = originalRUN, y = LogIntensities, fill = Normalisation)) +
         geom_boxplot() +
         ylab(input$plot_y_lab_qc) +
         xlab(input$plot_x_lab_qc) +
