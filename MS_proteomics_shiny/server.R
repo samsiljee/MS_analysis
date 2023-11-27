@@ -52,6 +52,10 @@ server <- function(input, output, session) {
 
   # Testing
   output$test_text <- renderPrint({
-    abundance_plot_data()
+    switch(input$normalisation_plot_level,
+    Feature = MSstats_processed()$FeatureLevelData,
+    Protein = MSstats_processed()$ProteinLevelData
+    )
+    # MSstats_processed()$ProteinLevelData
   })
 }

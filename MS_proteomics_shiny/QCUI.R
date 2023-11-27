@@ -16,7 +16,7 @@ QCUI <- tabPanel(
     ),
     selectInput("plot_type_qc", "Plot type",
       choices = c(
-        "Abundance"
+        "Normalisation"
       ),
       multiple = FALSE
     ),
@@ -26,6 +26,16 @@ QCUI <- tabPanel(
     uiOutput("plot_x_lab_input_qc"),
     # Y lab
     uiOutput("plot_y_lab_input_qc"),
+    
+    # Normalisation plot options
+    conditionalPanel(
+      condition = "input.plot_type_qc == 'Normalisation'",
+      radioButtons(
+        "normalisation_plot_level",
+                   "Level",
+        choices = c("Feature", "Protein"))
+    ),
+    
     # Plot saving options
     hr(style = "border-top: 2px solid #000000;"),
     numericInput("plot_width_qc", "Plot width (mm)", value = 240, step = 10),
