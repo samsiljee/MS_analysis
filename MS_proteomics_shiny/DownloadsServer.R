@@ -206,14 +206,16 @@ output$plot_download <- downloadHandler(
 output$plot_qc_download <- downloadHandler(
   filename = function() {
     switch(input$plot_type_qc,
-           Abundance = paste0("Abundance_QC_plot_", Sys.Date(), ".png")
+           Normalisation = paste0("Normalisation_QC_plot_", Sys.Date(), ".png")
     )
   },
   content = function(file) {
     switch(input$plot_type_qc,
-           Abundance = {
+           Normalisation = {
              ggsave(file,
-                    plot = abundance_plot(),
+                    plot = switch(input$plot_type_qc,
+                                  Normalisation = normalisation_plot()
+                    ),
                     width = input$plot_width_qc,
                     height = input$plot_height_qc,
                     dpi = input$plot_dpi_qc,
