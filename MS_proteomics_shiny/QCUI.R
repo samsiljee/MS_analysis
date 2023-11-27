@@ -16,7 +16,7 @@ QCUI <- tabPanel(
     ),
     selectInput("plot_type_qc", "Plot type",
       choices = c(
-        "Normalisation"
+        "Normalisation" = "Normalisation"
       ),
       multiple = FALSE
     ),
@@ -32,8 +32,9 @@ QCUI <- tabPanel(
       condition = "input.plot_type_qc == 'Normalisation'",
       radioButtons(
         "normalisation_plot_level",
-                   "Level",
-        choices = c("Feature", "Protein"))
+        "Level",
+        choiceNames = c("Feature", "Protein"),
+        choiceValues = c("feature", "protein")),
     ),
     
     # Plot saving options

@@ -24,7 +24,10 @@ output$plot_y_lab_input_qc <- renderUI({
   textInput("plot_y_lab_qc",
     "Y label",
     value = switch(input$plot_type_qc,
-      Normalisation = "Log intensity"
+      Normalisation = switch(input$normalisation_plot_level,
+                             feature = "Abundance",
+                             protein = "Log intensity"
+      )
     )
   )
 })
@@ -73,9 +76,9 @@ observeEvent(input$go_process, {
 normalisation_plot_data <- reactive({
   # Clean normalised data
   norm_dat <- merge(
-    x = ifelse(input$normalisation_plot_level == "Feature",
-      MSstats_processed()$FeatureLevelData,
-      MSstats_processed()$ProteinLevelData
+    x = switch(input$normalisation_plot_level,
+               feature = MSstats_processed()$FeatureLevelData,
+               protein = MSstats_processed()$ProteinLevelData
     ) %>%
       mutate(originalRUN = as.character(originalRUN)),
     y = annot_col(),
@@ -83,14 +86,13 @@ normalisation_plot_data <- reactive({
     by.y = "PcaRef",
     all.x = TRUE
   ) %>%
-    mutate(Normalisation = "Normalised") %>%
-    dplyr::select(originalRUN, LogIntensities, Normalisation)
+    mutate(Normalisation = "Normalised")
 
   # Clean un-normalised data
   un_norm_dat <- merge(
-    x = ifelse(input$normalisation_plot_level == "Feature",
-      un_normalised_data()$FeatureLevelData,
-      un_normalised_data()$ProteinLevelData
+    x = switch(input$normalisation_plot_level,
+               feature = un_normalised_data()$FeatureLevelData,
+               protein = un_normalised_data()$ProteinLevelData
     ) %>%
       mutate(originalRUN = as.character(originalRUN)),
     y = annot_col(),
@@ -98,23 +100,31 @@ normalisation_plot_data <- reactive({
     by.y = "PcaRef",
     all.x = TRUE
   ) %>%
-    mutate(Normalisation = "Un-normalised") %>%
-    dplyr::select(originalRUN, LogIntensities, Normalisation)
+    mutate(Normalisation = "Original")
 
   # Return combined datasets
-  return(rbind(norm_dat, un_norm_dat))
+  combined_dat <- rbind(norm_dat, un_norm_dat) %>%
+    mutate(y_values = switch(input$normalisation_plot_level,
+                             feature = ABUNDANCE,
+                             protein = LogIntensities)
+           )
+  return(combined_dat)
 })
 
-
-# Create plot
+# Create normalisation plot
 normalisation_plot <- reactive({
   normalisation_plot_data() %>%
-    ggplot(aes(x = originalRUN, y = LogIntensities, fill = Normalisation)) +
+    ggplot(
+      aes(
+        x = originalRUN,
+        y = y_values,
+        fill = Normalisation)) +
     geom_boxplot() +
     ylab(input$plot_y_lab_qc) +
     xlab(input$plot_x_lab_qc) +
     ggtitle(input$plot_title_qc) +
-    selected_theme_qc()
+    selected_theme_qc() +
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.3))
 })
 
 # Render plot ----
