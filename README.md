@@ -60,7 +60,6 @@ Created July 18th 2022
     - Sample CVs
     - Protein numbers
     - Sample coverage
-    - Normalisation
     - Missing values heatmap
     - Imputation
   - Better progress bars for slow processes

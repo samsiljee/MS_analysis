@@ -52,10 +52,6 @@ server <- function(input, output, session) {
 
   # Testing
   output$test_text <- renderPrint({
-    switch(input$normalisation_plot_level,
-    Feature = MSstats_processed()$FeatureLevelData,
-    Protein = MSstats_processed()$ProteinLevelData
-    )
-    # MSstats_processed()$ProteinLevelData
+    c(class(MSstats_input()), colnames(annot_col()))
   })
 }
