@@ -4,22 +4,12 @@ FormatUI <- tabPanel(
     # LFQ/PD options ----
     conditionalPanel(
       condition = "input.quant_method == 'LFQ' & input.platform == 'PD'",
-      checkboxInput(
-        "LFQPDuseNumProteinsColumn",
-        "Remove peptides with more than one in \"number of proteins\" column",
-        value = TRUE
-      ),
-      checkboxInput(
-        "LFQPDuseUniquePeptide",
-        "Remove peptides assigned to more than one protein",
-        value = TRUE
-      ),
+      # Standard options
       radioButtons(
-        "LFQPDsummaryforMultipleRows",
-        "Summary method for multiple rows",
-        choiceNames = c("Max", "Sum"),
-        choiceValues = c("max", "sum"),
-        selected = "max"
+        "LFQPDwhich.quantification",
+        "Column to be used for quantification",
+        choiceNames = c("Precursor area", "Intensity", "Area"),
+        choiceValues = c("Precursor.Area", "Intensity", "Area")
       ),
       checkboxInput(
         "LFQPDremoveFewMeasurements",
@@ -27,32 +17,53 @@ FormatUI <- tabPanel(
         value = TRUE
       ),
       checkboxInput(
-        "LFQPDremoveOxidationMpeptides",
-        "Remove peptides with methionine oxidation",
-        value = FALSE
+        "LFQPDuseUniquePeptide",
+        "Remove peptides assigned to more than one protein",
+        value = TRUE
       ),
+      # Advanced options
+      conditionalPanel(
+        condition = "input.AdvancedOptionsLFQPD == true",
+        checkboxInput(
+          "LFQPDuseNumProteinsColumn",
+          "Remove peptides with more than one in \"number of proteins\" column",
+          value = TRUE
+        ),
+        radioButtons(
+          "LFQPDsummaryforMultipleRows",
+          "Summary method for multiple rows",
+          choiceNames = c("Max", "Sum"),
+          choiceValues = c("max", "sum"),
+          selected = "max"
+        ),
+        checkboxInput(
+          "LFQPDremoveOxidationMpeptides",
+          "Remove peptides with methionine oxidation",
+          value = FALSE
+        ),
+        checkboxInput(
+          "LFQPDremoveProtein_with1Peptide",
+          "Remove proteins with only one peptide and charge",
+          value = FALSE
+        ),
+        radioButtons(
+          "LFQPDwhich.proteinid",
+          "Protein ID",
+          choiceNames = c("Protein accessions", "Master protein accessions"),
+          choiceValues = c("Protein.Accessions", "Master.Protein.Accessions")
+        ),
+        radioButtons(
+          "LFQPDwhich.sequence",
+          "Column to be used for peptide sequences",
+          choiceNames = c("Sequence", "Annotated sequence"),
+          choiceValues = c("Sequence", "Annotated.Sequence")
+        )
+      ),
+      # Show advanced options
       checkboxInput(
-        "LFQPDremoveProtein_with1Peptide",
-        "Remove proteins with only one peptide and charge",
+        "AdvancedOptionsLFQPD",
+        "Show advanced options",
         value = FALSE
-      ),
-      radioButtons(
-        "LFQPDwhich.quantification",
-        "Column to be used for quantification",
-        choiceNames = c("Precursor area", "Intensity", "Area"),
-        choiceValues = c("Precursor.Area", "Intensity", "Area")
-      ),
-      radioButtons(
-        "LFQPDwhich.proteinid",
-        "Protein ID",
-        choiceNames = c("Protein accessions", "Master protein accessions"),
-        choiceValues = c("Protein.Accessions", "Master.Protein.Accessions")
-      ),
-      radioButtons(
-        "LFQPDwhich.sequence",
-        "Column to be used for peptide sequences",
-        choiceNames = c("Sequence", "Annotated sequence"),
-        choiceValues = c("Sequence", "Annotated.Sequence")
       )
     ),
 
