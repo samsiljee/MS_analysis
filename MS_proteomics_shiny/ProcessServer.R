@@ -31,7 +31,7 @@ MSstats_processed <- eventReactive(input$go_process, {
         MBimpute = input$MBimpute,
         remove50missing = input$remove50missing,
         fix_missing = ifelse(input$fix_missing == "NULL", NULL, input$fix_missing),
-        maxQuantileforCensored = input$maxQuantileforCensored,
+        maxQuantileforCensored = input$maxQuantileforCensoredLFQ,
         use_log_file = TRUE,
         log_file_path = process_log_file_path
       )
@@ -45,7 +45,7 @@ MSstats_processed <- eventReactive(input$go_process, {
         remove_norm_channel = input$remove_norm_channel,
         remove_empty_channel = TRUE,
         MBimpute = input$MBimpute,
-        maxQuantileforCensored = input$maxQuantileforCensored,
+        maxQuantileforCensored = input$maxQuantileforCensoredTMT,
         use_log_file = TRUE,
         log_file_path = process_log_file_path
       )

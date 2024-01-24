@@ -4,15 +4,19 @@ ProcessUI <- tabPanel(
     # LFQ options
     conditionalPanel(
       condition = "input.quant_method == 'LFQ'",
+      # Standard options
+      radioButtons("normalization",
+                   "Normalisation method used between runs",
+                   choiceNames = c("Equalize medians", "Quantile", "Global standards", "None"),
+                   choiceValues = c("equalizeMedians", "quantile", "globalStandards", FALSE)
+      ),
+      # Advanced options
+      conditionalPanel(
+        condition = "input.AdvancedProcessOptionsLFQ == true",
       radioButtons("logTrans",
         "Base of log transformation",
         choices = c(2, 10),
         selected = 2
-      ),
-      radioButtons("normalization",
-        "Normalisation method used to remove bias between runs",
-        choiceNames = c("Equalize medians", "Quantile", "Global standards", "None"),
-        choiceValues = c("equalizeMedians", "quantile", "globalStandards", FALSE)
       ),
       conditionalPanel(
         condition = "input.normalization == 'globalStandards'",
@@ -61,7 +65,7 @@ ProcessUI <- tabPanel(
         condition = "input.summaryMethod == 'TMP'",
         checkboxInput(
           "MBimpute",
-          "Impute censored values by Accelated failure model",
+          "Impute censored values (Accelated failure model)",
           value = TRUE
         ),
         checkboxInput(
@@ -81,6 +85,18 @@ ProcessUI <- tabPanel(
         "fix missing values",
         choiceNames = c("No action", "0 -> NA", "NA -> 0"),
         choiceValues = c("NULL", "zero_to_na", "na_to_zero")
+      ),
+      numericInput(
+        "maxQuantileforCensoredLFQ",
+        "Maximum quantile for deciding censored missing values",
+        value = 0.999,
+        step = 0.001
+      )),
+      # Show advanced options
+      checkboxInput(
+        "AdvancedProcessOptionsLFQ",
+        "Show advanced options",
+        value = FALSE
       )
     ),
 
@@ -125,16 +141,15 @@ ProcessUI <- tabPanel(
         "remove_norm_channel",
         "Remove reference channels",
         value = TRUE
+      ),
+      numericInput(
+        "maxQuantileforCensoredTMT",
+        "Maximum quantile for deciding censored missing values",
+        value = 0.999,
+        step = 0.001
       )
     ),
 
-    # Common options
-    numericInput(
-      "maxQuantileforCensored",
-      "Maximum quantile for deciding censored missing values",
-      value = 0.999,
-      step = 0.001
-    ),
     actionButton("go_process", "Process!"),
     hr(style = "border-top: 2px solid #000000;"),
     downloadButton("processed_protein_tsv", "Save protein data as .tsv"),
