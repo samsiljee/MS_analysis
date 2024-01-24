@@ -70,16 +70,25 @@ FormatUI <- tabPanel(
     # LFQ/MQ options ----
     conditionalPanel(
       condition = "input.quant_method == 'LFQ' & input.platform == 'MQ'",
-      radioButtons(
-        "LFQMQproteinID",
-        "Protein ID",
-        choiceNames = c("Proteins", "Leading razor protein"),
-        choiceValues = c("Proteins", "Leading.razor.protein")
+      # Standard options
+      checkboxInput(
+        "LFQMQremoveFewMeasurements",
+        "Remove features with one or two measurements across runs",
+        value = TRUE
       ),
       checkboxInput(
         "LFQMQuseUniquePeptide",
         "Remove peptides assigned to more than one protein",
         value = TRUE
+      ),
+      # Advanced options
+      conditionalPanel(
+        condition = "input.AdvancedOptionsLFQMQ == true",
+        radioButtons(
+        "LFQMQproteinID",
+        "Protein ID",
+        choiceNames = c("Proteins", "Leading razor protein"),
+        choiceValues = c("Proteins", "Leading.razor.protein")
       ),
       radioButtons(
         "LFQMQsummaryforMultipleRows",
@@ -87,11 +96,6 @@ FormatUI <- tabPanel(
         choiceNames = c("Sum", "Max"),
         choiceValues = c("sum", "max"),
         selected = "max"
-      ),
-      checkboxInput(
-        "LFQMQremoveFewMeasurements",
-        "Remove features with one or two measurements across runs",
-        value = TRUE
       ),
       checkboxInput(
         "LFQMQremoveMpeptides",
@@ -107,7 +111,13 @@ FormatUI <- tabPanel(
         "LFQMQremoveProtein_with1Peptide",
         "Remove proteins with only one peptide and charge",
         value = FALSE
-      )
+      )),
+    # Show advanced options
+    checkboxInput(
+      "AdvancedOptionsLFQMQ",
+      "Show advanced options",
+      value = FALSE
+    )
     ),
 
     # LFQ/DIA-NN ----
