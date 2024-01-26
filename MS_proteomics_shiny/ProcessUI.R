@@ -10,6 +10,19 @@ ProcessUI <- tabPanel(
                    choiceNames = c("Equalize medians", "Quantile", "Global standards", "None"),
                    choiceValues = c("equalizeMedians", "quantile", "globalStandards", FALSE)
       ),
+      radioButtons("summaryMethod",
+                   "Method used to summarise features",
+                   choiceNames = c("Tukey's median polish", "Linear mixed model"),
+                   choiceValues = c("TMP", "linear")
+      ),
+      conditionalPanel(
+        condition = "input.summaryMethod == 'TMP'",
+        checkboxInput(
+          "MBimpute",
+          "Impute censored values (Accelated failure model)",
+          value = TRUE
+        )
+      ),
       # Advanced options
       conditionalPanel(
         condition = "input.AdvancedProcessOptionsLFQ == true",
@@ -49,11 +62,6 @@ ProcessUI <- tabPanel(
           step = 1
         )
       ),
-      radioButtons("summaryMethod",
-        "Method used to summarise features",
-        choiceNames = c("Tukey's median polish", "Linear mixed model"),
-        choiceValues = c("TMP", "linear")
-      ),
       conditionalPanel(
         condition = "input.summaryMethod == 'linear'",
         checkboxInput("equalFeatureVar",
@@ -63,11 +71,6 @@ ProcessUI <- tabPanel(
       ),
       conditionalPanel(
         condition = "input.summaryMethod == 'TMP'",
-        checkboxInput(
-          "MBimpute",
-          "Impute censored values (Accelated failure model)",
-          value = TRUE
-        ),
         checkboxInput(
           "remove50missing",
           "Remove runs with >50% missing values",
