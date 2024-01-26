@@ -39,25 +39,31 @@ MSstatsInput <- DIANNtoMSstatsFormat(input = data, annotation = annot_col, use_l
 # Process data
 MSstats_processed <- dataProcess(MSstatsInput, use_log_file = FALSE)
 
-# Make protein matrix
-annotations_small <- annot_col %>%
-    mutate(originalRUN = PcaRef) %>%
-    select(originalRUN, Experiment)
-data_small <- MSstats_processed$ProteinLevelData %>%
-    mutate(originalRUN = as.character(originalRUN)) %>%
-    select(originalRUN, LogIntensities, Protein)
+# Run comparison
+MSstats_compared <- groupComparison(contrast.matrix = "pairwise",
+                                    data = MSstats_processed,
+                                    save_fitted_models = FALSE,
+                                    use_log_file = FALSE)
 
-prot_mat <- merge(
-    x = data_small,
-    y = annotations_small,
-    by = "originalRUN",
-    all.x = TRUE
-) %>%
-    dplyr::select(
-        Protein, Experiment, LogIntensities
-    ) %>%
-    pivot_wider(
-        id_cols = Protein,
-        names_from = Experiment,
-        values_from = LogIntensities
-    )
+# # Make protein matrix
+# annotations_small <- annot_col %>%
+#     mutate(originalRUN = PcaRef) %>%
+#     select(originalRUN, Experiment)
+# data_small <- MSstats_processed$ProteinLevelData %>%
+#     mutate(originalRUN = as.character(originalRUN)) %>%
+#     select(originalRUN, LogIntensities, Protein)
+# 
+# prot_mat <- merge(
+#     x = data_small,
+#     y = annotations_small,
+#     by = "originalRUN",
+#     all.x = TRUE
+# ) %>%
+#     dplyr::select(
+#         Protein, Experiment, LogIntensities
+#     ) %>%
+#     pivot_wider(
+#         id_cols = Protein,
+#         names_from = Experiment,
+#         values_from = LogIntensities
+#     )

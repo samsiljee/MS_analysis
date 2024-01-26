@@ -60,7 +60,6 @@ Created July 18th 2022
     - Sample CVs
     - Protein numbers
     - Sample coverage
-    - Normalisation
     - Missing values heatmap
     - Imputation
   - Better progress bars for slow processes
@@ -77,12 +76,10 @@ Created July 18th 2022
   - Fix issue with modelQC not downloading (for TMT at least) - Currently this is only a placeholder for MSstatsTMT and will not be available
   - filter out infinite fold change broken
   - Add ability to upload annotations and raw PSMs in multiple files
-  - Add error stop in comparisons section when adding a comparison, stops progress if there is no name entered
   - Spell out direction A vs B say in comparison
   - Fix error with update required when changing to heatmap
   - Fix GO analysis and STRING
   - Question mark button for description of settings
-  - Add DIANN input
   
 # License
 Feel free to use this code as you wish under the MIT license, however an acknowledgement would be nice. Thanks!
