@@ -62,6 +62,7 @@ Created July 18th 2022
     - Sample coverage
     - Missing values heatmap
     - Imputation
+    - See https://github.com/samsiljee/Graphing/blob/main/MS_QC/PD_QC.Rmd for other potential plots
   - Better progress bars for slow processes
   - Add reset to comparison matrix
   - Go term analysis with complete tabular output in the analysis tab, and plots intergrated into the visualisation tab
@@ -71,7 +72,6 @@ Created July 18th 2022
   - Add WGCNA to analysis section
   - Add option to use/see example data, could use MSstats test data for this perhaps
   - Help text for various settings
-  - Hide some options under "advanced settings", otherwise use defaults
   - Create a manual?
   - Fix issue with modelQC not downloading (for TMT at least) - Currently this is only a placeholder for MSstatsTMT and will not be available
   - filter out infinite fold change broken

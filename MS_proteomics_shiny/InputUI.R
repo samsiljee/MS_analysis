@@ -7,12 +7,12 @@ InputUI <- tabPanel(
     uiOutput("psm_input"),
     conditionalPanel(
       condition = "input.platform == 'MQ'",
-      checkboxInput("keep_contaminants", "Keep potential contaminants",
-        value = FALSE
-      ),
       fileInput("proteinGroups", "MQ protein groups file",
         buttonLabel = "Browse",
         placeholder = "Upload proteinGroups.txt"
+      ),
+      checkboxInput("keep_contaminants", "Keep potential contaminants",
+                    value = FALSE
       )
     ),
     hr(style = "border-top: 2px solid #000000;"),

@@ -2,10 +2,10 @@ ComparisonUI <- tabPanel(
   "Comparison",
   sidebarPanel(
     h4("Comparisons"),
-    # Common options
+    # Standard options
     radioButtons("contrast_method", "Contrast method",
-      choiceNames = c("All combinations (pairwise)", "Custom comparisons"),
-      choiceValues = c("pairwise", "custom")
+                 choiceNames = c("All combinations (pairwise)", "Custom comparisons"),
+                 choiceValues = c("pairwise", "custom")
     ),
     conditionalPanel(
       condition = "input.contrast_method == 'custom'",
@@ -16,6 +16,15 @@ ComparisonUI <- tabPanel(
       actionButton("add_comparison", "Add comparison")
     ),
     hr(style = "border-top: 2px solid #000000;"),
+    # Show advanced options
+    checkboxInput(
+      "AdvancedComparisonOptions",
+      "Show advanced options",
+      value = FALSE
+    ),
+    # Advanced options
+    conditionalPanel(
+      condition = "input.AdvancedComparisonOptions == true",
     numericInput("FC_threshold", "Log 2 fold-change threshold",
       value = 0.58,
       step = 0.1
@@ -56,7 +65,7 @@ ComparisonUI <- tabPanel(
     conditionalPanel(
       condition = "input.quant_method == 'LFQ'",
       checkboxInput("filter_results", "Filter out proteins with infinite fold-change", value = TRUE)
-    ),
+    )),
     actionButton("go_compare", "Compare!"),
     hr(style = "border-top: 2px solid #000000;"),
     downloadButton("results_tsv", "Save results as .tsv"),
