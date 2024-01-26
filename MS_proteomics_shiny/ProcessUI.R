@@ -1,7 +1,7 @@
 ProcessUI <- tabPanel(
   "Process",
   sidebarPanel(
-    # LFQ options
+    # LFQ options ----
     conditionalPanel(
       condition = "input.quant_method == 'LFQ'",
       # Standard options
@@ -103,9 +103,10 @@ ProcessUI <- tabPanel(
       )
     ),
 
-    # TMT options
+    # TMT options ----
     conditionalPanel(
       condition = "input.quant_method == 'TMT'",
+      # Standard options
       radioButtons(
         "TMTProtSumMethod",
         "Protein-level summarisation method",
@@ -130,11 +131,14 @@ ProcessUI <- tabPanel(
           value = TRUE
         )
       ),
-      checkboxInput(
-        "global_norm",
-        "Global median normalisation (peptide-level)",
-        value = TRUE
-      ),
+      # Advanced options
+      conditionalPanel(
+        condition = "input.AdvancedProcessOptionsTMT == true",
+        checkboxInput(
+          "global_norm",
+          "Global median normalisation (peptide-level)",
+          value = TRUE
+        ),
       checkboxInput(
         "reference_norm",
         "Reference channel normalisation between runs (protein-level)",
@@ -150,6 +154,12 @@ ProcessUI <- tabPanel(
         "Maximum quantile for deciding censored missing values",
         value = 0.999,
         step = 0.001
+      )),
+      # Show advanced options
+      checkboxInput(
+        "AdvancedProcessOptionsTMT",
+        "Show advanced options",
+        value = FALSE
       )
     ),
 
