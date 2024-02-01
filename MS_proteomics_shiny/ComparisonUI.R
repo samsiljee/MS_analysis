@@ -64,7 +64,7 @@ ComparisonUI <- tabPanel(
     checkboxInput("save_fitted_models", "Save fitted models to the .rda output", value = FALSE),
     conditionalPanel(
       condition = "input.quant_method == 'LFQ'",
-      checkboxInput("filter_results", "Filter out proteins with infinite fold-change", value = TRUE)
+      checkboxInput("filter_results", "Filter out proteins missing in one codition (infinite fold-change)", value = TRUE)
     )),
     actionButton("go_compare", "Compare!"),
     hr(style = "border-top: 2px solid #000000;"),
