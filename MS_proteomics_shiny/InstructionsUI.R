@@ -2,14 +2,27 @@ InstructionsUI <- tabPanel(
   "Instructions",
   "Welcome to my proteomics analysis pipeline.", br(),
   "Please move sequentially through the tabs to complete the pipeline. Analysis however can be skipped if desired, however not all plots will be available in the visualisation tab.", br(),
-  radioButtons("platform",
+  selectInput("platform",
     "Search platform",
-    choiceNames = c("Proteome Discoverer", "MaxQuant", "DIA-NN"),
-    choiceValues = c("PD", "MQ", "DIANN")
+    choices = c(
+      "Proteome Discoverer" = "PD",
+      "MaxQuant" = "MQ",
+      "DIA-NN" = "DIANN"
+    ),
+    multiple = FALSE
   ),
-  radioButtons("quant_method",
-    "Quantitation method",
-    choices = c("LFQ", "TMT")
+  uiOutput("quant_method_input"),
+  selectInput("species", "Species",
+              choices = c(
+                "Human",
+                "Rat",
+                "Other (analysis tab will not be functional)" = "Other"          
+                ),
+              multiple = FALSE
+  ),
+  conditionalPanel(
+    condition = "input.species == 'Other'",
+    "Please email samsiljee@gmail.com, or ask on Github for your species to be added"
   ),
  
   hr(style = "border-top: 2px solid #000000;"),

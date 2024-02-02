@@ -1,5 +1,21 @@
 # Input
 # Reactive UI
+# Quant methods for Instructions page, disable TMT for DIA-NN input
+output$quant_method_input <- renderUI({
+  choices <- if (input$platform == "DIANN") {
+    c("LFQ")
+  } else {
+    c("LFQ", "TMT")
+  }
+  
+  selectInput("quant_method",
+              "Quantitation method",
+              choices = choices,
+              multiple = FALSE
+  )
+})
+
+
 output$psm_input <- renderUI({
   fileInput("PSMs",
     switch(input$platform,
@@ -39,9 +55,9 @@ output$wizard_launch <- renderUI(
 annot_col <- reactive({
   if ( # Only create annotations if there is data to work with, either uploaded or from wizard
     !is.null(input$annotations) |
-    (!is.null(input$channel_annotations) & !is.null(input$run_annotations)) |
-    !is.null(wizard_data()) |
-    !is.null(TMT_wizard_runs_data())
+      (!is.null(input$channel_annotations) & !is.null(input$run_annotations)) |
+      !is.null(wizard_data()) |
+      !is.null(TMT_wizard_runs_data())
   ) {
     # Input the annotations file
     df <- switch(input$quant_method,
@@ -65,13 +81,12 @@ annot_col <- reactive({
 
         df
       },
-      
       TMT = { # load annotations for TMT methods
         # Channel annotations
         channel_df <- if (!is.null(TMT_wizard_channels_data())) {
           df <- TMT_wizard_channels_data()
           df
-        }  else {
+        } else {
           df <- vroom(input$channel_annotations$datapath)
           df
         }
@@ -80,7 +95,7 @@ annot_col <- reactive({
         run_df <- if (!is.null(TMT_wizard_runs_data())) {
           df <- TMT_wizard_runs_data()
           df
-        }  else {
+        } else {
           df <- vroom(input$run_annotations$datapath)
           df
         }

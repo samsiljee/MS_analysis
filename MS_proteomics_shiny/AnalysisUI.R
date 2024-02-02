@@ -6,10 +6,6 @@ AnalysisUI <- tabPanel(
       choices = c("GO enrichment analysis", "STRING"),
       multiple = FALSE
     ),
-    selectInput("species", "Species",
-      choices = c("Human", "Rat"),
-      multiple = FALSE
-    ),
     # GO term analysis input
     conditionalPanel(
       condition = "input.analysis_type == 'GO enrichment analysis'",
