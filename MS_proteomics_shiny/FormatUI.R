@@ -55,8 +55,8 @@ FormatUI <- tabPanel(
         radioButtons(
           "LFQPDwhich.sequence",
           "Column to be used for peptide sequences",
-          choiceNames = c("Sequence", "Annotated sequence"),
-          choiceValues = c("Sequence", "Annotated.Sequence")
+          choiceNames = c("Annotated sequence", "Sequence"),
+          choiceValues = c("Annotated.Sequence", "Sequence")
         )
       ),
       # Show advanced options
