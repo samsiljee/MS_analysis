@@ -147,10 +147,10 @@ MSstats_results <- reactive({
     MSstats_comparison_results()[-which(MSstats_comparison_results()$log2FC == Inf | MSstats_comparison_results()$log2FC == -Inf), ]
   } else {
     MSstats_comparison_results()
-  } %>%
-    mutate(
-      Gene_symbol = mapIds(org.Hs.eg.db, keys=Protein, column="SYMBOL", keytype="UNIPROT", multiVals="first")
-    )
+  } # %>%
+  #   mutate(
+  #     Gene_symbol = mapIds(org.Hs.eg.db, keys=Protein, column="SYMBOL", keytype="UNIPROT", multiVals="first")
+  #   )
 })
 
 # Output ----
@@ -165,6 +165,6 @@ output$results_tab <- renderDataTable({
 
 output$outliers <- renderText(paste("There are",
   length(base::which(MSstats_comparison_results()$log2FC == Inf | MSstats_comparison_results()$log2FC == -Inf)),
-  "results with infinite fold-change.",
+  "results missing in one or more conditions.",
   sep = " "
 ))
