@@ -163,8 +163,13 @@ output$results_tab <- renderDataTable({
   )
 })
 
-output$outliers <- renderText(paste("There are",
-  length(base::which(MSstats_comparison_results()$log2FC == Inf | MSstats_comparison_results()$log2FC == -Inf)),
-  "results missing in one or more conditions.",
-  sep = " "
-))
+output$results_summary <- renderTable({
+  MSstats_results() %>%
+    group_by(Label) %>%
+    summarise(
+      "Proteins quantified" = n() - sum(issue == "completeMissing", na.rm = TRUE),
+      "Missing in numerator" = sum(log2FC == -Inf, na.rm = TRUE),
+      "Missing in denominator" = sum(log2FC == Inf, na.rm = TRUE),
+      "Differentially abundant" = sum(Dif == "Upregulated" | Dif == "Downregulated", na.rm = TRUE)
+    )
+})

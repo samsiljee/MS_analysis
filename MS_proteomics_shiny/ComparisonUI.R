@@ -78,7 +78,7 @@ ComparisonUI <- tabPanel(
     "Comparisons to be made:",
     tableOutput("comparison_matrix_tab"),
     hr(style = "border-top: 2px solid #000000;"),
-    textOutput("outliers"),
+    tableOutput("results_summary"),
     conditionalPanel(
       condition = "input.quant_method == 'LFQ'",
       radioButtons("results_tab_view", "Which results would you like to view?",
