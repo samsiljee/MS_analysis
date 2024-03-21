@@ -44,7 +44,7 @@ output$psm_input <- renderUI({
         "Upload report.tsv"
       },
       SN = {
-        "Upload \"check what to put here!\""
+        "Upload report.tsv"
       }
     )
   )
