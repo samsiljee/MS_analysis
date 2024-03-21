@@ -168,7 +168,7 @@ FormatUI <- tabPanel(
         ),
         checkboxInput(
           "LFQDIANNremoveProtein_with1Feature",
-          "remove proteins with a single feature",
+          "Remove proteins with a single feature",
           value = TRUE
         )
       ),
@@ -184,6 +184,12 @@ FormatUI <- tabPanel(
     conditionalPanel(
       condition = "input.platform == 'SN'",
       # Standard options
+      radioButtons(
+        "LFQSNintensity",
+        "Column to be used for quantification",
+        choiceNames = c("Peak area", "Normalised peak area"),
+        choiceValues = c("PeakArea", "NormalizedPeakArea")
+      ),
       checkboxInput(
         "LFQSNuseUniquePeptide",
         "Remove peptides assigned to more than one protein",
@@ -194,19 +200,13 @@ FormatUI <- tabPanel(
         "Remove features with one or two measurements across runs",
         value = TRUE
       ),
-      checkboxInput(
-        "LFQSNMBR",
-        "Was match between runs used in DIA-NN?",
-        value = TRUE
-      ),
       # Advanced options
       conditionalPanel(
         condition = "input.AdvancedOptionsLFQSN == true",
-        numericInput(
-          "LFQSNglobal_qvalue_cutoff",
-          "Global qvalue cutoff",
-          value = 0.01,
-          step = 0.01
+        checkboxInput(
+          "LFQSNfilter_with_Qvalue",
+          "Censor values greater than Q value cutoff",
+          value = TRUE
         ),
         numericInput(
           "LFQSNqvalue_cutoff",
@@ -214,21 +214,17 @@ FormatUI <- tabPanel(
           value = 0.01,
           step = 0.01
         ),
-        numericInput(
-          "LFQSNpg_qvalue_cutoff",
-          "Protein groups qvalue cutoff",
-          value = 0.01,
-          step = 0.01
-        ),
-        checkboxInput(
-          "LFQSNremoveOxidationMpeptides",
-          "Remove peptides with methionine oxidation",
-          value = TRUE
-        ),
         checkboxInput(
           "LFQSNremoveProtein_with1Feature",
-          "remove proteins with a single feature",
+          "Remove proteins with a single feature",
           value = TRUE
+        ),
+        radioButtons(
+          "LFQSNsummaryforMultipleRows",
+          "Summary method for multiple rows",
+          choiceNames = c("Max", "Sum"),
+          choiceValues = c("max", "sum"),
+          selected = "max"
         )
       ),
       # Show advanced options
@@ -238,7 +234,7 @@ FormatUI <- tabPanel(
         value = FALSE
       )
     ),
-    
+
     # TMT/PD options ----
     conditionalPanel(
       condition = "input.quant_method == 'TMT' & input.platform == 'PD'",
@@ -293,12 +289,12 @@ FormatUI <- tabPanel(
       condition = "input.quant_method == 'TMT' & input.platform == 'MQ'",
       # Standard options
       checkboxInput(
-        "LFQPDuseUniquePeptide",
+        "TMTMQuseUniquePeptide",
         "Remove peptides assigned to more than one protein",
         value = TRUE
       ),
       checkboxInput(
-        "rmPSM_withfewMea_withinRun",
+        "TMTMQrmPSM_withfewMea_withinRun",
         "Remove features with one or two measurements across runs",
         value = TRUE
       ),
@@ -322,17 +318,17 @@ FormatUI <- tabPanel(
           )
         ),
         checkboxInput(
-          "rmProt_Only.identified.by.site",
+          "TMTMQrmProt_Only.identified.by.site",
           "Remove proteins only identified by a modification site",
           value = FALSE
         ),
         checkboxInput(
-          "rmProtein_with1Feature",
+          "TMTMQrmProtein_with1Feature",
           "Remove proteins with only 1 peptide and charge",
           value = FALSE
         ),
         radioButtons(
-          "summaryforMultipleRows",
+          "TMTMQsummaryforMultipleRows",
           "Summary method for multiple rows",
           choiceNames = c("Sum", "Max"),
           choiceValues = c("sum", "max"),
