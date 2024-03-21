@@ -2,10 +2,10 @@
 # Reactive UI
 # Quant methods for Instructions page, disable TMT for DIA-NN input
 output$quant_method_input <- renderUI({
-  choices <- if (input$platform == "DIANN") {
-    c("LFQ")
+  choices <- if (input$platform == "DIANN" | input$platform == "SN") {
+    c("LFQ/DIA" = "LFQ")
   } else {
-    c("LFQ", "TMT")
+    c("LFQ/DIA" = "LFQ", "TMT" = "TMT")
   }
   
   selectInput("quant_method",
