@@ -12,14 +12,14 @@ InputUI <- tabPanel(
         placeholder = "Upload proteinGroups.txt"
       ),
       checkboxInput("keep_contaminants", "Keep potential contaminants",
-                    value = FALSE
+        value = FALSE
       )
     ),
     hr(style = "border-top: 2px solid #000000;"),
 
     # LFQ annotations
     conditionalPanel(
-      condition = "input.quant_method == 'LFQ'",
+      condition = "input.quant_method == 'LFQ' & input.platform != 'SN'",
       fileInput("annotations", "Annotations file",
         buttonLabel = "Browse",
         placeholder = "Upload annotations"
@@ -40,8 +40,11 @@ InputUI <- tabPanel(
     ),
 
     # Annotations wizard
-    uiOutput("wizard_launch"),
-    
+    conditionalPanel(
+      condition = "input.platform != 'SN'",
+      uiOutput("wizard_launch")
+    ),
+
     # Show annotation downloads if using the wizard
     conditionalPanel(
       condition = "input.doneButton > 0",
@@ -57,15 +60,15 @@ InputUI <- tabPanel(
         downloadButton("wizard_runs_annotations_tsv", "Save run annotations")
       )
     ),
-    
-   
-    
   ), # sidebar panel
 
   mainPanel(
-    h3("Annotations"),
-    withSpinner(dataTableOutput("annotation_tab")),
-    hr(style = "border-top: 2px solid #000000;"),
+    conditionalPanel(
+      condition = "input.platform != 'SN'",
+      h3("Annotations"),
+      withSpinner(dataTableOutput("annotation_tab")),
+      hr(style = "border-top: 2px solid #000000;")
+    ),
     h3("PSMs"),
     withSpinner(dataTableOutput("PSMs_tab")),
     conditionalPanel(
