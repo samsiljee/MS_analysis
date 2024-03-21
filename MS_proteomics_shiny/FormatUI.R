@@ -123,7 +123,7 @@ FormatUI <- tabPanel(
 
     # LFQ/DIA-NN ----
     conditionalPanel(
-      condition = "input.quant_method == 'LFQ' & input.platform == 'DIANN'",
+      condition = "input.platform == 'DIANN'",
       # Standard options
       checkboxInput(
         "LFQDIANNuseUniquePeptide",
@@ -180,6 +180,65 @@ FormatUI <- tabPanel(
       )
     ),
 
+    # LFQ/Spectronaut ----
+    conditionalPanel(
+      condition = "input.platform == 'SN'",
+      # Standard options
+      checkboxInput(
+        "LFQSNuseUniquePeptide",
+        "Remove peptides assigned to more than one protein",
+        value = TRUE
+      ),
+      checkboxInput(
+        "LFQSNremoveFewMeasurements",
+        "Remove features with one or two measurements across runs",
+        value = TRUE
+      ),
+      checkboxInput(
+        "LFQSNMBR",
+        "Was match between runs used in DIA-NN?",
+        value = TRUE
+      ),
+      # Advanced options
+      conditionalPanel(
+        condition = "input.AdvancedOptionsLFQSN == true",
+        numericInput(
+          "LFQSNglobal_qvalue_cutoff",
+          "Global qvalue cutoff",
+          value = 0.01,
+          step = 0.01
+        ),
+        numericInput(
+          "LFQSNqvalue_cutoff",
+          "qvalue cutoff",
+          value = 0.01,
+          step = 0.01
+        ),
+        numericInput(
+          "LFQSNpg_qvalue_cutoff",
+          "Protein groups qvalue cutoff",
+          value = 0.01,
+          step = 0.01
+        ),
+        checkboxInput(
+          "LFQSNremoveOxidationMpeptides",
+          "Remove peptides with methionine oxidation",
+          value = TRUE
+        ),
+        checkboxInput(
+          "LFQSNremoveProtein_with1Feature",
+          "remove proteins with a single feature",
+          value = TRUE
+        )
+      ),
+      # Show advanced options
+      checkboxInput(
+        "AdvancedOptionsLFQSN",
+        "Show advanced options",
+        value = FALSE
+      )
+    ),
+    
     # TMT/PD options ----
     conditionalPanel(
       condition = "input.quant_method == 'TMT' & input.platform == 'PD'",
