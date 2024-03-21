@@ -28,12 +28,17 @@ InstructionsUI <- tabPanel(
  
   hr(style = "border-top: 2px solid #000000;"),
   conditionalPanel(
-    condition = "input.quant_method == 'LFQ'",
+    condition = "input.platform == 'SN'",
+    "Spectronaut input does not require an annotations file."
+  ),
+  conditionalPanel(
+    condition = "input.quant_method == 'LFQ' & input.platform != 'SN'",
     "Please use the annotation wizard on the \"Input\" tab to create an annotation file, or prepare a .tsv or .csv file with the following columns:", br(),
     "\"Run\" exact filenames of the raw data files, with .raw extension for PD, and without for MQ or DIA-NN.", br(),
     "\"Condition\" describing the experimental group.", br(),
     "\"BioReplicate\" describing the biological replicate.", br(),
-    "\"Fraction\" set all to 1 if no fractionation was done.", br()
+    "\"Fraction\" set all to 1 if no fractionation was done.", br(),
+    "Technical replicates are automatically detected."
   ),
   conditionalPanel(
     condition = "input.quant_method == 'TMT'",
@@ -47,9 +52,9 @@ InstructionsUI <- tabPanel(
     "\"Mixture\" batch or mixture of TMT channels. Set all to 1 if only one mixture was run.", br(),
     "\"Channel\" TMT channel within each miture, must match the PSMs file.", br(),
     "\"Condition\" describing the experimental group. Normalisation channel/s must be set to \"Norm\".", br(),
-    "\"BioReplicate\" describing the biological replicate. Normalisation channel/s must be set to \"Norm\".", br()
+    "\"BioReplicate\" describing the biological replicate. Normalisation channel/s must be set to \"Norm\".", br(),
+    "Technical replicates are automatically detected."
   ),
-  "Technical replicates are automatically detected.", br(),
   hr(style = "border-top: 2px solid #000000;"),
   "Debugging output here, please ignore", br(),
   verbatimTextOutput("test_text")
