@@ -29,10 +29,10 @@ InstructionsUI <- tabPanel(
   hr(style = "border-top: 2px solid #000000;"),
   conditionalPanel(
     condition = "input.platform == 'SN'",
-    "Spectronaut input does not require an annotations file."
+    "Spectronaut input can use annotations integrated into the report file."
   ),
   conditionalPanel(
-    condition = "input.quant_method == 'LFQ' & input.platform != 'SN'",
+    condition = "input.quant_method == 'LFQ'",
     "Please use the annotation wizard on the \"Input\" tab to create an annotation file, or prepare a .tsv or .csv file with the following columns:", br(),
     "\"Run\" exact filenames of the raw data files, with .raw extension for PD, and without for MQ or DIA-NN.", br(),
     "\"Condition\" describing the experimental group.", br(),
