@@ -1,21 +1,21 @@
 # Input
 # Reactive UI
-# Quant methods for Instructions page, disable TMT for DIA-NN input
+# Quant methods for Instructions page, disable TMT for DIA-NN or Spectronaut input
 output$quant_method_input <- renderUI({
   choices <- if (input$platform == "DIANN" | input$platform == "SN") {
     c("LFQ/DIA" = "LFQ")
   } else {
     c("LFQ/DIA" = "LFQ", "TMT" = "TMT")
   }
-  
+
   selectInput("quant_method",
-              "Quantitation method",
-              choices = choices,
-              multiple = FALSE
+    "Quantitation method",
+    choices = choices,
+    multiple = FALSE
   )
 })
 
-
+# Customise placeholders and button names for specific input
 output$psm_input <- renderUI({
   fileInput("PSMs",
     switch(input$platform,
@@ -26,6 +26,9 @@ output$psm_input <- renderUI({
         "MQ evidence file"
       },
       DIANN = {
+        "Report file"
+      },
+      SN = {
         "Report file"
       }
     ),
@@ -39,6 +42,9 @@ output$psm_input <- renderUI({
       },
       DIANN = {
         "Upload report.tsv"
+      },
+      SN = {
+        "Upload \"check what to put here!\""
       }
     )
   )
@@ -167,6 +173,10 @@ raw <- reactive({
         df <- vroom(input$PSMs$datapath)
         df$File.Name <- str_replace(df$File.Name, ".*\\\\", "")
         df$File.Name <- str_replace(df$File.Name, ".raw.mzml$", "")
+        df
+      },
+      SN = {
+        df <- vroom(input$PSMs$datapath)
         df
       }
     )
