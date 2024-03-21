@@ -1,4 +1,15 @@
 # Process
+# Reactive input to set default for censoredInt based on platform used
+output$censoredInt_input <- renderUI({
+  radioButtons(
+    "censoredInt",
+    "Censored values",
+    choiceNames = c("NA", "0", "Null"),
+    choiceValues = c("NA", "0", "NULL"),
+    selected = ifelse(input$platform == "SN", "0", "NA")
+  )
+})
+
 # Produce named standards
 standards <- reactive({
   if (!is.null(input$nameStandards)) {
@@ -27,7 +38,7 @@ MSstats_processed <- eventReactive(input$go_process, {
         n_top_feature = input$n_top_feature,
         summaryMethod = input$summaryMethod,
         equalFeatureVar = input$equalFeatureVar,
-        censoredInt = ifelse(input$censoredInt == "NULL", NULL, input$censoredInt),
+        censoredInt = input$censoredInt,
         MBimpute = input$MBimpute,
         remove50missing = input$remove50missing,
         fix_missing = ifelse(input$fix_missing == "NULL", NULL, input$fix_missing),
