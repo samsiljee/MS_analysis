@@ -1,11 +1,11 @@
 # Short script to test SpectronautToMSstatsFormat
 
-spectronaut_raw = system.file("tinytest/raw_data/Spectronaut/spectronaut_input.csv",
-                              package = "MSstatsConvert")
-spectronaut_raw = data.table::fread(spectronaut_raw)
-spectronaut_imported = SpectronauttoMSstatsFormat(spectronaut_raw, use_log_file = FALSE)
+tinytest_dat <- vroom("input/Spectronaut/spectronaut_input.csv")
+test_dat <- vroom("input/Spectronaut/240312 Alex AC-8056_Report.tsv")
 
+formatted_data <- SpectronauttoMSstatsFormat(
+  input = test_dat,
+  annotation = NULL,
+  use_log_file = FALSE)
 
-
-
-dat <- vroom("input/Spectronaut/spectronaut_input.csv")
+processed_data <- dataProcess(formatted_data)
