@@ -81,6 +81,7 @@ Created July 18th 2022
   - Fix GO analysis and STRING
   - Question mark button for description of settings
   - Function to generate a R script to replicate the analysis
+  - Add ability to upload reference FASTA database to use as background for STRING analysis
   
 # License
 Feel free to use this code as you wish under the MIT license, however an acknowledgement would be nice. Thanks!
