@@ -80,6 +80,7 @@ Created July 18th 2022
   - Fix error with update required when changing to heatmap
   - Fix GO analysis and STRING
   - Question mark button for description of settings
+  - Function to generate a R script to replicate the analysis
   
 # License
 Feel free to use this code as you wish under the MIT license, however an acknowledgement would be nice. Thanks!
