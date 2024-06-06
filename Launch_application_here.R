@@ -6,6 +6,8 @@
 required_packages <- c(
   "BiocManager",
   "shiny",
+  "MSstats",
+  "MSstatsTMT",
   "vroom",
   "janitor",
   "DT",
@@ -26,7 +28,7 @@ required_packages <- c(
 # Load or check and install missing packages
 for (package in required_packages) {
   if (!requireNamespace(package, quietly = TRUE)) {
-    if (package %in% c("ComplexHeatmap", "clusterProfiler", "STRINGdb")) {
+    if (package %in% c("ComplexHeatmap", "clusterProfiler", "STRINGdb", "MSstats", "MSstatsTMT")) {
       # Bioconductor packages
       if (!requireNamespace("BiocManager", quietly = TRUE)) {
         install.packages("BiocManager")
