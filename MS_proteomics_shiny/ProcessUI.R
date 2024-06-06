@@ -77,12 +77,7 @@ ProcessUI <- tabPanel(
           value = FALSE
         )
       ),
-      radioButtons(
-        "censoredInt",
-        "Censored values",
-        choiceNames = c("NA", "0", "Null"),
-        choiceValues = c("NA", "0", "NULL")
-      ),
+      uiOutput("censoredInt_input"),
       radioButtons(
         "fix_missing",
         "Fix missing values",

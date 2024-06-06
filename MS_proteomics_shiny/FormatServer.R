@@ -66,7 +66,22 @@ MSstats_input <- eventReactive(input$go_format, {
             use_log_file = TRUE,
             log_file_path = format_log_file_path
           )
-        } # swich = DIANN (LFQ)
+        }, # switch = DIANN (LFQ)
+        SN = {
+          SpectronauttoMSstatsFormat(
+            input = raw(),
+            annotation = NULL,
+            intensity = input$LFQSNintensity,
+            filter_with_Qvalue = input$LFQSNfilter_with_Qvalue,
+            qvalue_cutoff = input$LFQSNqvalue_cutoff,
+            useUniquePeptide = input$LFQSNuseUniquePeptide,
+            removeFewMeasurements = input$LFQSNremoveFewMeasurements,
+            removeProtein_with1Feature = input$LFQSNremoveProtein_with1Feature,
+            summaryforMultipleRows = input$LFQSNsummaryforMultipleRows,
+            use_log_file = TRUE,
+            log_file_path = format_log_file_path
+          )
+        } # switch = Spectronaut (LFQ)
       )
     }, # switch = LFQ
 
