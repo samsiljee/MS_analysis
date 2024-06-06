@@ -4,6 +4,7 @@
 
 # List of required packages
 required_packages <- c(
+  "BiocManager",
   "shiny",
   "vroom",
   "janitor",
