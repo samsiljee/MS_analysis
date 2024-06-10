@@ -12,8 +12,6 @@ InstructionsUI <- tabPanel(
     ),
     multiple = FALSE
   ),
-  tags$i(class = "glyphicon glyphicon-question-sign", 
-         title = "This is a hover-over extra information button"),
   uiOutput("quant_method_input"),
   selectInput("species", "Species",
               choices = c(

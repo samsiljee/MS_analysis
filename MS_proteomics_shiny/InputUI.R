@@ -11,8 +11,9 @@ InputUI <- tabPanel(
         buttonLabel = "Browse",
         placeholder = "Upload proteinGroups.txt"
       ),
-      checkboxInput("keep_contaminants", "Keep potential contaminants",
-        value = FALSE
+      checkboxInputHelp("keep_contaminants", "Keep potential contaminants",
+        value = FALSE,
+        helpText = "Include PSMs matched to MaxQuant's built-in contaminants database"
       )
     ),
     hr(style = "border-top: 2px solid #000000;"),

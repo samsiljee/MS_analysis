@@ -18,6 +18,9 @@ server <- function(input, output, session) {
   # Source files for Wizard UI elements
   source("LFQAnnotationWizardUI.R", local = TRUE)
   source("TMTAnnotationWizardUI.R", local = TRUE)
+  
+  # Source file to add extra info boxes beside the input buttons
+  source("InputFunctions.R", local = TRUE)
 
   # Load packages depending on input selected
   observeEvent(input$quant_method, {
