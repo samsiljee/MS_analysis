@@ -81,6 +81,7 @@ Created July 18th 2022
   - Fix GO analysis and STRING
   - Question mark button for description of settings
   - Fix error in default settings causing crash: Warning: Error in .checkDataProcessParams: The combination of required input MBimpute == TRUE and censoredInt = NULL has no censore missing values. Imputation will not be performed.- stop
+  - Add option to upload FASTA database as reference for STRINGdb background
   
 # License
 Feel free to use this code as you wish under the MIT license, however an acknowledgement would be nice. Thanks!
