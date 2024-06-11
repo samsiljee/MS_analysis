@@ -21,7 +21,7 @@ server <- function(input, output, session) {
   
   # Source file to add extra info boxes beside the input buttons
   source("InputFunctions.R", local = TRUE)
-
+  
   # Load packages depending on input selected
   observeEvent(input$quant_method, {
     selected_quant <- input$quant_method
@@ -51,10 +51,5 @@ server <- function(input, output, session) {
            "Human" = install_bioconductor_package("org.Hs.eg.db"),
            "Rat" = install_bioconductor_package("org.Rn.eg.db")
     )
-  })
-
-  # Testing
-  output$test_text <- renderPrint({
-    c(class(MSstats_input()), colnames(annot_col()))
   })
 }
