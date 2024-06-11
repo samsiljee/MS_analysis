@@ -17,7 +17,7 @@ Custom_CSS <- tags$style(
       margin-left: 5px;
       position: relative;
       top: -2px;
-      font-size: 14px;  /* Adjust the size as needed */
+      font-size: 14px;
     }
 
     /* CSS for checkbox help container */
