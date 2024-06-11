@@ -18,7 +18,7 @@ selectInputHelp <- function(..., helpText) {
 checkboxInputHelp <- function(..., helpText) {
   div(
     class = "checkbox-help-container",
-    checkboxInput(..., class = "help-icon"),
+    checkboxInput(...),
     tags$i(class = "glyphicon glyphicon-question-sign help-icon", title = helpText)
   )
 }
