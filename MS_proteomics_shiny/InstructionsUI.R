@@ -7,8 +7,8 @@ InstructionsUI <- tabPanel(
     choices = c(
       "Proteome Discoverer" = "PD",
       "MaxQuant" = "MQ",
-      "DIA-NN" = "DIANN",
-      "Spectronaut" = "SN"
+      "DIA-NN" = "DIANN"#,
+      # "Spectronaut" = "SN" #Remove Spectronaut option until it's actually working
     ),
     multiple = FALSE
   ),
