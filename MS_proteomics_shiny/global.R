@@ -5,12 +5,8 @@
 # Select input with help
 selectInputHelp <- function(..., helpText) {
   div(
-    
     selectInput(...),
-    tags$i(
-      class = "glyphicon glyphicon-question-sign",
-      title = helpText,
-    )
+    tags$i(class = "glyphicon glyphicon-question-sign", title = helpText)
   )
 }
 
