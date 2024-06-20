@@ -5,8 +5,8 @@ output$censoredInt_input <- renderUI({
     "censoredInt",
     "Censored values",
     choiceNames = c("NA", "0", "Null"),
-    choiceValues = c("NA", "0", "NULL"),
-    selected = ifelse(input$platform == "SN", "0", "NA")
+    choiceValues = c("NA", "0", NULL),
+    selected = "NA"
   )
 })
 

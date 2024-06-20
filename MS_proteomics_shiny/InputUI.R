@@ -13,7 +13,7 @@ InputUI <- tabPanel(
       ),
       checkboxInputHelp("keep_contaminants", "Keep potential contaminants",
         value = FALSE,
-        helpText = "Include PSMs matched to MaxQuant's built-in contaminants database"
+        helpText = "Exclude or include PSMs matched to MaxQuant's built-in contaminants database"
       )
     ),
     hr(style = "border-top: 2px solid #000000;"),
