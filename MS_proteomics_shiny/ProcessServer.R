@@ -4,9 +4,9 @@ output$censoredInt_input <- renderUI({
   radioButtons(
     "censoredInt",
     "Censored values",
-    choiceNames = c("NA", "0", "Null"),
-    choiceValues = c("NA", "0", NULL),
-    selected = "NA"
+    choiceNames = c("NA", "0"),
+    choiceValues = c("NA", "0"),
+    selected = ifelse(input$platform == "SN", "0", "NA")
   )
 })
 
