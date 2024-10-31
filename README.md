@@ -53,6 +53,8 @@ Created July 18th 2022
   - LFQ Analyst: https://analyst-suite.monash-proteomics.cloud.edu.au/apps/lfq-analyst/
   - Good resource on visualising enrichment analysis: https://yulab-smu.top/biomedical-knowledge-mining-book/enrichplot.html
   - ShinyGo: http://bioinformatics.sdstate.edu/go/
+  - R package for doing QC (mostly MQ input): https://www.bioconductor.org/packages/devel/bioc/vignettes/artMS/inst/doc/artMS_vignette.html
+  - Another QC workflow: https://jpquast.github.io/protti/articles/quality_control_workflow.html
 
 ## Issues and to-do
   - QC section
